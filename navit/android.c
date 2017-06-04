@@ -1427,9 +1427,9 @@ static void map_preview_label_line(struct point *p, int count, char *label, int 
 }
 
 
-
+/** renamed while working openGL */
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap_noGL(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
