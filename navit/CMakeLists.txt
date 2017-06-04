@@ -15,7 +15,7 @@ set(NAVIT_SRC announcement.c atom.c attr.c cache.c callback.c command.c config_.
    gui/internal/gui_internal.c
    graphics/android/graphics_android.c map/binfile/binfile.c
    map/csv/csv.c map/csv/quadtree.c map/textfile/textfile.c
-   osd/core/osd_core.c speech/android/speech_android.c android.c
+   osd/core/osd_core.c speech/android/speech_android.c android.c tilefactory.c
    util.c vehicle.c vehicleprofile.c xmlconfig.c )
 
 if(NOT USE_PLUGINS)
