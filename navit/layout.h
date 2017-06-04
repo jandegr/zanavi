@@ -41,7 +41,20 @@
 
 #include "item.h"
 #include "color.h"
-
+struct element_point
+{
+    char stub;
+};
+struct element_polyline
+{
+    int width;
+    int directed;
+    int dash_num;
+    int offset;
+    //unsigned char dash_table[4];
+    short dash_table[4];
+    struct color nightcol;
+};
 struct element
 {
 	enum
@@ -52,20 +65,8 @@ struct element
 	int text_size;
 	union
 	{
-		struct element_point
-		{
-			char stub;
-		} point;
-		struct element_polyline
-		{
-			int width;
-			int directed;
-			int dash_num;
-			int offset;
-			//unsigned char dash_table[4];
-			short dash_table[4];
-			struct color nightcol;
-		} polyline;
+		struct element_point point;
+		struct element_polyline polyline;
 		struct element_polygon
 		{
 			char stub;
