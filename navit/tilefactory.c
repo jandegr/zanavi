@@ -1,4 +1,4 @@
-/**
+/** jandegr
  * Some openGL test
  *
  * no oversampling (smooth lines) as long as it uses a pbuffer
@@ -18,8 +18,10 @@
 
 
 
-// apparently the order of the includes is import
+
+// apparently the order of the includes is important
 // several unneeded
+
 #if dedf0
 
 #include <stdlib.h>
@@ -43,6 +45,7 @@
 #include "item.h"
 #include "attr.h"
 #endif
+
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
@@ -305,62 +308,13 @@ set_color(struct color *color)
 /**
  * draws wit z
  *
- * MOET aangepast worden met z als een uniform !!!!!!!!!!!!!!!!!!!
- *
- * end dan moet alles via draw_array gebeuren ?? of toch maar nu en dan gebruiken !!
- * voegt toch een extra loop toe !!!
- *
- * dit is goed om rechtstreeks p te tekenen als er geen voorbewerking gebeurt
- *
- * drawstencil is al GLshort, alleen nog z te veranderen naar uniform !!!!!!
- *
- *
- * */
-static inline void
-draw_array_3dzold(struct point *p, int count, int z, GLenum mode)
-{
-    int i;
-#if def0  // version with float, use if vertexshader handles mapcenter
-    GLfloat x[count*3];
-
-    for (i = 0 ; i < count ; i++) {
-        x[i*3]=(GLfloat)(p[i].x);
-        x[i*3+1]=(GLfloat)(p[i].y);
-        x[i*3+2]= (GLfloat) z;
-    }
-
-	glVertexAttribPointer(gvPositionHandle, 3, GL_FLOAT, GL_FALSE, 0, x);
-#endif
-
-    GLshort x[count*3]; ///////////  if navit does transformations this can be a GLshort !!!!!
-
-    for (i = 0 ; i < count ; i++) {
-        x[i*3]=(GLshort)(p[i].x - mapcenter_x);
-        x[i*3+1]=(GLshort)(p[i].y - mapcenter_y);
-        x[i*3+2]= (GLshort)z;
-    }
-
-    glVertexAttribPointer(gvPositionHandle, 3, GL_SHORT, GL_FALSE, 0, x);
-    glEnableVertexAttribArray(gvPositionHandle);
-    glUniform1i(gvZvalHandle,z); // todo finish using uniform for z
-
-
-    glDrawArrays(mode, 0, count);
-}
-
-/**
- * draws wit z
- *
- * drawstencil is al GLshort, alleen nog z te veranderen naar uniform !!!!!!
- *
- *
- * */
+ * use this if the points were not processed and are still int's
+ */
 static inline void
 draw_array(struct point *p, int count, int z, GLenum mode)
 {
     int i;
-
-    GLshort x[count*2]; ///////////  if CPU does mapcenter this can be a GLshort !!!!!
+    GLshort x[count*2]; //CPU does mapcenter so this can be a GLshort
 
     for (i = 0 ; i < count ; i++) {
         x[i*2]=(GLshort)(p[i].x - mapcenter_x);
@@ -369,123 +323,9 @@ draw_array(struct point *p, int count, int z, GLenum mode)
 
     glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, x);
     glEnableVertexAttribArray(gvPositionHandle);
-    glUniform1i(gvZvalHandle,z); // todo finish using uniform for z
-
+    glUniform1i(gvZvalHandle,z);
 
     glDrawArrays(mode, 0, count);
-}
-
-/**
- * Draws polygons with an optional outline.
- *
- */
-int drawStencil_old_GLfloat(struct openGL_hash_entry *entry, struct point *p, int count) {
-
-    int i;
-    GList *elements = entry->elements;
-    struct element *element_data = elements->data;
-    GLfloat boundingbox[12];
-    boundingbox[0] = boundingbox[3] = boundingbox[6] = boundingbox[9] = (GLfloat)p[0].x; // topleft, topright, bottomright, bottomleft
-    boundingbox[1] = boundingbox[4] = boundingbox[7] = boundingbox[10] = (GLfloat)p[0].y;
-    boundingbox[2] = boundingbox[5] = boundingbox[8] = boundingbox[11] = (GLfloat) entry->z;
-    if (element_data->type == 2) // is it actually a polygon ?
-    {
-        //       dbg(0, "draw POLYGON\n");
-        struct color *color = &(element_data->color);
-        set_color(color);
-        GLfloat x[count * 3];
-
-        // version without boundingbox and without z
-        //  for (i = 0; i < count; i++) {
-        //      x[i * 2] = (GLfloat) (p[i].x);
-        //      x[i * 2 + 1] = (GLfloat) (p[i].y);
-        //  }
-
-        for (int i = 0 ; i < count ; i++)
-        {
-            x[i*3]=(GLfloat)(p[i].x);
-            x[i*3+1]=(GLfloat)(p[i].y);
-            x[i*3+2]=0.0; // z is only used by the boundingbox
-            if (p[i].x < boundingbox[0])
-            {
-                boundingbox[0] = boundingbox[9] = p[i].x;
-            }
-            else
-            {
-                if (p[i].x > boundingbox[3])
-                {
-                    boundingbox[3] = boundingbox[6] = p[i].x;
-                }
-            }
-            if (p[i].y < boundingbox[1])
-            {
-                boundingbox[1] = boundingbox[4] = p[i].y;
-            }
-            else
-            {
-                if (p[i].y > boundingbox[7])
-                {
-                    boundingbox[7] = boundingbox[10] = p[i].y;
-                }
-            }
-        }
-
-        glClear(GL_STENCIL_BUFFER_BIT);
-        glEnable(GL_STENCIL_TEST);
-        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-        glStencilFunc(GL_ALWAYS, 0, 1);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
-        glStencilMask(1);
-        glDisable(GL_DEPTH_TEST); // for some reason stencil does not work with depthtest enabled
-
-        glVertexAttribPointer(gvPositionHandle, 3, GL_FLOAT, GL_FALSE, 0, x);
-        glEnableVertexAttribArray(gvPositionHandle);
-
-        glDrawArrays(GL_TRIANGLE_FAN, 0, count);
-//        checkGlError("glDrawArrays");
-
-        if (elements->next)
-        {
-            struct element *element_next_data = elements->next->data;
-            if (element_next_data->type == 1) // does the polygon have an outline ?
-            {
-                glLineWidth((GLfloat) 1.0);
-                glStencilFunc(GL_ALWAYS, 2, 3);
-                glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-                glStencilMask(3);
-                glVertexAttribPointer(gvPositionHandle, 3, GL_FLOAT, GL_FALSE, 0, x);
-                glEnableVertexAttribArray(gvPositionHandle);
-                glDrawArrays(GL_LINE_STRIP, 0, count);
-                checkGlError("glDrawArrays");
-            }
-        }
-
-        glEnable(GL_DEPTH_TEST); // reenable depthtest after stencil
-
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-        glStencilFunc(GL_EQUAL, 1, 1);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-        // version without boundingbox
-        // glDrawArrays(GL_TRIANGLE_FAN, 0, count);
-
-        glVertexAttribPointer(gvPositionHandle, 3, GL_FLOAT, GL_FALSE, 0, boundingbox);
-        glEnableVertexAttribArray(gvPositionHandle);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        if (elements->next)
-        {
-            struct element *element_next_data = elements->next->data;
-            if (element_next_data->type == 1) // paint outline for polygon
-            {
-                struct color *color = &(element_next_data->color);
-                set_color(color);
-                glStencilFunc(GL_EQUAL, 2, 2);
-                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-            }
-        }
-        glDisable(GL_STENCIL_TEST);
-        return 0;
-    }
 }
 
 /**
@@ -502,13 +342,10 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
     boundingbox[1] = boundingbox[3] = boundingbox[5] = boundingbox[7] = (GLshort)p[0].y - mapcenter_y;
     if (element_data->type == 2) // is it actually a polygon ?
     {
-
-        glUniform1i(gvZvalHandle,entry->z);
-
-        //       dbg(0, "draw POLYGON\n");
         struct color *color = &(element_data->color);
         set_color(color);
         GLshort x[count * 2];
+        glUniform1i(gvZvalHandle,entry->z);
 
         for (int i = 0 ; i < count ; i++)
         {
@@ -572,10 +409,6 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         glStencilFunc(GL_EQUAL, 1, 1);
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-        // version without boundingbox
-        // glDrawArrays(GL_TRIANGLE_FAN, 0, count);
-
         glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, boundingbox);
         glEnableVertexAttribArray(gvPositionHandle);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -689,6 +522,8 @@ void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count,
                drawStencil(entry, p, count);
 
             // some test to debug water
+            // draws the triangles as red lines
+            // above the polygon
             if (debug_triangles == TRUE)
             {
                 struct color *color = g_alloca(sizeof(struct color));
@@ -811,9 +646,11 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     mapset = global_navit->mapsets->data;
 
 
-    // try to use layout some day
+
     layout = global_navit->layout_current;
     order = transform_get_order(tr);
+
+    // FIXME FIXME !!!!
 
     int order_corrected = order + shift_order;
     if (order_corrected < limit_order_corrected)
@@ -837,15 +674,17 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
 //    dbg(lvl_info,"scale_shift = %f\n", tr->scale_shift);
     dbg(0,"layout = %s order = %i delta = %i zoom = %i\n", layout->name, order,layout->order_delta, zoom);
     dbg(0,"order_corrected = %i, shift_order = %i \n", order_corrected, shift_order);
+
  //   order = order + layout->order_delta; ------------------- !!!!!! ---------------------
  //   ------------------ must probably use order_corrected or so ---------------------
     // see line 3138 in graphics.c
-        order = zoom; //?????
-//      set map background color
-        glClearColor(((float)layout->color.r)/65535,((float)layout->color.g)/65535 , ((float)layout->color.b)/65535, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // FIXME FIXME !!!!
 
+    order = zoom; //?????
+//  set map background color
+    glClearColor(((float)layout->color.r)/65535,((float)layout->color.g)/65535 , ((float)layout->color.b)/65535, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (!htab || htab_order != order_corrected) // check for changes in layout as well !!!!
                                                 // what if a lyaer just gets deactivated by the user ?
@@ -889,8 +728,7 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
                                 {
                                     entry->defer = TRUE;
                                 }
-
-                                   g_hash_table_insert(htab, item_to_name(
+                                g_hash_table_insert(htab, item_to_name(
                                            type->data), // anders blaast text er de polygons uit !!
                                                         entry); // nooit NULL toevoegen !!!!
                             }
@@ -926,7 +764,7 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     matrix[7]=0.0;
     matrix[8]=0.0;
     matrix[9]=0.0;
-    matrix[10]=-0.001; // z multiplier ????????????
+    matrix[10]=-0.001; // z multiplier
     matrix[11]=0.0;
     matrix[12]=0.0;
     matrix[13]=0.0;
