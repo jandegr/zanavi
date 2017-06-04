@@ -4840,7 +4840,18 @@ public class NavitGraphics
 			//System.out.println("CLEAR MAP:011:clear preview map");
 		}
 	}
-
+	
+	/**
+	 * Make the preview bitmap the one produced with
+	 * openGL in native code.
+	 *
+	 * @param bitmap to use as preview
+	 */
+	static void Preview_set_bitmap(Bitmap bitmap)
+	{
+		preview_bitmap = bitmap;
+	}
+	
 	static void DrawPreview_polyline(int type, int c[], String type2)
 	{
 		if (preview_bitmap != null)
