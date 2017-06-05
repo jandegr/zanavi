@@ -126,54 +126,6 @@ const EGLint ctxAttr[] = {
 		EGL_NONE
 };
 
-//const char gVertexShader [] =
-//		"attribute vec2 vPosition;\n"
-//				"attribute vec2        texture_position; \n"
-//				"uniform mat4        mvproj;\n"
-//				"varying vec2 v_texture_position;\n"
-//				"uniform lowp vec4  color;\n"
-//				"void main() {\n"
-//				"  v_texture_position=texture_position;\n"
-//				"  gl_Position = mvproj * vec4(vPosition, 0, 1);\n"
-//				"}\n";
-// scaling seperate
-//const char gVertexShader [] =
-//        "attribute vec2 vPosition;\n"
-//                "uniform float scaleX;\n"
-//                "uniform vec4 mapcenter;\n"
-//                "attribute vec2        texture_position; \n"
-//                "uniform mat4        mvproj;\n"
-//                "varying vec2 v_texture_position;\n"
-//                "uniform lowp vec4  color;\n"
-//                "void main() {\n"
-//                "  v_texture_position=texture_position;\n"
-//                "  gl_Position = mvproj * vec4( scaleX * (vPosition.x - mapcenter.x), scaleX * (vPosition.y - mapcenter.y) , 0, 1);\n"
-//                "}\n";
-
-// no scaling needed, already in matrix mapcenter handled in the vertexshader
-const char gVertexShaderMapcenter [] =
-        "attribute vec3 vPosition;\n"
-                "uniform vec4 mapcenter;\n"
-                "attribute vec2        texture_position; \n"
-                "uniform mat4        mvproj;\n"
-                "varying vec2 v_texture_position;\n"
-                "uniform vec4  color;\n"
-                "void main() {\n"
-                "  v_texture_position=texture_position;\n"
-                "  gl_Position = mvproj * vec4((vPosition.x - mapcenter.x), (vPosition.y - mapcenter.y) , vPosition.z, 1);\n"
-                "}\n";
-
-const char gVertexShader_3d [] =
-        "attribute vec3 vPosition;\n"
-                "attribute vec2        texture_position; \n"
-                "uniform mat4        mvproj;\n"
-                "varying vec2 v_texture_position;\n"
-                "uniform vec4  color;\n"
-                "void main() {\n"
-                "  v_texture_position=texture_position;\n"
-                "  gl_Position = mvproj * vec4((vPosition.x), (vPosition.y) , vPosition.z, 1);\n"
-                "}\n";
-
 const char gVertexShader [] =
         "attribute vec2 vPosition;\n"
                 "attribute vec2        texture_position; \n"
@@ -292,6 +244,11 @@ void shutdownEGL() {
 	eglCtx = EGL_NO_CONTEXT;
 }
 
+/**
+ * Sets the openGL color
+ *
+ * @param color
+ */
 void
 set_color(struct color *color)
 {
@@ -306,9 +263,15 @@ set_color(struct color *color)
 }
 
 /**
- * draws wit z
+ * draws any primitive with z
  *
- * use this if the points were not processed and are still int's
+ * use this if the points were not processed and
+ * still have int coords
+ *
+ * @param p first of the points
+ * @param count the number of points
+ * @param z
+ * @param mode the openGL draw mode
  */
 static inline void
 draw_array(struct point *p, int count, int z, GLenum mode)
@@ -329,8 +292,12 @@ draw_array(struct point *p, int count, int z, GLenum mode)
 }
 
 /**
- * Draws polygons with an optional outline.
+ * Draws the polygon elements of a hash entry with an optional outline.
  *
+ * @param entry the hash entry derived from an itemgra
+ * @param p first of the points
+ * @param count the number of points
+ * @return nothing
  */
 int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
 
@@ -428,7 +395,14 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
     }
 }
 
-
+/**
+ * Draws the line elements of a hash entry
+ *
+ * @param entry the hash entry derived from an itemgra
+ * @param p first of the points
+ * @param count the number of points
+ * @return nothing
+ */
 static void
 draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
 {
@@ -442,7 +416,6 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
 
         if (element_data->type == 1)
         {
-
             struct element_polyline *line = &(element_data->u);
             struct color *color = &(element_data->color);
             set_color(color);
@@ -455,44 +428,95 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
             {
                 // version with GLshort and mapcenter handled by CPU
 
-                GLshort proad[(count - 1) * 8];
-
-                // zou moeten zijn sarten met een halve cirkel in elk punt
-                // op het eind nog een toevoegen
+                GLshort proad[((count - 1) * 8) + 4]; // 4 points per segment + one extra for start and end
 
                 glUniform1i(gvZvalHandle,z);
 
                 int thickness = line->width;
                 // check there are at least 2 point !!!!!!!!!!!!!! todo
                 count--; // 1 wegsegment minder dan count
+                int ccounter = 0;
                 for (int j = 0; j < count; j++)
                 {
-                    int i = j * 8;
-                    double dx = (float) (p[1 + j].x - p[0 + j].x); //delta x
-                    double dy = (float) (p[1 + j].y - p[0 + j].y); //delta y
+                    double dx = (p[1 + j].x - p[0 + j].x); //delta x
+                    double dy = (p[1 + j].y - p[0 + j].y); //delta y
                     double linelength = sqrt(dx * dx + dy * dy);
-                    dx /= linelength;
-                    dy /= linelength;
 
-                    const int px = (int)((thickness * (-dy)) / 2); //perpendicular vector with length thickness * 0.5
-                    const int py = (int)((thickness * dx) / 2);
+                    // add start cap
+                    // TODO a few more points for thick lines
+                    if (ccounter == 0)
+                    {
+                        int firstx = p[0 + j].x - (int)(dx * thickness/ ( 2 * linelength )) - mapcenter_x;
+                        int firsty = p[0 + j].y - (int)(dy  * thickness/ (2 * linelength)) - mapcenter_y;
+                        proad[ccounter] = (GLshort) firstx;
+                        ccounter++;
+                        proad[ccounter] = (GLshort) firsty;
+                        ccounter++;
+                    }
+
+                    int lastx;
+                    int lasty;
+                    if (j == (count-1)) // remember these for the end cap
+                    {
+                        lastx = p[1 + j].x + (int) (dx * thickness / (2 * linelength))- mapcenter_x;
+                        lasty = p[1 + j].y + (int) (dy * thickness / (2 * linelength))- mapcenter_y;
+                    }
+
+                    dx = dx / linelength;
+                    dy = dy / linelength;
+                    //perpendicular vector with length thickness * 0.5
+                    const int px = (int)((thickness * (-dy)) / 2);
+                    const int py = (int)((thickness * dx) / 2 );
                     //	dbg(lvl_error, "dx = %lf, dy = %lf, px = %lf, py = %lf\n", dx, dy, px, py);
 
-                    proad[0 + i] = (GLshort)(p[0 + j].x - px - mapcenter_x);
-                    proad[1 + i] = (GLshort)(p[0 + j].y - py - mapcenter_y);
-                    proad[2 + i] = (GLshort)(p[0 + j].x + px - mapcenter_x);
-                    proad[3 + i] = (GLshort)(p[0 + j].y + py - mapcenter_y);
-                    proad[4 + i] = (GLshort)(p[1 + j].x - px - mapcenter_x);
-                    proad[5 + i] = (GLshort)(p[1 + j].y - py - mapcenter_y);
-                    proad[6 + i] = (GLshort)(p[1 + j].x + px - mapcenter_x);
-                    proad[7 + i] = (GLshort)(p[1 + j].y + py - mapcenter_y);
+                    proad[ccounter] = (GLshort)(p[0 + j].x - px - mapcenter_x);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[0 + j].y - py - mapcenter_y);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[0 + j].x + px - mapcenter_x);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[0 + j].y + py - mapcenter_y);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[1 + j].x - px - mapcenter_x);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[1 + j].y - py - mapcenter_y);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[1 + j].x + px - mapcenter_x);
+                    ccounter ++;
+                    proad[ccounter] = (GLshort)(p[1 + j].y + py - mapcenter_y);
+                    ccounter ++;
+
+                    // add end cap
+                    if (j == (count-1))
+                    {
+                        proad[ccounter] = (GLshort) lastx;
+                        ccounter++;
+                        proad[ccounter] = (GLshort) lasty;
+                        ccounter++;
+                    }
                 }
                 glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, proad);
-            				checkGlError("in draw_array glVertexAttribPointer");
+                checkGlError("in draw_array glVertexAttribPointer");
                 glEnableVertexAttribArray(gvPositionHandle);
-            				checkGlError("in draw_array glEnableVertexAttribArray");
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4 * count);
-            				checkGlError("glDrawArrays");
+                checkGlError("in draw_array glEnableVertexAttribArray");
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, (ccounter/2)); // 4 points for a segment + startpoint
+                checkGlError("glDrawArrays");
+#if def0
+                // debug
+                if (!elements->next)
+                {
+                    glUniform1i(gvZvalHandle, z + 1);
+                    struct color *color2 = g_alloca(sizeof(struct color));
+                    color2->r = 65000;
+                    color2->b = 0;
+                    color2->g = 0;
+                    set_color(color2);
+                    glLineWidth(1.0f);
+                    glDrawArrays(GL_LINE_STRIP, 0, ccounter/2); // 4 points for a segment + startpoint
+                    checkGlError("glDrawArrays");
+                }
+                // end debug
+#endif
                 count ++; // just in case we use coords once more
             }
         }
@@ -501,15 +525,25 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
     }
 }
 
-/**remove the debug_triangles hack some later*/
-void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count, int debug_triangles )
+
+/**
+ * Draws the elements of a hash entry for the given points.
+ *
+ * @param entry the hash entry derived from an itemgra
+ * @param p first of the points
+ * @param count the number of points
+ * @param triangles TRUE or FALSE
+ * @return nothing
+ *
+ */
+void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count, int triangles )
 {
 
     GList *elements = entry->elements;
     struct element *element = elements->data;
-//    dbg(0,"elemnt ENTRY type = %i\n", element->type);
+    // dbg(0,"elemnt ENTRY type = %i\n", element->type);
 
-        // missing element arrows
+    // missing element arrows, text, circle and so on
 
     if (element->type == 1) //polyline, can have another one as second element
     {
@@ -519,22 +553,29 @@ void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count,
     {
         if (element->type == 2) //polygon, can have an outline as second element
         {
-               drawStencil(entry, p, count);
-
-            // some test to debug water
-            // draws the triangles as red lines
-            // above the polygon
-            if (debug_triangles == TRUE)
-            {
-                struct color *color = g_alloca(sizeof(struct color));
-                color->r = 65000;
-                color->b = 0;
-                color->g = 0;
+            if (triangles == TRUE) // no need to stecil pretriangulated polygons
+            {                      // and those seem to have lost their outline as well
+                struct color *color = &(element->color);
                 set_color(color);
+                draw_array(p, count, entry->z, GL_TRIANGLE_STRIP);
+
+#if def1
+                // some test for triangulated polygons
+                // draws the triangles as red lines
+                // above the polygon
+                struct color *color2 = g_alloca(sizeof(struct color));
+                color2->r = 65000;
+                color2->b = 0;
+                color2->g = 0;
+                set_color(color2);
                 glLineWidth(3.0f);
                 draw_array(p, count, entry->z +1 , GL_LINES);
+#endif
             }
-
+            else // not yet triangulated so use stencil and draw optional outline
+            {
+                drawStencil(entry, p, count);
+            }
         }
     }
 
@@ -824,8 +865,8 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
                                     }
 
                                         //     dbg(0,"draw type %s\n",item_to_name(item->type));
-                                    if (entry->defer == FALSE) {
-                                        /**remove debug trangles hack some later*/
+                                    if (entry->defer == FALSE)
+                                    {
                                         if (!strstr(item_to_name(item->type),"triang"))
                                         {
                                             draw_elements(entry, ca, count, FALSE);
@@ -983,40 +1024,6 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jo
         checkGlError("glGetFloatv linewidthrange");
         glMaxLineWidth = lineWidthRange[1];
     }
-    // no real need for this matrix anymore
-    // at each request a custom one is made
-
-//    for (int i = 0 ; i < 16 ; i++){
-//        matrix[i]=0.0;
-//    }
-
-//      this one is to render to the screen
-//    matrix[0]=2.0/width;
-//    matrix[5]=-2.0/height;
-//    matrix[10]=1;
-//    matrix[12]=-1;
-//    matrix[13]=1;
-//    matrix[15]=1;
-
-    // this one is to render with a bitmap as final target
-    // but transformation handled by navit
-//    matrix[0]=2.0/width;
-//    matrix[5]=2.0/height;
-//    matrix[10]=1;
-//    matrix[12]=-1; //
-//    matrix[13]=-1; //
-//    matrix[15]=1;
-
-// not rotated and needs scaling
-//    matrix[0]=1;
-//    matrix[5]=-1;
-//    matrix[10]=1;
-//    matrix[12]=0; //
-//    matrix[13]=0; //
-//    matrix[15]=1;
-
-//    glUniformMatrix4fv(gvMvprojHandle, 1, GL_FALSE, matrix);
-
 
 // setup openGL END
 
