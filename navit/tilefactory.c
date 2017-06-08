@@ -385,14 +385,14 @@ static inline void
 draw_array(struct point *p, int count, int z, GLenum mode)
 {
     int i;
-    GLshort x[count*2]; //CPU does mapcenter so this can be a GLshort
+    GLshort pcoord[count*2]; //CPU does mapcenter so this can be a GLshort
 
     for (i = 0 ; i < count ; i++) {
-        x[i*2]=(GLshort)(p[i].x - mapcenter_x);
-        x[i*2+1]=(GLshort)(p[i].y - mapcenter_y);
+        pcoord[i*2]=(GLshort)(p[i].x - mapcenter_x);
+        pcoord[i*2+1]=(GLshort)(p[i].y - mapcenter_y);
     }
 
-    glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, x);
+    glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, pcoord);
     //glEnableVertexAttribArray(gvPositionHandle);
     glUniform1i(gvZvalHandle,z);
 
