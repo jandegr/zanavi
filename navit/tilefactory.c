@@ -7,7 +7,7 @@
  * How to get the order the same as in the full mapview ?
  * tried order_corrected and other stuff FIXME FIXME FIXME
  *
- * plenty of stuff missing, poi's , dashed lines , ....
+ * plenty of stuff missing, poi's , thick dashed lines , ....
  *
  * for now works as a drop-in replacement for the lowqual preview map
  *
@@ -22,30 +22,6 @@
 // apparently the order of the includes is important
 // several unneeded
 
-#if dedf0
-
-#include <stdlib.h>
-//#include <string.h>
-//#include <poll.h>
-#include <glib.h>
-#include "android.h"
-//#include <android/log.h>
-#include <android/bitmap.h>
-#include "navit.h"
-//#include "config_.h"
-//#include "command.h"
-#include "debug.h"
-#include "transform.h"
-#include "map.h"
-#include "coffeecatch.h"
-#include "coffeejni.h"
-#include "mapset.h"
-#include "layout.h"
-#include "graphics.h"
-#include "item.h"
-#include "attr.h"
-#endif
-
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
@@ -54,38 +30,40 @@
 #include <glib.h>
 #include <stdio.h>
 #include <math.h>
-#include <zlib.h>
-#include "config.h"
+//#include <zlib.h>
+//#include "config.h"
 #include "debug.h"
-#include "string.h"
-#include "draw_info.h"
+//#include "string.h"
+//#include "draw_info.h"
 #include "point.h"
 #include "graphics.h"
-#include "projection.h"
-#include "item.h"
+//#include "projection.h"
+//#include "item.h"
 #include "map.h"
-#include "coord.h"
+//#include "coord.h"
 #include "transform.h"
 #include "plugin.h"
-#include "profile.h"
+//#include "profile.h"
 #include "mapset.h"
 #include "layout.h"
 #include "route.h"
-#include "util.h"
+//#include "util.h"
 #include "callback.h"
 #include "file.h"
-#include "event.h"
+//#include "event.h"
 //
-#include "attr.h"
+//#include "attr.h"
+// ??????????????? track ?
 #include "track.h"
 #include "navit.h"
-#include "route.h"
+//#include "route.h"
 
 struct openGL_hash_entry {
     int z;
     int defer;
     GList *elements;
 };
+
 
 GHashTable* htab = NULL;
 int htab_order = 99999;
@@ -101,11 +79,15 @@ EGLSurface eglSurface;
 EGLContext eglCtx;
 EGLDisplay eglDisp;
 
-GLuint gvMvprojHandle;
+
 GLuint gvPositionHandle;
-GLuint gvColorHandle;
-GLuint gvMapcenterHandle;
-GLuint gvZvalHandle;
+GLint gvMvprojHandle;
+GLint gvColorHandle;
+//GLint gvMapcenterHandle;
+GLint gvScaleXHandle;
+GLint gvZvalHandle;
+GLint gvUseDashesHandle;
+GLint gvSourcePointHandle;
 GLfloat glMaxLineWidth;
 
 // EGL config attributes
@@ -126,34 +108,123 @@ const EGLint ctxAttr[] = {
 		EGL_NONE
 };
 
+
+#if def0 // dashes but in world coords, resizes dashes with zoom
 const char gVertexShader [] =
         "attribute vec2 vPosition;\n"
                 "attribute vec2        texture_position; \n"
                 "uniform mat4        mvproj;\n"
+                "uniform mat2        invMvproj;\n"
+                "uniform bool use_dashes;\n"
+                "varying float v_use_dashes = 0.0;\n"
                 "varying vec2 v_texture_position;\n"
+                "varying vec2 position;\n"
                 "uniform vec4  color;\n"
                 "uniform int  zval;\n"
                 "void main() {\n"
                 "  v_texture_position=texture_position;\n"
                 "  gl_Position = mvproj * vec4((vPosition.x), (vPosition.y) , zval, 1);\n"
+                "  if (use_dashes){\n"
+                "      v_use_dashes = 1.0;\n"
+                "      position = invMvproj * vec2(gl_Position.x, gl_Position.y) ;\n"
+                "  }\n"
+                "}\n";
+
+// met invMvproj moet er terug naar schermcoordinaten gerekend worde
+// van de actuele positie
+// bewerking op of met gl_position kan beter in de fragmentshader gebeuren,
+// dat is daar ook beschikbaar !!!!
+// of met gl_FragCoord werken ???
+// http://www.shaderific.com/glsl-variables
+//"precision mediump float;\n"
+
+const char gFragmentShader [] =
+        "precision highp float;\n"
+                "uniform vec4  color;\n"
+                "uniform sampler2D texture;\n"
+                "uniform bool use_texture;\n"
+                "varying float v_use_dashes;\n"
+                "uniform vec2 sourcePoint;\n"
+                "varying vec2 position;\n"
+                "varying vec2 v_texture_position;\n"
+                "void main() {\n"
+                "   if (use_texture) {\n"
+                "     gl_FragColor = texture2D(texture, v_texture_position);\n"
+                "   }else if (v_use_dashes > 0.0){\n"
+                "      if (cos(0.85 * abs(distance(sourcePoint.xy, position.xy))) - 0.3 > 0.0)\n"
+                "         {\n"
+                "             discard;\n"
+                "         } else \n"
+                "         {\n"
+                "             gl_FragColor = color;\n"
+                "         }\n"
+                "   }else{\n"
+                "     gl_FragColor = color;\n"
+                "   }\n"
+                "}\n";
+
+
+const char gFragmentShader_NOdash [] =
+        "precision mediump float;\n"
+                "uniform vec4  color;\n"
+                "uniform sampler2D texture;\n"
+                "uniform bool use_texture;\n"
+                "uniform bool use_dashes;\n"
+                "varying vec2 v_texture_position;\n"
+                "void main() {\n"
+                "   if (use_texture) {\n"
+                "     gl_FragColor = texture2D(texture, v_texture_position);\n"
+                "   }else if (use_dashes){\n"
+                "     discard;\n"
+                "   }else{\n"
+                "     gl_FragColor = color;\n"
+                "   }\n"
+                "}\n";
+#endif
+
+const char gVertexShader [] =
+        "attribute vec2 vPosition;\n" // zo een vec4 maken waarbij 3 en 4 first point zijn en dan niet met line strip tekenen !!
+                "attribute vec2        texture_position; \n"
+                "uniform mat4        mvproj;\n"
+                "uniform bool use_dashes;\n"
+                "uniform vec2 sourcePoint;\n"
+                "uniform float scaleX;"
+                "uniform vec4  color;\n"
+                "uniform int  zval;\n"
+                "varying vec2 v_texture_position;\n"
+                "varying float vDistanceFromSource;\n"
+                "void main() {\n"
+                "  v_texture_position=texture_position;\n"
+                "  gl_Position = mvproj * vec4((vPosition.x), (vPosition.y) , zval, 1);\n"
+                "  if (use_dashes){\n"
+                "      vec4 position = mvproj * vec4(sourcePoint.x, sourcePoint.y, zval, 1) ;\n"
+                "      vDistanceFromSource = distance(position.xy, gl_Position.xy) * scaleX;\n"
+                "  }\n"
                 "}\n";
 
 const char gFragmentShader [] =
-		"precision mediump float;\n"
-				"uniform vec4  color;\n"
-				"uniform sampler2D texture;\n"
-				"uniform bool use_texture;\n"
-				"uniform bool use_dashes;\n"
-				"varying vec2 v_texture_position;\n"
-				"void main() {\n"
-				"   if (use_texture) {\n"
-				"     gl_FragColor = texture2D(texture, v_texture_position);\n"
-				"   }else if (use_dashes){\n"
-				"     discard;\n"
-				"   }else{\n"
-				"     gl_FragColor = color;\n"
-				"   }\n"
-				"}\n";
+        "precision highp float;\n"
+                "uniform vec4  color;\n"
+                "uniform sampler2D texture;\n"
+                "uniform bool use_texture;\n"
+                "uniform bool use_dashes;\n"
+                "varying float vDistanceFromSource;\n"
+                "varying vec2 v_texture_position;\n"
+                "void main() {\n"
+                "   if (use_texture) {\n"
+                "     gl_FragColor = texture2D(texture, v_texture_position);\n"
+                "   }else if (use_dashes){\n"
+                "      if (cos(0.65 * abs(vDistanceFromSource)) - 0.3 > 0.0)\n"
+                "         {\n"
+                "             discard;\n"
+                "         } else \n"
+                "         {\n"
+                "             gl_FragColor = color;\n"
+                "         }\n"
+                "   }else{\n"
+                "     gl_FragColor = color;\n"
+                "   }\n"
+                "}\n";
 
 
 static void printGLString(const char *name, GLenum s) {
@@ -161,10 +232,12 @@ static void printGLString(const char *name, GLenum s) {
 	dbg(0,"GL %s = %s\n", name, v);
 }
 
-static void checkGlError(const char* op) {
-	for (GLint error = glGetError(); error; error = glGetError()) {
-		dbg(0,"after %s() glError (0x%x)\n", op, error);
-	}
+static inline void checkGlError(const char* op) {
+
+//	for (GLint error = glGetError(); error; error = glGetError()) {
+//		dbg(0,"after %s() glError (0x%x)\n", op, error);
+//	}
+
 }
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
@@ -245,11 +318,46 @@ void shutdownEGL() {
 }
 
 /**
- * Sets the openGL color
+ * Sets the transformation matrices for the shader(s).
+ *
+ * @param width of the bitmap
+ * @param tr the current transformation of the screen
+ */
+void set_matrices(int width, const struct transformation *tr)
+{
+    GLfloat yawcos = (GLfloat)cos(-M_PI * tr->yaw / 180);
+    GLfloat yawsin = (GLfloat)sin(-M_PI * tr->yaw / 180);
+
+    GLfloat matrix[16];
+
+    matrix[0]= (GLfloat)(yawcos *(2.0/width) / tr->scale);
+    matrix[1]= (GLfloat)(yawsin *(2.0/width) / tr->scale);
+    matrix[2]=0.0;
+    matrix[3]=0.0;
+    matrix[4]= matrix[1];
+    matrix[5] = -matrix[0];
+    matrix[6]=0.0;
+    matrix[7]=0.0;
+    matrix[8]=0.0;
+    matrix[9]=0.0;
+    matrix[10]=-0.001f; // z multiplier
+    matrix[11]=0.0;
+    matrix[12]=0.0;
+    matrix[13]=0.0;
+    matrix[14]=0.0;
+    matrix[15]=1.0;
+
+    glUniformMatrix4fv(gvMvprojHandle, 1, GL_FALSE, matrix);
+}
+
+
+/**
+ * Sets the openGL color uniform
+ * for the shaderprograms.
  *
  * @param color
  */
-void
+static inline void
 set_color(struct color *color)
 {
 //	dbg(lvl_error,"set color r = %i, g = %i, b = %i, a = %i\n",color->r,color->g,color->b,color->a);
@@ -285,7 +393,7 @@ draw_array(struct point *p, int count, int z, GLenum mode)
     }
 
     glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, x);
-    glEnableVertexAttribArray(gvPositionHandle);
+    //glEnableVertexAttribArray(gvPositionHandle);
     glUniform1i(gvZvalHandle,z);
 
     glDrawArrays(mode, 0, count);
@@ -305,8 +413,8 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
     GList *elements = entry->elements;
     struct element *element_data = elements->data;
     GLshort boundingbox[8];
-    boundingbox[0] = boundingbox[2] = boundingbox[4] = boundingbox[6] = (GLshort)p[0].x - mapcenter_x; // topleft, topright, bottomright, bottomleft
-    boundingbox[1] = boundingbox[3] = boundingbox[5] = boundingbox[7] = (GLshort)p[0].y - mapcenter_y;
+    boundingbox[0] = boundingbox[2] = boundingbox[4] = boundingbox[6] = (GLshort)(p[0].x - mapcenter_x); // topleft, topright, bottomright, bottomleft
+    boundingbox[1] = boundingbox[3] = boundingbox[5] = boundingbox[7] = (GLshort)(p[0].y - mapcenter_y);
     if (element_data->type == 2) // is it actually a polygon ?
     {
         struct color *color = &(element_data->color);
@@ -351,10 +459,10 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
         glDisable(GL_DEPTH_TEST); // for some reason stencil does not work with depthtest enabled
 
         glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, x);
-        glEnableVertexAttribArray(gvPositionHandle);
+        //glEnableVertexAttribArray(gvPositionHandle);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, count);
-//        checkGlError("glDrawArrays");
+        checkGlError("glDrawArrays");
 
         if (elements->next)
         {
@@ -377,7 +485,7 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
         glStencilFunc(GL_EQUAL, 1, 1);
         glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
         glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, boundingbox);
-        glEnableVertexAttribArray(gvPositionHandle);
+        //glEnableVertexAttribArray(gvPositionHandle);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         if (elements->next)
         {
@@ -395,13 +503,28 @@ int drawStencil(struct openGL_hash_entry *entry, struct point *p, int count) {
     }
 }
 
+static inline void
+setdashes(int enable)
+{
+    if (enable == TRUE)
+    {
+        glUniform1i(gvUseDashesHandle,TRUE);
+    }
+    else
+    {
+        glUniform1i(gvUseDashesHandle,FALSE);
+    }
+
+
+}
+
 /**
  * Draws the line elements of a hash entry
+ * version with GLshort and mapcenter handled by CPU
  *
  * @param entry the hash entry derived from an itemgra
  * @param p first of the points
  * @param count the number of points
- * @return nothing
  */
 static void
 draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
@@ -414,27 +537,65 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
         struct element *element_data = elements->data;
 //        dbg(0, "draw element_data z  = %f\n", z);
 
-        if (element_data->type == 1)
+        if (element_data->type == 1 && count > 1)
         {
             struct element_polyline *line = &(element_data->u);
             struct color *color = &(element_data->color);
             set_color(color);
+            if (line->width <  1)
+            {
+                line->width = 1;
+            }
             if (line->width <  5) /////////!!!!!!!
-            {  // width zero may crash it ???
+            {   // let GPU draw them as lines
                 glLineWidth((GLfloat)line->width);
-                draw_array(p, count, z, GL_LINE_STRIP);
+                glUniform1i(gvZvalHandle,z);
+                if (line->dash_num)
+                {
+                    setdashes(TRUE);
+
+                    for(int i=0; i<(count-1); i++)
+                    {
+                        GLfloat segcoord[4];
+                        segcoord[0] = (GLfloat)(p[0 + i].x - mapcenter_x);
+                        segcoord[1] = (GLfloat)(p[0 + i].y - mapcenter_y);
+                        segcoord[2] = (GLfloat)(p[1 + i].x - mapcenter_x);
+                        segcoord[3] = (GLfloat)(p[1 + i].y - mapcenter_y);
+
+                        GLfloat sourcePoint[2];
+                        sourcePoint[0] = segcoord[0];
+                        sourcePoint[1] = segcoord[1];
+
+                        // glUniform2iv gives errors
+                        glUniform2fv(gvSourcePointHandle,1, segcoord);
+                        checkGlError("glUniform2fv sourcePoint");
+
+                        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, segcoord);
+                        checkGlError("in draw_array glVertexAttribPointer");
+
+                        //glEnableVertexAttribArray(gvPositionHandle);
+                        //checkGlError("in draw_array glEnableVertexAttribArray");
+
+                        glDrawArrays(GL_LINES, 0, 2);
+                        checkGlError("glDrawArrays");
+                    }
+                    setdashes(FALSE);
+                }
+                else
+                {
+                    draw_array(p, count, z, GL_LINE_STRIP);
+                }
             }
             else
-            {
-                // version with GLshort and mapcenter handled by CPU
-
-                GLshort proad[((count - 1) * 8) + 4]; // 4 points per segment + one extra for start and end
+            {   // construct boxes and an end and startcap
+                count--; // 1 roadsegment less than number of points
+                GLshort proad[(count * 8) + 4]; // 4 points per segment + one extra for start and end
 
                 glUniform1i(gvZvalHandle,z);
 
                 int thickness = line->width;
-                // check there are at least 2 point !!!!!!!!!!!!!! todo
-                count--; // 1 wegsegment minder dan count
+
+                // keep track of the number of coords produced
                 int ccounter = 0;
                 for (int j = 0; j < count; j++)
                 {
@@ -454,8 +615,8 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
                         ccounter++;
                     }
 
-                    int lastx;
-                    int lasty;
+                    int lastx = 0;
+                    int lasty = 0;
                     if (j == (count-1)) // remember these for the end cap
                     {
                         lastx = p[1 + j].x + (int) (dx * thickness / (2 * linelength))- mapcenter_x;
@@ -497,8 +658,10 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
                 }
                 glVertexAttribPointer(gvPositionHandle, 2, GL_SHORT, GL_FALSE, 0, proad);
                 checkGlError("in draw_array glVertexAttribPointer");
-                glEnableVertexAttribArray(gvPositionHandle);
-                checkGlError("in draw_array glEnableVertexAttribArray");
+
+                //glEnableVertexAttribArray(gvPositionHandle);
+                //checkGlError("in draw_array glEnableVertexAttribArray");
+
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, (ccounter/2)); // 4 points for a segment + startpoint
                 checkGlError("glDrawArrays");
 #if def0
@@ -517,7 +680,7 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
                 }
                 // end debug
 #endif
-                count ++; // just in case we use coords once more
+                count ++; // restore count to the number of points
             }
         }
         elements = elements->next;
@@ -536,7 +699,7 @@ draw_lines(struct openGL_hash_entry *entry, struct point *p, int count)
  * @return nothing
  *
  */
-void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count, int triangles )
+void draw_elements( struct openGL_hash_entry *entry ,struct point *points, int count, int triangles )
 {
 
     GList *elements = entry->elements;
@@ -547,7 +710,7 @@ void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count,
 
     if (element->type == 1) //polyline, can have another one as second element
     {
-        draw_lines(entry, p, count);
+        draw_lines(entry, points, count);
     }
     else
     {
@@ -557,9 +720,9 @@ void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count,
             {                      // and those seem to have lost their outline as well
                 struct color *color = &(element->color);
                 set_color(color);
-                draw_array(p, count, entry->z, GL_TRIANGLE_STRIP);
+                draw_array(points, count, entry->z, GL_TRIANGLE_STRIP);
 
-#if def1
+#if def0
                 // some test for triangulated polygons
                 // draws the triangles as red lines
                 // above the polygon
@@ -574,7 +737,7 @@ void draw_elements( struct openGL_hash_entry *entry ,struct point *p, int count,
             }
             else // not yet triangulated so use stencil and draw optional outline
             {
-                drawStencil(entry, p, count);
+                drawStencil(entry, points, count);
             }
         }
     }
@@ -604,20 +767,89 @@ void free_element( gpointer key, gpointer value, gpointer userData )
 
 void freehtab()
 {
-    if (!htab)
+    if (htab)
     {
-        return;
+        g_hash_table_foreach(htab, free_element, NULL);
+        g_hash_table_destroy(htab);
     }
-    g_hash_table_foreach (htab, free_element, NULL);
-    g_hash_table_destroy(htab);
 }
+
+/**
+ * Fills the hash (if needed) with the layout
+ * elements first to appear based on the order.
+ *
+ * @param layout
+ * @param order
+ */
+void fillhash(const struct layout *layout, int order)
+{
+    if (!htab || htab_order != order) // check for changes in layout as well !!!!
+        // what if a layer just gets deactivated by the user ?
+    {
+        freehtab();
+        htab = g_hash_table_new(g_str_hash, g_str_equal);
+        htab_order = order;
+
+        GList *current_layer = layout->layers;
+        int z = 10;
+        while (current_layer)
+        {
+            struct layer *layer = current_layer->data;
+            //         dbg(0, "layer %s\n", layer->name);
+            if (layer->active && (!strstr(layer->name,"POI"))&& (!strstr(layer->name,"labels")))
+            {
+                //          dbg(0, "layer %s +++ ACTIVE\n", layer->name);
+                GList *current_itemgra = layer->itemgras;
+                while (current_itemgra)
+                {
+                    struct itemgra *itemgra = current_itemgra->data;
+                    int ordermin = itemgra->order.min;  // zou rechtstreeks kunnen gebruikt worden, was ander probleem
+                    int ordermax = itemgra->order.max;
+                    //dbg(0,"itemgra min = %i, max = %i",ordermin , ordermax);
+
+                    GList *elements = itemgra->elements;
+                    GList *type = itemgra->type;
+                    struct element *element = elements->data;
+                    if (ordermin <= order && ordermax >= order)
+                    {
+                        while (type)
+                        {
+                            //dbg(lvl_error,"item %i\n",element->type); // dit is lijn , polygon en zo
+                            struct openGL_hash_entry *entry = g_new0(struct openGL_hash_entry, 1);
+                            entry->z = z;
+                            entry->elements = elements;
+                            entry->defer = FALSE;
+                            if (!g_hash_table_lookup(htab, item_to_name(type->data)))
+                            {
+                                if (strstr(item_to_name(type->data),"building"))
+                                {
+                                    entry->defer = TRUE;
+                                }
+                                g_hash_table_insert(htab, item_to_name(
+                                        type->data), // anders blaast text er de polygons uit !!
+                                                    entry); // nooit NULL toevoegen !!!!
+                            }
+                            //           dbg(0, "inserted item %s\n",item_to_name(type->data));  //dit is item poly_park enzovoort
+                            type = type->next;
+                        }
+                        z = z + 10; // all types in an itemgra draw with the same Z
+                    }
+                    current_itemgra = current_itemgra->next;
+                }
+            }
+            //   else we have an inactive layer, do nothing
+
+            current_layer = current_layer->next;
+        }
+    }
+}
+
 
 void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
     dbg(0,"+#+:enter\n");
 #endif
-    // config_get_attr(config, attr_navit, &attr, NULL);
     dbg(lvl_info,"enter\n");
     struct layout  * layout;
     int order;
@@ -629,22 +861,22 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     (*env)->ReleaseStringUTFChars(env, latlonzoom, s);
 
     // show map preview for (lat#lon#zoom)
-    struct coord_geo g;
-    char *p;
+    struct coord_geo geocoord;
+    char *part;
     char *stopstring;
 
     // lat
-    p = strtok(parse_str, "#");
-    g.lat = strtof(p, &stopstring);
+    part = strtok(parse_str, "#");
+    geocoord.lat = strtof(part, &stopstring);
     // lon
-    p = strtok(NULL, "#");
-    g.lng = strtof(p, &stopstring);
+    part = strtok(NULL, "#");
+    geocoord.lng = strtof(part, &stopstring);
     // zoom
-    p = strtok(NULL, "#");
-    zoom = atoi(p);
+    part = strtok(NULL, "#");
+    zoom = atoi(part);
 
     struct coord c;
-    transform_from_geo(projection_mg, &g, &c);
+    transform_from_geo(projection_mg, &geocoord, &c);
 
     struct item *item;
     struct map_rect *mr = NULL;
@@ -657,10 +889,12 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     struct map_selection sel;
     const int selection_range = sel_range;
 
-    const int max = 400; // was 100
+    const int max = 1000;   // was 100, 600 fixes flooding fo river Dender near Ninove
+                            // 1000 fixes its flooding south of Lessines
     int count;
-    struct coord *ca = g_alloca(sizeof(struct coord) * max);
- //   struct point *pa = g_alloca(sizeof(struct point) * max); // not used if GPU does all transformations
+    struct point *p = g_alloca(sizeof(struct point) * max); // some anomaly in navit, struct coord and struct point
+                                                            // are the same. struct coord has an x and an y coord,
+                                                            // together they make a point and not a coord
 
     sel.next = NULL;
     sel.order = zoom;
@@ -685,8 +919,6 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     global_cancel_preview_map_drawing = 0;
 
     mapset = global_navit->mapsets->data;
-
-
 
     layout = global_navit->layout_current;
     order = transform_get_order(tr);
@@ -713,8 +945,8 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
 //    dbg(lvl_info,"map center x = %i, y = %i\n", tr->map_center.x, tr->map_center.y);
 //    dbg(lvl_info,"scale = %f\n", tr->scale);
 //    dbg(lvl_info,"scale_shift = %f\n", tr->scale_shift);
-    dbg(0,"layout = %s order = %i delta = %i zoom = %i\n", layout->name, order,layout->order_delta, zoom);
-    dbg(0,"order_corrected = %i, shift_order = %i \n", order_corrected, shift_order);
+//    dbg(0,"layout = %s order = %i delta = %i zoom = %i\n", layout->name, order,layout->order_delta, zoom);
+//    dbg(0,"order_corrected = %i, shift_order = %i \n", order_corrected, shift_order);
 
  //   order = order + layout->order_delta; ------------------- !!!!!! ---------------------
  //   ------------------ must probably use order_corrected or so ---------------------
@@ -723,107 +955,21 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
     // FIXME FIXME !!!!
 
     order = zoom; //?????
-//  set map background color
+
+    // set map background color
     glClearColor(((float)layout->color.r)/65535,((float)layout->color.g)/65535 , ((float)layout->color.b)/65535, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (!htab || htab_order != order_corrected) // check for changes in layout as well !!!!
-                                                // what if a lyaer just gets deactivated by the user ?
-    {
-        freehtab();
-        htab = g_hash_table_new(g_str_hash, g_str_equal);
-        htab_order = order_corrected;
-
-        GList *current_layer = layout->layers;
-        int z = 10;
-        while (current_layer)
-        {
-            struct layer *layer = current_layer->data;
-         //         dbg(0, "layer %s\n", layer->name);
-            if (layer->active && (!strstr(layer->name,"POI"))&& (!strstr(layer->name,"labels")))
-            {
-                //          dbg(0, "layer %s +++ ACTIVE\n", layer->name);
-                GList *current_itemgra = layer->itemgras;
-                while (current_itemgra)
-                {
-                    struct itemgra *itemgra = current_itemgra->data;
-                    int ordermin = itemgra->order.min;  // zou rechtstreeks kunnen gebruikt worden, was ander probleem
-                    int ordermax = itemgra->order.max;
-                    //           dbg(0,"itemgra min = %i, max = %i",ordermin , ordermax);
-
-                    GList *elements = itemgra->elements;
-                    GList *type = itemgra->type;
-                    struct element *element = elements->data;
-                    if (ordermin <= order_corrected && ordermax >= order_corrected)
-                    {
-                        while (type)
-                        {
-                            //dbg(lvl_error,"item %i\n",element->type); // dit is lijn , polygon en zo
-                            struct openGL_hash_entry *entry = g_new0(struct openGL_hash_entry, 1);
-                            entry->z = z;
-                            entry->elements = elements;
-                            entry->defer = FALSE;
-                            if (!g_hash_table_lookup(htab, item_to_name(type->data)))
-                            {
-                                if (strstr(item_to_name(type->data),"building"))
-                                {
-                                    entry->defer = TRUE;
-                                }
-                                g_hash_table_insert(htab, item_to_name(
-                                           type->data), // anders blaast text er de polygons uit !!
-                                                        entry); // nooit NULL toevoegen !!!!
-                            }
-                            //           dbg(0, "inserted item %s\n",item_to_name(type->data));  //dit is item poly_park enzovoort
-                            type = type->next;
-                        }
-                        z = z + 10; // all types in an itemgra draw with the same Z
-                    }
-                    current_itemgra = current_itemgra->next;
-                }
-            }
-         //   else we have an inactive layer, do nothing
-
-            current_layer = current_layer->next;
-        }
-    }
+    // check the hash and (re)fill if needed
+    fillhash(layout, order_corrected);
 
     mapcenter_x = tr->map_center.x;
     mapcenter_y = tr->map_center.y;
 
-    navit_float yawc = navit_cos(-M_PI * tr->yaw / 180);
-    navit_float yaws = navit_sin(-M_PI * tr->yaw / 180);
+    set_matrices(width, tr);
 
-    GLfloat matrix[16];
-
-    matrix[0]=(GLfloat)(yawc)*(2.0/width) / tr->scale;
-    matrix[1]=(GLfloat)(yaws)*(2.0/width) / tr->scale;
-    matrix[2]=0.0;
-    matrix[3]=0.0;
-    matrix[4]= matrix[1];
-    matrix[5] = -matrix[0];
-    matrix[6]=0.0;
-    matrix[7]=0.0;
-    matrix[8]=0.0;
-    matrix[9]=0.0;
-    matrix[10]=-0.001; // z multiplier
-    matrix[11]=0.0;
-    matrix[12]=0.0;
-    matrix[13]=0.0;
-    matrix[14]=0.0;
-    matrix[15]=1.0;
-
-    glUniformMatrix4fv(gvMvprojHandle, 1, GL_FALSE, matrix);
-
-#if def0
-    GLfloat matrix[4];
-
-    matrix[0]=(GLfloat)(yawc)*(2.0/width) / tr->scale;
-    matrix[1]=(GLfloat)(yaws)*(2.0/width) / tr->scale;
-    matrix[2]= matrix[1];
-    matrix[3] = -matrix[0];
-    glUniformMatrix2fv(gvMvprojHandle, 1, GL_FALSE, matrix);
-#endif
-
+    // inform the shader of the scale, used for dashes and such
+    glUniform1f(gvScaleXHandle, (GLfloat)(width/2.0));
 
     msh = mapset_open(mapset);
     while (msh && (map = mapset_next(msh, 0)))
@@ -843,14 +989,16 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
                         {
                             if (global_cancel_preview_map_drawing == 1)
                             {
-                                dbg(0, "global_cancel_preview_map_drawing = 1");
-                                break;
+                             // NOT DURING TESTING
+                             //   dbg(0, "global_cancel_preview_map_drawing = 1");
+                             //   break;
                             }
 
                             struct openGL_hash_entry *entry;
-                            if (entry = g_hash_table_lookup(htab, item_to_name(item->type)))
+                            entry = g_hash_table_lookup(htab, item_to_name(item->type));
+                            if (entry)
                             {
-                                count = item_coord_get_within_selection(item, ca, max, &sel);
+                                count = item_coord_get_within_selection(item, (struct coord*)p, max, &sel);
 
                                 if (count)
                                 {
@@ -864,27 +1012,28 @@ void DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, in
                                         item->flags = 0;
                                     }
 
-                                        //     dbg(0,"draw type %s\n",item_to_name(item->type));
+                                    //dbg(0,"draw type %s\n",item_to_name(item->type));
                                     if (entry->defer == FALSE)
                                     {
                                         if (!strstr(item_to_name(item->type),"triang"))
                                         {
-                                            draw_elements(entry, ca, count, FALSE);
+                                            // draw non-triangulated elements
+                                            draw_elements(entry, p, count, FALSE);
                                         }
                                         else
                                         {
-                                            draw_elements(entry, ca, count, TRUE);
+                                            // draw triangulated elements
+                                            draw_elements(entry, p, count, TRUE);
                                         }
                                     }
                                     else
                                     {
-                                      //  defer_elements(entry, ca, count);    TODO
+                                      //  defer_elements(entry, (struct coord*)p, count);    TODO
                                     }
                                 }
                             }
                         }
                         map_rect_destroy(mr);
-
                     }
                 }
             }
@@ -925,7 +1074,7 @@ void sendBitmap(JNIEnv* env, int width, int height){
 
     if (Preview_set_bitmap == NULL)
     {
-        dbg(lvl_error, "no method found for Preview_set_bitmap \n");
+        dbg(0, "no method found for Preview_set_bitmap \n");
         return;
     }
 
@@ -1002,20 +1151,37 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jo
 
         glEnable(GL_DEPTH_TEST); // needed if drawing with z
 
+        // gives GLint
         gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
         checkGlError("glGetAttribLocation vPosition");
+        // but this wants GLunit
+        glEnableVertexAttribArray(gvPositionHandle); //always used, enable as default
+
 
         gvMvprojHandle = glGetUniformLocation(gProgram, "mvproj");
         checkGlError("glGetUniformLocation mvproj");
 
+//        gvInvMvprojHandle = glGetUniformLocation(gProgram, "invMvproj");
+//        checkGlError("glGetUniformLocation mvproj");
+
         gvColorHandle = glGetUniformLocation(gProgram, "color");
         checkGlError("glGetUniformLocation color");
 
-        gvMapcenterHandle = glGetUniformLocation(gProgram, "mapcenter");
-        checkGlError("glGetUniformLocation mapcenter");
+//        gvMapcenterHandle = glGetUniformLocation(gProgram, "mapcenter");
+//        checkGlError("glGetUniformLocation mapcenter");
+
+
+        gvScaleXHandle = glGetUniformLocation(gProgram, "scaleX");
+        checkGlError("glGetUniformLocation scaleX");
 
         gvZvalHandle = glGetUniformLocation(gProgram, "zval");
-        checkGlError("glGetUniformLocation");
+        checkGlError("glGetUniformLocation zval");
+
+        gvUseDashesHandle = glGetUniformLocation(gProgram, "use_dashes");
+        checkGlError("glGetUniformLocation use_dashes");
+
+        gvSourcePointHandle = glGetUniformLocation(gProgram, "sourcePoint");
+        checkGlError("glGetUniformLocation sourcePoint");
 
         glViewport(0, 0, width, height);
         checkGlError("glViewport");
