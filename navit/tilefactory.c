@@ -1092,7 +1092,7 @@ void sendBitmap(JNIEnv* env, int width, int height){
     AndroidBitmap_lockPixels(jnienv2, bitmapObj, &pPixels);
     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pPixels);
     AndroidBitmap_unlockPixels(jnienv2, bitmapObj);
-    (*jnienv2)->CallStaticObjectMethod(jnienv2,NavitGraphicsClass3, Preview_set_bitmap, bitmapObj);
+    (*jnienv2)->CallStaticVoidMethod(jnienv2,NavitGraphicsClass3, Preview_set_bitmap, bitmapObj);
 
 }
 
@@ -1100,7 +1100,7 @@ void sendBitmap(JNIEnv* env, int width, int height){
  * An openGL version of the lowqual map
  */
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range) {
+Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jclass thiz, jstring latlonzoom, jint width, jint height, jint font_size, jint scale, jint sel_range) {
 
     GLuint gProgram;
     GLfloat lineWidthRange[2];
