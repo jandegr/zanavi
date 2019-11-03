@@ -36,15 +36,15 @@ jobs:
     - name: Upload Lint report
       uses: actions/upload-artifact@v1.0.0
       with: 
-        path: /home/runner/work/navit/navit/navit/android/build/reports/lint-results.html
+        path: /home/runner/work/zanavi/zanavi/navit/android/build/reports/lint-results.html
         name: Lint
     - name: Upload checkstyle report
       uses: actions/upload-artifact@v1.0.0
       with: 
-        path: /home/runner/work/navit/navit/navit/android/build/outputs/checkstyle
+        path: /home/runner/work/zanavi/zanavi/navit/android/build/outputs/checkstyle
         name: checkstyle
     - name: Upload apk
       uses: actions/upload-artifact@v1.0.0
       with: 
-        path: /home/runner/work/navit/navit/navit/android/build/outputs/apk/debug
+        path: /home/runner/work/zanavi/zanavi/navit/android/build/outputs/apk/debug
         name: apk
