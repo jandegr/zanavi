@@ -24,8 +24,6 @@ jobs:
       run: ./gradlew build
     - name: javadoc
       run: ./gradlew generateDebugJavadoc
-    - name: checkstyle
-      run: ./gradlew checkstyleMain
 #    - name: lint
 #      run: ./gradlew lint test
     - name: Upload javadoc
@@ -38,11 +36,6 @@ jobs:
       with: 
         path: /home/runner/work/zanavi/zanavi/navit/android/build/reports/lint-results.html
         name: Lint
-    - name: Upload checkstyle report
-      uses: actions/upload-artifact@v1.0.0
-      with: 
-        path: /home/runner/work/zanavi/zanavi/navit/android/build/outputs/checkstyle
-        name: checkstyle
     - name: Upload apk
       uses: actions/upload-artifact@v1.0.0
       with: 
