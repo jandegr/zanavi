@@ -1,108 +1,34 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 apply plugin: 'com.android.application'
 // -------QC-------
 // apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'net.ltgt.apt'
-apply from: '../config/quality.gradle'
-apply plugin: 'spoon'
+// apply plugin: 'net.ltgt.apt' -- not found, jdg
+// apply from: '../config/quality.gradle'
+// apply plugin: 'spoon'
 // -------QC-------
 
-repositories {
-    jcenter()
-
-    flatDir {
-        dirs 'libs'
-    }
-}
-
-dependencies {
-    // dependencies for app building
-
-    compile project(':android-about-page')
-
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':android-support-v7-appcompat')
-    compile project(':android-support-annotations')
-    compile project(':android-support-vector-drawable')
-
-    // androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-
-}
-
-task deleteStuff(type: Delete) {
-    logging.captureStandardOutput LogLevel.INFO
-
-    def sysprops = System.getProperties()
-    if (sysprops['idea.platform.prefix'] != null) {
-
-        println 'deleteStuff on Android Studio Build'
-        println new File(".").absolutePath
-
-        FileTree tree1 = fileTree(dir: "nativelibs/armeabi");
-        tree1.each {
-            File file ->
-                delete(file)
-        }
-
-        FileTree tree2 = fileTree(dir: "nativelibs/armeabi-v7a");
-        tree2.each {
-            File file ->
-                delete(file)
-        }
-
-        FileTree tree3 = fileTree(dir: "nativelibs/x86");
-        tree3.each {
-            File file ->
-                delete(file)
-        }
-
-    }
-    else
-    {
-        println 'not on Android Studio'
-    }
-}
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     compileOptions.encoding = 'UTF-8'
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-
-        jackOptions {
-            enabled true
-        }
+        minSdkVersion 17
+        targetSdkVersion 29
 
         vectorDrawables.useSupportLibrary = true
         // generatedDensities = []
 
+        ndk {//  ?? , 'x86' 'x86_64', 'arm64-v8a',
+            abiFilters  'armeabi-v7a', 'x86'
+        }
         externalNativeBuild {
-            def sysprops = System.getProperties()
-            if (sysprops['idea.platform.prefix'] != null) {
-                cmake {
-                    abiFilters 'armeabi' //,'x86'
-                }
+            cmake {
+                arguments '-DUSE_PLUGINS=y', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n', '-DENABLE_ROLL=y'
+                'Dplugin/pedestrian=n' //werkt op linux maar niet hier in androidstudio !!!
             }
         }
-
-        ndk {
-            def sysprops = System.getProperties()
-            if (sysprops['idea.platform.prefix'] != null) {
-                // Specifies the ABI configurations of your native
-                // libraries Gradle should build and package with your APK.
-                abiFilters 'armeabi' //, 'x86'
-            }
-        }
-
     }
 
     aaptOptions {
@@ -127,6 +53,12 @@ android {
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path '../../CMakeLists.txt'
+        }
+    }
+
     compileOptions {
         encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -137,18 +69,6 @@ android {
         abortOnError false
     }
 
-    externalNativeBuild {
-
-        def sysprops = System.getProperties()
-        if (sysprops['idea.platform.prefix'] != null) {
-            // Built from AndroidStudio
-            cmake {
-                path '../../CMakeLists.txt'
-            }
-        } else {
-            // Built from command line
-        }
-    }
 
 
     packagingOptions {
@@ -161,7 +81,26 @@ android {
         exclude 'META-INF/NOTICE'
 // -------QC-------
     }
+    dependencies {
+        // dependencies for app building
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+        implementation 'androidx.appcompat:appcompat:1.1.0'
+        implementation 'com.github.medyo:android-about-page:1.2.5'
+//        implementation 'com.android.support:support-compat:28.0.0'
+//        implementation project(':android-support-compat')
+//        implementation project(':android-support-fragment')
+//        implementation project('android-about-page')
 
+
+//        implementation project(':android-support-annotations')
+//    compile project(':android-support-vector-drawable')
+
+        // androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+
+    }
 }
+
+
+
 
 
