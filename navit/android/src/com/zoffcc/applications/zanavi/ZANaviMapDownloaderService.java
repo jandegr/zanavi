@@ -30,7 +30,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v7.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import com.zoffcc.applications.zanavi.NavitMapDownloader.ProgressThread;
 

@@ -141,14 +141,14 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.app.NotificationCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -1201,7 +1201,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		setContentView(R.layout.main_layout);
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
+		//FIXME pls
+
+
+		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = null;
+
 		if (toolbar != null)
 		{
 			try
@@ -1275,7 +1282,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			actionBarHeight = NavitGraphics.dp_to_px(144);
 		}
 
-		final android.support.v7.widget.Toolbar view_toolbar_top = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+		final Toolbar view_toolbar_top = (Toolbar) findViewById(R.id.toolbar);
 		ViewTreeObserver vto = view_toolbar_top.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
@@ -6599,413 +6606,220 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		return true;
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		Log.e("Navit", "onActivityResult");
-		switch (requestCode)
-		{
-		case Navit.ZANaviIntro_id:
-			try
-			{
-				PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(PREF_KEY_FIRST_START, false).commit();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-
-		case Navit.NavitGPXConvChooser_id:
-			try
-			{
-				Log.e("Navit", "onActivityResult 001");
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					String in_ = data.getStringExtra(FileDialog.RESULT_PATH);
-					convert_gpx_file_real(in_);
+		switch (requestCode) {
+			case Navit.ZANaviIntro_id:
+				try {
+					PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(PREF_KEY_FIRST_START, false).commit();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e77)
-			{
-				e77.printStackTrace();
-			}
-			break;
 
-		case NavitReplayFileConvChooser_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					final String in_ = data.getStringExtra(FileDialog.RESULT_PATH);
-					final Thread replay_gpx_file_001 = new Thread()
-					{
-						@Override
-						public void run()
-						{
-							try
-							{
-								Thread.sleep(2000); // wait 2 seconds before we start
-								String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-								ZANaviDebugReceiver.DR_replay_gps_file(in_, date);
-							}
-							catch (Exception e)
-							{
-							}
-						}
-					};
-					replay_gpx_file_001.start();
+			case Navit.NavitGPXConvChooser_id:
+				try {
+					Log.e("Navit", "onActivityResult 001");
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						String in_ = data.getStringExtra(FileDialog.RESULT_PATH);
+						convert_gpx_file_real(in_);
+					}
+				} catch (Exception e77) {
+					e77.printStackTrace();
 				}
-			}
-			catch (Exception e77)
-			{
-				e77.printStackTrace();
-			}
-			break;
+				break;
 
-		case Navit.NavitDeleteSecSelectMap_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					if (!data.getStringExtra("selected_id").equalsIgnoreCase(NavitDeleteSelectMapActivity.CANCELED_ID))
-					{
-						System.out.println("Global_Location_update_not_allowed = 1");
-						Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
-
-						// remove all sdcard maps
-						Message msg = new Message();
-						Bundle b = new Bundle();
-						b.putInt("Callback", 19);
-						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
-
-						try
-						{
-							Thread.sleep(100);
-						}
-						catch (InterruptedException e)
-						{
-						}
-
-						Log.d("Navit", "delete map id=" + Integer.parseInt(data.getStringExtra("selected_id")));
-						String map_full_line = NavitMapDownloader.OSM_MAP_NAME_ondisk_ORIG_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
-						Log.d("Navit", "delete map full line=" + map_full_line);
-
-						String del_map_name = MAP_FILENAME_PATH + map_full_line.split(":", 2)[0];
-						System.out.println("del map file :" + del_map_name);
-						// remove from cat file
-						NavitMapDownloader.remove_from_cat_file(map_full_line);
-						// remove from disk
-						File del_map_name_file = new File(del_map_name);
-						del_map_name_file.delete();
-						for (int jkl = 1; jkl < 51; jkl++)
-						{
-							File del_map_name_fileSplit = new File(del_map_name + "." + String.valueOf(jkl));
-							del_map_name_fileSplit.delete();
-						}
-						// also remove index file
-						File del_map_name_file_idx = new File(del_map_name + ".idx");
-						del_map_name_file_idx.delete();
-						// remove also any MD5 files for this map that may be on disk
-						try
-						{
-							String tmp = map_full_line.split(":", 2)[1];
-							if (!tmp.equals(NavitMapDownloader.MAP_URL_NAME_UNKNOWN))
-							{
-								tmp = tmp.replace("*", "");
-								tmp = tmp.replace("/", "");
-								tmp = tmp.replace("\\", "");
-								tmp = tmp.replace(" ", "");
-								tmp = tmp.replace(">", "");
-								tmp = tmp.replace("<", "");
-								System.out.println("removing md5 file:" + Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
-								File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
-								md5_final_filename.delete();
-							}
-						}
-						catch (Exception e)
-						{
-							e.printStackTrace();
-						}
-
-						// remove map, and zoom out
-						// ***** onStop();
-						// ***** onCreate(getIntent().getExtras());
-
-						try
-						{
-							Thread.sleep(100);
-						}
-						catch (InterruptedException e)
-						{
-						}
-
-						// add all sdcard maps
-						msg = new Message();
-						b = new Bundle();
-						b.putInt("Callback", 20);
-						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
-
-						final Thread zoom_to_route_004 = new Thread()
-						{
-							int wait = 1;
-							int count = 0;
-							int max_count = 60;
-
+			case NavitReplayFileConvChooser_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						final String in_ = data.getStringExtra(FileDialog.RESULT_PATH);
+						final Thread replay_gpx_file_001 = new Thread() {
 							@Override
-							public void run()
-							{
-								while (wait == 1)
-								{
-									try
-									{
-										if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33))
-										{
-											zoom_to_route();
-											wait = 0;
-										}
-										else
-										{
-											wait = 1;
-										}
-
-										count++;
-										if (count > max_count)
-										{
-											wait = 0;
-										}
-										else
-										{
-											Thread.sleep(400);
-										}
-									}
-									catch (Exception e)
-									{
-									}
+							public void run() {
+								try {
+									Thread.sleep(2000); // wait 2 seconds before we start
+									String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
+									ZANaviDebugReceiver.DR_replay_gps_file(in_, date);
+								} catch (Exception e) {
 								}
 							}
 						};
-						zoom_to_route_004.start();
-
-						System.out.println("Global_Location_update_not_allowed = 0");
-						Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
+						replay_gpx_file_001.start();
 					}
+				} catch (Exception e77) {
+					e77.printStackTrace();
 				}
-			}
-			catch (Exception e)
-			{
-				Log.d("Navit", "error on onActivityResult 3");
-				e.printStackTrace();
-			}
-			break;
-		case Navit.NavitDownloaderPriSelectMap_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					try
-					{
-						// Log.d("Navit", "PRI id=" + Integer.parseInt(data.getStringExtra("selected_id")));
-						// set map id to download
-						Navit.download_map_id = NavitMapDownloader.OSM_MAP_NAME_ORIG_ID_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
-						// show the map download progressbar, and download the map
-						if (Navit.download_map_id > -1)
-						{
-							// --------- start a map download (highest level) ---------
-							// --------- start a map download (highest level) ---------
-							// --------- start a map download (highest level) ---------
-							// showDialog(Navit.MAPDOWNLOAD_PRI_DIALOG); // old method in app
+				break;
 
-							// new method in service
-							Message msg = progress_handler.obtainMessage();
-							// Bundle b = new Bundle();
-							msg.what = 22;
-							progress_handler.sendMessage(msg);
+			case Navit.NavitDeleteSecSelectMap_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						if (!data.getStringExtra("selected_id").equalsIgnoreCase(NavitDeleteSelectMapActivity.CANCELED_ID)) {
+							System.out.println("Global_Location_update_not_allowed = 1");
+							Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
 
-							// show license for OSM maps
-							//. TRANSLATORS: please only translate the first word "Map data" and leave the other words in english
-							Toast.makeText(getApplicationContext(), "Map data (c) OpenStreetMap contributors", Toast.LENGTH_SHORT).show();
-							// --------- start a map download (highest level) ---------
-							// --------- start a map download (highest level) ---------
-							// --------- start a map download (highest level) ---------
+							// remove all sdcard maps
+							Message msg = new Message();
+							Bundle b = new Bundle();
+							b.putInt("Callback", 19);
+							msg.setData(b);
+							NavitGraphics.callback_handler.sendMessage(msg);
+
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+							}
+
+							Log.d("Navit", "delete map id=" + Integer.parseInt(data.getStringExtra("selected_id")));
+							String map_full_line = NavitMapDownloader.OSM_MAP_NAME_ondisk_ORIG_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
+							Log.d("Navit", "delete map full line=" + map_full_line);
+
+							String del_map_name = MAP_FILENAME_PATH + map_full_line.split(":", 2)[0];
+							System.out.println("del map file :" + del_map_name);
+							// remove from cat file
+							NavitMapDownloader.remove_from_cat_file(map_full_line);
+							// remove from disk
+							File del_map_name_file = new File(del_map_name);
+							del_map_name_file.delete();
+							for (int jkl = 1; jkl < 51; jkl++) {
+								File del_map_name_fileSplit = new File(del_map_name + "." + String.valueOf(jkl));
+								del_map_name_fileSplit.delete();
+							}
+							// also remove index file
+							File del_map_name_file_idx = new File(del_map_name + ".idx");
+							del_map_name_file_idx.delete();
+							// remove also any MD5 files for this map that may be on disk
+							try {
+								String tmp = map_full_line.split(":", 2)[1];
+								if (!tmp.equals(NavitMapDownloader.MAP_URL_NAME_UNKNOWN)) {
+									tmp = tmp.replace("*", "");
+									tmp = tmp.replace("/", "");
+									tmp = tmp.replace("\\", "");
+									tmp = tmp.replace(" ", "");
+									tmp = tmp.replace(">", "");
+									tmp = tmp.replace("<", "");
+									System.out.println("removing md5 file:" + Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
+									File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
+									md5_final_filename.delete();
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+
+							// remove map, and zoom out
+							// ***** onStop();
+							// ***** onCreate(getIntent().getExtras());
+
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+							}
+
+							// add all sdcard maps
+							msg = new Message();
+							b = new Bundle();
+							b.putInt("Callback", 20);
+							msg.setData(b);
+							NavitGraphics.callback_handler.sendMessage(msg);
+
+							final Thread zoom_to_route_004 = new Thread() {
+								int wait = 1;
+								int count = 0;
+								int max_count = 60;
+
+								@Override
+								public void run() {
+									while (wait == 1) {
+										try {
+											if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33)) {
+												zoom_to_route();
+												wait = 0;
+											} else {
+												wait = 1;
+											}
+
+											count++;
+											if (count > max_count) {
+												wait = 0;
+											} else {
+												Thread.sleep(400);
+											}
+										} catch (Exception e) {
+										}
+									}
+								}
+							};
+							zoom_to_route_004.start();
+
+							System.out.println("Global_Location_update_not_allowed = 0");
+							Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
 						}
 					}
-					catch (NumberFormatException e)
-					{
-						Log.d("Navit", "NumberFormatException selected_id");
+				} catch (Exception e) {
+					Log.d("Navit", "error on onActivityResult 3");
+					e.printStackTrace();
+				}
+				break;
+			case Navit.NavitDownloaderPriSelectMap_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						try {
+							// Log.d("Navit", "PRI id=" + Integer.parseInt(data.getStringExtra("selected_id")));
+							// set map id to download
+							Navit.download_map_id = NavitMapDownloader.OSM_MAP_NAME_ORIG_ID_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
+							// show the map download progressbar, and download the map
+							if (Navit.download_map_id > -1) {
+								// --------- start a map download (highest level) ---------
+								// --------- start a map download (highest level) ---------
+								// --------- start a map download (highest level) ---------
+								// showDialog(Navit.MAPDOWNLOAD_PRI_DIALOG); // old method in app
+
+								// new method in service
+								Message msg = progress_handler.obtainMessage();
+								// Bundle b = new Bundle();
+								msg.what = 22;
+								progress_handler.sendMessage(msg);
+
+								// show license for OSM maps
+								//. TRANSLATORS: please only translate the first word "Map data" and leave the other words in english
+								Toast.makeText(getApplicationContext(), "Map data (c) OpenStreetMap contributors", Toast.LENGTH_SHORT).show();
+								// --------- start a map download (highest level) ---------
+								// --------- start a map download (highest level) ---------
+								// --------- start a map download (highest level) ---------
+							}
+						} catch (NumberFormatException e) {
+							Log.d("Navit", "NumberFormatException selected_id");
+						}
+					} else {
+						// user pressed back key
 					}
+				} catch (Exception e) {
+					Log.d("Navit", "error on onActivityResult");
+					e.printStackTrace();
 				}
-				else
-				{
-					// user pressed back key
-				}
-			}
-			catch (Exception e)
-			{
-				Log.d("Navit", "error on onActivityResult");
-				e.printStackTrace();
-			}
-			break;
-		case Navit.NavitDownloaderSecSelectMap_id: // unused!!! unused!!! unused!!! unused!!! unused!!!
-			break;
-		case ZANaviVoiceInput_id:
-			if (resultCode == AppCompatActivity.RESULT_OK)
-			{
-				try
-				{
-					String addr = data.getStringExtra("address_string");
-					double lat = data.getDoubleExtra("lat", 0);
-					double lon = data.getDoubleExtra("lon", 0);
-					String hn = "";
-
-					// save last address entry string
-					p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
-					saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
-
-					Boolean partial_match = true;
-					Navit.use_index_search = false;
-
-					Navit_last_address_partial_match = partial_match;
-					Navit_last_address_search_string = addr;
-					Navit_last_address_hn_string = hn;
-
-					Navit_last_address_full_file_search = false;
-
-					// clear results
-					Navit.NavitAddressResultList_foundItems.clear();
-					Navit.Navit_Address_Result_double_index.clear();
-					Navit.NavitSearchresultBarIndex = -1;
-					Navit.NavitSearchresultBar_title = "";
-					Navit.NavitSearchresultBar_text = "";
-					Navit.search_results_towns = 0;
-					Navit.search_results_streets = 0;
-					Navit.search_results_streets_hn = 0;
-					Navit.search_results_poi = 0;
-
-					if (addr.equals(""))
-					{
-						// empty search string entered
-						Toast.makeText(getApplicationContext(), Navit.get_text("No search string"), Toast.LENGTH_LONG).show(); //TRANS
-					}
-					else
-					{
-						System.out.println("Global_Location_update_not_allowed = 1");
-						Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
-
-						// --> this still does the search // google_online_search_and_set_destination(addr);
-						result_set_destination(lat, lon, addr);
-
-						System.out.println("Global_Location_update_not_allowed = 0");
-						Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
-					}
-
-				}
-				catch (Exception e)
-				{
-
-				}
-			}
-			break;
-		case NavitAddressSearch_id_online:
-		case NavitAddressSearch_id_offline:
-			Log.e("Navit", "NavitAddressSearch_id_:001");
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					try
-					{
+				break;
+			case Navit.NavitDownloaderSecSelectMap_id: // unused!!! unused!!! unused!!! unused!!! unused!!!
+				break;
+			case ZANaviVoiceInput_id:
+				if (resultCode == AppCompatActivity.RESULT_OK) {
+					try {
 						String addr = data.getStringExtra("address_string");
+						double lat = data.getDoubleExtra("lat", 0);
+						double lon = data.getDoubleExtra("lon", 0);
 						String hn = "";
-						try
-						{
-							// only from offline mask!
-							hn = data.getStringExtra("hn_string");
-						}
-						catch (Exception e)
-						{
-							hn = "";
-						}
 
 						// save last address entry string
 						p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
 						saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
 
-						Boolean partial_match = false;
-						try
-						{
-							// only from offline mask!
-							partial_match = data.getStringExtra("partial_match").equals("1");
-						}
-						catch (Exception e)
-						{
-						}
-
-						Message msg2 = new Message();
-						Bundle b2 = new Bundle();
-						b2.putInt("Callback", 44);
-						msg2.setData(b2);
-						NavitGraphics.callback_handler.sendMessage(msg2);
-
-						if (requestCode == NavitAddressSearch_id_offline)
-						{
-							search_hide_duplicates = false;
-							try
-							{
-								Boolean hide_dup = data.getStringExtra("hide_dup").equals("1");
-								if (hide_dup)
-								{
-									search_hide_duplicates = true;
-									Message msg = new Message();
-									Bundle b = new Bundle();
-									b.putInt("Callback", 45);
-									msg.setData(b);
-									NavitGraphics.callback_handler.sendMessage(msg);
-								}
-							}
-							catch (Exception e)
-							{
-							}
-
-							if (Navit.CIDEBUG == 0)
-							{
-								Navit.use_index_search = Navit.allow_use_index_search();
-							}
-						}
-						else
-						{
-							Navit.use_index_search = false;
-						}
+						Boolean partial_match = true;
+						Navit.use_index_search = false;
 
 						Navit_last_address_partial_match = partial_match;
 						Navit_last_address_search_string = addr;
 						Navit_last_address_hn_string = hn;
 
-						try
-						{
-							// only from offline mask!
-							Navit_last_address_full_file_search = data.getStringExtra("full_file_search").equals("1");
-						}
-						catch (Exception e)
-						{
-							Navit_last_address_full_file_search = false;
-						}
-
-						try
-						{
-							// only from offline mask!
-							Navit_last_address_search_country_iso2_string = data.getStringExtra("address_country_iso2");
-
-							Navit_last_address_search_country_flags = data.getIntExtra("address_country_flags", 3);
-							// System.out.println("Navit_last_address_search_country_flags=" + Navit_last_address_search_country_flags);
-							Navit_last_address_search_country_id = data.getIntExtra("search_country_id", 1); // default=*ALL*
-							p.PREF_search_country = Navit_last_address_search_country_id;
-							setPrefs_search_country();
-						}
-						catch (Exception e)
-						{
-
-						}
+						Navit_last_address_full_file_search = false;
 
 						// clear results
 						Navit.NavitAddressResultList_foundItems.clear();
@@ -7018,656 +6832,618 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						Navit.search_results_streets_hn = 0;
 						Navit.search_results_poi = 0;
 
-						if (addr.equals(""))
-						{
+						if (addr.equals("")) {
 							// empty search string entered
-							Toast.makeText(getApplicationContext(), Navit.get_text("No search string entered"), Toast.LENGTH_LONG).show(); //TRANS
-						}
-						else
-						{
+							Toast.makeText(getApplicationContext(), Navit.get_text("No search string"), Toast.LENGTH_LONG).show(); //TRANS
+						} else {
 							System.out.println("Global_Location_update_not_allowed = 1");
 							Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
 
-							if (requestCode == NavitAddressSearch_id_online)
-							{
-								// online googlemaps search
-								try
-								{
-									Log.e("Navit", "call-11: (1)num " + Navit.SEARCHRESULTS_WAIT_DIALOG);
-								}
-								catch (Exception e)
-								{
-									e.printStackTrace();
-								}
+							// --> this still does the search // google_online_search_and_set_destination(addr);
+							result_set_destination(lat, lon, addr);
 
-								System.out.println("dialog -- 11:003");
-								System.out.println("online googlemaps search");
-								Message msg = progress_handler.obtainMessage();
-								Bundle b = new Bundle();
-								msg.what = 11;
-								b.putInt("dialog_num", Navit.SEARCHRESULTS_WAIT_DIALOG);
-								msg.setData(b);
-								progress_handler.sendMessage(msg);
+							System.out.println("Global_Location_update_not_allowed = 0");
+							Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
+						}
+
+					} catch (Exception e) {
+
+					}
+				}
+				break;
+			case NavitAddressSearch_id_online:
+			case NavitAddressSearch_id_offline:
+				Log.e("Navit", "NavitAddressSearch_id_:001");
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						try {
+							String addr = data.getStringExtra("address_string");
+							String hn = "";
+							try {
+								// only from offline mask!
+								hn = data.getStringExtra("hn_string");
+							} catch (Exception e) {
+								hn = "";
 							}
-							else if (requestCode == NavitAddressSearch_id_offline)
-							{
-								// offline binfile search
 
-								if (!Navit.use_index_search)
-								{
-									try
-									{
-										Log.e("Navit", "call-11: (2)num " + Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
+							// save last address entry string
+							p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
+							saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
+
+							Boolean partial_match = false;
+							try {
+								// only from offline mask!
+								partial_match = data.getStringExtra("partial_match").equals("1");
+							} catch (Exception e) {
+							}
+
+							Message msg2 = new Message();
+							Bundle b2 = new Bundle();
+							b2.putInt("Callback", 44);
+							msg2.setData(b2);
+							NavitGraphics.callback_handler.sendMessage(msg2);
+
+							if (requestCode == NavitAddressSearch_id_offline) {
+								search_hide_duplicates = false;
+								try {
+									Boolean hide_dup = data.getStringExtra("hide_dup").equals("1");
+									if (hide_dup) {
+										search_hide_duplicates = true;
+										Message msg = new Message();
+										Bundle b = new Bundle();
+										b.putInt("Callback", 45);
+										msg.setData(b);
+										NavitGraphics.callback_handler.sendMessage(msg);
 									}
-									catch (Exception e)
-									{
+								} catch (Exception e) {
+								}
+
+								if (Navit.CIDEBUG == 0) {
+									Navit.use_index_search = Navit.allow_use_index_search();
+								}
+							} else {
+								Navit.use_index_search = false;
+							}
+
+							Navit_last_address_partial_match = partial_match;
+							Navit_last_address_search_string = addr;
+							Navit_last_address_hn_string = hn;
+
+							try {
+								// only from offline mask!
+								Navit_last_address_full_file_search = data.getStringExtra("full_file_search").equals("1");
+							} catch (Exception e) {
+								Navit_last_address_full_file_search = false;
+							}
+
+							try {
+								// only from offline mask!
+								Navit_last_address_search_country_iso2_string = data.getStringExtra("address_country_iso2");
+
+								Navit_last_address_search_country_flags = data.getIntExtra("address_country_flags", 3);
+								// System.out.println("Navit_last_address_search_country_flags=" + Navit_last_address_search_country_flags);
+								Navit_last_address_search_country_id = data.getIntExtra("search_country_id", 1); // default=*ALL*
+								p.PREF_search_country = Navit_last_address_search_country_id;
+								setPrefs_search_country();
+							} catch (Exception e) {
+
+							}
+
+							// clear results
+							Navit.NavitAddressResultList_foundItems.clear();
+							Navit.Navit_Address_Result_double_index.clear();
+							Navit.NavitSearchresultBarIndex = -1;
+							Navit.NavitSearchresultBar_title = "";
+							Navit.NavitSearchresultBar_text = "";
+							Navit.search_results_towns = 0;
+							Navit.search_results_streets = 0;
+							Navit.search_results_streets_hn = 0;
+							Navit.search_results_poi = 0;
+
+							if (addr.equals("")) {
+								// empty search string entered
+								Toast.makeText(getApplicationContext(), Navit.get_text("No search string entered"), Toast.LENGTH_LONG).show(); //TRANS
+							} else {
+								System.out.println("Global_Location_update_not_allowed = 1");
+								Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
+
+								if (requestCode == NavitAddressSearch_id_online) {
+									// online googlemaps search
+									try {
+										Log.e("Navit", "call-11: (1)num " + Navit.SEARCHRESULTS_WAIT_DIALOG);
+									} catch (Exception e) {
 										e.printStackTrace();
 									}
 
-									// show dialog, and start search for the results
-									// make it indirect, to give our activity a chance to startup
-									// (remember we come straight from another activity and ours is still paused!)
-									System.out.println("dialog -- 11:004");
+									System.out.println("dialog -- 11:003");
+									System.out.println("online googlemaps search");
 									Message msg = progress_handler.obtainMessage();
 									Bundle b = new Bundle();
 									msg.what = 11;
-									b.putInt("dialog_num", Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
+									b.putInt("dialog_num", Navit.SEARCHRESULTS_WAIT_DIALOG);
 									msg.setData(b);
 									progress_handler.sendMessage(msg);
-								}
-							}
-						}
-					}
-					catch (NumberFormatException e)
-					{
-						Log.d("Navit", "NumberFormatException selected_id");
-					}
-				}
-				else
-				{
-					// user pressed back key
-					Log.e("Navit", "NavitAddressSearch_id_:900");
-				}
-			}
-			catch (Exception e)
-			{
-				Log.d("Navit", "error on onActivityResult");
-				e.printStackTrace();
-			}
-			Log.e("Navit", "NavitAddressSearch_id_:999");
-			break;
-		case Navit.NavitAddressResultList_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					try
-					{
-						if (data.getStringExtra("what").equals("view"))
-						{
-							// get the coords for the destination
-							int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
+								} else if (requestCode == NavitAddressSearch_id_offline) {
+									// offline binfile search
 
-							// save last address entry string
-							String addr = data.getStringExtra("address_string");
-							p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
-							saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
-
-							try
-							{
-								Navit.follow_button_off();
-							}
-							catch (Exception e2)
-							{
-								e2.printStackTrace();
-							}
-
-							System.out.println("XSOM:009");
-
-							if (Navit.use_index_search)
-							{
-								show_geo_on_screen_with_zoom_and_delay((float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
-							}
-							else
-							{
-								show_geo_on_screen_with_zoom_and_delay(Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
-							}
-						}
-						else if (data.getStringExtra("what").equals("set"))
-						{
-							Log.d("Navit", "adress result list id=" + Integer.parseInt(data.getStringExtra("selected_id")));
-
-							// save last address entry string
-							String addr = data.getStringExtra("address_string");
-							p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
-							saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
-
-							// get the coords for the destination
-							int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
-
-							String _addr = "";
-							double _lat = 0;
-							double _lon = 0;
-
-							// (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon)
-							// (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat)
-
-							// ok now set target
-							try
-							{
-								if (Navit.use_index_search)
-								{
-									_addr = Navit.NavitAddressResultList_foundItems.get(destination_id).addr;
-									_lat = Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat);
-									_lon = Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
-									//Navit.remember_destination(Navit.NavitAddressResultList_foundItems.get(destination_id).addr, (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
-								}
-								else
-								{
-									_addr = Navit.NavitAddressResultList_foundItems.get(destination_id).addr;
-									_lat = Navit.NavitAddressResultList_foundItems.get(destination_id).lat;
-									_lon = Navit.NavitAddressResultList_foundItems.get(destination_id).lon;
-									//Navit.remember_destination(Navit.NavitAddressResultList_foundItems.get(destination_id).addr, Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
-								}
-								// save points
-								//write_map_points();
-							}
-							catch (Exception e)
-							{
-								e.printStackTrace();
-							}
-
-							route_wrapper(_addr, 0, 0, false, _lat, _lon, true);
-
-							final Thread zoom_to_route_005 = new Thread()
-							{
-								int wait = 1;
-								int count = 0;
-								int max_count = 60;
-
-								@Override
-								public void run()
-								{
-									while (wait == 1)
-									{
-										try
-										{
-											if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33))
-											{
-												zoom_to_route();
-												wait = 0;
-											}
-											else
-											{
-												wait = 1;
-											}
-
-											count++;
-											if (count > max_count)
-											{
-												wait = 0;
-											}
-											else
-											{
-												Thread.sleep(400);
-											}
+									if (!Navit.use_index_search) {
+										try {
+											Log.e("Navit", "call-11: (2)num " + Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
+										} catch (Exception e) {
+											e.printStackTrace();
 										}
-										catch (Exception e)
-										{
-										}
+
+										// show dialog, and start search for the results
+										// make it indirect, to give our activity a chance to startup
+										// (remember we come straight from another activity and ours is still paused!)
+										System.out.println("dialog -- 11:004");
+										Message msg = progress_handler.obtainMessage();
+										Bundle b = new Bundle();
+										msg.what = 11;
+										b.putInt("dialog_num", Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
+										msg.setData(b);
+										progress_handler.sendMessage(msg);
 									}
 								}
-							};
-							zoom_to_route_005.start();
-							// zoom_to_route();
-
-							// ---------- DEBUG: write route to file ----------
-							// ---------- DEBUG: write route to file ----------
-							// ---------- DEBUG: write route to file ----------
-							if (p.PREF_enable_debug_write_gpx)
-							{
-								write_route_to_gpx_file();
 							}
-							// ---------- DEBUG: write route to file ----------
-							// ---------- DEBUG: write route to file ----------
-
-							try
-							{
-								Navit.follow_button_on();
-							}
-							catch (Exception e2)
-							{
-								e2.printStackTrace();
-							}
-
-							//							if (Navit.use_index_search)
-							//							{
-							//								show_geo_on_screen((float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
-							//							}
-							//							else
-							//							{
-							//								show_geo_on_screen(Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
-							//							}
+						} catch (NumberFormatException e) {
+							Log.d("Navit", "NumberFormatException selected_id");
 						}
-						else
-						{
-							// -- nothing --
-						}
+					} else {
+						// user pressed back key
+						Log.e("Navit", "NavitAddressSearch_id_:900");
 					}
-					catch (NumberFormatException e)
-					{
-						Log.d("Navit", "NumberFormatException selected_id");
-					}
-					catch (Exception e)
-					{
-
-					}
+				} catch (Exception e) {
+					Log.d("Navit", "error on onActivityResult");
+					e.printStackTrace();
 				}
-				else
-				{
-					// user pressed back key
-				}
-			}
-			catch (Exception e)
-			{
-				Log.d("Navit", "error on onActivityResult");
-				e.printStackTrace();
-			}
-			break;
-		case NavitAddressSearch_id_gmaps:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
+				Log.e("Navit", "NavitAddressSearch_id_:999");
+				break;
+			case Navit.NavitAddressResultList_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						try {
+							if (data.getStringExtra("what").equals("view")) {
+								// get the coords for the destination
+								int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
 
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
-		case NavitAddressSearch_id_sharedest:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
+								// save last address entry string
+								String addr = data.getStringExtra("address_string");
+								p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
+								saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
 
-				}
-				Log.d("Navit", "sharedest: finished");
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
-		case NavitGeoCoordEnter_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					// lat lon enter activitiy result
-
-					try
-					{
-						if (data.getStringExtra("what").equals("view"))
-						{
-							// get the coords for the destination
-							float lat = Float.parseFloat(data.getStringExtra("lat"));
-							float lon = Float.parseFloat(data.getStringExtra("lon"));
-
-							// Log.d("Navit", "coord picker: " + lat);
-							// Log.d("Navit", "coord picker: " + lon);
-
-							// set nice zoomlevel before we show destination
-							//							int zoom_want = Navit_SHOW_DEST_ON_MAP_ZOOMLEVEL;
-							//							//
-							//							Message msg = new Message();
-							//							Bundle b = new Bundle();
-							//							b.putInt("Callback", 33);
-							//							b.putString("s", Integer.toString(zoom_want));
-							//							msg.setData(b);
-							//							try
-							//							{
-							//								N_NavitGraphics.callback_handler.sendMessage(msg);
-							//								Navit.GlobalScaleLevel = zoom_want;
-							//							}
-							//							catch (Exception e)
-							//							{
-							//								e.printStackTrace();
-							//							}
-							//							if (PREF_save_zoomlevel)
-							//							{
-							//								setPrefs_zoomlevel();
-							//							}
-							// set nice zoomlevel before we show destination
-
-							try
-							{
-								Navit.follow_button_off();
-							}
-							catch (Exception e2)
-							{
-								e2.printStackTrace();
-							}
-
-							show_geo_on_screen(lat, lon);
-						}
-						else
-						{
-							// get the coords for the destination
-							float lat = Float.parseFloat(data.getStringExtra("lat"));
-							float lon = Float.parseFloat(data.getStringExtra("lat"));
-							String dest_name = "manual coordinates";
-
-							// ok now set target
-							try
-							{
-								dest_name = NavitGraphics.CallbackGeoCalc(8, lat, lon);
-								if ((dest_name.equals(" ")) || (dest_name == null))
-								{
-									dest_name = "manual coordinates";
+								try {
+									Navit.follow_button_off();
+								} catch (Exception e2) {
+									e2.printStackTrace();
 								}
-								//								Navit.remember_destination(dest_name, lat, lon);
-								//								// save points
-								//								write_map_points();
+
+								System.out.println("XSOM:009");
+
+								if (Navit.use_index_search) {
+									show_geo_on_screen_with_zoom_and_delay((float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
+								} else {
+									show_geo_on_screen_with_zoom_and_delay(Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
+								}
+							} else if (data.getStringExtra("what").equals("set")) {
+								Log.d("Navit", "adress result list id=" + Integer.parseInt(data.getStringExtra("selected_id")));
+
+								// save last address entry string
+								String addr = data.getStringExtra("address_string");
+								p.PREF_StreetSearchStrings = pushToArray(p.PREF_StreetSearchStrings, addr, STREET_SEARCH_STRINGS_SAVE_COUNT);
+								saveArray(p.PREF_StreetSearchStrings, "xxStrtSrhStrxx", STREET_SEARCH_STRINGS_SAVE_COUNT);
+
+								// get the coords for the destination
+								int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
+
+								String _addr = "";
+								double _lat = 0;
+								double _lon = 0;
+
+								// (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon)
+								// (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat)
+
+								// ok now set target
+								try {
+									if (Navit.use_index_search) {
+										_addr = Navit.NavitAddressResultList_foundItems.get(destination_id).addr;
+										_lat = Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat);
+										_lon = Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
+										//Navit.remember_destination(Navit.NavitAddressResultList_foundItems.get(destination_id).addr, (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
+									} else {
+										_addr = Navit.NavitAddressResultList_foundItems.get(destination_id).addr;
+										_lat = Navit.NavitAddressResultList_foundItems.get(destination_id).lat;
+										_lon = Navit.NavitAddressResultList_foundItems.get(destination_id).lon;
+										//Navit.remember_destination(Navit.NavitAddressResultList_foundItems.get(destination_id).addr, Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
+									}
+									// save points
+									//write_map_points();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+								route_wrapper(_addr, 0, 0, false, _lat, _lon, true);
+
+								final Thread zoom_to_route_005 = new Thread() {
+									int wait = 1;
+									int count = 0;
+									int max_count = 60;
+
+									@Override
+									public void run() {
+										while (wait == 1) {
+											try {
+												if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33)) {
+													zoom_to_route();
+													wait = 0;
+												} else {
+													wait = 1;
+												}
+
+												count++;
+												if (count > max_count) {
+													wait = 0;
+												} else {
+													Thread.sleep(400);
+												}
+											} catch (Exception e) {
+											}
+										}
+									}
+								};
+								zoom_to_route_005.start();
+								// zoom_to_route();
+
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+								if (p.PREF_enable_debug_write_gpx) {
+									write_route_to_gpx_file();
+								}
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+
+								try {
+									Navit.follow_button_on();
+								} catch (Exception e2) {
+									e2.printStackTrace();
+								}
+
+								//							if (Navit.use_index_search)
+								//							{
+								//								show_geo_on_screen((float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(destination_id).lat), (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(destination_id).lon));
+								//							}
+								//							else
+								//							{
+								//								show_geo_on_screen(Navit.NavitAddressResultList_foundItems.get(destination_id).lat, Navit.NavitAddressResultList_foundItems.get(destination_id).lon);
+								//							}
+							} else {
+								// -- nothing --
 							}
-							catch (Exception e)
-							{
-								e.printStackTrace();
+						} catch (NumberFormatException e) {
+							Log.d("Navit", "NumberFormatException selected_id");
+						} catch (Exception e) {
+
+						}
+					} else {
+						// user pressed back key
+					}
+				} catch (Exception e) {
+					Log.d("Navit", "error on onActivityResult");
+					e.printStackTrace();
+				}
+				break;
+			case NavitAddressSearch_id_gmaps:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case NavitAddressSearch_id_sharedest:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+
+					}
+					Log.d("Navit", "sharedest: finished");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case NavitGeoCoordEnter_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						// lat lon enter activitiy result
+
+						try {
+							if (data.getStringExtra("what").equals("view")) {
+								// get the coords for the destination
+								float lat = Float.parseFloat(data.getStringExtra("lat"));
+								float lon = Float.parseFloat(data.getStringExtra("lon"));
+
+								// Log.d("Navit", "coord picker: " + lat);
+								// Log.d("Navit", "coord picker: " + lon);
+
+								// set nice zoomlevel before we show destination
+								//							int zoom_want = Navit_SHOW_DEST_ON_MAP_ZOOMLEVEL;
+								//							//
+								//							Message msg = new Message();
+								//							Bundle b = new Bundle();
+								//							b.putInt("Callback", 33);
+								//							b.putString("s", Integer.toString(zoom_want));
+								//							msg.setData(b);
+								//							try
+								//							{
+								//								N_NavitGraphics.callback_handler.sendMessage(msg);
+								//								Navit.GlobalScaleLevel = zoom_want;
+								//							}
+								//							catch (Exception e)
+								//							{
+								//								e.printStackTrace();
+								//							}
+								//							if (PREF_save_zoomlevel)
+								//							{
+								//								setPrefs_zoomlevel();
+								//							}
+								// set nice zoomlevel before we show destination
+
+								try {
+									Navit.follow_button_off();
+								} catch (Exception e2) {
+									e2.printStackTrace();
+								}
+
+								show_geo_on_screen(lat, lon);
+							} else {
+								// get the coords for the destination
+								float lat = Float.parseFloat(data.getStringExtra("lat"));
+								float lon = Float.parseFloat(data.getStringExtra("lat"));
+								String dest_name = "manual coordinates";
+
+								// ok now set target
+								try {
+									dest_name = NavitGraphics.CallbackGeoCalc(8, lat, lon);
+									if ((dest_name.equals(" ")) || (dest_name == null)) {
+										dest_name = "manual coordinates";
+									}
+									//								Navit.remember_destination(dest_name, lat, lon);
+									//								// save points
+									//								write_map_points();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+								//							// DEBUG: clear route rectangle list
+								//							NavitGraphics.route_rects.clear();
+								//
+								//							if (NavitGraphics.navit_route_status == 0)
+								//							{
+								//								Navit.destination_set();
+								//
+								//								Message msg = new Message();
+								//								Bundle b = new Bundle();
+								//								b.putInt("Callback", 3);
+								//								b.putString("lat", String.valueOf(lat));
+								//								b.putString("lon", String.valueOf(lon));
+								//								b.putString("q", dest_name);
+								//								msg.setData(b);
+								//								NavitGraphics.callback_handler.sendMessage(msg);
+								//							}
+								//							else
+								//							{
+								//								Message msg = new Message();
+								//								Bundle b = new Bundle();
+								//								b.putInt("Callback", 48);
+								//								b.putString("lat", String.valueOf(lat));
+								//								b.putString("lon", String.valueOf(lon));
+								//								b.putString("q", dest_name);
+								//								msg.setData(b);
+								//								NavitGraphics.callback_handler.sendMessage(msg);
+								//							}
+								//
+
+								route_wrapper(dest_name, 0, 0, false, lat, lon, true);
+
+								final Thread zoom_to_route_006 = new Thread() {
+									int wait = 1;
+									int count = 0;
+									int max_count = 60;
+
+									@Override
+									public void run() {
+										while (wait == 1) {
+											try {
+												if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33)) {
+													zoom_to_route();
+													wait = 0;
+												} else {
+													wait = 1;
+												}
+
+												count++;
+												if (count > max_count) {
+													wait = 0;
+												} else {
+													Thread.sleep(400);
+												}
+											} catch (Exception e) {
+											}
+										}
+									}
+								};
+								zoom_to_route_006.start();
+								// zoom_to_route();
+
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+								if (p.PREF_enable_debug_write_gpx) {
+									write_route_to_gpx_file();
+								}
+								// ---------- DEBUG: write route to file ----------
+								// ---------- DEBUG: write route to file ----------
+
+								try {
+									Navit.follow_button_on();
+								} catch (Exception e2) {
+									e2.printStackTrace();
+								}
+
+								// show_geo_on_screen(lat, lon);
+							}
+						} catch (NumberFormatException e) {
+							Log.d("Navit", "NumberFormatException selected_id");
+						} catch (Exception e) {
+
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case NavitRecentDest_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						Log.d("Navit", "recent dest id=" + Integer.parseInt(data.getStringExtra("selected_id")));
+						// get the coords for the destination
+						int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
+
+						if (data.getStringExtra("what").equals("view")) {
+							try {
+								Navit.follow_button_off();
+							} catch (Exception e2) {
+								e2.printStackTrace();
 							}
 
-							//							// DEBUG: clear route rectangle list
-							//							NavitGraphics.route_rects.clear();
-							//
-							//							if (NavitGraphics.navit_route_status == 0)
-							//							{
-							//								Navit.destination_set();
-							//
-							//								Message msg = new Message();
-							//								Bundle b = new Bundle();
-							//								b.putInt("Callback", 3);
-							//								b.putString("lat", String.valueOf(lat));
-							//								b.putString("lon", String.valueOf(lon));
-							//								b.putString("q", dest_name);
-							//								msg.setData(b);
-							//								NavitGraphics.callback_handler.sendMessage(msg);
-							//							}
-							//							else
-							//							{
-							//								Message msg = new Message();
-							//								Bundle b = new Bundle();
-							//								b.putInt("Callback", 48);
-							//								b.putString("lat", String.valueOf(lat));
-							//								b.putString("lon", String.valueOf(lon));
-							//								b.putString("q", dest_name);
-							//								msg.setData(b);
-							//								NavitGraphics.callback_handler.sendMessage(msg);
-							//							}
-							//
+							float lat = Navit.map_points.get(destination_id).lat;
+							float lon = Navit.map_points.get(destination_id).lon;
+							show_geo_on_screen_with_zoom_and_delay(lat, lon, 150);
+						} else {
+							// ok now set target
+							String dest_name = Navit.map_points.get(destination_id).point_name;
+							float lat = Navit.map_points.get(destination_id).lat;
+							float lon = Navit.map_points.get(destination_id).lon;
+
+							// System.out.println("XXXXXX:" + lat + " " + lon);
 
 							route_wrapper(dest_name, 0, 0, false, lat, lon, true);
 
-							final Thread zoom_to_route_006 = new Thread()
-							{
+							final Thread zoom_to_route_007 = new Thread() {
 								int wait = 1;
 								int count = 0;
 								int max_count = 60;
 
 								@Override
-								public void run()
-								{
-									while (wait == 1)
-									{
-										try
-										{
-											if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33))
-											{
+								public void run() {
+									while (wait == 1) {
+										try {
+											if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33)) {
 												zoom_to_route();
 												wait = 0;
-											}
-											else
-											{
+											} else {
 												wait = 1;
 											}
 
 											count++;
-											if (count > max_count)
-											{
+											if (count > max_count) {
 												wait = 0;
-											}
-											else
-											{
+											} else {
 												Thread.sleep(400);
 											}
-										}
-										catch (Exception e)
-										{
+										} catch (Exception e) {
 										}
 									}
 								}
 							};
-							zoom_to_route_006.start();
-							// zoom_to_route();
+							zoom_to_route_007.start();
 
 							// ---------- DEBUG: write route to file ----------
 							// ---------- DEBUG: write route to file ----------
 							// ---------- DEBUG: write route to file ----------
-							if (p.PREF_enable_debug_write_gpx)
-							{
+							if (p.PREF_enable_debug_write_gpx) {
 								write_route_to_gpx_file();
 							}
 							// ---------- DEBUG: write route to file ----------
 							// ---------- DEBUG: write route to file ----------
 
-							try
-							{
+							try {
 								Navit.follow_button_on();
-							}
-							catch (Exception e2)
-							{
+							} catch (Exception e2) {
 								e2.printStackTrace();
 							}
 
-							// show_geo_on_screen(lat, lon);
 						}
 					}
-					catch (NumberFormatException e)
-					{
-						Log.d("Navit", "NumberFormatException selected_id");
-					}
-					catch (Exception e)
-					{
-
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
-		case NavitRecentDest_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					Log.d("Navit", "recent dest id=" + Integer.parseInt(data.getStringExtra("selected_id")));
-					// get the coords for the destination
-					int destination_id = Integer.parseInt(data.getStringExtra("selected_id"));
+				break;
 
-					if (data.getStringExtra("what").equals("view"))
-					{
-						try
-						{
-							Navit.follow_button_off();
-						}
-						catch (Exception e2)
-						{
-							e2.printStackTrace();
+			case NavitSendFeedback_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						String feedback_text = data.getStringExtra("feedback_text");
+
+						String subject_d_version = "";
+						if (Navit_DonateVersion_Installed) {
+							subject_d_version = subject_d_version + "D,";
 						}
 
-						float lat = Navit.map_points.get(destination_id).lat;
-						float lon = Navit.map_points.get(destination_id).lon;
-						show_geo_on_screen_with_zoom_and_delay(lat, lon, 150);
-					}
-					else
-					{
-						// ok now set target
-						String dest_name = Navit.map_points.get(destination_id).point_name;
-						float lat = Navit.map_points.get(destination_id).lat;
-						float lon = Navit.map_points.get(destination_id).lon;
+						if (Navit_Largemap_DonateVersion_Installed) {
+							subject_d_version = subject_d_version + "L,";
+						}
 
-						// System.out.println("XXXXXX:" + lat + " " + lon);
+						try {
+							int rl = get_reglevel();
 
-						route_wrapper(dest_name, 0, 0, false, lat, lon, true);
-
-						final Thread zoom_to_route_007 = new Thread()
-						{
-							int wait = 1;
-							int count = 0;
-							int max_count = 60;
-
-							@Override
-							public void run()
-							{
-								while (wait == 1)
-								{
-									try
-									{
-										if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33))
-										{
-											zoom_to_route();
-											wait = 0;
-										}
-										else
-										{
-											wait = 1;
-										}
-
-										count++;
-										if (count > max_count)
-										{
-											wait = 0;
-										}
-										else
-										{
-											Thread.sleep(400);
-										}
-									}
-									catch (Exception e)
-									{
-									}
-								}
+							if (rl > 0) {
+								subject_d_version = "U" + rl + ",";
 							}
-						};
-						zoom_to_route_007.start();
-
-						// ---------- DEBUG: write route to file ----------
-						// ---------- DEBUG: write route to file ----------
-						// ---------- DEBUG: write route to file ----------
-						if (p.PREF_enable_debug_write_gpx)
-						{
-							write_route_to_gpx_file();
-						}
-						// ---------- DEBUG: write route to file ----------
-						// ---------- DEBUG: write route to file ----------
-
-						try
-						{
-							Navit.follow_button_on();
-						}
-						catch (Exception e2)
-						{
-							e2.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 
+						String FD_addon = "";
+						if (FDBL) {
+							FD_addon = ",FD";
+						}
+
+						sendEmail("feedback@zanavi.cc", "ZANavi Feedback (v:" + subject_d_version + FD_addon + NavitAppVersion + " a:" + Build.VERSION.SDK + ")", feedback_text);
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					Toast.makeText(getApplicationContext(), Navit.get_text("there was a problem with sending feedback"), Toast.LENGTH_SHORT).show(); //TRANS
 				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
+				break;
 
-		case NavitSendFeedback_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					String feedback_text = data.getStringExtra("feedback_text");
-
-					String subject_d_version = "";
-					if (Navit_DonateVersion_Installed)
-					{
-						subject_d_version = subject_d_version + "D,";
-					}
-
-					if (Navit_Largemap_DonateVersion_Installed)
-					{
-						subject_d_version = subject_d_version + "L,";
-					}
-
-					try
-					{
-						int rl = get_reglevel();
-
-						if (rl > 0)
-						{
-							subject_d_version = "U" + rl + ",";
-						}
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-
-					String FD_addon = "";
-					if (FDBL)
-					{
-						FD_addon = ",FD";
-					}
-
-					sendEmail("feedback@zanavi.cc", "ZANavi Feedback (v:" + subject_d_version + FD_addon + NavitAppVersion + " a:" + android.os.Build.VERSION.SDK + ")", feedback_text);
+			default:
+				Log.e("Navit", "onActivityResult " + requestCode + " " + resultCode);
+				try {
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ActivityResults[requestCode].onActivityResult(requestCode, resultCode, data);
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+					// ---------- what is this doing ????? ----------
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				Toast.makeText(getApplicationContext(), Navit.get_text("there was a problem with sending feedback"), Toast.LENGTH_SHORT).show(); //TRANS
-			}
-			break;
-
-		default:
-			Log.e("Navit", "onActivityResult " + requestCode + " " + resultCode);
-			try
-			{
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ActivityResults[requestCode].onActivityResult(requestCode, resultCode, data);
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-				// ---------- what is this doing ????? ----------
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
+				break;
 		}
 		Log.e("Navit", "onActivityResult finished");
 	}
@@ -12812,7 +12588,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			NavitDataStorageDirs = android.support.v4.content.ContextCompat.getExternalFilesDirs(Navit.getBaseContext_, null);
+			NavitDataStorageDirs = androidx.core.content.ContextCompat.getExternalFilesDirs(Navit.getBaseContext_, null);
 
 			if (NavitDataStorageDirs.length > 0)
 			{

@@ -19,16 +19,17 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import androidx.fragment.app.ListFragment;
+
 import com.zoffcc.applications.zanavi.ZANaviListViewAdapter.ListViewItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ZANaviRoadbookFragment extends ListFragment
 {

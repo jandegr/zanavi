@@ -19,15 +19,22 @@
 
 package com.zoffcc.applications.zanavi;
 
-import net.technologichron.manacalc.NumberPicker;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
-public class GeoCoordEnterDialog extends ActionBarActivity
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import net.technologichron.manacalc.NumberPicker;
+
+//import android.support.v7.app.ActionBarActivity;
+
+// before androidx refactoring, remove this !!
+//public class GeoCoordEnterDialog extends ActionBarActivity
+public class GeoCoordEnterDialog extends AppCompatActivity
 {
 	float lat;
 	float lon;
@@ -53,7 +60,7 @@ public class GeoCoordEnterDialog extends ActionBarActivity
 
 		setContentView(R.layout.geocoordenter);
 
-		android.support.v7.widget.Toolbar bar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar2vi);
+		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2vi);
 		bar.setTitle(Navit.get_text("Coord Dialog"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -88,7 +95,9 @@ public class GeoCoordEnterDialog extends ActionBarActivity
 			public void onClick(View v)
 			{
 				Intent resultIntent = new Intent();
-				setResult(ActionBarActivity.RESULT_CANCELED, resultIntent);
+				// before androidx refactoring, remove this !!
+				//setResult(ActionBarActivity.RESULT_CANCELED, resultIntent);
+				setResult(AppCompatActivity.RESULT_CANCELED, resultIntent);
 				finish();
 			}
 		});
@@ -177,8 +186,9 @@ public class GeoCoordEnterDialog extends ActionBarActivity
 
 		resultIntent.putExtra("lat", String.valueOf(this.lat));
 		resultIntent.putExtra("lon", String.valueOf(this.lon));
-
-		setResult(ActionBarActivity.RESULT_OK, resultIntent);
+        // before androidx refactoring, remove this !!
+		//setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		setResult(AppCompatActivity.RESULT_OK, resultIntent);
 		if (what.equals("view"))
 		{
 			resultIntent.putExtra("what", "view");
