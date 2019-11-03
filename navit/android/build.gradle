@@ -68,7 +68,19 @@ android {
         abortOnError false
     }
 
+    applicationVariants.all { variant ->
+        // create tasks to generate Javadocs
+        task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+            source = android.sourceSets.main.java.srcDirs
+            destinationDir = file("build/outputs/docs/javadoc/")
 
+            // the name that will appear in the docs
+            title = rootProject.name
+            options.memberLevel = JavadocMemberLevel.PACKAGE
+            verbose = true
+            failOnError false    
+        }
+    }
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
