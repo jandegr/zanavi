@@ -395,8 +395,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	static AlertDialog.Builder generic_alert_box = null;
 
-	private Boolean xmlconfig_unpack_file = true;
-	private Boolean write_new_version_file = true;
 	final static int Navit_Status_COMPLETE_NEW_INSTALL = 1;
 	final static int Navit_Status_UPGRADED_TO_NEW_VERSION = 2;
 	final static int Navit_Status_NORMAL_STARTUP = 0;
@@ -405,7 +403,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static Boolean Navit_index_on_but_no_idx_files = false;
 	static Boolean Navit_maps_too_old = false;
 	static Boolean Navit_Largemap_DonateVersion_Installed = false;
-	private int startup_status = Navit_Status_NORMAL_STARTUP;
 	final static int Navit_SHOW_DEST_ON_MAP_ZOOMLEVEL = 8;
 	static Boolean unsupported = false;
 	static Boolean Navit_maps_loaded = false;
@@ -583,7 +580,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static PowerManager.WakeLock wl;
 	static PowerManager.WakeLock wl_cpu;
 	static PowerManager.WakeLock wl_navigating;
-	private NavitActivityResult ActivityResults[];
+	private NavitActivityResult[] ActivityResults;
 	static AudioManager NavitAudioManager = null;
 	public static InputMethodManager mgr = null;
 	public static DisplayMetrics metrics = null;
@@ -1196,18 +1193,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		metrics = new DisplayMetrics();
 		display_.getMetrics(Navit.metrics);
 
-		road_book_items = new ArrayList<ListViewItem>();
+		road_book_items = new ArrayList<>();
 		fragmentManager = getSupportFragmentManager();
 
 		setContentView(R.layout.main_layout);
 
-
-
-		//FIXME pls
-
-
-		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		Toolbar toolbar = null;
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
 		if (toolbar != null)
 		{
@@ -1291,8 +1282,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				view_toolbar_top.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				// int width = view_toolbar_top.getMeasuredWidth();
-				int height = view_toolbar_top.getMeasuredHeight();
-				Navit.actionBarHeight = height;
+				Navit.actionBarHeight = view_toolbar_top.getMeasuredHeight();
 				// System.out.println("hhh:88=" + Navit.actionBarHeight);
 				Navit.cur_y_margin_bottom_bar_touch = Navit.map_view_height + Navit.actionBarHeight + bottom_bar_px - Navit.bottom_bar_slider_shadow_px; // try to put view at bottom
 
@@ -1620,7 +1610,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		{
 		}
 
-		startup_status = Navit_Status_NORMAL_STARTUP;
+		int startup_status = Navit_Status_NORMAL_STARTUP;
 
 		//		glSurfaceView = (GLSurfaceView) findViewById(R.id.glSurfaceView_001);
 		//		glSurfaceView.setEGLContextClientVersion(2); // enable OpenGL 2.0
@@ -1995,8 +1985,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// *******************
 		// *******************
 
-		xmlconfig_unpack_file = false;
-		write_new_version_file = false;
+		Boolean xmlconfig_unpack_file = false;
+		Boolean write_new_version_file = false;
 		try
 		{
 			NavitAppVersion = "" + this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
@@ -2752,8 +2742,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		System.out.println("Global_want_dpi[002]=" + NavitGraphics.Global_dpi_factor + ":" + NavitGraphics.preview_coord_factor);
 
-		// gggggggggggggggggggggggggg new !!!!!!!!!!!!!!!!!!!!
-
 		// --> dont use!! NavitMain(this, langu, android.os.Build.VERSION.SDK_INT);
 		Log.e("Navit", "android.os.Build.VERSION.SDK_INT=" + Integer.valueOf(android.os.Build.VERSION.SDK));
 
@@ -2788,29 +2776,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// NavitMain(this, langu, Integer.valueOf(android.os.Build.VERSION.SDK), my_display_density);
 		// --old--
 		// NavitActivity(3);
-
-		// CAUTION: don't use android.os.Build.VERSION.SDK_INT if <uses-sdk android:minSdkVersion="3" />
-		// You will get exception on all devices with Android 1.5 and lower
-		// because Build.VERSION.SDK_INT is since SDK 4 (Donut 1.6)
-
-		//		(see: http://developer.android.com/guide/appendix/api-levels.html)
-		//		Platform Version   				API Level
-		//		=============================================
-		//		Android 4.0.3					15
-		//		Android 4.0, 4.0.1, 4.0.2		14
-		//      Android 3.2         			13
-		//      Android 3.1      				12
-		//      Android 3.0         			11
-		//      Android 2.3.3       			10
-		//      Android 2.3.1        			9
-		//		Android 2.2          			8
-		//		Android 2.1          			7
-		//		Android 2.0.1        			6
-		//		Android 2.0          			5
-		//		Android 1.6          			4
-		//		Android 1.5          			3
-		//		Android 1.1          			2
-		//		Android 1.0          			1
 
 		Navit.mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -4419,7 +4384,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 					System.out.println("SUI:001");
 
-					boolean parsable = false;
 					boolean unparsable_info_box = true;
 					try
 					{
@@ -4442,14 +4406,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							Navit.NavitStartupAlreadySearching = true;
 							start_targetsearch_from_intent(intent_data.split("q=", -1)[1]);
 							// dont use this here, already starting search, so set to "false"
-							parsable = false;
 							unparsable_info_box = false;
 						}
 					}
 					else
 					{
 						Log.e("Navit", "already started search from startup intent");
-						parsable = false;
 						unparsable_info_box = false;
 					}
 
@@ -5639,7 +5601,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				try
 				{
-					String tmp[] = current_target_string2.split(":", 2);
+					String[] tmp = current_target_string2.split(":", 2);
 
 					if (Navit.OSD_route_001.arriving_time_valid)
 					{
@@ -6092,7 +6054,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				try
 				{
-					String tmp[] = current_target_string.split(":", 2);
+					String[] tmp = current_target_string.split(":", 2);
 					googlemaps_show(tmp[0], tmp[1], "ZANavi Target");
 				}
 				catch (Exception e)
@@ -6297,7 +6259,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				try
 				{
-					String tmp[] = current_target_string2.split(":", 2);
+					String[] tmp = current_target_string2.split(":", 2);
 
 					if (Navit.OSD_route_001.arriving_time_valid)
 					{
@@ -6388,7 +6350,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							{
 								lat_lon = NavitGraphics.CallbackGeoCalc(1, NavitGraphics.Global_dpi_factor * NG__map_main.view.getWidth() / 2, NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2);
 							}
-							String tmp[] = lat_lon.split(":", 2);
+							String[] tmp = lat_lon.split(":", 2);
 							//System.out.println("tmp=" + lat_lon);
 							lat = Float.parseFloat(tmp[0]);
 							lon = Float.parseFloat(tmp[1]);
@@ -6515,7 +6477,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					lat_lon = NavitGraphics.CallbackGeoCalc(1, NavitGraphics.Global_dpi_factor * NG__map_main.view.getWidth() / 2, NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2);
 				}
 
-				String tmp[] = lat_lon.split(":", 2);
+				String[] tmp = lat_lon.split(":", 2);
 				//System.out.println("tmp=" + lat_lon);
 				lat = Float.parseFloat(tmp[0]);
 				lon = Float.parseFloat(tmp[1]);
@@ -6682,7 +6644,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							File del_map_name_file = new File(del_map_name);
 							del_map_name_file.delete();
 							for (int jkl = 1; jkl < 51; jkl++) {
-								File del_map_name_fileSplit = new File(del_map_name + "." + String.valueOf(jkl));
+								File del_map_name_fileSplit = new File(del_map_name + "." + jkl);
 								del_map_name_fileSplit.delete();
 							}
 							// also remove index file
@@ -7499,14 +7461,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		private Boolean running;
 		Boolean startmain = false;
-		private CMC_object l2;
-		private Integer l3;
-		private MCB_object l4;
-		private TCB_object l5;
-		private SCCB_object l6;
-		private Location l7;
-		private GeCB_Object l8;
-		private LowQ_Object l9;
 
 		Navit x;
 		String lang;
@@ -7608,7 +7562,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void NavitActivity2(int i)
+		void NavitActivity2(int i)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7632,7 +7586,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void StartMain(Navit x, String lang, int version, String display_density_string, String n_datadir, String n_sharedir)
+		void StartMain(Navit x, String lang, int version, String display_density_string, String n_datadir, String n_sharedir)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7725,7 +7679,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void calc_sun_stats()
+		 void calc_sun_stats()
 		{
 			//
 			//
@@ -7751,7 +7705,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						lat_lon = NavitGraphics.CallbackGeoCalc(1, NavitGraphics.Global_dpi_factor * NG__map_main.view.getWidth() / 2, NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2);
 					}
 
-					String tmp[] = lat_lon.split(":", 2);
+					String[] tmp = lat_lon.split(":", 2);
 					//System.out.println("tmp=" + lat_lon);
 					lat = Float.parseFloat(tmp[0]);
 					lon = Float.parseFloat(tmp[1]);
@@ -7812,7 +7766,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			//
 		}
 
-		public void do_sun_calc()
+		void do_sun_calc()
 		{
 			//
 			//
@@ -7937,7 +7891,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				{
 					while (queue8.size() > 0)
 					{
-						l9 = queue8.poll();
+						LowQ_Object l9 = queue8.poll();
 						if (l9 != null)
 						{
 							// System.out.println("DrawLowqualMap");
@@ -7949,6 +7903,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				{
 				}
 
+				Location l7;
 				while (queue6.size() > 0)
 				{
 					try
@@ -7976,7 +7931,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// blocking call
 						// l2 = queue.take();
 						// non-blocking call
-						l2 = queue.poll();
+						CMC_object l2 = queue.poll();
 						if (l2 != null)
 						{
 							//System.out.println("CWorkerThread:CallbackMessageChannelReal_call:JTHREAD ID=" + this.getId());
@@ -8018,7 +7973,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// blocking call
 						// l6 = queue5.take();
 						// non-blocking call
-						l6 = queue5.poll();
+						SCCB_object l6 = queue5.poll();
 						if (l6 != null)
 						{
 							//System.out.println("CWorkerThread:SizeChangedCallbackReal_call:JTHREAD ID=" + this.getId());
@@ -8041,7 +7996,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// blocking call
 						// l5 = queue4.take();
 						// non-blocking call
-						l5 = queue4.poll();
+						TCB_object l5 = queue4.poll();
 						if (l5 != null)
 						{
 							//System.out.println("CWorkerThread:TimeoutCallback_call:JTHREAD ID=" + this.getId());
@@ -8088,7 +8043,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// blocking call
 						// l4 = queue3.take();
 						// non-blocking call
-						l4 = queue3.poll();
+						MCB_object l4 = queue3.poll();
 						if (l4 != null)
 						{
 							//System.out.println("CWorkerThread:MotionCallbackReal_call:JTHREAD ID=" + this.getId());
@@ -8135,7 +8090,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							}
 						}
 
-						l8 = queue7.poll();
+						GeCB_Object l8 = queue7.poll();
 						if (l8 != null)
 						{
 							if (l8.type == 1)
@@ -8319,7 +8274,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// blocking call
 						// l3 = queue2.take();
 						// non-blocking call
-						l3 = queue2.poll();
+						Integer l3 = queue2.poll();
 						if (l3 != null)
 						{
 							int i3 = l3.intValue();
@@ -13112,9 +13067,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
-		System.out.println("");
+		System.out.println();
 		System.out.println("*** Zoom out FULL ***");
-		System.out.println("");
+		System.out.println();
 		Message msg = new Message();
 		Bundle b = new Bundle();
 		b.putInt("Callback", 8);
@@ -13710,7 +13665,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		String lat_lon = NavitGraphics.CallbackGeoCalc(1, (x + NavitGraphics.mCanvasWidth_overspill) * NavitGraphics.Global_dpi_factor, (y + NavitGraphics.mCanvasHeight_overspill) * NavitGraphics.Global_dpi_factor);
 		try
 		{
-			String tmp[] = lat_lon.split(":", 2);
+			String[] tmp = lat_lon.split(":", 2);
 			//System.out.println("tmp=" + lat_lon);
 			float lat = Float.parseFloat(tmp[0]);
 			float lon = Float.parseFloat(tmp[1]);
@@ -16362,7 +16317,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		ret.Longitude = 0;
 		try
 		{
-			String tmp[] = current_target_string2.split(":", 2);
+			String[] tmp = current_target_string2.split(":", 2);
 			ret.Latitude = Double.parseDouble(tmp[0]);
 			ret.Longitude = Double.parseDouble(tmp[1]);
 		}
@@ -16387,7 +16342,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 			if (Navit.GFX_OVERSPILL)
 			{
-				String tmp[] = x_y.split(":", 2);
+				String[] tmp = x_y.split(":", 2);
 				int x = Integer.parseInt(tmp[0]);
 				int y = Integer.parseInt(tmp[1]);
 
@@ -16398,7 +16353,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			}
 			else
 			{
-				String tmp[] = x_y.split(":", 2);
+				String[] tmp = x_y.split(":", 2);
 				int x = Integer.parseInt(tmp[0]);
 				int y = Integer.parseInt(tmp[1]);
 
@@ -16432,7 +16387,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				lat_lon = NavitGraphics.CallbackGeoCalc(1, x * NavitGraphics.Global_dpi_factor, y * NavitGraphics.Global_dpi_factor);
 			}
 
-			String tmp[] = lat_lon.split(":", 2);
+			String[] tmp = lat_lon.split(":", 2);
 			out.Latitude = Float.parseFloat(tmp[0]);
 			out.Longitude = Float.parseFloat(tmp[1]);
 		}
