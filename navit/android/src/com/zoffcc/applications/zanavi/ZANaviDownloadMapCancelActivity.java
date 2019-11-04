@@ -29,7 +29,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -37,6 +36,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
@@ -63,7 +65,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_download_cancel_activity);
 
-		android.support.v7.widget.Toolbar bar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar2nd);
+		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2nd);
 		bar.setTitle(Navit.get_text("Download"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{

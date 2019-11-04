@@ -30,10 +30,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.LayoutParams;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +42,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.LayoutParams;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
@@ -292,7 +292,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		header.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		header.setGravity(Gravity.TOP);
 
-		view = new ImageView(this)
+		view = new androidx.appcompat.widget.AppCompatImageView(this)
 		{
 			@Override
 			protected void onDraw(Canvas canvas)
@@ -408,7 +408,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 	{
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra("selected_id", String.valueOf(this.selected_id));
-		setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		setResult(AppCompatActivity.RESULT_OK, resultIntent);
 
 		if (view_bitmap != null)
 		{

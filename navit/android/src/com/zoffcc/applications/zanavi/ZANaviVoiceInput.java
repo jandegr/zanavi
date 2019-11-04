@@ -19,8 +19,6 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -30,13 +28,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ZANaviVoiceInput extends ActionBarActivity
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import java.util.List;
+
+public class ZANaviVoiceInput extends AppCompatActivity
 {
 	private static final int REQUEST_CODE = 847;
 	// private ListView wordsList;
@@ -69,7 +71,7 @@ public class ZANaviVoiceInput extends ActionBarActivity
 
 		setContentView(R.layout.voice_recog);
 
-		android.support.v7.widget.Toolbar bar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar2vi);
+		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2vi);
 		bar.setTitle(Navit.get_text("Voice Search"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -433,7 +435,7 @@ public class ZANaviVoiceInput extends ActionBarActivity
 		resultIntent.putExtra("address_string", addr);
 		resultIntent.putExtra("lat", lat);
 		resultIntent.putExtra("lon", lon);
-		setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		setResult(AppCompatActivity.RESULT_OK, resultIntent);
 		//System.out.println("XYZ:finish");
 		finish();
 	}

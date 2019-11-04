@@ -21,7 +21,6 @@ package com.zoffcc.applications.zanavi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -31,7 +30,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class NavitFeedbackFormActivity extends ActionBarActivity
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+public class NavitFeedbackFormActivity extends AppCompatActivity
 {
 	private EditText feedback_text;
 
@@ -46,7 +48,7 @@ public class NavitFeedbackFormActivity extends ActionBarActivity
 
 		setContentView(R.layout.feedback_dialog);
 
-		android.support.v7.widget.Toolbar bar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar2);
+		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2);
 		bar.setTitle(Navit.get_text("send feedback"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -110,7 +112,7 @@ public class NavitFeedbackFormActivity extends ActionBarActivity
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra("feedback_text", NavitFeedbackFormActivity.this.feedback_text.getText().toString());
 
-		setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		setResult(AppCompatActivity.RESULT_OK, resultIntent);
 		finish();
 	}
 

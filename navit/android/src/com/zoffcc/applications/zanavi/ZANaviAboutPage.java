@@ -1,11 +1,5 @@
 package com.zoffcc.applications.zanavi;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import mehdi.sakout.aboutpage.AboutPage;
-import mehdi.sakout.aboutpage.Element;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
@@ -16,15 +10,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.zoffcc.applications.logging.Logging;
 import com.zoffcc.applications.logging.Logging.AsyncResponse;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import mehdi.sakout.aboutpage.AboutPage;
+import mehdi.sakout.aboutpage.Element;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
@@ -109,7 +110,16 @@ public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 		// final String copyrights = String.format("Copyright © %1$d", Calendar.getInstance().get(Calendar.YEAR));
 		final String copyrights = String.format("Copyright © 2016");
 		copyRightsElement.setTitle(copyrights);
-		copyRightsElement.setColor(ContextCompat.getColor(this, mehdi.sakout.aboutpage.R.color.about_item_icon_color));
+
+
+
+		//FIXME pls
+		//copyRightsElement.setColor(ContextCompat.getColor(this, mehdi.sakout.aboutpage.R.color.about_item_icon_color));
+
+
+
+
+
 		copyRightsElement.setGravity(Gravity.CENTER);
 		copyRightsElement.setOnClickListener(new View.OnClickListener()
 		{
