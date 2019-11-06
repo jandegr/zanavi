@@ -208,11 +208,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static String NavitAppVersion_prev = "-1";
 	public static String NavitAppVersion_string = "0";
 	private final Boolean NAVIT_IS_EMULATOR = false; // when running on emulator set to true!!
-	private static boolean has_hw_menu_button = false;
 	private static final int NAVIT_MIN_HORIZONTAL_DP_FOR_ACTIONBAR = 400;
-	private static int actionbar_item_width = 100;
 	private static int actionbar_items_will_fit = 2;
-	private static boolean actionbar_all_items_will_fit = false;
 	private static boolean actionabar_download_icon_visible = false;
 	static boolean is_navigating = false;
 	static boolean is_paused = true;
@@ -351,7 +348,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	Dialog dialog_info_popup = null;
 	static int info_popup_seen_count = 0;
 	static final int info_popup_seen_count_max = 2; // must look at the info pop 2 times
-	private static boolean info_popup_seen_count_end = false;
 
 	static Navit Global_Navit_Object = null;
 	static AssetManager asset_mgr = null;
@@ -375,10 +371,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static double elevation = 0;
 	private double moon_azimuth_cache = -1;
 	private double moon_evelation_cache = -1;
-	private Boolean sun_moon__must_calc_new = true;
 	private SunriseSunsetCalculator sun_moon__calc = null;
 	private Calendar sun_moon__cx = null;
-	private SolarPosition.SunCoordinates sun_moon__sc = null;
 	private static boolean calc_sun_enabled = true;
 	// -------- SUN / MOON ----------
 
@@ -733,8 +727,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static final String Navit_CENTER_FILENAME = "center.txt";
 
 	static final int RC_PERM_001 = 11;
-
-	private static boolean need_recalc_route = false;
 
 	static Resources res_ = null;
 	private static Window app_window = null;
@@ -2367,7 +2359,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//			});
 		//		}
 
-		info_popup_seen_count_end = false;
+		boolean info_popup_seen_count_end = false;
 		File navit_first_startup = new File(FIRST_STARTUP_FILE);
 		// if file does NOT exist, show the info box
 		if (!navit_first_startup.exists())
@@ -3397,6 +3389,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 			}
 		}
+
+		Log.e("Navit", "OnStart:Global_Init_Finished = " + Global_Init_Finished);
 
 		cwthr.NavitActivity2(2);
 
@@ -5282,10 +5276,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Log.e("Navit", "Navit width in DP -> " + display_.getWidth() / Navit.metrics.density);
 		Log.e("Navit", "Navit width in DP -> density=" + Navit.metrics.density);
 
+		boolean actionbar_all_items_will_fit = false;
 		try
 		{
 			View v4 = findViewById(R.id.item_settings_menu_button);
 			// Log.e("Navit", "Navit width in DP -> v4=" + v4);
+			int actionbar_item_width = 100;
 			if ((v4 != null) && (v4.getWidth() > 0))
 			{
 				Log.e("Navit", "Navit width in DP -> v4.w=" + v4.getWidth());
@@ -7427,7 +7423,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	class TCB_object
 	{
 		int del;
-		int id;
+		long id;
 		NavitTimeout nt;
 	}
 
@@ -7507,7 +7503,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void TimeoutCallback2(NavitTimeout nt, int del, int id)
+		public void TimeoutCallback2(NavitTimeout nt, int del, long id)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7578,7 +7574,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		void StartMain(Navit x, String lang, int version, String display_density_string, String n_datadir, String n_sharedir)
+		void StartMain(Navit x, String lang, int version, String display_density_string,
+					   String n_datadir, String n_sharedir)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7678,7 +7675,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// SUN ----------------
 			//
 			//
-			sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
+			Boolean sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
 
 			if ((sun_moon__must_calc_new) || (azmiuth_cache == -1))
 			{
@@ -7714,7 +7711,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					//System.out.println(t.getID());
 					sun_moon__calc = new SunriseSunsetCalculator(new Location2(String.valueOf(lat), String.valueOf(lon)), t.getID());
 					sun_moon__cx = Calendar.getInstance();
-					sun_moon__sc = SolarPosition.getSunPosition(new Date(), lat, lon);
+					SolarPosition.SunCoordinates sun_moon__sc = SolarPosition.getSunPosition(new Date(), lat, lon);
 
 					azmiuth_cache = sun_moon__sc.azimuth;
 					zenith_cache = sun_moon__sc.zenithAngle;
@@ -7887,6 +7884,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						if (l9 != null)
 						{
 							// System.out.println("DrawLowqualMap");
+							Log.e("Navit","DrawLowqualMap");
 							NavitGraphics.DrawLowqualMap(l9.latlonzoom, l9.w, l9.h, l9.fontsize, l9.scale, l9.selection_range);
 						}
 					}
@@ -11360,7 +11358,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static void activatePrefs(int dummy)
 	{
 
-		need_recalc_route = false; // do we need to recalc the route?
+		boolean need_recalc_route = false; // do we need to recalc the route?
 
 		// call some functions to activate the new settings
 		if (p.PREF_follow_gps)
@@ -14081,7 +14079,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private void detect_menu_button()
 	{
 		// default: we dont have a real menu button
-		has_hw_menu_button = false;
+		boolean has_hw_menu_button = false;
 
 		try
 		{

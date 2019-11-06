@@ -703,50 +703,6 @@ void main_init_nls(void)
 
 }
 
-
-gchar* g_strdup_printf_custom(const gchar *format, ...)
-{
-  gchar *buffer;
-  va_list args;
-
-  va_start (args, format);
-  buffer = g_strdup_vprintf_custom (format, args);
-  va_end (args);
-
-  return buffer;
-}
-
-gchar* g_strdup_vprintf_custom(const gchar *format,	  va_list      args)
-{
-  gchar *string = NULL;
-
-  g_vasprintf_custom (&string, format, args);
-
-  return string;
-}
-
-gint g_vasprintf_custom (gchar **string, gchar const *format, va_list args)
-{
-	gint len;
-	g_return_val_if_fail (string != NULL, -1); 
-
-	len = rpl_vasprintf(string , format, args);
-	if (len < 0)
-	{
-		*string = NULL;
-	}
-	else if (!g_mem_is_system_malloc ()) 
-	{
-		/* vasprintf returns malloc-allocated memory */
-		gchar *string1 = g_strndup (*string, len);
-		free (*string);
-		*string = string1;
-	}
-
-   return len;
-}
-
-
 char *replace_str2(const char *str, const char *old, const char *new)
 			{
 				char *ret, *r;

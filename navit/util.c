@@ -191,10 +191,13 @@ char *stristr(const char *String, const char *Pattern)
 */
 
 
-// TODO: android studio ---------
-// TODO: android studio ---------
-#if 1
-int
+// NDK has it included for android 18 and up
+// for 64 bit builds of android, ABI is lifted in ndk to 21
+// so getdelim and getline is included for 64 bit android builds
+// now matter what minSDK is
+// for 32 bit builds with minSDK > 17 it would be included from NDK as well
+#ifndef HAVE_GETDELIM
+ssize_t
 getdelim (char **lineptr, size_t *n, int delimiter, FILE *fp)
 {
   int result;
@@ -268,15 +271,16 @@ getdelim (char **lineptr, size_t *n, int delimiter, FILE *fp)
 
   return result;
 }
+#endif
 
-int
+#ifndef HAVE_GETLINE
+ssize_t
 getline (char **lineptr, size_t *n, FILE *stream)
 {
   return getdelim (lineptr, n, '\n', stream);
 }
 #endif
-// TODO: android studio ---------
-// TODO: android studio ---------
+
 
 
 #endif

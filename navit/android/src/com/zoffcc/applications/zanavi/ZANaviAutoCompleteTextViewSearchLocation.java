@@ -21,15 +21,14 @@ package com.zoffcc.applications.zanavi;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.widget.AutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
-public class ZANaviAutoCompleteTextViewSearchLocation extends AutoCompleteTextView
+public class ZANaviAutoCompleteTextViewSearchLocation extends AppCompatAutoCompleteTextView
 {
 
 	public ZANaviAutoCompleteTextViewSearchLocation(Context context)

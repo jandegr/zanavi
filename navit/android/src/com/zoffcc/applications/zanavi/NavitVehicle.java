@@ -1099,7 +1099,7 @@ public class NavitVehicle
 					try
 					{
 						// System.out.println("extrapolated pos:" + extrapolated_post_string);
-						String tmp[] = extrapolated_post_string.split(":", 3);
+						String[] tmp = extrapolated_post_string.split(":", 3);
 						float lat = Float.parseFloat(tmp[0]);
 						float lon = Float.parseFloat(tmp[1]);
 						float dir = Float.parseFloat(tmp[2]);

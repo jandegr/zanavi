@@ -9,8 +9,8 @@ set(NAVIT_SRC announcement.c atom.c attr.c cache.c callback.c command.c config_.
    event.c file.c graphics.c gui.c item.c layout.c log.c main.c map.c
    linguistics.c mapset.c maptype.c menu.c messages.c bookmarks.c navit.c navigation.c osd.c param.c phrase.c plugin.c popup.c
    profile.c projection.c roadprofile.c route.c search.c speech.c start_real.c sunriset.c transform.c track.c
-   maptool/miniz.c coffeecatch.c
-   coffeejni.c snprintf.c
+   maptool/miniz.c
+   snprintf.c
    vehicle/android/vehicle_android.c vehicle/demo/vehicle_demo.c
    gui/internal/gui_internal.c
    graphics/android/graphics_android.c map/binfile/binfile.c

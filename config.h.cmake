@@ -68,3 +68,9 @@
 #cmakedefine HAVE_STRING_H 1
 
 #cmakedefine EZXML_NOMMAP 0
+
+#cmakedefine HAVE_GETDELIM 1
+
+#cmakedefine HAVE_GETLINE 1
+
+#cmakedefine DEBUG_BUILD 1

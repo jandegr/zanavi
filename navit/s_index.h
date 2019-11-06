@@ -1,1 +1,1 @@
-s_index.h_full
+#include <s_index.h_full>

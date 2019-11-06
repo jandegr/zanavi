@@ -29,9 +29,9 @@ import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
-public class ZANaviBusySpinner extends ImageView
+public class ZANaviBusySpinner extends AppCompatImageView
 {
 	int mCanvasWidth;
 	int mCanvasHeight;

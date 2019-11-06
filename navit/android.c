@@ -43,9 +43,6 @@
 #include "roadprofile.h"
 #include "navit_nls.h"
 
-#include "coffeecatch.h"
-#include "coffeejni.h"
-
 // #include "layout.h"
 
 JNIEnv *jnienv;
@@ -71,12 +68,6 @@ jmethodID NavitGraphics_alter_missing_icon = NULL;
 
 struct attr attr;
 
-
-
-
-
-
-
 // #define NAVIT_FUNC_CALLS_DEBUG_PRINT 1
 
 
@@ -97,14 +88,6 @@ struct attr attr;
 #endif
 // --------------- debug function calls ------------------
 // --------------- debug function calls ------------------
-
-
-
-
-
-
-
-
 
 
 // ------------------------- COPIED STUFF --- this is generally bad ------------------
@@ -523,23 +506,34 @@ Java_com_zoffcc_applications_zanavi_Navit_AppCrashC__XX_real(JNIEnv* env, jobjec
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_Navit_AppCrashC(JNIEnv* env, jobject thiz)
+Java_com_zoffcc_applications_zanavi_Navit_AppCrashC(JNIEnv* env, jclass thiz)
 {
+#ifdef ZANAVI_COFFEE
 	// dbg(0,"app_crash_C:001\n");
 	send_alert_to_java(99, "app_crash_C:001");
 	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_Navit_AppCrashC__XX_real(env, thiz));
 	send_alert_to_java(99, "app_crash_C:002");
 	// dbg(0,"app_crash_C:099\n");
+#endif
 }
 
+
+
+//Java_com_zoffcc_applications_zanavi_Navit_NavitMain_old(JNIEnv* env, jobject thiz, jobject activity,
+//		jstring lang, jint version, jstring display_density_string, jstring n_datadir, jstring n_sharedir, jobject bitmap)
+//{
+//#ifdef ZANAVI_COFFEE
+//	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(env, thiz,
+//			activity, lang, version, display_density_string, n_datadir, n_sharedir, bitmap));
+//#else
+//	Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(env, thiz, activity, lang, version,
+//			display_density_string, n_datadir, n_sharedir, bitmap);
+//#endif
+//}
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject thiz, jobject activity, jobject lang, int version, jobject display_density_string, jobject n_datadir, jobject n_sharedir, jobject bitmap)
-{
-	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(env, thiz, activity, lang, version, display_density_string, n_datadir, n_sharedir, bitmap));
-}
-
-Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(JNIEnv* env, jobject thiz, jobject activity, jobject lang, int version, jobject display_density_string, jobject n_datadir, jobject n_sharedir, jobject bitmap)
+Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject thiz, jobject activity,
+		jstring lang, jint version, jstring display_density_string, jstring n_datadir, jstring n_sharedir, jobject bitmap)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -718,8 +712,6 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(JNIEnv* env, jobjec
 	 dummy_997 = NULL;
 	 */
 
-
-
 #if 0
 
 	double lat = 48.6936931;
@@ -767,10 +759,6 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(JNIEnv* env, jobjec
 
 #endif
 
-
-
-
-
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:leave\n");
 #endif
@@ -778,7 +766,7 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(JNIEnv* env, jobjec
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_Navit_NavitActivity(JNIEnv* env, jobject thiz, int param)
+Java_com_zoffcc_applications_zanavi_Navit_NavitActivity(JNIEnv* env, jobject thiz, jint param)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -876,7 +864,8 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitActivity(JNIEnv* env, jobject thi
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_SizeChangedCallbackReal(JNIEnv* env, jobject thiz, int w, int h, jobject bitmap)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_SizeChangedCallbackReal(JNIEnv* env, jclass thiz,
+		jint w, jint h, jobject bitmap)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -906,7 +895,8 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_SizeChangedCallbackReal(JNIEnv
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_MotionCallbackReal(JNIEnv* env, jobject thiz, int x1, int y1, int x2, int y2, int draw)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_MotionCallbackReal(JNIEnv* env, jclass thiz,
+		jint x1, jint y1, jint x2, jint y2, jint draw)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -965,7 +955,8 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_MotionCallbackReal(JNIEnv* env
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_TimeoutCallback(JNIEnv* env, jobject thiz, int delete, int id)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_TimeoutCallback(JNIEnv* env, jclass thiz,
+		jint delete, jlong id)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -985,7 +976,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_TimeoutCallback(JNIEnv* env, j
 	//if (id != 0)
 	//{
 	//	dbg(0,"callback struct=%p %d\n", id, id);
-	callback_call_0((struct callback *) id);
+	callback_call_0((struct callback *) (intptr_t) id);
 	//}
 	// ICS
 	//dbg(0,"timeout 2\n");
@@ -1004,6 +995,9 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_TimeoutCallback(JNIEnv* env, j
 	 */
 #endif
 }
+
+
+// todo JDG fix signature (if this is used at all)
 
 JNIEXPORT void JNICALL
 Java_com_zoffcc_applications_zanavi_NavitIdle_IdleCallback(JNIEnv* env, jobject thiz, int id)
@@ -1049,17 +1043,21 @@ Java_com_zoffcc_applications_zanavi_NavitWatch_poll(JNIEnv* env, jobject thiz, i
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitWatch_WatchCallback(JNIEnv* env, jobject thiz, int id)
+Java_com_zoffcc_applications_zanavi_NavitWatch_WatchCallback(JNIEnv* env, jobject thiz, jlong id)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
 #endif
-	//DBG // dbg(0, "enter %p %p\n", thiz, (void *) id);
-	callback_call_0((struct callback *) id);
+
+	callback_call_0((struct callback *) (intptr_t) id);
 }
 
+
+// todo JDG fix signature (if this is used at all)
+
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitSensors_SensorCallback(JNIEnv* env, jobject thiz, int id, int sensor, float x, float y, float z)
+Java_com_zoffcc_applications_zanavi_NavitSensors_SensorCallback(JNIEnv* env, jobject thiz, int id,
+		int sensor, float x, float y, float z)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -1071,12 +1069,13 @@ Java_com_zoffcc_applications_zanavi_NavitSensors_SensorCallback(JNIEnv* env, job
 	// dbg(0, "THREAD ID=%d\n", thread_id);
 
 	//DBG // dbg(0, "enter %p %p %f %f %f\n", thiz, (void *) id, x, y, z);
-	callback_call_4((struct callback *) id, sensor, &x, &y, &z);
+	callback_call_4((struct callback *) id, sensor, &x, &y, &z); // fixme
 }
 
 
-
-Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(JNIEnv *env, jobject thiz, double lat, double lon, float speed, float direction, double height, float radius, long gpstime)
+JNIEXPORT void JNICALL
+Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback(JNIEnv *env, jclass thiz,
+		jdouble lat, jdouble lon, jfloat speed, jfloat direction, jdouble height, jfloat radius, jlong gpstime)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -1113,11 +1112,18 @@ Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(JNIEnv
 }
 
 
-JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback(JNIEnv *env, jobject thiz, double lat, double lon, float speed, float direction, double height, float radius, long gpstime)
-{
-	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(env, thiz, lat, lon, speed, direction, height, radius, gpstime));
-}
+
+//Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback(JNIEnv *env, jclass thiz, jdouble lat,
+//		jdouble lon, jfloat speed, jfloat direction, jdouble height, jfloat radius, jlong gpstime)
+//{
+//#ifdef ZANAVI_COFFEE
+//	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(env,
+//			thiz, lat, lon, speed, direction, height, radius, gpstime));
+//#else
+//	Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(env, thiz, lat, lon,
+//			speed, direction, height, radius, gpstime);
+//#endif
+//}
 
 
 
@@ -1318,13 +1324,15 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList__XX_r
 
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList(JNIEnv* env, jobject thiz, int id, int partial, jobject str, jobject str_town, jobject str_hn, int search_flags, jobject search_country, jobject latlon, int radius)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList(JNIEnv* env, jobject thiz,
+		jint id, jint partial, jstring str, jstring str_town, jstring str_hn, jint search_flags,
+		jstring search_country, jstring latlon, jint radius)
 {
-	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList__XX_real(env, thiz, id, partial, str, str_town, str_hn, search_flags, search_country, latlon, radius));
+	Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList__XX_real(env, thiz, id, partial, str, str_town, str_hn, search_flags, search_country, latlon, radius);
 }
 
 JNIEXPORT jint JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackDestinationValid(JNIEnv* env, jobject thiz)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackDestinationValid(JNIEnv* env, jclass thiz)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -1429,7 +1437,8 @@ static void map_preview_label_line(struct point *p, int count, char *label, int 
 
 /** renamed while working openGL */
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap_noGL(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap_noGL(JNIEnv* env, jobject thiz,
+		jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -1488,6 +1497,8 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap_noGL(JNIEnv* en
 
 	struct map_selection sel;
 	const int selection_range = sel_range; // should be something with "width" and "height" i guess ??!!
+	                                       // JDG-JDG this is only used for oldstyle navit search
+	                                       // in binfile (AFAIK)
 
 	const int max = 100;
 	int count;
@@ -1662,7 +1673,8 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap_noGL(JNIEnv* en
 
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitMapPreviewActivity_DrawMapPreview(JNIEnv* env, jobject thiz, jobject latlonzoom, int width, int height, int font_size, int scale, int sel_range)
+Java_com_zoffcc_applications_zanavi_NavitMapPreviewActivity_DrawMapPreview(JNIEnv* env, jclass thiz,
+		jstring latlonzoom, jint width, jint height, jint font_size, jint scale, jint sel_range)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -2119,7 +2131,7 @@ void android_DrawPreview_polyline(struct point *p, int count, int type, const ch
 
 
 JNIEXPORT jobjectArray JNICALL 
-Java_com_zoffcc_applications_zanavi_NavitGraphics_GetRoadBookItems(JNIEnv *env, jobject thiz, int result_id)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_GetRoadBookItems(JNIEnv *env, jclass thiz, jint result_id)
 {
     jobjectArray ret;
     int i;
@@ -2175,7 +2187,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_GetRoadBookItems(JNIEnv *env, 
 
 
 JNIEXPORT jstring JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackGeoCalc(JNIEnv* env, jobject thiz, int i, float a, float b)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackGeoCalc(JNIEnv* env, jclass thiz, jint i, jfloat a, jfloat b)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -2591,7 +2603,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackGeoCalc(JNIEnv* env, j
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackLocalizedString(JNIEnv* env, jobject thiz, jobject str)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackLocalizedString(JNIEnv* env, jclass thiz, jstring str)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -2619,7 +2631,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackLocalizedString(JNIEnv
 }
 
 JNIEXPORT jint JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_GetThreadId(JNIEnv* env, jobject thiz)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_GetThreadId(JNIEnv* env, jclass thiz)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");
@@ -2633,7 +2645,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_GetThreadId(JNIEnv* env, jobje
 }
 
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackMessageChannelReal(JNIEnv* env, jobject thiz, int i, jobject str2)
+Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackMessageChannelReal(JNIEnv* env, jclass thiz, jint i, jstring str2)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");

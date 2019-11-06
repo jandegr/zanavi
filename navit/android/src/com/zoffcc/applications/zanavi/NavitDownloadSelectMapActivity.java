@@ -137,7 +137,7 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 		//this.getListView().addHeaderView(text_v);
 
 		NavitMapDownloader.init();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE);
 		setListAdapter(adapter);
 		this.getListView().setFastScrollEnabled(true);
 		this.getListView().setVerticalFadingEdgeEnabled(true);

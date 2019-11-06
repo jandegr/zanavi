@@ -25,9 +25,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
-public class ZANaviOSDDebug01 extends ImageView
+public class ZANaviOSDDebug01 extends AppCompatImageView
 {
 
 	private Paint paint = new Paint();

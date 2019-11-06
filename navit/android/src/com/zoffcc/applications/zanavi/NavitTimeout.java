@@ -43,7 +43,7 @@ import java.util.Random;
 public class NavitTimeout extends Thread
 {
 	boolean event_multi;
-	private int event_callbackid;
+	private long event_callbackid;
 	private int event_timeout;
 	Boolean running;
 	private int randnum = 0;
@@ -52,7 +52,7 @@ public class NavitTimeout extends Thread
 
 	// public native void TimeoutCallback(int del, int id);
 
-	NavitTimeout(int timeout, boolean multi, int callbackid)
+	NavitTimeout(int timeout, boolean multi, long callbackid)
 	{
 		this.randnum = myRandom.nextInt();
 		//Log.e("Navit", "Create New Event #"+randnum+" - to=" + timeout + " multi=" + multi + " cid=" + callbackid);

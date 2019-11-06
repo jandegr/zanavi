@@ -402,7 +402,7 @@ callback_call(struct callback *cb, int pcount, void **p)
 	if (cb->pcount + pcount <= 8)
 	{
 		//dbg(1,"cb->pcount=%d\n", cb->pcount);
-		if (cb->pcount && cb->p)
+		if (cb->pcount)
 		{
 			//dbg(1,"cb->p[0]=%p\n", cb->p[0]);
 		}

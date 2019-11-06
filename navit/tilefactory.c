@@ -1100,7 +1100,9 @@ void sendBitmap(JNIEnv* env, int width, int height){
  * An openGL version of the lowqual map
  */
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jclass thiz, jstring latlonzoom, jint width, jint height, jint font_size, jint scale, jint sel_range) {
+Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jclass thiz, jstring latlonzoom,
+        jint width, jint height, jint font_size, jint scale, jint sel_range)
+{
 
     GLuint gProgram;
     GLfloat lineWidthRange[2];

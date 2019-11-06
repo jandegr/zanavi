@@ -12,7 +12,7 @@
 #endif /* _MSC_VER */
 #include "wordexp.h"
 #include "glob.h"
-
+#include <glib.h>
 
 static int
 is_valid_variable_char(char c, int pos)
@@ -76,8 +76,8 @@ expand_variables(const char *in)
 /*
  * @brief minimal realization of wordexp according to IEEE standard
  * shall perform word expansion as described in the Shell
- * expansion of ´$NAME´ or ´${NAME}´
- * expansion of ´*´ and ´?´
+ * expansion of ï¿½$NAMEï¿½ or ï¿½${NAME}ï¿½
+ * expansion of ï¿½*ï¿½ and ï¿½?ï¿½
  * @param words: pointer to a string containing one or more words to be expanded
  * but here only one word supported
  */
@@ -94,10 +94,10 @@ wordexp(const char *words, wordexp_t *we, int flags)
 	assert(we != NULL);
 	assert(words != NULL);
  
-	/* expansion of ´$NAME´ or ´${NAME}´ */
+	/* expansion of ï¿½$NAMEï¿½ or ï¿½${NAME}ï¿½ */
 	words_expanded=expand_variables(words);
 #ifdef HAVE_API_WIN32_BASE
-	/* expansion of ´*´, ´?´ */
+	/* expansion of ï¿½*ï¿½, ï¿½?ï¿½ */
 	error=glob(words_expanded, 0, NULL, &pglob);
 	if (!error)
 	{

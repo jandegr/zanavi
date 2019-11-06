@@ -14,19 +14,20 @@ android {
     compileOptions.encoding = 'UTF-8'
 
     defaultConfig {
-        minSdkVersion 17
+        minSdkVersion 14
         targetSdkVersion 29
 
         vectorDrawables.useSupportLibrary = true
         // generatedDensities = []
 
-        ndk {//  ?? , 'x86' 'x86_64', 'arm64-v8a',
-            abiFilters  'armeabi-v7a', 'x86'
+        ndk {// , 'arm64-v8a', 'x86_64'
+            abiFilters  'x86', 'armeabi-v7a'
         }
         externalNativeBuild {
             cmake {
-                arguments '-DUSE_PLUGINS=y', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n', '-DENABLE_ROLL=y'
-                'Dplugin/pedestrian=n' //werkt op linux maar niet hier in androidstudio !!!
+                arguments '-DUSE_PLUGINS=y', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n' ,
+                        '-DDEBUG_BUILD=y' // later make this depend on release or debug build
+                                         // makes dbg() C statements print to logcat
             }
         }
     }
@@ -97,14 +98,11 @@ android {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
         implementation 'androidx.appcompat:appcompat:1.1.0'
         implementation 'com.github.medyo:android-about-page:1.2.5'
-//        implementation 'com.android.support:support-compat:28.0.0'
-//        implementation project(':android-support-compat')
-//        implementation project(':android-support-fragment')
+
 //        implementation project('android-about-page')
 
 
 //        implementation project(':android-support-annotations')
-//    compile project(':android-support-vector-drawable')
 
         // androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 

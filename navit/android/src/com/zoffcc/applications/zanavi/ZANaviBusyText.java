@@ -26,9 +26,9 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class ZANaviBusyText extends TextView
+public class ZANaviBusyText extends AppCompatTextView
 {
 	final int text_size = 23;
 

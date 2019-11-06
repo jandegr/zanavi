@@ -26,9 +26,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
-public class ZANaviOSDCompass extends ImageView
+public class ZANaviOSDCompass extends AppCompatImageView
 {
 	int w = 10;
 	int h = 10;

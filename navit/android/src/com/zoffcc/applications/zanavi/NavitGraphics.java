@@ -3682,7 +3682,7 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static native void TimeoutCallback(int del, int id);
+	public static native void TimeoutCallback(int del, long id);
 
 	public static native void SizeChangedCallbackReal(int w, int h, Bitmap main_map_bitmap);
 
@@ -3750,7 +3750,8 @@ public class NavitGraphics
 	 * }
 	 */
 
-	public static native void DrawLowqualMap(String latlonzoom, int width, int height, int font_size, int scale, int sel_range);
+	public static native void DrawLowqualMap(String latlonzoom, int width, int height, int font_size,
+											 int scale, int sel_range);
 
 	public void NavitSetGrObj()
 	{
@@ -3760,7 +3761,7 @@ public class NavitGraphics
 
 	Paint paint_dr_polyl = new Paint();
 
-	protected void draw_polyline(int c[], int width, int r, int g, int b, int a)
+	protected void draw_polyline(int[] c, int width, int r, int g, int b, int a)
 	{
 		paint_dr_polyl.setARGB(a, r, g, b);
 		paint_dr_polyl.setStrokeWidth(width);

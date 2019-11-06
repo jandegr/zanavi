@@ -43,15 +43,15 @@ public class NavitWatch implements Runnable
 	private boolean removed;
 	private int watch_fd;
 	private int watch_cond;
-	private int watch_callbackid;
+	private long watch_callbackid;
 	private boolean callback_pending;
 	private Runnable callback_runnable;
 
 	public native void poll(int fd, int cond);
 
-	public native void WatchCallback(int id);
+	public native void WatchCallback(long id);
 
-	NavitWatch(int fd, int cond, int callbackid)
+	NavitWatch(int fd, int cond, long callbackid)
 	{
 		Log.e("NavitWatch", "Creating new thread for " + fd + " " + cond + " from current thread " + java.lang.Thread.currentThread().getName());
 		watch_fd = fd;

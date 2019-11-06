@@ -39,6 +39,10 @@
 #ifndef NAVIT_DEBUG_H
 #define NAVIT_DEBUG_H
 
+#ifdef  DEBUG_BUILD
+#define _DEBUG_BUILD_
+#endif
+
 /*
  *
  *
@@ -135,7 +139,6 @@ extern int debug_level;
 
 
 #ifdef _DEBUG_BUILD_
-
 #define dbg_str2(x) #x
 #define dbg_str1(x) dbg_str2(x)
 #define dbg_module dbg_str1(MODULE)
@@ -194,7 +197,7 @@ extern int debug_level;
 // ----------------
 //#else
 // ----------------
-//#define g_free_func g_free
+#define g_free_func g_free
 #define dbg_guard(x) x
 // ----------------
 //#endif
