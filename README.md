@@ -3,6 +3,8 @@ In androidstudio just import the toplevel dir and no more need to download-andro
 
 a prebuilt apk (debug) can be found in the artifacts of latest build in the ations tab of this github page
 
+some sort of a changelog https://github.com/jandegr/zanavi/issues/2
+
 
 ORIGINAL
 <img src="https://cloud.githubusercontent.com/assets/16841860/23113427/4eb1e016-f738-11e6-9b71-7503210245a4.png" width="530" />
