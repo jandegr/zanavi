@@ -19,8 +19,6 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -28,8 +26,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.LayoutParams;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -41,9 +37,14 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.LayoutParams;
+
 import com.retain.dialog.RenameDialog;
 import com.retain.dialog.RenameHandlerInterface;
 import com.zoffcc.applications.zanavi.Navit.Navit_Point_on_Map;
+
+import java.util.ArrayList;
 
 public class NavitRecentDestinationActivity extends ListActivity
 {

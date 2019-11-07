@@ -15,12 +15,6 @@
  */
 package pub.devrel.easypermissions;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,10 +25,17 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Utility to request and check System permissions for apps targeting Android M (API >= 23).
@@ -90,7 +91,7 @@ public class EasyPermissions
 	 * Request a set of permissions, showing rationale if the system requests it.
 	 * 
 	 * @param object
-	 *            Activity or Fragment requesting permissions. Should implement {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback} or {@link android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
+	 *            Activity or Fragment requesting permissions. Should implement {@link androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback} or {@link androidx.core.app.FragmentCompat.OnRequestPermissionsResultCallback}
 	 * @param rationale
 	 *            a message explaining why the application needs this set of permissions, will
 	 *            be displayed if the user rejects the request the first time.
@@ -108,7 +109,7 @@ public class EasyPermissions
 	 * Request a set of permissions, showing rationale if the system requests it.
 	 * 
 	 * @param object
-	 *            Activity or Fragment requesting permissions. Should implement {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback} or {@link android.support.v13.app.FragmentCompat.OnRequestPermissionsResultCallback}
+	 *            Activity or Fragment requesting permissions. Should implement {@link androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback} or {@link androidx.core.app.FragmentCompat.OnRequestPermissionsResultCallback}
 	 * @param rationale
 	 *            a message explaining why the application needs this set of permissions, will
 	 *            be displayed if the user rejects the request the first time.
@@ -168,7 +169,7 @@ public class EasyPermissions
 	}
 
 	/**
-	 * Handle the result of a permission request, should be called from the calling Activity's {@link android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback#onRequestPermissionsResult(int, String[], int[])} method.
+	 * Handle the result of a permission request, should be called from the calling Activity's {@link androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback#onRequestPermissionsResult(int, String[], int[])} method.
 	 * <p>
 	 * If any permissions were granted or denied, the Activity will receive the appropriate callbacks through {@link PermissionCallbacks} and methods annotated with {@link AfterPermissionGranted} will be run if appropriate.
 	 * 

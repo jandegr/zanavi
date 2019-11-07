@@ -38,13 +38,6 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -69,7 +62,6 @@ import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -88,8 +80,17 @@ import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.zoffcc.applications.zanavi.Navit.Navit_Address_Result_Struct;
 import com.zoffcc.applications.zanavi.NavitAndroidOverlay.NavitAndroidOverlayBubble;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class NavitGraphics
 {
@@ -4840,7 +4841,18 @@ public class NavitGraphics
 			//System.out.println("CLEAR MAP:011:clear preview map");
 		}
 	}
-
+	
+	/**
+	 * Make the preview bitmap the one produced with
+	 * openGL in native code.
+	 *
+	 * @param bitmap to use as preview
+	 */
+	static void Preview_set_bitmap(Bitmap bitmap)
+	{
+		preview_bitmap = bitmap;
+	}
+	
 	static void DrawPreview_polyline(int type, int c[], String type2)
 	{
 		if (preview_bitmap != null)

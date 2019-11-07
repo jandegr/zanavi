@@ -38,8 +38,6 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -48,8 +46,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -77,8 +73,13 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.zoffcc.applications.zanavi.Navit.Navit_Address_Result_Struct;
 import com.zoffcc.applications.zanavi.NavitSearchResultListArrayAdapter.search_result_entry;
+
+import java.util.ArrayList;
 
 public class NavitAddressSearchActivity extends AppCompatActivity
 {
@@ -605,7 +606,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_search_form);
 
-		android.support.v7.widget.Toolbar bar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar2nd);
+		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2nd);
 		bar.setTitle(Navit.get_text("address search"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -1066,59 +1067,45 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 		this.startActivityForResult(search_intent, Navit.NavitAddressSearchCountry_id);
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		switch (requestCode)
-		{
-		case Navit.NavitAddressSearchCountry_id:
-			try
-			{
-				if (resultCode == ActionBarActivity.RESULT_OK)
-				{
-					search_country_id = Integer.parseInt(data.getStringExtra("selected_id"));
-					// System.out.println("search_country_id=" + search_country_id);
-					search_country_select.setText(NavitAddressSearchCountrySelectActivity.CountryList_Human[search_country_id][2]);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case Navit.NavitAddressSearchCountry_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						search_country_id = Integer.parseInt(data.getStringExtra("selected_id"));
+						// System.out.println("search_country_id=" + search_country_id);
+						search_country_select.setText(NavitAddressSearchCountrySelectActivity.CountryList_Human[search_country_id][2]);
+					}
+				} catch (Exception e) {
+
 				}
-			}
-			catch (Exception e)
-			{
+				break;
 
-			}
-			break;
+			case Navit.NavitMapPreview_id:
+				try {
+					if (resultCode == Activity.RESULT_OK) {
+						Log.e("Navit", "*activity ready*");
+						int sel_id = Integer.parseInt(data.getStringExtra("selected_id"));
+						Log.e("Navit", "*activity ready* sel_id=" + sel_id);
 
-		case Navit.NavitMapPreview_id:
-			try
-			{
-				if (resultCode == Activity.RESULT_OK)
-				{
-					Log.e("Navit", "*activity ready*");
-					int sel_id = Integer.parseInt(data.getStringExtra("selected_id"));
-					Log.e("Navit", "*activity ready* sel_id=" + sel_id);
-
-					if (sel_id == 1)
-					{
-						// user wants to set as destination
-						this.selected_id = this.selected_id_passthru;
-						// close this activity
-						executeDone("set");
+						if (sel_id == 1) {
+							// user wants to set as destination
+							this.selected_id = this.selected_id_passthru;
+							// close this activity
+							executeDone("set");
+						} else if (sel_id == 2) {
+							// "back"
+						} else if (sel_id == 3) {
+							// show destination on map
+							this.selected_id = this.selected_id_passthru;
+							executeDone("view");
+						}
 					}
-					else if (sel_id == 2)
-					{
-						// "back"
-					}
-					else if (sel_id == 3)
-					{
-						// show destination on map
-						this.selected_id = this.selected_id_passthru;
-						executeDone("view");
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			break;
+				break;
 		}
 
 	}
@@ -1138,7 +1125,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 
 		Intent resultIntent = new Intent();
 
-		NavitAddressSearchActivity_s.setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		NavitAddressSearchActivity_s.setResult(AppCompatActivity.RESULT_OK, resultIntent);
 		resultIntent.putExtra("address_string", NavitAddressSearchActivity.address_string.getText().toString());
 		resultIntent.putExtra("what", "-");
 
@@ -1254,7 +1241,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 			resultIntent.putExtra("what", "-");
 		}
 
-		setResult(ActionBarActivity.RESULT_OK, resultIntent);
+		setResult(AppCompatActivity.RESULT_OK, resultIntent);
 		finish();
 	}
 }

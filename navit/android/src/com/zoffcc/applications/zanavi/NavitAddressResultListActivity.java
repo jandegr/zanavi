@@ -38,19 +38,11 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.LayoutParams;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +51,16 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.LayoutParams;
+
 import com.zoffcc.applications.zanavi.NavitSearchResultListArrayAdapter.search_result_entry;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NavitAddressResultListActivity extends ExpandableListActivity
 {

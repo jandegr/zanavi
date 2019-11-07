@@ -19,14 +19,6 @@
 
 package com.zoffcc.applications.zanavi;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import pub.devrel.easypermissions.EasyPermissions;
 import android.animation.ArgbEvaluator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -46,10 +38,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -71,8 +59,22 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.zoffcc.applications.logging.Logging;
 import com.zoffcc.applications.logging.Logging.AsyncResponse;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 @SuppressLint("NewApi")
 public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements AsyncResponse
