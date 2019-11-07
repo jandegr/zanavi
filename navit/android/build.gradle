@@ -1,0 +1,100 @@
+apply plugin: 'com.android.application'
+// -------QC-------
+// apply plugin: 'com.neenbedankt.android-apt'
+// apply plugin: 'net.ltgt.apt' -- not found, jdg
+// apply from: '../config/quality.gradle'
+// apply plugin: 'spoon'
+// -------QC-------
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+
+    compileOptions.encoding = 'UTF-8'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 29
+
+        vectorDrawables.useSupportLibrary = true
+        // generatedDensities = []
+
+        ndk {//  ?? , 'x86' 'x86_64', 'arm64-v8a',
+            abiFilters  'armeabi-v7a'
+        }
+        externalNativeBuild {
+            cmake {
+                arguments '-DUSE_PLUGINS=y', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n'
+            }
+        }
+    }
+
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
+
+
+    dexOptions {
+        javaMaxHeapSize "2.2g"
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src', 'aidl']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['nativelibs']
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path '../../CMakeLists.txt'
+        }
+    }
+
+    compileOptions {
+        encoding "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+// -------QC-------
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+// -------QC-------
+    }
+    dependencies {
+        // dependencies for app building
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+        implementation 'androidx.appcompat:appcompat:1.1.0'
+        implementation 'com.github.medyo:android-about-page:1.2.5'
+
+//        implementation project(':android-support-annotations')
+//    compile project(':android-support-vector-drawable')
+
+        // androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+
+    }
+}
+
+
+
+
+
