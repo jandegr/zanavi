@@ -43,7 +43,7 @@ import android.os.Environment;
 public class ExternalStorage
 {
 
-	public static final String SD_CARD = "sdCard";
+	private static final String SD_CARD = "sdCard";
 	public static final String EXTERNAL_SD_CARD = "externalSdCard";
 
 	/**
@@ -83,10 +83,10 @@ public class ExternalStorage
 	 */
 	public static Map<String, File> getAllStorageLocations()
 	{
-		Map<String, File> map = new HashMap<String, File>(10);
+		Map<String, File> map = new HashMap<>(10);
 
-		List<String> mMounts = new ArrayList<String>(10);
-		List<String> mVold = new ArrayList<String>(10);
+		List<String> mMounts = new ArrayList<>(10);
+		List<String> mVold = new ArrayList<>(10);
 		mMounts.add("/mnt/sdcard");
 		mVold.add("/mnt/sdcard");
 
@@ -150,7 +150,7 @@ public class ExternalStorage
 		}
 		mVold.clear();
 
-		List<String> mountHash = new ArrayList<String>(10);
+		List<String> mountHash = new ArrayList<>(10);
 
 		for (String mount : mMounts)
 		{

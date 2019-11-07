@@ -505,7 +505,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	static ArrayList<Navit_Point_on_Map> map_points;
 
-	public static Set<String> Navit_Address_Result_double_index = new HashSet<>();
+	public static final Set<String> Navit_Address_Result_double_index = new HashSet<>();
 
 	public NavitAndroidOverlay NavitAOverlay2;
 	public static NavitAndroidOverlay NavitAOverlay2_s;
@@ -551,8 +551,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	}
 
 	public static final Navit_OSD_compass OSD_compass = new Navit_OSD_compass();
-	public static Navit_OSD_route_001 OSD_route_001 = new Navit_OSD_route_001();
-	public static Navit_OSD_route_nextturn OSD_nextturn = new Navit_OSD_route_nextturn();
+	public static final Navit_OSD_route_001 OSD_route_001 = new Navit_OSD_route_001();
+	public static final Navit_OSD_route_nextturn OSD_nextturn = new Navit_OSD_route_nextturn();
 	public static Navit_OSD_scale OSD_scale = new Navit_OSD_scale();
 
 	SimGPS Simulate = null;
@@ -640,7 +640,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static int NavitSearchresultBarIndex = -1;
 	public static String NavitSearchresultBar_title = "";
 	public static String NavitSearchresultBar_text = "";
-	public static List<Navit_Address_Result_Struct> NavitAddressResultList_foundItems = new ArrayList<>();
+	public static final List<Navit_Address_Result_Struct> NavitAddressResultList_foundItems = new ArrayList<>();
 
 	public static Boolean DemoVehicle = false;
 
@@ -3273,7 +3273,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 								{
 									int wait = 1;
 									int count = 0;
-									int max_count = 60;
+									final int max_count = 60;
 
 									@Override
 									public void run()
@@ -4278,7 +4278,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						{
 							int wait = 1;
 							int count = 0;
-							int max_count = 60;
+							final int max_count = 60;
 
 							@Override
 							public void run()
@@ -5886,7 +5886,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	}
 
 	@SuppressLint("NewApi")
-	public boolean onOptionsItemSelected_wrapper(int id)
+	private boolean onOptionsItemSelected_wrapper(int id)
 	{
 		// Handle item selection
 		switch (id)
@@ -6679,7 +6679,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							final Thread zoom_to_route_004 = new Thread() {
 								int wait = 1;
 								int count = 0;
-								int max_count = 60;
+								final int max_count = 60;
 
 								@Override
 								public void run() {
@@ -7021,7 +7021,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 								final Thread zoom_to_route_005 = new Thread() {
 									int wait = 1;
 									int count = 0;
-									int max_count = 60;
+									final int max_count = 60;
 
 									@Override
 									public void run() {
@@ -7203,7 +7203,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 								final Thread zoom_to_route_006 = new Thread() {
 									int wait = 1;
 									int count = 0;
-									int max_count = 60;
+									final int max_count = 60;
 
 									@Override
 									public void run() {
@@ -7287,7 +7287,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							final Thread zoom_to_route_007 = new Thread() {
 								int wait = 1;
 								int count = 0;
-								int max_count = 60;
+								final int max_count = 60;
 
 								@Override
 								public void run() {
@@ -8363,7 +8363,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	class SimGPS extends Thread
 	{
 		private Boolean running;
-		private Handler h;
+		private final Handler h;
 
 		SimGPS(Handler h_)
 		{
@@ -8416,10 +8416,10 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	class SearchResultsThreadSpinnerThread extends Thread
 	{
-		int dialog_num;
+		final int dialog_num;
 		int spinner_current_value;
 		private Boolean running;
-		Handler mHandler;
+		final Handler mHandler;
 
 		SearchResultsThreadSpinnerThread(Handler h, int dialog_num)
 		{
@@ -8478,8 +8478,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	class SearchResultsThread extends Thread
 	{
 		private Boolean running;
-		Handler mHandler;
-		int my_dialog_num;
+		final Handler mHandler;
+		final int my_dialog_num;
 
 		SearchResultsThread(Handler h, int dialog_num)
 		{
@@ -9445,7 +9445,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	};
 
-	private Handler progress_handler = new Handler()
+	private final Handler progress_handler = new Handler()
 	{
 		@SuppressLint("NewApi")
 		public void handleMessage(Message msg)
@@ -14579,7 +14579,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	}
 
 	private static int debug_indent = -1;
-	private static String debug_indent_spaces = "                                                                                                                                                                                     ";
+	private static final String debug_indent_spaces = "                                                                                                                                                                                     ";
 
 	// type: 0 -> enter, 1 -> leave, 2 .. n -> return(#n)
 	static void my_func_name(int type)
@@ -14689,7 +14689,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		{
 			int wait = 1;
 			int count = 0;
-			int max_count = 300; // wait 2 minutes for route to be calculated
+			final int max_count = 300; // wait 2 minutes for route to be calculated
 
 			@Override
 			public void run()
@@ -15136,7 +15136,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		act.setTheme(Theme_id);
 	}
 
-	private com.zoffcc.applications.zanavi_msg.ZListener.Stub zclientListener = new com.zoffcc.applications.zanavi_msg.ZListener.Stub()
+	private final com.zoffcc.applications.zanavi_msg.ZListener.Stub zclientListener = new com.zoffcc.applications.zanavi_msg.ZListener.Stub()
 	{
 		@Override
 		public String handleUpdated(String data) throws RemoteException
@@ -15146,7 +15146,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	};
 
-	private static Object sync_plugin_send = new Object();
+	private static final Object sync_plugin_send = new Object();
 
 	private static void send_data_to_plugin_bg(final int msg_cat, final String data)
 	{
@@ -15195,7 +15195,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// send data to plugin (plugin will send to server) in another task! --------------------------
 	}
 
-	private ServiceConnection serviceConnection = new ServiceConnection()
+	private final ServiceConnection serviceConnection = new ServiceConnection()
 	{
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service)
@@ -16401,7 +16401,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		return out.toString();
 	}
 
-	private static Handler UIHandler;
+	private static final Handler UIHandler;
 	static
 	{
 		UIHandler = new Handler(Looper.getMainLooper());

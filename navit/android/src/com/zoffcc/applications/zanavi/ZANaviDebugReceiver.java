@@ -49,24 +49,24 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 	private static int rewind_count = 0;
 	final private static int skip = 30;
 	static boolean is_replaying = false;
-	static boolean flag_route_ready = false;
-	static String file_name_global = "";
+	private static boolean flag_route_ready = false;
+	private static String file_name_global = "";
 
-	static String success_source = "";
-	static String success_item = "";
-	static String success_value = "";
-	static String success_operator = "";
-	static int result_code = -1;
-	static int local_meters_value = 0;
+	private static String success_source = "";
+	private static String success_item = "";
+	private static String success_value = "";
+	private static String success_operator = "";
+	private static int result_code = -1;
+	private static int local_meters_value = 0;
 
-	static int yaml_sum = 0;
-	static int yaml_err = 0;
+	private static int yaml_sum = 0;
+	private static int yaml_err = 0;
 
-	static double lat_pos = 0.0;
-	static double lon_pos = 0.0;
-	static double lat_dst = 0.0;
-	static double lon_dst = 0.0;
-	static double heading_pos = 0.0;
+	private static double lat_pos = 0.0;
+	private static double lon_pos = 0.0;
+	private static double lat_dst = 0.0;
+	private static double lon_dst = 0.0;
+	private static double heading_pos = 0.0;
 
 	/*
 	 * 
@@ -89,7 +89,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 	 * -
 	 */
 
-	static void enable_normal_location()
+	private static void enable_normal_location()
 	{
 		Navit.runOnUI(new Runnable()
 		{
@@ -113,7 +113,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		});
 	}
 
-	static void disable_normal_location()
+	private static void disable_normal_location()
 	{
 		Navit.runOnUI(new Runnable()
 		{
@@ -127,7 +127,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		});
 	}
 
-	static void DR_add_destination(String key, Bundle extras)
+	private static void DR_add_destination(String key, Bundle extras)
 	{
 		Object value = extras.get(key);
 		String value2 = value.toString().replaceAll("\\s+", "").replaceAll("\"", "");
@@ -162,7 +162,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		System.out.println("ZANaviDebugReceiver:" + String.format("%s %s (%s)", key, value.toString(), value.getClass().getName()));
 	}
 
-	static void DR_set_position(String key, Bundle extras, boolean disable_loc)
+	private static void DR_set_position(String key, Bundle extras, boolean disable_loc)
 	{
 		if (disable_loc)
 		{
@@ -214,7 +214,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		// System.out.println("ZANaviDebugReceiver:" + "speed=" + speed + " dir=" + direction);
 	}
 
-	static void DR_save_route_to_gpx_file()
+	private static void DR_save_route_to_gpx_file()
 	{
 		ZANaviLogMessages.ap("RouteSaveGpxPath", Navit.NAVIT_DATA_DEBUG_DIR);
 		
@@ -229,20 +229,19 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		System.out.println("ZANaviDebugReceiver:" + "file=" + filename);
 	}
 
-	static void DR_save_route_to_gpx_file_with_name(String name)
+	private static void DR_save_route_to_gpx_file_with_name(String name)
 	{
 		Message msg = new Message();
 		Bundle b = new Bundle();
 		b.putInt("Callback", 96);
 		// String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-		String filename = name;
-		b.putString("s", filename);
+		b.putString("s", name);
 		msg.setData(b);
 		NavitGraphics.callback_handler.sendMessage(msg);
-		System.out.println("ZANaviDebugReceiver:" + "file=" + filename);
+		System.out.println("ZANaviDebugReceiver:" + "file=" + name);
 	}
 
-	static void DR_clear_route()
+	private static void DR_clear_route()
 	{
 		// clear any previous destinations
 		Message msg2 = new Message();
@@ -265,7 +264,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		System.out.println("ZANaviDebugReceiver:" + "skip");
 	}
 
-	static void DR_replay_yaml_file(String filename, final String date)
+	private static void DR_replay_yaml_file(String filename, final String date)
 	{
 
 		file_name_global = filename;
@@ -276,7 +275,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		{
 			if ((filename != null) && (!filename.equals("")))
 			{
-				BufferedReader br = null;
+				BufferedReader br;
 				br = new BufferedReader(new FileReader(filename));
 
 				is_replaying = true;
@@ -291,7 +290,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				lon_dst = 0.0;
 				heading_pos = 0.0;
 
-				String line = "";
+				String line;
 				while ((line = br.readLine()) != null)
 				{
 					if ((line.length() >= "from:".length()) && (line.equals("from:")))
@@ -350,9 +349,9 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 								// read lat,lon
 								String name_str = line.split(":", 2)[0];
 								String value_str = line.split(":", 2)[1];
-								double lat = 0.0;
-								double lon = 0.0;
-								double heading = 0.0;
+								double lat;
+								double lon;
+								double heading;
 
 								if (name_str.contains("lat"))
 								{
@@ -442,7 +441,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				{
 					int wait = 1;
 					int count = 0;
-					int max_count = 380; // seconds
+					final int max_count = 380; // seconds
 					int first_status = -999;
 					int status_wrong = 0;
 
@@ -660,7 +659,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 									System.out.println("_DRxx_:018" + "Roadbook items < 3 !!");
 								}
 
-								int jk = 0;
+								int jk;
 								if (separated != null)
 								{
 									if (separated.length > 2)
@@ -880,7 +879,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 									{
 										if (success_item.equalsIgnoreCase("'nodes'"))
 										{
-											int s = -99;
+											int s;
 											s = (separated.length - 2);
 											int v = Integer.parseInt(success_value);
 											result_code = success_value_compare(s, v);
@@ -985,7 +984,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		}
 	}
 
-	static void DR_replay_yaml_file_search_n(String filename, final String date)
+	private static void DR_replay_yaml_file_search_n(String filename, final String date)
 	{
 
 		file_name_global = filename;
@@ -996,7 +995,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		{
 			if ((filename != null) && (!filename.equals("")))
 			{
-				BufferedReader br = null;
+				BufferedReader br;
 				br = new BufferedReader(new FileReader(filename));
 
 				is_replaying = true;
@@ -1012,7 +1011,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				String hn_str = "";
 
 				String mode = "-";
-				String line = "";
+				String line;
 				while ((line = br.readLine()) != null)
 				{
 					if ((line.length() >= "type:".length()) && (line.equals("type:")))
@@ -1258,7 +1257,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 								try
 								{
-									int i = 0;
+									int i;
 									for (i = 0; i < Navit.NavitAddressResultList_foundItems.size(); i++)
 									{
 										out.write("result:" + i + ":" + Navit.NavitAddressResultList_foundItems.get(i).result_type + ":" + Navit.NavitAddressResultList_foundItems.get(i).lat + ":" + Navit.NavitAddressResultList_foundItems.get(i).lon + ":" + Navit.NavitAddressResultList_foundItems.get(i).addr + "\n");
@@ -1367,7 +1366,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		}
 	}
 
-	static void DR_replay_yaml_file_search_i(String filename, final String date)
+	private static void DR_replay_yaml_file_search_i(String filename, final String date)
 	{
 
 		file_name_global = filename;
@@ -1378,7 +1377,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		{
 			if ((filename != null) && (!filename.equals("")))
 			{
-				BufferedReader br = null;
+				BufferedReader br;
 				br = new BufferedReader(new FileReader(filename));
 
 				is_replaying = true;
@@ -1394,7 +1393,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				String hn_str = "";
 
 				String mode = "-";
-				String line = "";
+				String line;
 				while ((line = br.readLine()) != null)
 				{
 					if ((line.length() >= "type:".length()) && (line.equals("type:")))
@@ -1644,7 +1643,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 								try
 								{
-									int i = 0;
+									int i;
 									for (i = 0; i < Navit.NavitAddressResultList_foundItems.size(); i++)
 									{
 										out.write("result:" + i + ":" + Navit.NavitAddressResultList_foundItems.get(i).result_type + ":" + Navit.NavitAddressResultList_foundItems.get(i).lat + ":" + Navit.NavitAddressResultList_foundItems.get(i).lon + ":" + Navit.NavitAddressResultList_foundItems.get(i).addr + "\n");
@@ -1754,7 +1753,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		}
 	}
 
-	static int success_value_compare(int s, int v)
+	private static int success_value_compare(int s, int v)
 	{
 		if (success_operator.equalsIgnoreCase("'=='"))
 		{
@@ -1869,8 +1868,8 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 			yaml_sum = 0;
 			yaml_err = 0;
-			BufferedReader br = null;
-			String line2 = "";
+			BufferedReader br;
+			String line2;
 
 			File[] directoryListing = dir.listFiles(textFilter);
 			if (directoryListing != null)
@@ -1973,8 +1972,8 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 		try
 		{
-			FileOutputStream outf = null;
-			OutputStreamWriter out = null;
+			FileOutputStream outf;
+			OutputStreamWriter out;
 			outf = new FileOutputStream(yaml_dir + "/" + "_XX_XX_DURATION_XX_XX_.txt");
 			out = new OutputStreamWriter(outf);
 			out.write(duration_string);
@@ -1988,8 +1987,8 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 		try
 		{
-			FileOutputStream outf = null;
-			OutputStreamWriter out = null;
+			FileOutputStream outf;
+			OutputStreamWriter out;
 			outf = new FileOutputStream(yaml_dir + "/" + "_XX_XX_SUMMARY_XX_XX_.txt");
 			out = new OutputStreamWriter(outf);
 			out.write("tests:" + yaml_sum + "\n");
@@ -2048,12 +2047,12 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 					return;
 				}
 
-				BufferedReader br = null;
+				BufferedReader br;
 				br = new BufferedReader(new FileReader(filename));
 
 				Bundle extras2;
 
-				String line = "";
+				String line;
 				String[] line_parts;
 
 				skip_count = skip;
@@ -2260,7 +2259,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 							{
 								int wait = 1;
 								int count = 0;
-								int max_count = 60;
+								final int max_count = 60;
 
 								@Override
 								public void run()
@@ -2330,7 +2329,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 							{
 								int wait = 1;
 								int count = 0;
-								int max_count = 60;
+								final int max_count = 60;
 
 								@Override
 								public void run()

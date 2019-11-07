@@ -32,23 +32,20 @@ import net.technologichron.manacalc.NumberPicker;
 
 //import android.support.v7.app.ActionBarActivity;
 
-// before androidx refactoring, remove this !!
-//public class GeoCoordEnterDialog extends ActionBarActivity
+
 public class GeoCoordEnterDialog extends AppCompatActivity
 {
-	float lat;
-	float lon;
 
-	static int v_lat1 = 47;
-	static int v_lat2 = 0;
-	static int v_lat3 = 0;
+	private static int v_lat1 = 47;
+	private static int v_lat2 = 0;
+	private static int v_lat3 = 0;
 
-	static int v_lon1 = 13;
-	static int v_lon2 = 0;
-	static int v_lon3 = 0;
+	private static int v_lon1 = 13;
+	private static int v_lon2 = 0;
+	private static int v_lon3 = 0;
 
-	static boolean sel_ns = true;
-	static boolean sel_we = false;
+	private static boolean sel_ns = true;
+	private static boolean sel_we = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -166,26 +163,26 @@ public class GeoCoordEnterDialog extends AppCompatActivity
 		final NumberPicker value_lat1 = (NumberPicker) findViewById(R.id.lat1);
 		final NumberPicker value_lat2 = (NumberPicker) findViewById(R.id.lat2);
 		final NumberPicker value_lat3 = (NumberPicker) findViewById(R.id.lat3);
-		lat = value_lat1.getValue() + ((float) value_lat2.getValue() / 60) + ((float) value_lat3.getValue() / 3600);
+		float lat = value_lat1.getValue() + ((float) value_lat2.getValue() / 60) + ((float) value_lat3.getValue() / 3600);
 
 		final NumberPicker value_lon1 = (NumberPicker) findViewById(R.id.lon1);
 		final NumberPicker value_lon2 = (NumberPicker) findViewById(R.id.lon2);
 		final NumberPicker value_lon3 = (NumberPicker) findViewById(R.id.lon3);
-		lon = value_lon1.getValue() + ((float) value_lon2.getValue() / 60) + ((float) value_lon3.getValue() / 3600);
+		float lon = value_lon1.getValue() + ((float) value_lon2.getValue() / 60) + ((float) value_lon3.getValue() / 3600);
 
 		final ToggleButton toggle_NS = (ToggleButton) findViewById(R.id.toggleButtonNS);
 		if (!toggle_NS.isChecked())
 		{
-			this.lat = -this.lat;
+			lat = -lat;
 		}
 		final ToggleButton toggle_WE = (ToggleButton) findViewById(R.id.toggleButtonWE);
 		if (toggle_WE.isChecked())
 		{
-			this.lon = -this.lon;
+			lon = -lon;
 		}
 
-		resultIntent.putExtra("lat", String.valueOf(this.lat));
-		resultIntent.putExtra("lon", String.valueOf(this.lon));
+		resultIntent.putExtra("lat", String.valueOf(lat));
+		resultIntent.putExtra("lon", String.valueOf(lon));
         // before androidx refactoring, remove this !!
 		//setResult(ActionBarActivity.RESULT_OK, resultIntent);
 		setResult(AppCompatActivity.RESULT_OK, resultIntent);
