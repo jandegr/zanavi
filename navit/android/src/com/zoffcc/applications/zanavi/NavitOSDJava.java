@@ -50,7 +50,7 @@ public class NavitOSDJava // extends View
 
 	private static Object sync_dummy_001 = new Object();
 	private static Boolean allow_drawing = true;
-	public static Integer synchro_obj = 0;
+	private static Integer synchro_obj = 0;
 	// private static Boolean in_draw_real = false;
 
 	// public static Handler progress_handler_ = new Handler();
@@ -64,63 +64,63 @@ public class NavitOSDJava // extends View
 	static int NavitStreetFontLetterWidth = 28;
 	static final int NavitStreetFontLetterWidth_base = 28;
 
-	static Bitmap compass_b = null;
+	private static Bitmap compass_b = null;
 	static Canvas compass_c = null;
 	static int compass_radius = 0;
 	static int compass_center_x = 0;
 	static int compass_center_y = 0;
-	static int compass_lt_x = 0;
-	static int compass_lt_y = 0;
+	private static int compass_lt_x = 0;
+	private static int compass_lt_y = 0;
 	static int compass_w = 0;
 	static int compass_h = 0;
 	static Boolean did_draw_circle = false;
 
-	static Bitmap ddtt_b = null;
+	private static Bitmap ddtt_b = null;
 	static Canvas ddtt_c = null;
-	static int ddtt_lt_x = 0;
-	static int ddtt_lt_y = 0;
+	private static int ddtt_lt_x = 0;
+	private static int ddtt_lt_y = 0;
 	static int ddtt_text_start_x = 0;
 	static int ddtt_text_start_y = 0;
 	static int ddtt_w = 0;
 	static int ddtt_h = 0;
 	static int ddtt_font_size = 0;
 
-	static Bitmap eta_b = null;
+	private static Bitmap eta_b = null;
 	static Canvas eta_c = null;
-	static int eta_lt_x = 0;
-	static int eta_lt_y = 0;
+	private static int eta_lt_x = 0;
+	private static int eta_lt_y = 0;
 	static int eta_text_start_x = 0;
 	static int eta_text_start_y = 0;
 	static int eta_w = 0;
 	static int eta_h = 0;
 	static int eta_font_size = 0;
 
-	static Bitmap nt_b = null;
+	private static Bitmap nt_b = null;
 	static Canvas nt_c = null;
-	static int nt_lt_x = 0;
-	static int nt_lt_y = 0;
-	static int nt_lt_xB = 0;
-	static int nt_lt_yB = 0;
+	private static int nt_lt_x = 0;
+	private static int nt_lt_y = 0;
+	private static int nt_lt_xB = 0;
+	private static int nt_lt_yB = 0;
 	static int nt_text_start_x = 0;
 	static int nt_text_start_y = 0;
 	static int nt_w = 0;
 	static int nt_h = 0;
 	static int nt_font_size = 0;
 
-	static Bitmap dttarget_b = null;
+	private static Bitmap dttarget_b = null;
 	static Canvas dttarget_c = null;
-	static int dttarget_lt_x = 0;
-	static int dttarget_lt_y = 0;
+	private static int dttarget_lt_x = 0;
+	private static int dttarget_lt_y = 0;
 	static int dttarget_text_start_x = 0;
 	static int dttarget_text_start_y = 0;
 	static int dttarget_w = 0;
 	static int dttarget_h = 0;
 	static int dttarget_font_size = 0;
 
-	Bitmap scale_b = null;
+	private Bitmap scale_b = null;
 	Canvas scale_c = null;
-	static int scale_lt_x = 0;
-	static int scale_lt_y = 0;
+	private static int scale_lt_x = 0;
+	private static int scale_lt_y = 0;
 	static int scale_text_start_x = 0;
 	static int scale_text_start_y = 0;
 	static int scale_line_start_x = 0;
@@ -132,11 +132,11 @@ public class NavitOSDJava // extends View
 	static int scale_h = 0;
 	static int scale_font_size = 0;
 
-	Bitmap rest_osd_b = null;
-	Canvas rest_osd_c = null;
+	private Bitmap rest_osd_b = null;
+	private Canvas rest_osd_c = null;
 
 	Bitmap buffer_osd_b = null;
-	Canvas buffer_osd_c = null;
+	private Canvas buffer_osd_c = null;
 
 	// Bitmap buffer2_osd_b = null;
 	// Canvas buffer2_osd_c = null;
@@ -271,7 +271,7 @@ public class NavitOSDJava // extends View
 			}
 		}
 
-		public void buzz(boolean redraw_osd, boolean redraw_overlay)
+		void buzz(boolean redraw_osd, boolean redraw_overlay)
 		{
 			this.start_work = true;
 			this.need_redraw_osd = redraw_osd;

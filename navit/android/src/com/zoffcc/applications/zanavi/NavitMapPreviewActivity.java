@@ -51,22 +51,20 @@ import androidx.appcompat.widget.Toolbar.LayoutParams;
 @SuppressLint("NewApi")
 public class NavitMapPreviewActivity extends AppCompatActivity
 {
-	int selected_id;
+	private int selected_id;
 	private ImageView view = null;
-	private LinearLayout ll;
 
-	public static Canvas view_canvas = null;
-	public static Bitmap view_bitmap = null;
-	public static Canvas view_canvas_upper = null;
-	public static Bitmap view_bitmap_upper = null;
-	public int my_height = 0;
-	public int my_width = 0;
+	private static Canvas view_canvas = null;
+	private static Bitmap view_bitmap = null;
+	private static Canvas view_canvas_upper = null;
+	private static Bitmap view_bitmap_upper = null;
+	private int my_height = 0;
+	private int my_width = 0;
 	private float my_lat = 0f;
 	private float my_lon = 0f;
 	private static int mp_overview = 0;
-	private static int MaxConfigs = 6;
-	private static Paint paint = new Paint();
-	private static int MaxStrokeConfigs = 3;
+	private static final int MaxConfigs = 6;
+	private static final Paint paint = new Paint();
 
 	public static class MapPreviewConfig
 	{
@@ -79,7 +77,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		String my_bgcolor_1;
 	}
 
-	public static MapPreviewConfig[] mapconf = new MapPreviewConfig[MaxConfigs];
+	private static final MapPreviewConfig[] mapconf = new MapPreviewConfig[MaxConfigs];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -98,10 +96,11 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 16;
 		mapconf[j].my_font_size = 200;
 		mapconf[j].my_selection_range = 400;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		int maxStrokeConfigs = 3;
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 16;
 		mapconf[j].my_strokewidth[2] = 16;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#FEFC8C";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEFEFE";
@@ -111,10 +110,10 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 16 * 2;
 		mapconf[j].my_font_size = 200;
 		mapconf[j].my_selection_range = 400;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 16;
 		mapconf[j].my_strokewidth[2] = 16;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#FEFC8C";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEFEFE";
@@ -124,10 +123,10 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 1024;
 		mapconf[j].my_font_size = 100;
 		mapconf[j].my_selection_range = 50000;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 6;
 		mapconf[j].my_strokewidth[2] = 6;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#CCCCCC";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEF9EE";
@@ -137,10 +136,10 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 8192;
 		mapconf[j].my_font_size = 65;
 		mapconf[j].my_selection_range = 100000;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 3;
 		mapconf[j].my_strokewidth[2] = 3;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#CCCCCC";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEF9EE";
@@ -150,10 +149,10 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 8192 * 2 * 2 * 2;
 		mapconf[j].my_font_size = 65;
 		mapconf[j].my_selection_range = 710000;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 3;
 		mapconf[j].my_strokewidth[2] = 3;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#CCCCCC";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEF9EE";
@@ -163,10 +162,10 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mapconf[j].my_scale = 8192 * 2 * 2 * 2 * 2;
 		mapconf[j].my_font_size = 65;
 		mapconf[j].my_selection_range = 1210000;
-		mapconf[j].my_strokewidth = new int[MaxStrokeConfigs];
+		mapconf[j].my_strokewidth = new int[maxStrokeConfigs];
 		mapconf[j].my_strokewidth[0] = 3;
 		mapconf[j].my_strokewidth[2] = 3;
-		mapconf[j].my_color = new String[MaxStrokeConfigs];
+		mapconf[j].my_color = new String[maxStrokeConfigs];
 		mapconf[j].my_color[0] = "#CCCCCC";
 		mapconf[j].my_color[2] = "#9B1199";
 		mapconf[j].my_bgcolor_1 = "#FEF9EE";
@@ -199,7 +198,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND, WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 
-		ll = new LinearLayout(this);
+		LinearLayout ll = new LinearLayout(this);
 		ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		ll.setOrientation(LinearLayout.VERTICAL);
 
@@ -493,7 +492,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		}
 	}
 
-	public static void DrawMapPreview_polyline(int type, int c[])
+	public static void DrawMapPreview_polyline(int type, int[] c)
 	{
 		if (view_bitmap != null)
 		{

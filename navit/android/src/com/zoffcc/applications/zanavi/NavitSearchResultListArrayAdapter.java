@@ -35,14 +35,14 @@ import android.widget.TextView;
 
 public class NavitSearchResultListArrayAdapter extends BaseExpandableListAdapter
 {
-	private Context context;
-	private Map<Integer, List<search_result_entry>> list;
+	private final Context context;
+	private final Map<Integer, List<search_result_entry>> list;
 
 	public static class search_result_entry
 	{
-		private int type;
-		private String name;
-		private int global_pos;
+		private final int type;
+		private final String name;
+		private final int global_pos;
 		final static private String[] typename = { "-S-", "Street", "Town", "POI", "-E-" };
 
 		public search_result_entry(int type, String name, int global_pos)
@@ -69,7 +69,7 @@ public class NavitSearchResultListArrayAdapter extends BaseExpandableListAdapter
 			return type;
 		}
 
-		public static String gettype_name(int my_type)
+		static String gettype_name(int my_type)
 		{
 			return Navit.get_text(typename[my_type]); // TRANS
 		}

@@ -45,14 +45,12 @@ import androidx.appcompat.widget.Toolbar;
 public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 {
 
-	public static TextView addr_view2 = null;
-	TextView addr_view = null;
-	TextView info_view = null;
+	private static TextView addr_view2 = null;
 	private static ZANaviDownloadMapCancelActivity my_object = null;
-	static ProgressBar pg = null;
-	static ProgressBar[] pg_speed = null;
-	static Drawable[] pg_speed_d = null;
-	static TextView[] pg_speed_txt = null;
+	private static ProgressBar pg = null;
+	private static ProgressBar[] pg_speed = null;
+	private static Drawable[] pg_speed_d = null;
+	private static TextView[] pg_speed_txt = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -77,14 +75,14 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 		});
 
 		//		// header text
-		addr_view = (TextView) findViewById(R.id.addr_view);
+		TextView addr_view = (TextView) findViewById(R.id.addr_view);
 		addr_view.setText(Navit.get_text("Stop map download?")); //TRANS
 		addr_view.setGravity(Gravity.CENTER);
 		addr_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
 		//		addr_view.setPadding(4, 10, 4, 10);
 		//
 		//		// info text
-		info_view = (TextView) findViewById(R.id.info_view);
+		TextView info_view = (TextView) findViewById(R.id.info_view);
 		info_view.setText(Navit.get_text("press HOME to download in the background")); //TRANS
 		info_view.setGravity(Gravity.CENTER);
 		info_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
@@ -156,8 +154,8 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 		pg_speed_txt = new TextView[NavitMapDownloader.MULTI_NUM_THREADS_MAX];
 
 		Resources r = getResources();
-		int pg_i = 0;
-		int pg_speed_id = 0;
+		int pg_i;
+		int pg_speed_id;
 		for (pg_i = 0; pg_i < NavitMapDownloader.MULTI_NUM_THREADS_MAX; pg_i++)
 		{
 			try

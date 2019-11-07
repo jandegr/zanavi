@@ -33,7 +33,6 @@ import java.util.List;
 
 public class ZANaviRoadbookFragment extends ListFragment
 {
-	private List<ListViewItem> mItems = null; // ListView items list
 	private ZANaviListViewAdapter adapter = null;
 
 	private boolean active = false;
@@ -60,7 +59,8 @@ public class ZANaviRoadbookFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 
 		// initialize the items list
-		mItems = new ArrayList<ListViewItem>();
+		// ListView items list
+		List<ListViewItem> mItems = new ArrayList<>();
 		Resources resources = getResources();
 		// initialize and set the list adapter
 		adapter = new ZANaviListViewAdapter(getActivity(), mItems);

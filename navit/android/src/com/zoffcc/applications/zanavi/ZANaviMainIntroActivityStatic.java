@@ -80,24 +80,22 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements AsyncResponse
 {
 	private ViewPager viewPager;
-	private MyViewPagerAdapter myViewPagerAdapter;
 	private LinearLayout dotsLayout;
-	private TextView[] dots;
-	ArrayList<Integer> layouts = new ArrayList<Integer>();
-	ArrayList<Integer> colors = new ArrayList<Integer>();
-	ArrayList<String> title_txt = new ArrayList<String>();
-	ArrayList<Spanned> desc_txt = new ArrayList<Spanned>();
-	ArrayList<Integer> icon_res = new ArrayList<Integer>();
-	ArrayList<Integer> id_ = new ArrayList<Integer>();
-	private Button btnSkip, btnNext;
+	private final ArrayList<Integer> layouts = new ArrayList<>();
+	private final ArrayList<Integer> colors = new ArrayList<>();
+	private final ArrayList<String> title_txt = new ArrayList<>();
+	private final ArrayList<Spanned> desc_txt = new ArrayList<>();
+	private final ArrayList<Integer> icon_res = new ArrayList<>();
+	private final ArrayList<Integer> id_ = new ArrayList<>();
+	private Button btnNext;
 	private int progress = 0;
 	private ArgbEvaluator argbEvaluator = null;
 
-	ProgressDialog progressDialog2;
+	private ProgressDialog progressDialog2;
 
-	ArrayList<String> disk_locations = new ArrayList<String>();
-	ArrayList<String> disk_locations_long = new ArrayList<String>();
-	ArrayList<String> disk_locations_path = new ArrayList<String>();
+	private final ArrayList<String> disk_locations = new ArrayList<>();
+	private final ArrayList<String> disk_locations_long = new ArrayList<>();
+	private final ArrayList<String> disk_locations_path = new ArrayList<>();
 
 	final private static int ID_CRASH = 100;
 	final private static int ID_PERM = 101;
@@ -107,11 +105,11 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 	final private static int ID_NOMAPS = 105;
 	final private static int ID_INDEX = 106;
 
-	static boolean custom_path_not_needed = false;
-	static int currently_selected = -1;
+	private static boolean custom_path_not_needed = false;
+	private static int currently_selected = -1;
 	private static int slide_press = -1;
 
-	static String screen_id_to_name(int id)
+	private static String screen_id_to_name(int id)
 	{
 		switch (id)
 		{
@@ -141,10 +139,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 		System.out.println("ZANaviMainIntroActivity:" + "onCreate");
 
-		if (Build.VERSION.SDK_INT >= 11)
-		{
-			argbEvaluator = new ArgbEvaluator();
-		}
+		argbEvaluator = new ArgbEvaluator();
 
 		// Making notification bar transparent
 		if (Build.VERSION.SDK_INT >= 21)
@@ -156,7 +151,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 		dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-		btnSkip = (Button) findViewById(R.id.btn_skip);
+		Button btnSkip = (Button) findViewById(R.id.btn_skip);
 		btnNext = (Button) findViewById(R.id.btn_next);
 
 		btnNext.setText(Navit.get_text("OK"));
@@ -290,7 +285,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		// making notification bar transparent
 		changeStatusBarColor();
 
-		myViewPagerAdapter = new MyViewPagerAdapter();
+		MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter();
 		viewPager.setAdapter(myViewPagerAdapter);
 		viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -400,120 +395,101 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		slide_press = -1;
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		System.out.println("ZANaviMainIntroActivity:" + "onActivityResult");
 
-		switch (requestCode)
-		{
-		case Navit.NavitDeleteSecSelectMap_id:
-			try
-			{
-				if (resultCode == AppCompatActivity.RESULT_OK)
-				{
-					System.out.println("Global_Location_update_not_allowed = 1");
-					Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
+		switch (requestCode) {
+			case Navit.NavitDeleteSecSelectMap_id:
+				try {
+					if (resultCode == AppCompatActivity.RESULT_OK) {
+						System.out.println("Global_Location_update_not_allowed = 1");
+						Navit.Global_Location_update_not_allowed = 1; // dont allow location updates now!
 
-					// remove all sdcard maps
-					Message msg = new Message();
-					Bundle b = new Bundle();
-					b.putInt("Callback", 19);
-					msg.setData(b);
-					NavitGraphics.callback_handler.sendMessage(msg);
+						// remove all sdcard maps
+						Message msg = new Message();
+						Bundle b = new Bundle();
+						b.putInt("Callback", 19);
+						msg.setData(b);
+						NavitGraphics.callback_handler.sendMessage(msg);
 
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-					}
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+						}
 
-					Log.d("Navit", "delete map id=" + Integer.parseInt(data.getStringExtra("selected_id")));
-					String map_full_line = NavitMapDownloader.OSM_MAP_NAME_ondisk_ORIG_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
-					Log.d("Navit", "delete map full line=" + map_full_line);
+						Log.d("Navit", "delete map id=" + Integer.parseInt(data.getStringExtra("selected_id")));
+						String map_full_line = NavitMapDownloader.OSM_MAP_NAME_ondisk_ORIG_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
+						Log.d("Navit", "delete map full line=" + map_full_line);
 
-					String del_map_name = Navit.MAP_FILENAME_PATH + map_full_line.split(":", 2)[0];
-					System.out.println("del map file :" + del_map_name);
-					// remove from cat file
-					NavitMapDownloader.remove_from_cat_file(map_full_line);
-					// remove from disk
-					File del_map_name_file = new File(del_map_name);
-					del_map_name_file.delete();
-					for (int jkl = 1; jkl < 51; jkl++)
-					{
-						File del_map_name_fileSplit = new File(del_map_name + "." + String.valueOf(jkl));
-						del_map_name_fileSplit.delete();
-					}
-					// also remove index file
-					File del_map_name_file_idx = new File(del_map_name + ".idx");
-					del_map_name_file_idx.delete();
-					// remove also any MD5 files for this map that may be on disk
-					try
-					{
-						String tmp = map_full_line.split(":", 2)[1];
-						if (!tmp.equals(NavitMapDownloader.MAP_URL_NAME_UNKNOWN))
-						{
-							tmp = tmp.replace("*", "");
-							tmp = tmp.replace("/", "");
-							tmp = tmp.replace("\\", "");
-							tmp = tmp.replace(" ", "");
-							tmp = tmp.replace(">", "");
-							tmp = tmp.replace("<", "");
-							System.out.println("removing md5 file:" + Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
-							File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
-							md5_final_filename.delete();
+						String del_map_name = Navit.MAP_FILENAME_PATH + map_full_line.split(":", 2)[0];
+						System.out.println("del map file :" + del_map_name);
+						// remove from cat file
+						NavitMapDownloader.remove_from_cat_file(map_full_line);
+						// remove from disk
+						File del_map_name_file = new File(del_map_name);
+						del_map_name_file.delete();
+						for (int jkl = 1; jkl < 51; jkl++) {
+							File del_map_name_fileSplit = new File(del_map_name + "." + jkl);
+							del_map_name_fileSplit.delete();
+						}
+						// also remove index file
+						File del_map_name_file_idx = new File(del_map_name + ".idx");
+						del_map_name_file_idx.delete();
+						// remove also any MD5 files for this map that may be on disk
+						try {
+							String tmp = map_full_line.split(":", 2)[1];
+							if (!tmp.equals(NavitMapDownloader.MAP_URL_NAME_UNKNOWN)) {
+								tmp = tmp.replace("*", "");
+								tmp = tmp.replace("/", "");
+								tmp = tmp.replace("\\", "");
+								tmp = tmp.replace(" ", "");
+								tmp = tmp.replace(">", "");
+								tmp = tmp.replace("<", "");
+								System.out.println("removing md5 file:" + Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
+								File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
+								md5_final_filename.delete();
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+						}
+
+						// add all sdcard maps
+						msg = new Message();
+						b = new Bundle();
+						b.putInt("Callback", 20);
+						msg.setData(b);
+						NavitGraphics.callback_handler.sendMessage(msg);
+
+						System.out.println("Global_Location_update_not_allowed = 0");
+						Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
+
+						// -----------------
+						Navit.intro_flag_indexmissing = false;
+						try {
+							// go to next slide
+							btnNext.callOnClick();
+							// -----------------
+						} catch (NoSuchMethodError e2) {
+							System.out.println("ZANaviMainIntroActivity:" + "callOnClick:Ex01");
 						}
 					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-					}
-
-					// add all sdcard maps
-					msg = new Message();
-					b = new Bundle();
-					b.putInt("Callback", 20);
-					msg.setData(b);
-					NavitGraphics.callback_handler.sendMessage(msg);
-
-					System.out.println("Global_Location_update_not_allowed = 0");
-					Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!
-
-					// -----------------
-					Navit.intro_flag_indexmissing = false;
-					try
-					{
-						// go to next slide
-						btnNext.callOnClick();
-						// -----------------
-					}
-					catch (java.lang.NoSuchMethodError e2)
-					{
-						System.out.println("ZANaviMainIntroActivity:" + "callOnClick:Ex01");
-					}
+				} catch (Exception e) {
+					Log.d("Navit", "error on onActivityResult 3");
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e)
-			{
-				Log.d("Navit", "error on onActivityResult 3");
-				e.printStackTrace();
-			}
-			break;
+				break;
 		}
 	}
 
 	private void addBottomDots(int currentPage)
 	{
-		dots = new TextView[layouts.size()];
+		TextView[] dots = new TextView[layouts.size()];
 
 		int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
 		int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -537,7 +513,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 	}
 
 	//  viewpager change listener
-	ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener()
+	private final ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener()
 	{
 
 		@Override
@@ -606,27 +582,13 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		@Override
 		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 		{
-			if (Build.VERSION.SDK_INT >= 11)
+			if (position < (layouts.size() - 1) && position < (colors.size() - 1))
 			{
-				if (position < (layouts.size() - 1) && position < (colors.size() - 1))
-				{
-					viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset, colors.get(position), colors.get(position + 1)));
-				}
-				else
-				{
-					viewPager.setBackgroundColor(colors.get(colors.size() - 1));
-				}
+				viewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset, colors.get(position), colors.get(position + 1)));
 			}
 			else
 			{
-				if (position < (layouts.size() - 1) && position < (colors.size() - 1))
-				{
-					viewPager.setBackgroundColor(ColorUtils.getColor(colors.get(position), colors.get(position + 1), positionOffset));
-				}
-				else
-				{
-					viewPager.setBackgroundColor(colors.get(colors.size() - 1));
-				}
+				viewPager.setBackgroundColor(colors.get(colors.size() - 1));
 			}
 		}
 
@@ -654,11 +616,10 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 	/**
 	 * View pager adapter
 	 */
-	public class MyViewPagerAdapter extends PagerAdapter
+	class MyViewPagerAdapter extends PagerAdapter
 	{
-		private LayoutInflater layoutInflater;
 
-		public MyViewPagerAdapter()
+		MyViewPagerAdapter()
 		{
 		}
 
@@ -667,7 +628,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		{
 			System.out.println("i_of: position=" + position);
 
-			layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			View view = layoutInflater.inflate(layouts.get(position), container, false);
 			TextView header_text = null;
@@ -839,7 +800,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 									// reset message
 									ZANaviMainApplication.last_stack_trace_as_string = "";
-									PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).commit();
+									PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).apply();
 
 									// reset flag
 									Navit.intro_flag_crash = false;
@@ -1386,19 +1347,19 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 		// reset message
 		ZANaviMainApplication.last_stack_trace_as_string = "";
-		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).commit();
+		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).apply();
 
 		// reset flag
 		Navit.intro_flag_crash = false;
 	}
 
-	public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter
+	class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter
 	{
 
 		private final Context activity;
-		private ArrayList<String> asr;
+		private final ArrayList<String> asr;
 
-		public CustomSpinnerAdapter(Context context, ArrayList<String> asr)
+		CustomSpinnerAdapter(Context context, ArrayList<String> asr)
 		{
 			this.asr = asr;
 			activity = context;
@@ -1503,7 +1464,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		return drawable;
 	}
 
-	static public Drawable scaleDrawable_dp(Drawable drawable, int width_dp, int height_dp)
+	private static Drawable scaleDrawable_dp(Drawable drawable, int width_dp, int height_dp)
 	{
 		int wi = drawable.getIntrinsicWidth();
 		int hi = drawable.getIntrinsicHeight();
@@ -1516,7 +1477,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		return drawable;
 	}
 
-	static String split_every(String in, int split_pos)
+	private static String split_every(String in, int split_pos)
 	{
 		String out = in;
 		try
@@ -1524,7 +1485,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			if (in.length() > split_pos)
 			{
 				out = "";
-				List<String> parts = new ArrayList<String>();
+				List<String> parts = new ArrayList<>();
 				int len = in.length();
 				for (int i = 0; i < len; i += split_pos)
 				{
@@ -1553,9 +1514,9 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 		boolean running;
 		private ProgressDialog progressDialog;
-		private File ff1;
-		private File ff2;
-		private int pathnum_;
+		private final File ff1;
+		private final File ff2;
+		private final int pathnum_;
 
 		AsyncTaskMapMover(File ff1, File ff2, int pathnum)
 		{

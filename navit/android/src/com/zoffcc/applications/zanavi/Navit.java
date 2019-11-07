@@ -205,14 +205,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static final String VERSION_TEXT_LONG_INC_REV = "4611";
 	static String ZANAVI_VERSION = "unknown";
 	public static String NavitAppVersion = "0";
-	private static String NavitAppVersion_prev = "-1";
 	public static String NavitAppVersion_string = "0";
-	private final Boolean NAVIT_IS_EMULATOR = false; // when running on emulator set to true!!
-	private static boolean has_hw_menu_button = false;
 	private static final int NAVIT_MIN_HORIZONTAL_DP_FOR_ACTIONBAR = 400;
-	private static int actionbar_item_width = 100;
 	private static int actionbar_items_will_fit = 2;
-	private static boolean actionbar_all_items_will_fit = false;
 	private static boolean actionabar_download_icon_visible = false;
 	static boolean is_navigating = false;
 	static boolean is_paused = true;
@@ -351,7 +346,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	Dialog dialog_info_popup = null;
 	static int info_popup_seen_count = 0;
 	static final int info_popup_seen_count_max = 2; // must look at the info pop 2 times
-	private static boolean info_popup_seen_count_end = false;
 
 	static Navit Global_Navit_Object = null;
 	static AssetManager asset_mgr = null;
@@ -369,17 +363,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private long sun_moon__mLastCalcSunMillis = -1L;
 	private double azmiuth_cache = -1;
 	private double zenith_cache = -1;
-	private static String sunrise_cache = "";
 	public static boolean is_night = false;
 	public static boolean is_twilight = false;
 	public static double elevation = 0;
-	private double moon_azimuth_cache = -1;
-	private double moon_evelation_cache = -1;
-	private Boolean sun_moon__must_calc_new = true;
-	private SunriseSunsetCalculator sun_moon__calc = null;
-	private Calendar sun_moon__cx = null;
-	private SolarPosition.SunCoordinates sun_moon__sc = null;
-	private static boolean calc_sun_enabled = true;
 	// -------- SUN / MOON ----------
 
 	public static CWorkerThread cwthr = null;
@@ -398,7 +384,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private final static int Navit_Status_UPGRADED_TO_NEW_VERSION = 2;
 	private final static int Navit_Status_NORMAL_STARTUP = 0;
 	static Boolean Navit_DonateVersion_Installed = false;
-	private static Boolean Navit_Plugin_001_Installed = false;
 	private static Boolean Navit_index_on_but_no_idx_files = false;
 	static Boolean Navit_maps_too_old = false;
 	static Boolean Navit_Largemap_DonateVersion_Installed = false;
@@ -602,7 +587,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private ProgressDialog search_results_wait_offline = null;
 	public static Handler Navit_progress_h = null;
 	public static NavitMapDownloader mapdownloader_pri = null;
-	private static NavitMapDownloader mapdownloader_sec = null;
 	private static final int NavitDownloaderPriSelectMap_id = 967;
 	private static final int NavitDownloaderSecSelectMap_id = 968;
 	public static final int NavitDeleteSecSelectMap_id = 969;
@@ -624,8 +608,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static Boolean NavitStartupAlreadySearching = false;
 	private SearchResultsThread searchresultsThread = null;
 	private SearchResultsThread searchresultsThread_offline = null;
-	private SearchResultsThreadSpinnerThread spinner_thread = null;
-	private SearchResultsThreadSpinnerThread spinner_thread_offline = null;
 	public static Boolean NavitAddressSearchSpinnerActive = false;
 	public static final int MAP_NUM_PRIMARY = 11;
 	private static final int NavitAddressSearch_id_offline = 70;
@@ -647,7 +629,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static Typeface NavitStreetnameFont = null;
 
 	private SensorManager sensorManager = null;
-	private static float lightsensor_max_value = -1;
 	// static final float lux_darkness_value = 4;
 	private Sensor lightSensor = null;
 	private SensorEventListener lightSensorEventListener = null;
@@ -658,11 +639,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static Context getBaseContext_ = null;
 	public static GpsStatus gps_st = null;
 
-	private static Bitmap lane_none = null;
-	private static Bitmap lane_left = null;
-	private static Bitmap lane_right = null;
-	private static Bitmap lane_merge_to_left = null;
-	private static Bitmap lane_merge_to_right = null;
 	static String lane_destination = "";
 	static String lanes_text = "";
 	static String lanes_text1 = "";
@@ -714,7 +690,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static int Navit_last_address_search_country_id = 0;
 	public static Boolean Navit_last_address_partial_match = true;
 	public static Geocoder Navit_Geocoder = null;
-	private static String UserAgentString = null;
 	public static String UserAgentString_bind = null;
 	public static Boolean first_ever_startup = false;
 
@@ -727,14 +702,10 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static String NAVIT_DATA_DIR = "/data/data/com.zoffcc.applications.zanavi"; // later use: Context.getFilesDir().getPath();
 	private static String NAVIT_DATA_SHARE_DIR = NAVIT_DATA_DIR + "/share";
 	static String NAVIT_DATA_DEBUG_DIR = CFG_FILENAME_PATH + "../debug/";
-	private static String FIRST_STARTUP_FILE = NAVIT_DATA_SHARE_DIR + "/has_run_once.txt";
-	private static String VERSION_FILE = NAVIT_DATA_SHARE_DIR + "/version.txt";
 	static final String Navit_DEST_FILENAME = "destinations.dat";
 	static final String Navit_CENTER_FILENAME = "center.txt";
 
 	static final int RC_PERM_001 = 11;
-
-	private static boolean need_recalc_route = false;
 
 	static Resources res_ = null;
 	private static Window app_window = null;
@@ -1484,8 +1455,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		File tmp3 = new File(NAVIT_DATA_SHARE_DIR);
 		tmp3.mkdirs();
 		// ---
-		FIRST_STARTUP_FILE = NAVIT_DATA_SHARE_DIR + "/has_run_once.txt";
-		VERSION_FILE = NAVIT_DATA_SHARE_DIR + "/version.txt";
+		String FIRST_STARTUP_FILE = NAVIT_DATA_SHARE_DIR + "/has_run_once.txt";
+		String VERSION_FILE = NAVIT_DATA_SHARE_DIR + "/version.txt";
 		// ---------------- set some directories -----------------
 		// ---------------- set some directories -----------------
 
@@ -1541,11 +1512,11 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		System.out.println("Navit:onCreate:THREAD ID=" + NavitGraphics.GetThreadId());
 
 		// bitmaps for lanes
-		lane_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_left);
-		lane_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_right);
-		lane_merge_to_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_left);
-		lane_merge_to_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_right);
-		lane_none = BitmapFactory.decodeResource(getResources(), R.drawable.lane_none);
+		Bitmap lane_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_left);
+		Bitmap lane_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_right);
+		Bitmap lane_merge_to_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_left);
+		Bitmap lane_merge_to_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_right);
+		Bitmap lane_none = BitmapFactory.decodeResource(getResources(), R.drawable.lane_none);
 		// bitmaps for lanes
 
 		// paint for bitmapdrawing on map
@@ -1997,13 +1968,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			NavitAppVersion_string = "2";
 		}
 
+		String navitAppVersion_prev = "-1";
 		try
 		{
 			File navit_version = new File(VERSION_FILE);
 			if (!navit_version.exists())
 			{
 				System.out.println("version file does not exist");
-				NavitAppVersion_prev = "-1";
+				navitAppVersion_prev = "-1";
 				write_new_version_file = true;
 			}
 			else
@@ -2017,11 +1989,11 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				if (len != -1)
 				{
 					// use only len bytes to make the string (the rest is garbage!!)
-					NavitAppVersion_prev = new String(buffer).substring(0, len);
+					navitAppVersion_prev = new String(buffer).substring(0, len);
 				}
 				else
 				{
-					NavitAppVersion_prev = "-1";
+					navitAppVersion_prev = "-1";
 					write_new_version_file = true;
 				}
 				fos_temp.close();
@@ -2030,15 +2002,15 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		catch (Exception e)
 		{
-			NavitAppVersion_prev = "-1";
+			navitAppVersion_prev = "-1";
 			write_new_version_file = true;
 			e.printStackTrace();
 		}
 
-		System.out.println("vprev:" + NavitAppVersion_prev + " vcur:" + NavitAppVersion);
+		System.out.println("vprev:" + navitAppVersion_prev + " vcur:" + NavitAppVersion);
 
 		intro_flag_update = false;
-		if (NavitAppVersion_prev.compareTo(NavitAppVersion) != 0)
+		if (navitAppVersion_prev.compareTo(NavitAppVersion) != 0)
 		{
 			// different version
 			System.out.println("different version!!");
@@ -2136,22 +2108,23 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			android_rom_name = android_rom_name + "; FD";
 		}
 
+		String userAgentString = null;
 		if (Navit_DonateVersion_Installed == false)
 		{
-			UserAgentString = "Mozilla/5.0 (Linux; U; " + "Z" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
+			userAgentString = "Mozilla/5.0 (Linux; U; " + "Z" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 			UserAgentString_bind = "Mozilla/5.0 @__THREAD__@ (Linux; U; " + "Z" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 		}
 		else
 		{
 			if (Navit_Largemap_DonateVersion_Installed == false)
 			{
-				UserAgentString = "Mozilla/5.0 (Linux; U; " + "donateZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
+				userAgentString = "Mozilla/5.0 (Linux; U; " + "donateZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 				UserAgentString_bind = "Mozilla/5.0 @__THREAD__@ (Linux; U; " + "donateZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 			}
 			else
 
 			{
-				UserAgentString = "Mozilla/5.0 (Linux; U; " + "LMdonateLMZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
+				userAgentString = "Mozilla/5.0 (Linux; U; " + "LMdonateLMZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 				UserAgentString_bind = "Mozilla/5.0 @__THREAD__@ (Linux; U; " + "LMdonateLMZ" + NavitAppVersion + "; " + android_version + "; " + android_device + " " + android_rom_name + ")";
 			}
 		}
@@ -2201,6 +2174,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		try
 		{
 			// this hangs the emulator, if emulator < 2.3 (only works in emulator >= 2.3)!!
+			// when running on emulator set to true!!
+			Boolean NAVIT_IS_EMULATOR = false;
 			if (!NAVIT_IS_EMULATOR)
 			{
 				sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -2225,7 +2200,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		try
 		{
 			lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-			lightsensor_max_value = lightSensor.getMaximumRange();
+			float lightsensor_max_value = lightSensor.getMaximumRange();
 			lightSensorEventListener = new SensorEventListener()
 			{
 				@Override
@@ -2367,7 +2342,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//			});
 		//		}
 
-		info_popup_seen_count_end = false;
+		boolean info_popup_seen_count_end = false;
 		File navit_first_startup = new File(FIRST_STARTUP_FILE);
 		// if file does NOT exist, show the info box
 		if (!navit_first_startup.exists())
@@ -3585,7 +3560,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//		// -------------- INTRO --------------
 
 		PackageInfo pkgInfo;
-		Navit_Plugin_001_Installed = false;
+		Boolean navit_Plugin_001_Installed = false;
 		try
 		{
 			// is the donate version installed?
@@ -3595,7 +3570,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			if (sharedUserId.equals("com.zoffcc.applications.zanavi"))
 			{
 				System.out.println("##plugin 001##");
-				Navit_Plugin_001_Installed = true;
+				navit_Plugin_001_Installed = true;
 			}
 		}
 		catch (Exception e)
@@ -5282,10 +5257,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Log.e("Navit", "Navit width in DP -> " + display_.getWidth() / Navit.metrics.density);
 		Log.e("Navit", "Navit width in DP -> density=" + Navit.metrics.density);
 
+		boolean actionbar_all_items_will_fit = false;
 		try
 		{
 			View v4 = findViewById(R.id.item_settings_menu_button);
 			// Log.e("Navit", "Navit width in DP -> v4=" + v4);
+			int actionbar_item_width = 100;
 			if ((v4 != null) && (v4.getWidth() > 0))
 			{
 				Log.e("Navit", "Navit width in DP -> v4.w=" + v4.getWidth());
@@ -7678,7 +7655,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// SUN ----------------
 			//
 			//
-			sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
+			Boolean sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
 
 			if ((sun_moon__must_calc_new) || (azmiuth_cache == -1))
 			{
@@ -7712,18 +7689,18 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					sun_moon__mLastCalcSunMillis = SystemClock.elapsedRealtime();
 					TimeZone t = TimeZone.getDefault(); // Since the user's time zone changes dynamically, avoid caching this value. Instead, use this method to look it up for each use. 
 					//System.out.println(t.getID());
-					sun_moon__calc = new SunriseSunsetCalculator(new Location2(String.valueOf(lat), String.valueOf(lon)), t.getID());
-					sun_moon__cx = Calendar.getInstance();
-					sun_moon__sc = SolarPosition.getSunPosition(new Date(), lat, lon);
+					SunriseSunsetCalculator sun_moon__calc = new SunriseSunsetCalculator(new Location2(String.valueOf(lat), String.valueOf(lon)), t.getID());
+					Calendar sun_moon__cx = Calendar.getInstance();
+					SolarPosition.SunCoordinates sun_moon__sc = SolarPosition.getSunPosition(new Date(), lat, lon);
 
 					azmiuth_cache = sun_moon__sc.azimuth;
 					zenith_cache = sun_moon__sc.zenithAngle;
-					sunrise_cache = sun_moon__calc.getOfficialSunriseForDate(sun_moon__cx);
+					String sunrise_cache = sun_moon__calc.getOfficialSunriseForDate(sun_moon__cx);
 					String sunset_cache = sun_moon__calc.getOfficialSunsetForDate(sun_moon__cx);
 					//System.out.println("calc moon");
 					SolarEventCalculator.moonCoor_ret moon_stats = sun_moon__calc.computeMoon(sun_moon__cx);
-					moon_azimuth_cache = moon_stats.az;
-					moon_evelation_cache = moon_stats.alt;
+					double moon_azimuth_cache = moon_stats.az;
+					double moon_evelation_cache = moon_stats.alt;
 				}
 				catch (Exception e)
 				{
@@ -7773,7 +7750,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				// on some systems BigInteger seems to crash, or maybe some values are out of range
 				// until the bug is found, night modus is deactivated
-				calc_sun_enabled = false;
+				boolean calc_sun_enabled = false;
 				is_twilight = false;
 				is_night = false;
 			}
@@ -10335,7 +10312,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			searchresultsThread_offline.start();
 
 			NavitAddressSearchSpinnerActive = true;
-			spinner_thread_offline = new SearchResultsThreadSpinnerThread(progress_handler, Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
+			SearchResultsThreadSpinnerThread spinner_thread_offline = new SearchResultsThreadSpinnerThread(progress_handler, Navit.SEARCHRESULTS_WAIT_DIALOG_OFFLINE);
 			spinner_thread_offline.start();
 
 			return search_results_wait_offline;
@@ -10364,7 +10341,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			searchresultsThread.start();
 
 			NavitAddressSearchSpinnerActive = true;
-			spinner_thread = new SearchResultsThreadSpinnerThread(progress_handler, Navit.SEARCHRESULTS_WAIT_DIALOG);
+			SearchResultsThreadSpinnerThread spinner_thread = new SearchResultsThreadSpinnerThread(progress_handler, Navit.SEARCHRESULTS_WAIT_DIALOG);
 			spinner_thread.start();
 
 			return search_results_wait;
@@ -10442,7 +10419,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				}
 			};
 			mapdownloader_dialog_sec.setOnDismissListener(mOnDismissListener2);
-			mapdownloader_sec = new NavitMapDownloader(this);
+			NavitMapDownloader mapdownloader_sec = new NavitMapDownloader(this);
 			progressThread_sec = mapdownloader_sec.new ProgressThread(progress_handler, NavitMapDownloader.z_OSM_MAPS[Navit.download_map_id], MAP_NUM_SECONDARY);
 			progressThread_sec.start();
 			//
@@ -11360,7 +11337,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static void activatePrefs(int dummy)
 	{
 
-		need_recalc_route = false; // do we need to recalc the route?
+		boolean need_recalc_route = false; // do we need to recalc the route?
 
 		// call some functions to activate the new settings
 		if (p.PREF_follow_gps)
@@ -14081,7 +14058,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private void detect_menu_button()
 	{
 		// default: we dont have a real menu button
-		has_hw_menu_button = false;
+		boolean has_hw_menu_button = false;
 
 		try
 		{

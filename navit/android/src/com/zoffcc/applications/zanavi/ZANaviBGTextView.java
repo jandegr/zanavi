@@ -6,9 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class ZANaviBGTextView extends TextView
+public class ZANaviBGTextView extends AppCompatTextView
 {
 
 	private Paint p = null;

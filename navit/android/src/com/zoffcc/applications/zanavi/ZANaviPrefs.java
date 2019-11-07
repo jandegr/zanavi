@@ -156,7 +156,7 @@ public class ZANaviPrefs
 		dst.PREF_night_mode_buffer = src.PREF_night_mode_buffer;
 		dst.PREF_enable_debug_crashdetect = src.PREF_enable_debug_crashdetect;
 
-		int j = 0;
+		int j;
 		for (j = 0; j < src.PREF_StreetSearchStrings.length; j++)
 		{
 			dst.PREF_StreetSearchStrings[j] = src.PREF_StreetSearchStrings[j];

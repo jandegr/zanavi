@@ -38,18 +38,16 @@ public class ZANaviMapDownloaderService extends Service
 {
 	private static NotificationManager nm;
 	private static Notification notification;
-	public static int NOTIFICATION_ID__DUMMY = 1;
+	private static final int NOTIFICATION_ID__DUMMY = 1;
 	public static int NOTIFICATION_ID__DUMMY2 = 2;
-	public static String Notification_header = "";
-	public static String Notification_text = "";
-	private static Context con = null;
-	private static PendingIntent p_activity = null;
+	private static String Notification_header = "";
+	private static String Notification_text = "";
 	private static Intent notificationIntent = null;
 
 	private static NotificationCompat.Builder builder_ = null;
 
 	private static ProgressThread progressThread_pri = null;
-	public static boolean service_running = false;
+	private static boolean service_running = false;
 	private static ZANaviMapDownloaderService my_object = null;
 
 	@Override
@@ -60,10 +58,11 @@ public class ZANaviMapDownloaderService extends Service
 		Notification_header = "ZANavi";
 		Notification_text = Navit.get_text("downloading, please wait ...");
 
-		con = this;
+		Context con = this;
 
 		Notification notification = null;
 
+		PendingIntent p_activity = null;
 		try
 		{
 			nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -131,7 +130,7 @@ public class ZANaviMapDownloaderService extends Service
 		return null;
 	}
 
-	public static void start_map_download()
+	private static void start_map_download()
 	{
 		try
 		{

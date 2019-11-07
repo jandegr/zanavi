@@ -53,9 +53,9 @@ public class ZANaviMainApplication extends Application
 
 	}
 
-	void save_error_msg()
+	private void save_error_msg()
 	{
-		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", last_stack_trace_as_string).commit();
+		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", last_stack_trace_as_string).apply();
 		System.out.println("ZANaviMainApp:" + "save_error_msg=" + last_stack_trace_as_string);
 	}
 

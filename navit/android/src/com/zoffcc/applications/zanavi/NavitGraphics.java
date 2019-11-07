@@ -380,7 +380,7 @@ public class NavitGraphics
 	int scroller_last_y = 0;
 	boolean scroller_active = false;
 
-	public static NavitGlobalMap NavitGlobalMap_ = null;
+	private static NavitGlobalMap NavitGlobalMap_ = null;
 
 	public void SetCamera(int use_camera)
 	{

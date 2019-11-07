@@ -31,30 +31,30 @@ import android.widget.LinearLayout;
 public class ZANaviLinearLayout extends LinearLayout
 {
 	private boolean need_size_change = false;
-	private Paint paint_crosshair = new Paint();
-	private Paint paint_sat_status = new Paint();
-	int delta_1 = 8;
-	int delta_2 = 35;
-	int wm;
-	int hm;
-	int sat_status_max_sats = 13;
-	int sat_status_lt_x = 0;
-	int sat_status_lt_y = 0;
-	int sat_status_lt_w = 1;
-	int sat_status_lt_h = 1;
-	Rect r1 = new Rect(0, 0, 1, 1);
-	Rect r2 = new Rect(0, 0, 1, 1);
-	Rect r3 = new Rect(0, 0, 1, 1);
-	Rect r4 = new Rect(0, 0, 1, 1);
-	View child1;
-	View child2;
-	View child3;
-	View child4;
-	View child5;
-	View child6;
-	View child7;
-	View child8;
-	View child9;
+	private final Paint paint_crosshair = new Paint();
+	private final Paint paint_sat_status = new Paint();
+	private int delta_1 = 8;
+	private int delta_2 = 35;
+	private int wm;
+	private int hm;
+	private int sat_status_max_sats = 13;
+	private int sat_status_lt_x = 0;
+	private int sat_status_lt_y = 0;
+	private int sat_status_lt_w = 1;
+	private int sat_status_lt_h = 1;
+	private final Rect r1 = new Rect(0, 0, 1, 1);
+	private final Rect r2 = new Rect(0, 0, 1, 1);
+	private final Rect r3 = new Rect(0, 0, 1, 1);
+	private final Rect r4 = new Rect(0, 0, 1, 1);
+	private View child1;
+	private View child2;
+	private View child3;
+	private View child4;
+	private View child5;
+	private View child6;
+	private View child7;
+	private View child8;
+	private View child9;
 
 	public ZANaviLinearLayout(Context context)
 	{
@@ -321,7 +321,7 @@ public class ZANaviLinearLayout extends LinearLayout
 		});
 	}
 
-	public void redraw_OSD_view(int i)
+	private void redraw_OSD_view(int i)
 	{
 		try
 		{
