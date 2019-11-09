@@ -40,9 +40,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("NewApi")
-class ZANaviDownloadMapCancelActivity extends AppCompatActivity
+
+public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 {
 
 	private static TextView addr_view2 = null;
