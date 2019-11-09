@@ -18,14 +18,14 @@ public class ZANaviListViewAdapter extends ArrayAdapter<ListViewItem>
 
 	public static class ListViewItem
 	{
-		public final String distanct_short; // the distance in short form [String] 
-		public final Drawable icon; // the drawable for the ListView item ImageView
-		public final String title; // the text for the ListView item title
-		public final String description; // the text for the ListView item description
+		final String distanct_short; // the distance in short form [String]
+		final Drawable icon; // the drawable for the ListView item ImageView
+		final String title; // the text for the ListView item title
+		final String description; // the text for the ListView item description
 		public final float lat;
 		public final float lon;
 
-		public ListViewItem(String distanct_short, Drawable icon, String title, String description, float lat, float lon)
+		ListViewItem(String distanct_short, Drawable icon, String title, String description, float lat, float lon)
 		{
 			this.distanct_short = distanct_short;
 			this.icon = icon;
@@ -36,7 +36,7 @@ public class ZANaviListViewAdapter extends ArrayAdapter<ListViewItem>
 		}
 	}
 
-	public ZANaviListViewAdapter(Context context, List<ListViewItem> items)
+	ZANaviListViewAdapter(Context context, List<ListViewItem> items)
 	{
 		super(context, R.layout.listview_item, items);
 	}
@@ -52,10 +52,10 @@ public class ZANaviListViewAdapter extends ArrayAdapter<ListViewItem>
 			convertView = inflater.inflate(R.layout.listview_item, parent, false);
 			// initialize the view holder
 			viewHolder = new ViewHolder();
-			viewHolder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
-			viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-			viewHolder.tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
-			viewHolder.road_book_short_distance_text = (TextView) convertView.findViewById(R.id.road_book_short_distance_text);
+			viewHolder.ivIcon = convertView.findViewById(R.id.ivIcon);
+			viewHolder.tvTitle = convertView.findViewById(R.id.tvTitle);
+			viewHolder.tvDescription = convertView.findViewById(R.id.tvDescription);
+			viewHolder.road_book_short_distance_text = convertView.findViewById(R.id.road_book_short_distance_text);
 			convertView.setTag(viewHolder);
 		}
 		else

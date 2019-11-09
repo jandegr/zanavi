@@ -42,7 +42,7 @@ import androidx.appcompat.widget.Toolbar;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
-public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
+class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 {
 
 	private static TextView addr_view2 = null;
@@ -63,7 +63,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_download_cancel_activity);
 
-		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2nd);
+		Toolbar bar = findViewById(R.id.toolbar2nd);
 		bar.setTitle(Navit.get_text("Download"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{
@@ -75,28 +75,28 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 		});
 
 		//		// header text
-		TextView addr_view = (TextView) findViewById(R.id.addr_view);
+		TextView addr_view = findViewById(R.id.addr_view);
 		addr_view.setText(Navit.get_text("Stop map download?")); //TRANS
 		addr_view.setGravity(Gravity.CENTER);
 		addr_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
 		//		addr_view.setPadding(4, 10, 4, 10);
 		//
 		//		// info text
-		TextView info_view = (TextView) findViewById(R.id.info_view);
+		TextView info_view = findViewById(R.id.info_view);
 		info_view.setText(Navit.get_text("press HOME to download in the background")); //TRANS
 		info_view.setGravity(Gravity.CENTER);
 		info_view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
 		//		info_view.setPadding(4, 10, 4, 10);
 		//
 		//		// message
-		addr_view2 = (TextView) findViewById(R.id.addr_view2);
+		addr_view2 = findViewById(R.id.addr_view2);
 		addr_view2.setText("");
 		addr_view2.setGravity(Gravity.CENTER_HORIZONTAL);
 		addr_view2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
 		//		addr_view2.setPadding(4, 10, 4, 10);
 		//
 		//		// "Yes" button
-		final Button btnSearch = (Button) findViewById(R.id.btnSearch);
+		final Button btnSearch = findViewById(R.id.btnSearch);
 		btnSearch.setText(Navit.get_text("Yes")); //TRANS
 		//		btnSearch.setPadding(4, 10, 4, 10);
 		btnSearch.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f);
@@ -131,7 +131,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 		});
 
 		//		// "No" button
-		final Button btnSearch2 = (Button) findViewById(R.id.btnSearch2);
+		final Button btnSearch2 = findViewById(R.id.btnSearch2);
 
 		btnSearch2.setText(Navit.get_text("No")); //TRANS
 		//		btnSearch2.setPadding(4, 10, 4, 10);
@@ -145,7 +145,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 			}
 		});
 
-		pg = (ProgressBar) findViewById(R.id.mapdownload_prog_bar);
+		pg = findViewById(R.id.mapdownload_prog_bar);
 		pg.setProgress(0);
 		pg.setIndeterminate(true);
 
@@ -162,14 +162,14 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 			{
 				pg_speed[pg_i] = null;
 				pg_speed_id = r.getIdentifier("mapdownload_speed_bar_t00" + (pg_i + 1), "id", "com.zoffcc.applications.zanavi");
-				pg_speed[pg_i] = (ProgressBar) findViewById(pg_speed_id);
+				pg_speed[pg_i] = findViewById(pg_speed_id);
 				//if (pg_i >= NavitMapDownloader.MULTI_NUM_THREADS)
 				//{
 				pg_speed[pg_i].setVisibility(View.INVISIBLE);
 				//}
 				pg_speed_d[pg_i] = pg_speed[pg_i].getProgressDrawable();
 
-				pg_speed_txt[pg_i] = (TextView) findViewById(r.getIdentifier("mapdownload_speed_text_t00" + (pg_i + 1), "id", "com.zoffcc.applications.zanavi"));
+				pg_speed_txt[pg_i] = findViewById(r.getIdentifier("mapdownload_speed_text_t00" + (pg_i + 1), "id", "com.zoffcc.applications.zanavi"));
 				pg_speed_txt[pg_i].setVisibility(View.INVISIBLE);
 			}
 			catch (Exception e2)

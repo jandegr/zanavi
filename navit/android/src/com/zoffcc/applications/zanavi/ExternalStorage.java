@@ -40,16 +40,16 @@ import android.os.Environment;
  * 
  * 
  */
-public class ExternalStorage
+class ExternalStorage
 {
 
 	private static final String SD_CARD = "sdCard";
-	public static final String EXTERNAL_SD_CARD = "externalSdCard";
+	static final String EXTERNAL_SD_CARD = "externalSdCard";
 
 	/**
 	 * @return True if the external storage is available. False otherwise.
 	 */
-	public static boolean isAvailable()
+	static boolean isAvailable()
 	{
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
@@ -59,7 +59,7 @@ public class ExternalStorage
 		return false;
 	}
 
-	public static String getSdCardPath()
+	static String getSdCardPath()
 	{
 		return Environment.getExternalStorageDirectory().getPath() + "/";
 	}
@@ -67,7 +67,7 @@ public class ExternalStorage
 	/**
 	 * @return True if the external storage is writable. False otherwise.
 	 */
-	public static boolean isWritable()
+	static boolean isWritable()
 	{
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state))
@@ -81,7 +81,7 @@ public class ExternalStorage
 	/**
 	 * @return A map of all storage locations available
 	 */
-	public static Map<String, File> getAllStorageLocations()
+	static Map<String, File> getAllStorageLocations()
 	{
 		Map<String, File> map = new HashMap<>(10);
 

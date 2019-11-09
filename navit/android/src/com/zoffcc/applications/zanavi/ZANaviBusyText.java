@@ -28,9 +28,9 @@ import android.util.TypedValue;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
 
-public class ZANaviBusyText extends AppCompatTextView
+class ZANaviBusyText extends AppCompatTextView
 {
-	final int text_size = 23;
+	private final int text_size = 23;
 
 	public ZANaviBusyText(Context context)
 	{
@@ -54,18 +54,18 @@ public class ZANaviBusyText extends AppCompatTextView
 		// this.setShadowLayer(2, 2, NavitGraphics.dp_to_px(1), Color.TRANSPARENT);
 	}
 
-	public static Handler UIHandler;
+	private static final Handler UIHandler;
 	static
 	{
 		UIHandler = new Handler(Looper.getMainLooper());
 	}
 
-	public static void runOnUI(Runnable runnable)
+	private static void runOnUI(Runnable runnable)
 	{
 		UIHandler.post(runnable);
 	}
 
-	public void setText2(String t)
+	void setText2(String t)
 	{
 		// System.out.println("ZANaviBusyText:" + "setText2 t=" + t);
 		final String t2 = t;
@@ -88,6 +88,7 @@ public class ZANaviBusyText extends AppCompatTextView
 		}
 	}
 
+	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);

@@ -1080,7 +1080,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		try
 		{
 			app_status_string = "running";
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putString(PREF_KEY_CRASH, "running").commit();
+			PreferenceManager.getDefaultSharedPreferences(this).edit().putString(PREF_KEY_CRASH, "running").apply();
 			System.out.println("app_status_string set:[onCreate]" + app_status_string);
 		}
 		catch (Exception e)
@@ -1161,7 +1161,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		setContentView(R.layout.main_layout);
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 
 		if (toolbar != null)
 		{
@@ -1191,7 +1191,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			e.printStackTrace();
 		}
 
-		progressbar_main_activity = (ProgressBar) findViewById(R.id.progressbar_main_activity);
+		progressbar_main_activity = findViewById(R.id.progressbar_main_activity);
 		progressbar_main_activity.setVisibility(View.GONE);
 		progressbar_main_activity.setProgress(0);
 
@@ -1880,9 +1880,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// update map list
 		NavitMapDownloader.init_maps_without_donate_largemaps();
 		// ---------- downloader threads ----------------
-
-		// ---- detect menu button ----
-		detect_menu_button();
 
 		if (Navit.metrics.densityDpi >= 320) //&& (PREF_shrink_on_high_dpi))
 		{
@@ -6543,7 +6540,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		switch (requestCode) {
 			case Navit.ZANaviIntro_id:
 				try {
-					PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(PREF_KEY_FIRST_START, false).commit();
+					PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(PREF_KEY_FIRST_START, false).apply();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -10564,7 +10561,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putString(PREF_KEY_CRASH, "down").commit();
+			PreferenceManager.getDefaultSharedPreferences(this).edit().putString(PREF_KEY_CRASH, "down").apply();
 			System.out.println("app_status_string set:[exit]" + "down");
 			System.out.println("app_status_string(1)=" + app_status_string);
 			app_status_string = "down";
@@ -10597,7 +10594,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean("show_3d_map", p.PREF_show_3d_map);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void follow_button_on()
@@ -10607,7 +10604,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Navit.follow_current = Navit.follow_on;
 		p.PREF_follow_gps = true;
 		editor.putBoolean("follow_gps", p.PREF_follow_gps);
-		editor.commit();
+		editor.apply();
 
 		// hold all map drawing -----------
 		Message msg = new Message();
@@ -10683,7 +10680,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Navit.follow_current = Navit.follow_off;
 		p.PREF_follow_gps = false;
 		editor.putBoolean("follow_gps", p.PREF_follow_gps);
-		editor.commit();
+		editor.apply();
 		getPrefs();
 		activatePrefs(1);
 
@@ -10734,7 +10731,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			p.PREF_show_poi_on_map = true;
 		}
 		editor.putBoolean("show_poi_on_map", p.PREF_show_poi_on_map);
-		editor.commit();
+		editor.apply();
 	}
 
 	private static void toggle_follow_button()
@@ -10785,7 +10782,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// follow mode ON -----------
 		}
 		editor.putBoolean("follow_gps", p.PREF_follow_gps);
-		editor.commit();
+		editor.apply();
 		//if (!PREF_follow_gps)
 		//{
 		//	// no compass turning without follow mode!
@@ -10856,7 +10853,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putInt("search_country_id", p.PREF_search_country);
-		editor.commit();
+		editor.apply();
 
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
@@ -10869,7 +10866,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putInt("zoomlevel_num", Navit.GlobalScaleLevel);
-		editor.commit();
+		editor.apply();
 		//System.out.println("2 save zoom level: " + Navit.GlobalScaleLevel);
 
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
@@ -10882,7 +10879,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("last_selected_dir_gpxfiles", p.PREF_last_selected_dir_gpxfiles);
-		editor.commit();
+		editor.apply();
 
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
@@ -11055,7 +11052,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				if (!prefs.contains("enable_debug_crashdetect"))
 				{
-					prefs.edit().putBoolean("enable_debug_crashdetect", true).commit();
+					prefs.edit().putBoolean("enable_debug_crashdetect", true).apply();
 					System.out.println("setting default value of enable_debug_crashdetect to \"true\"");
 				}
 			}
@@ -11072,7 +11069,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				{
 					if (!prefs.contains("enable_debug_crashdetect"))
 					{
-						prefs.edit().putBoolean("enable_debug_crashdetect", true).commit();
+						prefs.edit().putBoolean("enable_debug_crashdetect", true).apply();
 						System.out.println("setting default value of enable_debug_crashdetect to \"true\"");
 					}
 				}
@@ -12738,7 +12735,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			prefs.edit().putString("map_directory", path).commit();
+			prefs.edit().putString("map_directory", path).apply();
 		}
 		catch (Exception e)
 		{
@@ -12747,7 +12744,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			prefs.edit().putString("storage_directory", "" + num).commit();
+			prefs.edit().putString("storage_directory", "" + num).apply();
 		}
 		catch (Exception e)
 		{
@@ -12835,11 +12832,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		{
 			p.PREF_current_theme = Navit.DEFAULT_THEME_OLD_LIGHT;
 		}
-		else
-		{
-			p.PREF_current_theme = Navit.DEFAULT_THEME_OLD_DARK;
-		}
-
 	}
 
 	private void getPrefs_theme_main()
@@ -12853,11 +12845,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		{
 			p.PREF_current_theme_M = Navit.DEFAULT_THEME_OLD_LIGHT_M;
 		}
-		else
-		{
-			p.PREF_current_theme_M = Navit.DEFAULT_THEME_OLD_DARK_M;
-		}
-
 	}
 
 	private static void getPrefs_loc()
@@ -13058,82 +13045,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		System.out.println("XSOM:010");
 
-		//		if (api_version_int < 11)
-		//		{
-		//
-		//			new AsyncTask<Void, Void, String>()
-		//			{
-		//				@Override
-		//				protected String doInBackground(Void... params)
-		//				{
-		//					System.out.println("XSOM:011");
-		//
-		//					try
-		//					{
-		//						System.out.println("XSOM:001");
-		//						Thread.sleep((long) millis_start_delay);
-		//						Navit.show_geo_on_screen_no_draw(lat, lon);
-		//						System.out.println("XSOM:002");
-		//						Thread.sleep(100);
-		//						Navit.set_zoom_level_no_draw(Navit.Navit_SHOW_DEST_ON_MAP_ZOOMLEVEL);
-		//						System.out.println("XSOM:004");
-		//						Thread.sleep(120);
-		//						Navit.draw_map();
-		//						System.out.println("XSOM:005");
-		//					}
-		//					catch (Exception e)
-		//					{
-		//					}
-		//
-		//					return "";
-		//				}
-		//
-		//				@Override
-		//				protected void onPostExecute(String msg)
-		//				{
-		//
-		//				}
-		//			}.execute(null, null, null);
-		//
-		//		}
-		//		else
-		//		{
-		//			new AsyncTask<Void, Void, String>()
-		//			{
-		//				@Override
-		//				protected String doInBackground(Void... params)
-		//				{
-		//					System.out.println("XSOM:011");
-		//
-		//					try
-		//					{
-		//						System.out.println("XSOM:001");
-		//						Thread.sleep((long) millis_start_delay);
-		//						Navit.show_geo_on_screen_no_draw(lat, lon);
-		//						System.out.println("XSOM:002");
-		//						Thread.sleep(100);
-		//						Navit.set_zoom_level_no_draw(Navit.Navit_SHOW_DEST_ON_MAP_ZOOMLEVEL);
-		//						System.out.println("XSOM:004");
-		//						Thread.sleep(120);
-		//						Navit.draw_map();
-		//						System.out.println("XSOM:005");
-		//					}
-		//					catch (Exception e)
-		//					{
-		//					}
-		//
-		//					return "";
-		//				}
-		//
-		//				@Override
-		//				protected void onPostExecute(String msg)
-		//				{
-		//
-		//				}
-		//			}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		//
-		//		}
-
 		final Thread temp_work_thread = new Thread()
 		{
 			@Override
@@ -13319,7 +13230,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Boolean ret2 = false;
 		try
 		{
-			LocationManager locationmanager2 = (LocationManager) context.getSystemService("location");
+			LocationManager locationmanager2 = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			Bundle bundle = new Bundle();
 			//ret2 = locationmanager2.sendExtraCommand("gps", "delete_aiding_data", null);
 			//ret = ret2;
@@ -13846,27 +13757,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	private static boolean allow_use_index_search()
 	{
-		//		if ((!Navit_DonateVersion_Installed) && (!Navit_Largemap_DonateVersion_Installed))
-		//		{
-		//			// no donate version installed
-		//			Log.e("Navit", "no donate version installed");
-		//
-		//			Navit_index_on_but_no_idx_files = false;
-		//			return false;
-		//		}
-		//		else
-		//		{
-		//			Log.e("Navit", "donate version IS installed");
-		//		}
-
 		boolean ret = false;
 
 		// MAP_FILENAME_PATH
 		File folder = new File(MAP_FILENAME_PATH);
 		File[] listOfFiles = folder.listFiles();
-		File idx = null;
-		File md5_file = null;
-		FileOutputStream fos = null;
+		File idx;
+		File md5_file;
+		FileOutputStream fos;
 
 		int files = 0;
 		int file_without_index = 0;
@@ -13885,11 +13783,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						{
 							files++;
 							idx = new File(folder, file.getName() + ".idx");
-							if (idx.exists())
-							{
-							}
-							else
-							{
+							if (!idx.exists()) {
 								file_without_index++;
 
 								String servername = "";
@@ -13903,7 +13797,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 								if (!servername.equals(""))
 								{
-
 									// index for this map is missing. hack MD5 file so we can download it again
 									md5_file = new File(Navit.MAPMD5_FILENAME_PATH + "/" + servername + ".md5");
 
@@ -14054,27 +13947,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	@SuppressLint("NewApi")
-	private void detect_menu_button()
-	{
-		// default: we dont have a real menu button
-		boolean has_hw_menu_button = false;
-
-		try
-		{
-
-			has_hw_menu_button = ViewConfiguration.get(getApplicationContext()).hasPermanentMenuKey();
-
-		}
-		catch (Exception e)
-		{
-			// on error we must be on android API < 14 and therfore we have a menu button (that is what we assume)
-			has_hw_menu_button = true;
-		}
-
-		// now always show menu button icon
-		has_hw_menu_button = false;
-	}
 
 	public void onBackPressed()
 	{
@@ -15689,37 +15561,37 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					int h001;
 					android.view.ViewGroup.LayoutParams lp001;
 
-					View v003 = (View) findViewById(R.id.osd_nextturn_new);
+					View v003 = findViewById(R.id.osd_nextturn_new);
 					h001 = getResources().getDimensionPixelSize(R.dimen.osd_nextturn_new_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					v003 = (View) findViewById(R.id.bottom_bar);
+					v003 = findViewById(R.id.bottom_bar);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_bar_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					LinearLayout v002 = (LinearLayout) findViewById(R.id.bottom_slide_view);
+					LinearLayout v002 = findViewById(R.id.bottom_slide_view);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_slide_view_height);
 					lp001 = v002.getLayoutParams();
 					lp001.height = h001;
 					v002.requestLayout();
 
-					v003 = (View) findViewById(R.id.osd_timetodest_new);
+					v003 = findViewById(R.id.osd_timetodest_new);
 					h001 = getResources().getDimensionPixelSize(R.dimen.osd_timetodest_new_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					v002 = (LinearLayout) findViewById(R.id.bottom_line_container);
+					v002 = findViewById(R.id.bottom_line_container);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_line_container_height);
 					lp001 = v002.getLayoutParams();
 					lp001.height = h001;
 					v002.requestLayout();
 
-					RelativeLayout v001 = (RelativeLayout) findViewById(R.id.gui_top_container);
+					RelativeLayout v001 = findViewById(R.id.gui_top_container);
 					h001 = getResources().getDimensionPixelSize(R.dimen.gui_top_container_height);
 					lp001 = v001.getLayoutParams();
 					lp001.height = h001;
@@ -17104,7 +16976,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				{
 					// we updated in the last 2 minutes
 					Log.e("Navit", "updated app:updated app within last 2 minutes");
-					PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(PREF_KEY_LASTUPDATETS, info.lastUpdateTime).commit();
+					PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(PREF_KEY_LASTUPDATETS, info.lastUpdateTime).apply();
 					return true;
 				}
 			}

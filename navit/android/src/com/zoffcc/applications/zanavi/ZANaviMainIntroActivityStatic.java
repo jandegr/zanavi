@@ -149,10 +149,10 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 		setContentView(R.layout.intro_slide_static);
 
-		viewPager = (ViewPager) findViewById(R.id.view_pager);
-		dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-		Button btnSkip = (Button) findViewById(R.id.btn_skip);
-		btnNext = (Button) findViewById(R.id.btn_next);
+		viewPager = findViewById(R.id.view_pager);
+		dotsLayout = findViewById(R.id.layoutDots);
+		Button btnSkip = findViewById(R.id.btn_skip);
+		btnNext = findViewById(R.id.btn_next);
 
 		btnNext.setText(Navit.get_text("OK"));
 
@@ -546,14 +546,12 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 				// don't allow to leave "crash" screen with swiping forward
 				System.out.println("intro_logic:dont leave crash screen");
 				viewPager.setCurrentItem(progress, true);
-				return;
 			}
 			else if (position < progress)
 			{
 				// don't allow to swipe back
 				System.out.println("intro_logic:dont allow swipe back");
 				viewPager.setCurrentItem(progress, true);
-				return;
 			}
 			else
 			{
@@ -638,7 +636,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 			try
 			{
-				header_text = (TextView) view.findViewById(R.id.header_text_slide);
+				header_text = view.findViewById(R.id.header_text_slide);
 			}
 			catch (Exception e)
 			{
@@ -646,7 +644,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 			try
 			{
-				descr_text = (TextView) view.findViewById(R.id.desc_text_slide);
+				descr_text = view.findViewById(R.id.desc_text_slide);
 			}
 			catch (Exception e)
 			{
@@ -663,7 +661,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			ImageView icon_slide = null;
 			try
 			{
-				icon_slide = (ImageView) view.findViewById(R.id.icon_slide);
+				icon_slide = view.findViewById(R.id.icon_slide);
 			}
 			catch (Exception e)
 			{
@@ -702,7 +700,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Button button_slide = (Button) view.findViewById(R.id.button_slide);
+					Button button_slide = view.findViewById(R.id.button_slide);
 
 					if (EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms))
 					{
@@ -742,7 +740,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Button button_slide = (Button) view.findViewById(R.id.button_slide);
+					Button button_slide = view.findViewById(R.id.button_slide);
 					button_slide.setText(Navit.get_text("Submit Log"));
 					button_slide.setVisibility(View.VISIBLE);
 
@@ -784,7 +782,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Button button_slide2 = (Button) view.findViewById(R.id.button_slide2);
+					Button button_slide2 = view.findViewById(R.id.button_slide2);
 					button_slide2.setText(Navit.get_text("No, thanks"));
 					button_slide2.setVisibility(View.VISIBLE);
 
@@ -846,7 +844,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Button button_slide = (Button) view.findViewById(R.id.button_slide);
+					Button button_slide = view.findViewById(R.id.button_slide);
 					button_slide.setText(Navit.get_text("Maps"));
 					button_slide.setVisibility(View.VISIBLE);
 
@@ -886,11 +884,11 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Spinner spinner = (Spinner) findViewById(R.id.intro_spinner);
+					Spinner spinner = findViewById(R.id.intro_spinner);
 					spinner.setVisibility(View.VISIBLE);
 
 					int count_sd_card = 1;
-					String avail_space_string2 = "";
+					String avail_space_string2;
 					File f = new File(Navit.NavitDataDirectory_Maps);
 					int spinner_selection = 1;
 					custom_path_not_needed = false;
@@ -932,7 +930,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 						{
 							long avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
 							String avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
-							String avail_space_string = "";
+							String avail_space_string;
 							if (avail_space < 0)
 							{
 								avail_space_string = "";
@@ -1045,7 +1043,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 				try
 				{
-					Button button_slide = (Button) view.findViewById(R.id.button_slide);
+					Button button_slide = view.findViewById(R.id.button_slide);
 					button_slide.setText(Navit.get_text("Donate"));
 
 					boolean already_installed = false;
@@ -1159,10 +1157,9 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			else if (cur_id == ID_INDEX)
 			{
 				System.out.println("i_of:INDEX_ID");
-
 				try
 				{
-					Button button_slide = (Button) view.findViewById(R.id.button_slide);
+					Button button_slide = view.findViewById(R.id.button_slide);
 					button_slide.setText(Navit.get_text("Index"));
 					button_slide.setVisibility(View.VISIBLE);
 
@@ -1188,13 +1185,11 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 							}
 						}
 					});
-
 				}
 				catch (Exception e)
 				{
 				}
 			}
-
 			return view;
 		}
 
@@ -1251,7 +1246,6 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 				if (EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms))
 				{
 					// PERMISSION_ID = -1;
-
 					try
 					{
 						// go to next slide
@@ -1272,9 +1266,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 	public void onBackPressed()
 	{
 		System.out.println("ZANaviMainIntroActivity:" + "onBackPressed");
-
 		// block back button
-		return;
 	}
 
 	@Override
@@ -1403,15 +1395,6 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			}
 
 			txt.setMinimumHeight(NavitGraphics.dp_to_px(50));
-
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-			{
-				txt.setBackgroundColor(Color.parseColor("#4E219E"));
-				if (currently_selected == position)
-				{
-					txt.setBackgroundColor(Color.parseColor("#976ab7"));
-				}
-			}
 
 			txt.setTextColor(Color.parseColor("#ffffff"));
 			return txt;
@@ -1612,10 +1595,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			{
 				e.printStackTrace();
 			}
-
 			progressDialog.dismiss();
 		}
-
 	}
-
 }

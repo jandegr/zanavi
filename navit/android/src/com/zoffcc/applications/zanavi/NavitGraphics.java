@@ -94,33 +94,33 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class NavitGraphics
 {
-	private int parent_num;
+	private final int parent_num;
 	//private ArrayList overlays = new ArrayList();
 
-	static Canvas draw_canvas_s;
+	private static Canvas draw_canvas_s;
 	static Bitmap draw_bitmap_s;
-	static Canvas draw_canvas_screen_s;
-	static Bitmap draw_bitmap_screen_s;
-	static Canvas draw_canvas_screen_s2;
-	static Bitmap draw_bitmap_screen_s2;
+	private static Canvas draw_canvas_screen_s;
+	private static Bitmap draw_bitmap_screen_s;
+	private static Canvas draw_canvas_screen_s2;
+	private static Bitmap draw_bitmap_screen_s2;
 	//static SurfaceView2 view_s;
-	static View view_s;
+	private static View view_s;
 	static int dl_thread_cur = 0;
-	static int dl_thread_max = 1;
-	static DrawLinesThread[] dl_thread = new DrawLinesThread[dl_thread_max];
+	static final int dl_thread_max = 1;
+	static final DrawLinesThread[] dl_thread = new DrawLinesThread[dl_thread_max];
 	static Boolean draw_map_one_shot = false;
-	static Boolean draw_reset_factors = false;
-	static Boolean Global_Map_in_onDraw = false;
+	private static Boolean draw_reset_factors = false;
+	private static Boolean Global_Map_in_onDraw = false;
 
-	static boolean DOUBLE_TAP_ON = false;
-	static float DOUBLE_TAP_ZOOM_IN_FACTOR = 2.0f;
-	static float DOUBLE_TAP_ZOOM_IN_STEP = 1.0905077f; // hardcoded for DOUBLE_TAP_ZOOM_IN_FACTOR=2.0f !!!
+	private static boolean DOUBLE_TAP_ON = false;
+	private static final float DOUBLE_TAP_ZOOM_IN_FACTOR = 2.0f;
+	private static final float DOUBLE_TAP_ZOOM_IN_STEP = 1.0905077f; // hardcoded for DOUBLE_TAP_ZOOM_IN_FACTOR=2.0f !!!
 
 	static int lower_than_center_percent = 0;
 
-	static int touch_pointerCount = 0;
-	static int touch_pointerCount_old = 0;
-	static boolean touch_pointerCount_passed_zero = true;
+	private static int touch_pointerCount = 0;
+	private static int touch_pointerCount_old = 0;
+	private static boolean touch_pointerCount_passed_zero = true;
 
 	// static Boolean synch_drawing_for_map = false;
 	private static final Object synch_drawing_for_map = new Object();
@@ -133,17 +133,17 @@ public class NavitGraphics
 	static int Global_want_dpi_other = 210;
 	static float Global_dpi_factor = 1; // will be calculated correctly later
 	static float Global_dpi_factor_better = 1;
-	static int Global_Scaled_DPI_normal = 240; // we will scale the whole screen to 240 dpi on high dpi devices
+	static final int Global_Scaled_DPI_normal = 240; // we will scale the whole screen to 240 dpi on high dpi devices
 	// DPI ---------------------------------------------
 	// DPI ---------------------------------------------
 	// DPI ---------------------------------------------
 
-	static Camera camera = new Camera();
-	static Matrix cam_m = new Matrix();
-	static Matrix cam_m_vehicle = new Matrix();
-	static float strech_factor_3d_map = 1.2f; // ORIG = 2.2f
-	static int rotate_3d_map_angle = 44; // ORIG = 61
-	static float h_scaled = 20; // ORIG = xx set later!!
+	private static final Camera camera = new Camera();
+	private static final Matrix cam_m = new Matrix();
+	private static final Matrix cam_m_vehicle = new Matrix();
+	static final float strech_factor_3d_map = 1.2f; // ORIG = 2.2f
+	private static final int rotate_3d_map_angle = 44; // ORIG = 61
+	private static float h_scaled = 20; // ORIG = xx set later!!
 
 	private Canvas draw_canvas;
 	private Bitmap draw_bitmap;
@@ -155,92 +155,91 @@ public class NavitGraphics
 	private float view_srec_x = 0;
 	private float view_srec_y = 0;
 
-	static Path path_preview = new Path();
-	static Paint paint_preview = new Paint();
-	public static Canvas preview_canvas = null;
-	public static Bitmap preview_bitmap = null;
-	static int preview_map_width = 1200;
-	static int preview_map_height = 1200;
-	static float preview_map_my_lat = 0.0f;
-	static float preview_map_my_lon = 0.0f;
-	static int prev_pos_x;
-	static int prev_pos_y;
-	static int preview_map_last_pos_x = 0;
-	static int preview_map_last_pos_y = 0;
+	private static final Path path_preview = new Path();
+	private static final Paint paint_preview = new Paint();
+	private static Canvas preview_canvas = null;
+	private static Bitmap preview_bitmap = null;
+	private static int preview_map_width = 1200;
+	private static int preview_map_height = 1200;
+	private static float preview_map_my_lat = 0.0f;
+	private static float preview_map_my_lon = 0.0f;
+	private static int prev_pos_x;
+	private static int prev_pos_y;
+	private static int preview_map_last_pos_x = 0;
+	private static int preview_map_last_pos_y = 0;
 	static float preview_coord_factor = 1.0f;
-	static boolean preview_map_drawn = false;
-	static int scroller_last = 0;
-	static int fling_damper_factor = 3;
+	private static boolean preview_map_drawn = false;
+	private static int scroller_last = 0;
+	private static final int fling_damper_factor = 3;
 
 	static ZANaviOSDDebug01 debug_text_view = null;
 
-	public static final int map_bg_color = Color.parseColor("#FEF9EE");
-	final Paint paint_bg_color = new Paint(Color.parseColor("#FEF9EE"));
+	private static final int map_bg_color = Color.parseColor("#FEF9EE");
+	private final Paint paint_bg_color = new Paint(Color.parseColor("#FEF9EE"));
 
-	public static final int map_bg_color_nightmode = Color.parseColor("#666666");
-	final Paint paint_bg_color_nightmode = new Paint(Color.parseColor("#666666"));
+	private static final int map_bg_color_nightmode = Color.parseColor("#666666");
+	private final Paint paint_bg_color_nightmode = new Paint(Color.parseColor("#666666"));
 
-	public final static DashPathEffect dashed_map_lines__high = new DashPathEffect(new float[] { 4, 2 }, 1);
-	public final static DashPathEffect dashed_map_lines__low = new DashPathEffect(new float[] { 15, 11 }, 1);
-	public final static DashPathEffect dashed_map_lines__no_dash = null;
+	private final static DashPathEffect dashed_map_lines__high = new DashPathEffect(new float[] { 4, 2 }, 1);
+	private final static DashPathEffect dashed_map_lines__low = new DashPathEffect(new float[] { 15, 11 }, 1);
+	private final static DashPathEffect dashed_map_lines__no_dash = null;
 
-	public final static DashPathEffect h001 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l001 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h002 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l002 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h003 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l003 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h004 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l004 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h005 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l005 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h006 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l006 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect h007 = new DashPathEffect(new float[] { 6, 3 }, 1);
-	public final static DashPathEffect l007 = new DashPathEffect(new float[] { 7, 2 }, 1);
+	private final static DashPathEffect h001 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l001 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h002 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l002 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h003 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l003 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h004 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l004 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h005 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l005 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h006 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l006 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect h007 = new DashPathEffect(new float[] { 6, 3 }, 1);
+	private final static DashPathEffect l007 = new DashPathEffect(new float[] { 7, 2 }, 1);
 
-	public static Paint paint_for_map_display = new Paint();
-	public static Paint paint_sky_day = new Paint();
-	public static Paint paint_sky_night = new Paint();
-	public static Paint paint_sky_night_stars = new Paint();
-	public static Paint paint_sky_twilight1 = new Paint();
-	public static Paint paint_sky_twilight2 = new Paint();
-	public static Paint paint_sky_twilight3 = new Paint();
+	public static final Paint paint_for_map_display = new Paint();
+	public static final Paint paint_sky_day = new Paint();
+	public static final Paint paint_sky_night = new Paint();
+	public static final Paint paint_sky_night_stars = new Paint();
+	public static final Paint paint_sky_twilight1 = new Paint();
+	public static final Paint paint_sky_twilight2 = new Paint();
+	public static final Paint paint_sky_twilight3 = new Paint();
 
 	public static final int max_stars = 7;
-	public static float[] stars_x = new float[max_stars + 1];
-	public static float[] stars_y = new float[max_stars + 1];
-	public static int[] stars_size = new int[max_stars + 1];
+	public static final float[] stars_x = new float[max_stars + 1];
+	public static final float[] stars_y = new float[max_stars + 1];
+	public static final int[] stars_size = new int[max_stars + 1];
 
-	public final static DashPathEffect[] dashes__low = { null, l001, l002, l003, l004, l005, l006, l007 };
-	public final static DashPathEffect[] dashes__high = { null, h001, h002, h003, h004, h005, h006, h007 };
+	private final static DashPathEffect[] dashes__low = { null, l001, l002, l003, l004, l005, l006, l007 };
+	private final static DashPathEffect[] dashes__high = { null, h001, h002, h003, h004, h005, h006, h007 };
 
 	public static int navit_route_status = 0;
 
 	public final float BIGMAP_FACTOR = (10465f / 2f) * 0.8f;
-	Paint paint_maptile = new Paint();
-	Matrix matrix_maptile = new Matrix();
+	private final Paint paint_maptile = new Paint();
+	private final Matrix matrix_maptile = new Matrix();
 
-	static Paint strokeTextPaint = new Paint();
-	static Paint strokeTextPaint_nightmode = new Paint();
-	static double s_factor = 1;
-	static int s_strokTextSize = 8;
-	static int s_strokTextSize_min = 3;
+	private static final Paint strokeTextPaint = new Paint();
+	private static final Paint strokeTextPaint_nightmode = new Paint();
+	private static int s_strokTextSize = 8;
+	private static int s_strokTextSize_min = 3;
 
-	public static long last_paint_OSD = 0;
+	private static long last_paint_OSD = 0;
 
-	public static Boolean wait_for_redraw_map = false;
+	private static Boolean wait_for_redraw_map = false;
 
-	public static Boolean MAP_DISPLAY_OFF = false;
+	public static final Boolean MAP_DISPLAY_OFF = false;
 
 	public static int mCanvasWidth = 1;
 	public static int mCanvasHeight = 1;
 	public static int mCanvasWidth_overspill = 1;
 	public static int mCanvasHeight_overspill = 1;
 
-	public static final Boolean DEBUG_TOUCH = false;
-	public static Boolean ZOOM_MODE_ACTIVE = false;
-	public static float ZOOM_MODE_SCALE = 1.0f;
+	private static final Boolean DEBUG_TOUCH = false;
+	private static Boolean ZOOM_MODE_ACTIVE = false;
+	private static float ZOOM_MODE_SCALE = 1.0f;
 	public static Boolean DRAG_MODE_ACTIVE = false;
 
 	// ----------------- DEBUG ----------------
@@ -251,36 +250,34 @@ public class NavitGraphics
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
 
-	static boolean map_c_drawing = false;
-
 	private static long smooth_driving_ts001 = 0L;
 	private static long smooth_driving_ts002 = 0L;
 	private static long smooth_driving_ts002a = 0L;
 	private static long smooth_driving_ts003 = 0L;
 	private static long smooth_driving_tmptmp = 0L;
 
-	public static float Global_Map_Zoomfactor = 1.0f;
-	public static float Global_Map_Rotationangle = 0;
-	public static float Global_Map_TransX = 0;
-	public static float Global_Map_TransY = 0;
-	public static Boolean Global_SmoothDrawing_stop = false;
-	public static Boolean Global_onTouch_fingerdown = false;
+	private static float Global_Map_Zoomfactor = 1.0f;
+	private static float Global_Map_Rotationangle = 0;
+	private static float Global_Map_TransX = 0;
+	private static float Global_Map_TransY = 0;
+	private static Boolean Global_SmoothDrawing_stop = false;
+	private static Boolean Global_onTouch_fingerdown = false;
 
-	public static float draw_factor = 1.0f;
+	private static float draw_factor = 1.0f;
 
 	public static String debug_line_1 = "";
 	public static String debug_line_2 = "";
 	public static String debug_line_3 = "";
 	public static String debug_line_4 = "";
 
-	public static final int DRAW_ONEWAY_ARROWS_AT_ORDER = 13;
-	public static final int DRAW_DETAIL_DASHES_AT_ORDER = 13;
-	public static final int DRAW_MORE_DETAILS_AT_ORDER = 9;
-	public static final int DRAW_MORE_DETAILS_TUNNEL_BRIDGES_AT_ORDER = 8;
+	private static final int DRAW_ONEWAY_ARROWS_AT_ORDER = 13;
+	private static final int DRAW_DETAIL_DASHES_AT_ORDER = 13;
+	private static final int DRAW_MORE_DETAILS_AT_ORDER = 9;
+	private static final int DRAW_MORE_DETAILS_TUNNEL_BRIDGES_AT_ORDER = 8;
 
-	public static long[] OverlayDrawThread_cancel_drawing_timeout__options = { 300L, 900L, 2100L, 20000L }; // 900L normal, 300L short, 2100L long
-	public static int[] OverlayDrawThread_cancel_thread_sleep_time__options = { 100, 200, 400, 400 };
-	public static long[] OverlayDrawThread_cancel_thread_timeout__options = { 3000L, 3000L, 3000L, 22000L };
+	public static final long[] OverlayDrawThread_cancel_drawing_timeout__options = { 300L, 900L, 2100L, 20000L }; // 900L normal, 300L short, 2100L long
+	public static final int[] OverlayDrawThread_cancel_thread_sleep_time__options = { 100, 200, 400, 400 };
+	public static final long[] OverlayDrawThread_cancel_thread_timeout__options = { 3000L, 3000L, 3000L, 22000L };
 
 	public static long OverlayDrawThread_cancel_drawing_timeout = OverlayDrawThread_cancel_drawing_timeout__options[1];
 	public static int OverlayDrawThread_cancel_thread_sleep_time = OverlayDrawThread_cancel_thread_sleep_time__options[1];
@@ -296,41 +293,37 @@ public class NavitGraphics
 	int loc_2_y = 0;
 	Boolean loc_12_valid = false;
 	Boolean loc_dot_valid = false;
-	int gr_type = 0; // 0 -> dummy, 1 -> map
+	private int gr_type = 0; // 0 -> dummy, 1 -> map
 
-	int bitmap_w;
-	int bitmap_h;
-	int pos_x;
-	int pos_y;
+	private int bitmap_w;
+	private int bitmap_h;
+	private int pos_x;
+	private int pos_y;
 	//
-	int vehicle_speed = 0;
-	int vehicle_pos_x = 0;
-	int vehicle_pos_y = 0;
-	int vehicle_direction = 0;
-	int vehicle_pos_x_delta = 0;
-	int vehicle_pos_y_delta = 0;
-	int vehicle_direction_delta = 0;
-	int vehicle_zoom_delta = 0;
+	private int vehicle_speed = 0;
+	private int vehicle_pos_x = 0;
+	private int vehicle_pos_y = 0;
+	private int vehicle_direction = 0;
+	private int vehicle_pos_x_delta = 0;
+	private int vehicle_pos_y_delta = 0;
+	private int vehicle_direction_delta = 0;
+	private int vehicle_zoom_delta = 0;
 	// drag pos
-	public static int d_pos_x_old = -1;
-	public static int d_pos_y_old = -1;
-	// drag post
-	int pos_wraparound;
+	private static int d_pos_x_old = -1;
+	private static int d_pos_y_old = -1;
 	// int overlay_disabled;
 	float trackball_x, trackball_y;
-	View view;
+	final View view;
 	RelativeLayout relativelayout;
-	// --obsolote --- // NavitCamera camera;
-	AppCompatActivity activity;
 
 	private Bitmap bigmap_bitmap_temp = null;
 	private Matrix matrix_oneway_arrows = null;
 	private float wsave_003 = 0f;
 	private float wsave_004 = 0f;
 	private Boolean b_paint_antialias = true;
-	private Path b_paint_path = new Path();
+	private final Path b_paint_path = new Path();
 
-	public static Boolean in_map = true; // always in map mode, now
+	public static final Boolean in_map = true; // always in map mode, now
 
 	// for menu key
 	private static long time_for_long_press = 300L;
@@ -338,7 +331,7 @@ public class NavitGraphics
 
 	// for touch screen
 	private long last_touch_on_screen = 0L;
-	private static long long_press_on_screen_interval = 1000L;
+	private static final long long_press_on_screen_interval = 1000L;
 	static float long_press_on_screen_max_distance = 8f;
 
 	// Overlay View for Android
@@ -349,7 +342,6 @@ public class NavitGraphics
 	public static NavitAndroidOverlay NavitAOverlay_s = null;
 	private NavitOSDJava NavitAOSDJava = null;
 	public static NavitOSDJava NavitAOSDJava_ = null;
-	private TextView NavitMsgTv = null;
 	public static TextView NavitMsgTv_ = null;
 	public ZANaviBusySpinner busyspinner = null;
 	public static ZANaviBusySpinner busyspinner_ = null;
@@ -358,9 +350,8 @@ public class NavitGraphics
 
 	// public static EmulatedMenuView emu_menu_view;
 
-	PointF touch_now_center = new PointF(0, 0);
+	private PointF touch_now_center = new PointF(0, 0);
 
-	private TextView NavitMsgTv2 = null;
 	public static TextView NavitMsgTv2_ = null;
 
 	public static ScrollView NavitMsgTv2sc_ = null;
@@ -369,18 +360,15 @@ public class NavitGraphics
 	public static ImageView whats_here_pointer_image = null;
 	public static RelativeLayout.LayoutParams params_whats_here_container_wrap = new RelativeLayout.LayoutParams(10, 10);
 	public static RelativeLayout.LayoutParams params_whats_here_pointer_image = new RelativeLayout.LayoutParams(10, 10);
-	public static ImageButton whats_here_button_add_to;
-	public static ImageButton whats_here_button_whats;
-	public static ImageButton whats_here_button_drive;
 	public static TextView whats_here_text;
 	// public static String whats_here_text_string = "";
 
-	Scroller mScroller = null;
-	int scroller_last_x = 0;
-	int scroller_last_y = 0;
-	boolean scroller_active = false;
+	private Scroller mScroller = null;
+	private int scroller_last_x = 0;
+	private int scroller_last_y = 0;
+	private boolean scroller_active = false;
 
-	private static NavitGlobalMap NavitGlobalMap_ = null;
+//	private static NavitGlobalMap NavitGlobalMap_ = null;
 
 	public void SetCamera(int use_camera)
 	{
@@ -397,24 +385,20 @@ public class NavitGraphics
 		 */
 	}
 
-	public static SensorThread touch_sensor_thread = null;
+	private static SensorThread touch_sensor_thread = null;
 
 	private class SensorThread extends Thread
 	{
 		private Boolean running;
 		private long last_down_action = 0L;
 		private Boolean is_still_pressing;
-		//private View v = null;
-		//private NavitAndroidOverlay n_overlay = null;
-		private float prev_x;
-		private float prev_y;
-		private float x;
-		private float y;
+		private final float x;
+		private final float y;
 
 		SensorThread(long last_touch, float x, float y)
 		{
-			this.prev_x = x;
-			this.prev_y = y;
+			//private View v = null;
+			//private NavitAndroidOverlay n_overlay = null;
 			this.x = x;
 			this.y = y;
 			this.running = true;
@@ -435,7 +419,7 @@ public class NavitGraphics
 		//			this.is_still_pressing=false;
 		//		}
 
-		public void stop_me()
+		void stop_me()
 		{
 			this.running = false;
 		}
@@ -628,7 +612,7 @@ public class NavitGraphics
 		}
 	}
 
-	public static void init_3d_mode()
+	private static void init_3d_mode()
 	{
 		// 3D modus -----------------
 		NavitGraphics.cam_m.reset();
@@ -736,7 +720,7 @@ public class NavitGraphics
 		paint_preview.setStrokeWidth(dp_to_px(3));
 
 		// shadow for text on map --------------
-		s_factor = 1;
+		double s_factor = 1;
 		if ((Navit.metrics.densityDpi >= 320) && (!Navit.p.PREF_shrink_on_high_dpi))
 		{
 			s_factor = (double) Navit.metrics.densityDpi / (double) NavitGraphics.Global_Scaled_DPI_normal;
@@ -769,6 +753,8 @@ public class NavitGraphics
 
 		// shadow for text on map --------------
 
+		// --obsolote --- // NavitCamera camera;
+		AppCompatActivity activity1;
 		if (parent == 0)
 		{
 			this.gr_type = 1;
@@ -792,22 +778,22 @@ public class NavitGraphics
 			System.out.println("Global_want_dpi=" + Global_want_dpi + ":" + Navit.metrics.densityDpi + ":" + NavitGraphics.Global_dpi_factor + ":" + NavitGraphics.Global_dpi_factor_better);
 			System.out.println("preview_coord_factor=" + preview_coord_factor);
 
-			this.activity = activity;
-			view = (View) new view_map_custom(activity)
+			activity1 = activity;
+			view = new view_map_custom(activity)
 			{
 				int touch_mode = NONE;
 				float oldDist = 0;
-				PointF touch_now = new PointF(0, 0);
+				final PointF touch_now = new PointF(0, 0);
 				// PointF touch_now_center = new PointF(0, 0);
-				PointF touch_start = new PointF(0, 0);
-				PointF touch_prev = new PointF(0, 0);
+				final PointF touch_start = new PointF(0, 0);
+				final PointF touch_prev = new PointF(0, 0);
 				static final int NONE = 0;
 				static final int DRAG = 1;
 				static final int ZOOM = 2;
 				static final int PRESS = 3;
 
-				Paint paint_fling_line = new Paint();
-				Paint paint_fling_line2 = new Paint();
+				final Paint paint_fling_line = new Paint();
+				final Paint paint_fling_line2 = new Paint();
 
 				boolean fling_start = false;
 
@@ -1064,7 +1050,7 @@ public class NavitGraphics
 											String lat_lon = NavitGraphics.CallbackGeoCalc(1, ((((float) this.getWidth() / 2) - (float) prev_pos_x + ((float) mScroller.getFinalX() / fling_damper_factor)) + (float) NavitGraphics.mCanvasWidth_overspill) * (float) NavitGraphics.Global_dpi_factor, ((((float) this.getHeight() / 2) - (float) prev_pos_y + ((float) mScroller.getFinalY() / fling_damper_factor)) + (float) NavitGraphics.mCanvasHeight_overspill) * (float) NavitGraphics.Global_dpi_factor);
 											try
 											{
-												String tmp[] = lat_lon.split(":", 2);
+												String[] tmp = lat_lon.split(":", 2);
 												preview_map_my_lat = Float.parseFloat(tmp[0]);
 												preview_map_my_lon = Float.parseFloat(tmp[1]);
 											}
@@ -1352,13 +1338,13 @@ public class NavitGraphics
 					System.out.println("INIT Custom Map View");
 
 					paint_fling_line.setARGB(160, 120, 99, 99);
-					paint_fling_line.setStyle(Paint.Style.STROKE);
+					paint_fling_line.setStyle(Style.STROKE);
 					paint_fling_line.setStrokeWidth(dp_to_px(45));
 					paint_fling_line.setAntiAlias(true);
 					paint_fling_line.setDither(true);
 
 					paint_fling_line2.setARGB(200, 200, 99, 99);
-					paint_fling_line2.setStyle(Paint.Style.STROKE);
+					paint_fling_line2.setStyle(Style.STROKE);
 					paint_fling_line2.setStrokeWidth(dp_to_px(30));
 					paint_fling_line2.setAntiAlias(true);
 					paint_fling_line2.setDither(true);
@@ -1378,7 +1364,7 @@ public class NavitGraphics
 					// -- bottom bar --
 					try
 					{
-						final FrameLayout a = (FrameLayout) Navit.Global_Navit_Object.findViewById(R.id.bottom_bar_slide);
+						final FrameLayout a = Navit.Global_Navit_Object.findViewById(R.id.bottom_bar_slide);
 						final RelativeLayout.LayoutParams pp22 = (RelativeLayout.LayoutParams) a.getLayoutParams();
 						// System.out.println("hhh:1=" + a.getHeight());
 						// System.out.println("hhh:3=" + pp22.topMargin);
@@ -1772,7 +1758,7 @@ public class NavitGraphics
 					}
 				}
 
-				GestureDetector mGD = new GestureDetector(getContext(), new SimpleOnGestureListener()
+				final GestureDetector mGD = new GestureDetector(getContext(), new SimpleOnGestureListener()
 				{
 					boolean force_finish_doubletap_zoom = false;
 
@@ -1873,11 +1859,11 @@ public class NavitGraphics
 
 								if (Navit.GFX_OVERSPILL)
 								{
-									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 								}
 								else
 								{
-									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 								}
 								msg.setData(b);
 								try
@@ -2449,11 +2435,11 @@ public class NavitGraphics
 										// zzzzzzzzzzzzz;
 										if (Navit.GFX_OVERSPILL)
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										else
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										msg.setData(b);
 										try
@@ -2544,11 +2530,11 @@ public class NavitGraphics
 
 										if (Navit.GFX_OVERSPILL)
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										else
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Integer.toString(Navit.GlobalScaleLevel));
+											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										msg.setData(b);
 										try
@@ -2914,7 +2900,7 @@ public class NavitGraphics
 					return (float) Math.sqrt(x * x + y * y);
 				}
 
-				public PointF calc_center(MotionEvent event)
+				PointF calc_center(MotionEvent event)
 				{
 					//float x;
 					//float y;
@@ -2949,7 +2935,7 @@ public class NavitGraphics
 					return ret;
 				}
 
-				public float spacing(MotionEvent event)
+				float spacing(MotionEvent event)
 				{
 					float x;
 					float y;
@@ -3058,7 +3044,7 @@ public class NavitGraphics
 			// x4x NavitAOverlay.bringToFront();
 			// x4x NavitAOverlay.postInvalidate();
 
-			NavitAOverlay = (NavitAndroidOverlay) activity.findViewById(R.id.NavitAOverlay);
+			NavitAOverlay = activity.findViewById(R.id.NavitAOverlay);
 			NavitAOverlay.bringToFront();
 			NavitAOverlay.postInvalidate();
 			NavitAOverlay_s = NavitAOverlay;
@@ -3083,7 +3069,7 @@ public class NavitGraphics
 			// x4x relativelayout.addView(OSD_new, NavitAOSDJava_lp2);
 			// x4x OSD_new.bringToFront();
 
-			OSD_new = (ZANaviLinearLayout) activity.findViewById(R.id.OSD_new);
+			OSD_new = activity.findViewById(R.id.OSD_new);
 			OSD_new.bringToFront();
 
 			// OSD new -------------------------------------------------------
@@ -3102,16 +3088,16 @@ public class NavitGraphics
 			// x4x NavitMsgTv_lp.topMargin = 176;
 			// NavitMsgTv.setHeight(10);
 
-			NavitMsgTv = (TextView) activity.findViewById(R.id.NavitMsgTv);
-			NavitMsgTv_ = NavitMsgTv;
+			TextView navitMsgTv = activity.findViewById(R.id.NavitMsgTv);
+			NavitMsgTv_ = navitMsgTv;
 			int tc = Color.argb(125, 0, 0, 0); // half transparent black
-			NavitMsgTv.setBackgroundColor(tc);
-			NavitMsgTv.setLines(4);
-			NavitMsgTv.setTextSize(12);
-			NavitMsgTv.setTextColor(Color.argb(255, 200, 200, 200)); // almost white
+			navitMsgTv.setBackgroundColor(tc);
+			navitMsgTv.setLines(4);
+			navitMsgTv.setTextSize(12);
+			navitMsgTv.setTextColor(Color.argb(255, 200, 200, 200)); // almost white
 			// x4x relativelayout.addView(NavitMsgTv, NavitMsgTv_lp);
-			NavitMsgTv.bringToFront();
-			NavitMsgTv.postInvalidate();
+			navitMsgTv.bringToFront();
+			navitMsgTv.postInvalidate();
 			// android Messages TextView
 
 			// android Speech Messages TextView
@@ -3121,15 +3107,15 @@ public class NavitGraphics
 			// x4x RelativeLayout.LayoutParams NavitMsgTv_lp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
 			// x4x NavitMsgTv_lp2.leftMargin = 10;
 			// x4x NavitMsgTv_lp2.rightMargin = 10;
-			NavitMsgTv2 = (TextView) activity.findViewById(R.id.NavitMsgTv2cc);
-			NavitMsgTv2_ = NavitMsgTv2;
+			TextView navitMsgTv2 = activity.findViewById(R.id.NavitMsgTv2cc);
+			NavitMsgTv2_ = navitMsgTv2;
 			int tc2 = Color.argb(125, 0, 0, 0); // half transparent black
-			NavitMsgTv2.setBackgroundColor(tc2);
-			NavitMsgTv2.setTextSize(15);
-			NavitMsgTv2.setTextColor(Color.argb(255, 200, 200, 200)); // almost white
+			navitMsgTv2.setBackgroundColor(tc2);
+			navitMsgTv2.setTextSize(15);
+			navitMsgTv2.setTextColor(Color.argb(255, 200, 200, 200)); // almost white
 
 			// x4x ScrollView sc = new ScrollView(relativelayout.getContext());
-			NavitMsgTv2sc_ = (ScrollView) activity.findViewById(R.id.NavitMsgTv2);
+			NavitMsgTv2sc_ = activity.findViewById(R.id.NavitMsgTv2);
 
 			NavitMsgTv2sc_.bringToFront();
 			NavitMsgTv2sc_.postInvalidate();
@@ -3142,13 +3128,13 @@ public class NavitGraphics
 			// x4x sc.setScrollbarFadingEnabled(true);
 			NavitMsgTv2sc_.setHorizontalScrollBarEnabled(true);
 			NavitMsgTv2sc_.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-			NavitMsgTv2.setGravity(Gravity.BOTTOM);
+			navitMsgTv2.setGravity(Gravity.BOTTOM);
 			// x4x relativelayout.addView(sc, NavitMsgTv_lp3);
 
-			NavitMsgTv2.bringToFront();
-			NavitMsgTv2.postInvalidate();
-			NavitMsgTv2.setEnabled(false);
-			NavitMsgTv2.setVisibility(View.GONE);
+			navitMsgTv2.bringToFront();
+			navitMsgTv2.postInvalidate();
+			navitMsgTv2.setEnabled(false);
+			navitMsgTv2.setVisibility(View.GONE);
 			// android Speech Messages TextView
 
 			// busy spinner view on top of everything
@@ -3160,7 +3146,7 @@ public class NavitGraphics
 			// x4x busyspinner.postInvalidate();
 			// x4x busyspinner.setVisibility(View.INVISIBLE);
 
-			ZANaviBusySpinner busyspinner = (ZANaviBusySpinner) activity.findViewById(R.id.busyspinner);
+			ZANaviBusySpinner busyspinner = activity.findViewById(R.id.busyspinner);
 			busyspinner_ = busyspinner;
 			busyspinner.bringToFront();
 			busyspinner.postInvalidate();
@@ -3174,7 +3160,7 @@ public class NavitGraphics
 			// x4x busyspinnertext.postInvalidate();
 			// x4x busyspinnertext.setVisibility(View.INVISIBLE);
 
-			ZANaviBusyText busyspinnertext = (ZANaviBusyText) activity.findViewById(R.id.busyspinnertext);
+			ZANaviBusyText busyspinnertext = activity.findViewById(R.id.busyspinnertext);
 			busyspinnertext_ = busyspinnertext;
 			busyspinnertext.bringToFront();
 			busyspinnertext.postInvalidate();
@@ -3223,7 +3209,7 @@ public class NavitGraphics
 			// -------------------------------------------------------
 			// -------------------------------------------------------
 
-			Button no_maps_button = (Button) activity.findViewById(R.id.no_maps_button);
+			Button no_maps_button = activity.findViewById(R.id.no_maps_button);
 			no_maps_button.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -3244,7 +3230,7 @@ public class NavitGraphics
 
 			// Navit.Global_Navit_Object.glSurfaceView.bringToFront();
 
-			View view_srec = (View) activity.findViewById(R.id.view_srec);
+			View view_srec = activity.findViewById(R.id.view_srec);
 
 			// Disable button if no recognition service is present
 			PackageManager pm = activity.getPackageManager();
@@ -3330,7 +3316,7 @@ public class NavitGraphics
 				});
 			}
 
-			View vv_compass = (View) activity.findViewById(R.id.osd_compass_new);
+			View vv_compass = activity.findViewById(R.id.osd_compass_new);
 			vv_compass.bringToFront();
 
 			vv_compass.setOnClickListener(new View.OnClickListener()
@@ -3359,24 +3345,24 @@ public class NavitGraphics
 				}
 			});
 
-			View vv_speeding = (View) activity.findViewById(R.id.view_speeding);
+			View vv_speeding = activity.findViewById(R.id.view_speeding);
 			vv_speeding.bringToFront();
 
-			View vv_laneassist = (View) activity.findViewById(R.id.view_laneassist);
+			View vv_laneassist = activity.findViewById(R.id.view_laneassist);
 			vv_laneassist.bringToFront();
 
-			whats_here_container_wrap = (RelativeLayout) activity.findViewById(R.id.whats_here_container_wrap);
+			whats_here_container_wrap = activity.findViewById(R.id.whats_here_container_wrap);
 			whats_here_container_wrap.bringToFront();
 			params_whats_here_container_wrap = (android.widget.RelativeLayout.LayoutParams) whats_here_container_wrap.getLayoutParams();
 
-			whats_here_pointer_image = (ImageView) activity.findViewById(R.id.whats_here_pointer_image);
+			whats_here_pointer_image = activity.findViewById(R.id.whats_here_pointer_image);
 			whats_here_pointer_image.bringToFront();
 			params_whats_here_pointer_image = (android.widget.RelativeLayout.LayoutParams) whats_here_pointer_image.getLayoutParams();
 
-			whats_here_button_add_to = (ImageButton) activity.findViewById(R.id.whats_here_button_add_to);
-			whats_here_button_whats = (ImageButton) activity.findViewById(R.id.whats_here_button_whats);
-			whats_here_button_drive = (ImageButton) activity.findViewById(R.id.whats_here_button_drive);
-			whats_here_text = (TextView) activity.findViewById(R.id.whats_here_text);
+			ImageButton whats_here_button_add_to = activity.findViewById(R.id.whats_here_button_add_to);
+			ImageButton whats_here_button_whats = activity.findViewById(R.id.whats_here_button_whats);
+			ImageButton whats_here_button_drive = activity.findViewById(R.id.whats_here_button_drive);
+			whats_here_text = activity.findViewById(R.id.whats_here_text);
 
 			whats_here_button_add_to.setOnClickListener(new View.OnClickListener()
 			{
@@ -3420,7 +3406,7 @@ public class NavitGraphics
 				}
 			});
 
-			no_maps_container = (RelativeLayout) activity.findViewById(R.id.no_maps_container);
+			no_maps_container = activity.findViewById(R.id.no_maps_container);
 			no_maps_container.bringToFront();
 			try
 			{
@@ -3437,10 +3423,10 @@ public class NavitGraphics
 			{
 			}
 
-			View vv_bottom_bar = (View) activity.findViewById(R.id.bottom_bar_slide);
+			View vv_bottom_bar = activity.findViewById(R.id.bottom_bar_slide);
 			vv_bottom_bar.bringToFront();
 
-			vv_bottom_bar = (View) activity.findViewById(R.id.bottom_bar_container);
+			vv_bottom_bar = activity.findViewById(R.id.bottom_bar_container);
 			vv_bottom_bar.bringToFront();
 
 			// x4x activity.setContentView(relativelayout);
@@ -3499,12 +3485,12 @@ public class NavitGraphics
 			pos_x = x;
 			// System.out.println("px set:006");
 			pos_y = y;
-			pos_wraparound = wraparound;
+			// drag post
 			draw_canvas = new Canvas(draw_bitmap);
 			// DPI
 			//draw_canvas.setDensity(Global_want_dpi);
 
-			this.activity = activity;
+			activity1 = activity;
 			view = new View(activity)
 			{
 				// Vehicle ---------------------------
@@ -3687,14 +3673,14 @@ public class NavitGraphics
 	public static native void SizeChangedCallbackReal(int w, int h, Bitmap main_map_bitmap);
 
 	// DrawLowqualMap_wrapper("" + my_lat + "#" + my_lon + "#" + 18, 400, 400, 11, 8192, 100000);
-	public static void DrawLowqualMap_wrapper(String latlonzoom, int w, int h, int fontsize, int scale, int selection_range)
+	private static void DrawLowqualMap_wrapper(String latlonzoom, int w, int h, int fontsize, int scale, int selection_range)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 		Navit.cwthr.DrawLowqualMap_wrapper(latlonzoom, w, h, fontsize, scale, selection_range);
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static void SizeChangedCallback(int w, int h, Bitmap main_map_bitmap)
+	private static void SizeChangedCallback(int w, int h, Bitmap main_map_bitmap)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 		Navit.cwthr.SizeChangedCallback(w, h, main_map_bitmap);
@@ -3758,9 +3744,9 @@ public class NavitGraphics
 		// **disabled** Navit.N_NavitGraphics = this;
 	}
 
-	Paint paint_dr_polyl = new Paint();
+	private final Paint paint_dr_polyl = new Paint();
 
-	protected void draw_polyline(int c[], int width, int r, int g, int b, int a)
+	protected void draw_polyline(int[] c, int width, int r, int g, int b, int a)
 	{
 		paint_dr_polyl.setARGB(a, r, g, b);
 		paint_dr_polyl.setStrokeWidth(width);
@@ -3783,7 +3769,7 @@ public class NavitGraphics
 		//paint.setPathEffect(dashed_map_lines__no_dash);
 	}
 
-	protected void draw_polyline2__NEW(Paint paint, int c[], int order, int oneway)
+	protected void draw_polyline2__NEW(Paint paint, int[] c, int order, int oneway)
 	{
 		if (dl_thread[0] == null)
 		{
@@ -3806,7 +3792,7 @@ public class NavitGraphics
 		dl_thread[dl_thread_cur].add_lines3(paint, c, order, oneway);
 	}
 
-	static void draw_polyline2_threads(Paint paint, int c[], int order, int oneway)
+	private static void draw_polyline2_threads(Paint paint, int[] c, int order, int oneway)
 	{
 		if (!Navit.p.PREF_gui_oneway_arrows)
 		{
@@ -3861,19 +3847,11 @@ public class NavitGraphics
 		}
 	}
 
-	int len_dr_polyl2;
-	double d_x_dr_polyl2;
-	double d_y_dr_polyl2;
-	int bow_move_x;
-	int bow_move_y;
-	int middle_x_dr_polyl2;
-	int middle_y_dr_polyl2;
-	int angle_dr_polyl2;
-	int angle_dr_polyl2_move;
-	double bow_scale_move;
-	Matrix matrix_oneway_arrows2 = new Matrix();
+	private int angle_dr_polyl2_move;
+	private double bow_scale_move;
+	private final Matrix matrix_oneway_arrows2 = new Matrix();
 
-	protected void draw_polyline2(int c[], int order, int oneway)
+	protected void draw_polyline2(int[] c, int order, int oneway)
 	{
 		// Log.e("NavitGraphics", "draw_polyline2 count=" + c.length);
 		if (!Navit.p.PREF_gui_oneway_arrows)
@@ -3891,7 +3869,7 @@ public class NavitGraphics
 		//{
 
 		// line less than 28px -> dont draw arrow!
-		len_dr_polyl2 = (c[0] - c[2]) * (c[1] - c[3]);
+		int len_dr_polyl2 = (c[0] - c[2]) * (c[1] - c[3]);
 		if (len_dr_polyl2 < 0)
 		{
 			len_dr_polyl2 = -len_dr_polyl2;
@@ -3909,11 +3887,11 @@ public class NavitGraphics
 			// calc this in c-code !! will be much faster!!
 			// calc this in c-code !! will be much faster!!
 			// calc this in c-code !! will be much faster!!
-			d_x_dr_polyl2 = ((c[2] - c[0]));
-			d_y_dr_polyl2 = ((c[3] - c[1]));
-			middle_x_dr_polyl2 = c[0] + (int) (d_x_dr_polyl2 / 6);
-			middle_y_dr_polyl2 = c[1] + (int) (d_y_dr_polyl2 / 6);
-			angle_dr_polyl2 = (int) (Math.toDegrees(Math.atan2(d_y_dr_polyl2, d_x_dr_polyl2)));
+			double d_x_dr_polyl2 = ((c[2] - c[0]));
+			double d_y_dr_polyl2 = ((c[3] - c[1]));
+			int middle_x_dr_polyl2 = c[0] + (int) (d_x_dr_polyl2 / 6);
+			int middle_y_dr_polyl2 = c[1] + (int) (d_y_dr_polyl2 / 6);
+			int angle_dr_polyl2 = (int) (Math.toDegrees(Math.atan2(d_y_dr_polyl2, d_x_dr_polyl2)));
 			// calc this in c-code !! will be much faster!!
 			// calc this in c-code !! will be much faster!!
 			// calc this in c-code !! will be much faster!!
@@ -3985,8 +3963,8 @@ public class NavitGraphics
 						// calc this in c-code !! will be much faster!!
 						// calc this in c-code !! will be much faster!!
 						// calc this in c-code !! will be much faster!!
-						bow_move_x = -(int) (Math.cos(Math.toRadians(angle_dr_polyl2_move)) * (double) (bow_scale_move * (3 + Navit.oneway_bicycle_arrow.getWidth())));
-						bow_move_y = -(int) (Math.sin(Math.toRadians(angle_dr_polyl2_move)) * (double) (bow_scale_move * (3 + Navit.oneway_bicycle_arrow.getWidth())));
+						int bow_move_x = -(int) (Math.cos(Math.toRadians(angle_dr_polyl2_move)) * (double) (bow_scale_move * (3 + Navit.oneway_bicycle_arrow.getWidth())));
+						int bow_move_y = -(int) (Math.sin(Math.toRadians(angle_dr_polyl2_move)) * (double) (bow_scale_move * (3 + Navit.oneway_bicycle_arrow.getWidth())));
 						// calc this in c-code !! will be much faster!!
 						// calc this in c-code !! will be much faster!!
 						// calc this in c-code !! will be much faster!!
@@ -4016,7 +3994,7 @@ public class NavitGraphics
 		//paint.setPathEffect(dashed_map_lines__no_dash);
 	}
 
-	public static class draw_object
+	static class draw_object
 	{
 		int type;
 		Paint paint;
@@ -4038,15 +4016,14 @@ public class NavitGraphics
 		int dy;
 	}
 
-	public static class DrawLinesThread extends Thread
+	static class DrawLinesThread extends Thread
 	{
 		private Boolean running;
 		private Boolean start_drawing;
-		private final LinkedBlockingQueue<draw_object> queue = new LinkedBlockingQueue<draw_object>();
+		private final LinkedBlockingQueue<draw_object> queue = new LinkedBlockingQueue<>();
 
 		int i = 0;
-		private draw_object l2;
-		int thread_num;
+		final int thread_num;
 		int counter = 0;
 
 		int m_x;
@@ -4071,7 +4048,7 @@ public class NavitGraphics
 			m_c = true;
 		}
 
-		public void add_text(Paint paint, int x, int y, String text, int size, int dx, int dy)
+		void add_text(Paint paint, int x, int y, String text, int size, int dx, int dy)
 		{
 			draw_object l = new draw_object();
 			l.type = 1; // text
@@ -4091,7 +4068,7 @@ public class NavitGraphics
 			queue.offer(l);
 		}
 
-		public void add_lines(Paint paint, int c[], int order, int width)
+		void add_lines(Paint paint, int[] c, int order, int width)
 		{
 			draw_object l = new draw_object();
 			l.type = 0; // line
@@ -4107,7 +4084,7 @@ public class NavitGraphics
 			queue.offer(l);
 		}
 
-		public void add_lines3(Paint paint, int c[], int order, int oneway)
+		void add_lines3(Paint paint, int[] c, int order, int oneway)
 		{
 			draw_object l = new draw_object();
 			l.type = 3; // line (one way arrows)
@@ -4123,7 +4100,7 @@ public class NavitGraphics
 			queue.offer(l);
 		}
 
-		public void add_lines2(Paint paint, int c[], int order, int width, int line_type)
+		void add_lines2(Paint paint, int[] c, int order, int width, int line_type)
 		{
 			draw_object l = new draw_object();
 
@@ -4204,7 +4181,7 @@ public class NavitGraphics
 					try
 					{
 						// blocking call
-						l2 = queue.take();
+						draw_object l2 = queue.take();
 						// non-blocking call
 						// l2 = queue.poll();
 						if (l2 != null)
@@ -4279,7 +4256,7 @@ public class NavitGraphics
 		}
 	}
 
-	protected void draw_polyline3___NEW(Paint paint, int c[], int order, int width)
+	protected void draw_polyline3___NEW(Paint paint, int[] c, int order, int width)
 	{
 		if (dl_thread[0] == null)
 		{
@@ -4302,7 +4279,7 @@ public class NavitGraphics
 		dl_thread[dl_thread_cur].add_lines(paint, c, order, width);
 	}
 
-	static void draw_polyline3_threads(Paint paint, int c[], int order, int width)
+	private static void draw_polyline3_threads(Paint paint, int[] c, int order, int width)
 	{
 		//	Log.e("NavitGraphics","draw_polyline3_threads");
 		paint.setStyle(Paint.Style.STROKE);
@@ -4337,12 +4314,11 @@ public class NavitGraphics
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
-	Paint paint_dr_poly3 = new Paint();
-	int i_dr_poly3;
+	private final Paint paint_dr_poly3 = new Paint();
 
-	Path path_polyline_3_arrow_head = new Path();
+	private final Path path_polyline_3_arrow_head = new Path();
 
-	protected void draw_polyline3(int c[], int order, int width, int dashes, int r, int g, int b, int a, int with_end)
+	protected void draw_polyline3(int[] c, int order, int width, int dashes, int r, int g, int b, int a, int with_end)
 	{
 
 		paint_dr_poly3.setARGB(a, r, g, b);
@@ -4368,6 +4344,7 @@ public class NavitGraphics
 			draw_canvas.drawCircle(c[0], c[1], (width / 2), paint_dr_poly3);
 		}
 
+		int i_dr_poly3;
 		for (i_dr_poly3 = 2; i_dr_poly3 < c.length; i_dr_poly3 += 2)
 		{
 			if ((order > DRAW_MORE_DETAILS_AT_ORDER) && (with_end == 1))
@@ -4494,10 +4471,9 @@ public class NavitGraphics
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
 	// draw normal polylines -> this function gets called the most!! XX-thousand times
-	Paint paint_dr_poly4 = new Paint();
-	int i_dr_poly4;
+	private final Paint paint_dr_poly4 = new Paint();
 
-	protected void draw_polyline4(int c[], int order, int width, int type, int dashes, int r, int g, int b, int a, int with_end)
+	protected void draw_polyline4(int[] c, int order, int width, int type, int dashes, int r, int g, int b, int a, int with_end)
 	{
 		// type:0 -> normal line
 		// type:1 -> underground (tunnel)
@@ -4544,6 +4520,7 @@ public class NavitGraphics
 			type = 0;
 		}
 
+		int i_dr_poly4;
 		if (type == 2)
 		{
 			// bridge
@@ -4615,7 +4592,7 @@ public class NavitGraphics
 		//paint.setStrokeWidth(wsave_004);
 	}
 
-	protected void draw_polyline4__NEW(Paint paint, int c[], int order, int width, int type)
+	protected void draw_polyline4__NEW(Paint paint, int[] c, int order, int width, int type)
 	{
 		if (dl_thread[0] == null)
 		{
@@ -4639,7 +4616,7 @@ public class NavitGraphics
 	}
 
 	// for bridge or tunnel this function is used
-	static void draw_polyline4_threads(Paint paint, int c[], int order, int width, int type)
+	private static void draw_polyline4_threads(Paint paint, int[] c, int order, int width, int type)
 	{
 		// type:0 -> normal line
 		// type:1 -> underground (tunnel)
@@ -4720,7 +4697,7 @@ public class NavitGraphics
 
 	// for bridge or tunnel this function is used
 
-	protected void set_dashes(Paint paint, int variant, int order)
+	private void set_dashes(Paint paint, int variant, int order)
 	{
 		if (variant == 0)
 		{
@@ -4738,12 +4715,12 @@ public class NavitGraphics
 		}
 	}
 
-	protected void draw_polyline_dashed(Paint paint, int c[], int order, int oneway)
+	protected void draw_polyline_dashed(Paint paint, int[] c, int order, int oneway)
 	{
 		// emtpy dummy for C-Code
 	}
 
-	protected void draw_polyline_dashed______UNUSED(Paint paint, int c[], int order, int oneway)
+	protected void draw_polyline_dashed______UNUSED(Paint paint, int[] c, int order, int oneway)
 	{
 		//
 		//
@@ -4755,7 +4732,7 @@ public class NavitGraphics
 		b_paint_antialias = paint.isAntiAlias();
 		paint.setAntiAlias(Navit.p.PREF_use_anti_aliasing);
 
-		Boolean normal = false;
+		boolean normal = false;
 
 		// create matrix for the manipulation
 		Matrix matrix = new Matrix();
@@ -4830,10 +4807,9 @@ public class NavitGraphics
 		paint.setAntiAlias(b_paint_antialias);
 	}
 
-	Paint paint_draw_polygon = new Paint();
-	int dr_poly_i;
+	private final Paint paint_draw_polygon = new Paint();
 
-	void ClearPreview_bitmap()
+	private void ClearPreview_bitmap()
 	{
 		if (preview_bitmap != null)
 		{
@@ -4853,7 +4829,7 @@ public class NavitGraphics
 		preview_bitmap = bitmap;
 	}
 	
-	static void DrawPreview_polyline(int type, int c[], String type2)
+	static void DrawPreview_polyline(int type, int[] c, String type2)
 	{
 		if (preview_bitmap != null)
 		{
@@ -5057,7 +5033,7 @@ public class NavitGraphics
 	// this is used to draw filled polygons ---------------------------------------------
 	// this is used to draw filled polygons ---------------------------------------------
 	// this is used to draw filled polygons ---------------------------------------------
-	protected void draw_polygon(int c[], int width, int r, int g, int b, int a)
+	protected void draw_polygon(int[] c, int width, int r, int g, int b, int a)
 	{
 		paint_draw_polygon.setARGB(a, r, g, b);
 		paint_draw_polygon.setStrokeWidth(width);
@@ -5070,6 +5046,7 @@ public class NavitGraphics
 
 		b_paint_path.reset();
 		b_paint_path.moveTo(c[0], c[1]);
+		int dr_poly_i;
 		for (dr_poly_i = 2; dr_poly_i < c.length; dr_poly_i += 2)
 		{
 			b_paint_path.lineTo(c[dr_poly_i], c[dr_poly_i + 1]);
@@ -5083,7 +5060,7 @@ public class NavitGraphics
 	// this is used to draw filled polygons ---------------------------------------------
 	// this is used to draw filled polygons ---------------------------------------------
 
-	protected void draw_polygon2(Paint paint, int c[], int order, int oneway)
+	protected void draw_polygon2(Paint paint, int[] c, int order, int oneway)
 	{
 		paint.setStyle(Paint.Style.FILL);
 		b_paint_antialias = paint.isAntiAlias();
@@ -5195,7 +5172,7 @@ public class NavitGraphics
 		dl_thread[dl_thread_cur].add_text(paint, x, y, text, size, dx, dy);
 	}
 
-	static void draw_text_threads(Paint paint, int x, int y, String text, int size, int dx, int dy)
+	private static void draw_text_threads(Paint paint, int x, int y, String text, int size, int dx, int dy)
 	{
 		//		float fx = x;
 		//		float fy = y;
@@ -5276,7 +5253,7 @@ public class NavitGraphics
 		}
 	}
 
-	Paint paint_draw_text = new Paint();
+	private final Paint paint_draw_text = new Paint();
 
 	protected void draw_text(int x, int y, String text, int size, int dx, int dy, int r, int g, int b, int a)
 	{
@@ -5421,15 +5398,7 @@ public class NavitGraphics
 		// dummy -> do nothing!!
 	}
 
-	float dw__new_len;
-	float dw__scale_x_y;
-	float dw__deltaY;
-	float dw__deltaX;
-	float dw__angle_deg;
 	final int dw__map_tile_x = 256;
-	final int dw__map_tile_y = 256;
-	Bitmap dw__bitmap = null;
-	InputStream dw__infile;
 
 	// ", "(Ljava/lang/String;IIIIIIIII)V
 	protected void draw_warp(String imagepath, int count, int p0x, int p0y, int p1x, int p1y, int p2x, int p2y)
@@ -5452,7 +5421,7 @@ public class NavitGraphics
 
 		try
 		{
-			dw__bitmap = null;
+			Bitmap dw__bitmap = null;
 
 			//if (imagepath.startsWith("6/"))
 			//{
@@ -5462,7 +5431,7 @@ public class NavitGraphics
 			//{
 			try
 			{
-				dw__infile = Navit.asset_mgr.open(imagepath);
+				InputStream dw__infile = Navit.asset_mgr.open(imagepath);
 				dw__bitmap = BitmapFactory.decodeStream(dw__infile);
 				dw__infile.close();
 			}
@@ -5476,11 +5445,12 @@ public class NavitGraphics
 			{
 				// imlib_render_image_on_drawable_skewed(0, 0, w, h, p[0].x, p[0].y, p[1].x-p[0].x, p[1].y-p[0].y, p[2].x-p[0].x, p[2].y-p[0].y);
 				//matrix.setRotate(90.0f); // Degrees
-				dw__new_len = (float) (Math.sqrt(((p1x - p0x) * (p1x - p0x)) + ((p1y - p0y) * (p1y - p0y))));
-				dw__scale_x_y = dw__new_len / dw__map_tile_y;
-				dw__deltaY = -p1y + p0y;
-				dw__deltaX = p1x - p0x;
-				dw__angle_deg = -(float) (Math.atan2(dw__deltaY, dw__deltaX) * 180d / Math.PI);
+				float dw__new_len = (float) (Math.sqrt(((p1x - p0x) * (p1x - p0x)) + ((p1y - p0y) * (p1y - p0y))));
+				int dw__map_tile_y = 256;
+				float dw__scale_x_y = dw__new_len / dw__map_tile_y;
+				float dw__deltaY = -p1y + p0y;
+				float dw__deltaX = p1x - p0x;
+				float dw__angle_deg = -(float) (Math.atan2(dw__deltaY, dw__deltaX) * 180d / Math.PI);
 				//System.out.println("_warp: angle=" + angle_deg);
 				matrix_maptile.reset();
 				matrix_maptile.postTranslate(p0x, p0y - (dw__map_tile_y * dw__scale_x_y));
@@ -5515,7 +5485,7 @@ public class NavitGraphics
 
 		// System.out.println("NavitOSDJava:" + id + " " + text1 + " " + text2 + " " + text3 + " " + i1 + " " + i2 + " " + i3 + " " + i4 + " " + f1 + " " + f2 + " " + f3);
 		// System.out.println("NavitOSDJava:" + last_paint_OSD);
-		Boolean needed_value = false;
+		boolean needed_value = false;
 		try
 		{
 			if (id.equals("scale"))
@@ -5841,7 +5811,7 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	static void copy_map_buffer()
+	private static void copy_map_buffer()
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -5912,7 +5882,7 @@ public class NavitGraphics
 						}
 
 						String left_top_on_screen_string = CallbackGeoCalc(11, rr.x1, rr.y1);
-						String tmp[] = left_top_on_screen_string.split(":", 2);
+						String[] tmp = left_top_on_screen_string.split(":", 2);
 						int xx1 = Integer.parseInt(tmp[0]);
 						int yy1 = Integer.parseInt(tmp[1]);
 						// System.out.println("route_rect:: " + xx1 + "," + yy1);
@@ -6020,7 +5990,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	static String __n_distance(int i)
+	private static String __n_distance(int i)
 	{
 		String ret = "";
 		if ((i > 0) && (i < 10))
@@ -6050,7 +6020,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	static String __get_distance(int i, int is_length)
+	private static String __get_distance(int i, int is_length)
 	{
 		String ret = "";
 
@@ -6128,7 +6098,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	static String __direction(int i)
+	private static String __direction(int i)
 	{
 		String ret = "";
 
@@ -6147,7 +6117,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	static String __strength(int i)
+	private static String __strength(int i)
 	{
 		String ret = "";
 
@@ -6172,7 +6142,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	static String __navigation_item_destination(int i)
+	private static String __navigation_item_destination(int i)
 	{
 		String ret = "";
 
@@ -7070,8 +7040,8 @@ public class NavitGraphics
 	// call C-function to get value --> not used anymore now!!
 	public static native int CallbackDestinationValid();
 
-	public static Handler callback_handler = Navit.callback_handler_55;
-	public static Handler callback_handler_s = Navit.callback_handler_55;
+	public static final Handler callback_handler = Navit.callback_handler_55;
+	public static final Handler callback_handler_s = Navit.callback_handler_55;
 
 	//
 	//
@@ -7284,7 +7254,7 @@ public class NavitGraphics
 				{
 					try
 					{
-						TextView no_maps_text = (TextView) Navit.Global_Navit_Object.findViewById(R.id.no_maps_text);
+						TextView no_maps_text = Navit.Global_Navit_Object.findViewById(R.id.no_maps_text);
 						no_maps_text.setText("\n\n\n" + Navit.get_text("Some Maps are too old!") + "\n" + Navit.get_text("Please update your maps") + "\n\n");
 
 						// *TODO*
@@ -7370,17 +7340,17 @@ public class NavitGraphics
 	public static float ddx_last = 0;
 	public static float ddy_last = 0;
 	public static float dda_last = 0;
-	public static float ddx = 0;
-	public static float ddz = 0;
-	public static float ddy = 0;
-	public static float dda = 0f;
-	public static long last_vehicle_position_timestamp = 0L;
-	public static long Vehicle_updates_interval = 1000; // normal android phone gives position every 1000ms (=1 sec)
-	public static int Vehicle_smooth_moves_count = 3; // how many intermediate moves do we want to draw
-	public static int Vehicle_smooth_move_delay = 180;
-	public static int Vehicle_smooth_move_delay_real_used = Vehicle_smooth_move_delay;
+	private static float ddx = 0;
+	private static float ddz = 0;
+	private static float ddy = 0;
+	private static float dda = 0f;
+	private static long last_vehicle_position_timestamp = 0L;
+	private static long Vehicle_updates_interval = 1000; // normal android phone gives position every 1000ms (=1 sec)
+	private static int Vehicle_smooth_moves_count = 3; // how many intermediate moves do we want to draw
+	private static int Vehicle_smooth_move_delay = 180;
+	private static int Vehicle_smooth_move_delay_real_used = Vehicle_smooth_move_delay;
 	public static int Vehicle_delay_real_gps_position = 650; // normal value for smooth delay = 450
-	public static final int max_turn_angle = 190;
+	private static final int max_turn_angle = 190;
 
 	static class SmoothDriveThread_t_A extends Thread
 	{
@@ -7500,13 +7470,9 @@ public class NavitGraphics
 		}
 	}
 
-	static SmoothDriveThread_t_B STT_B = null;
-
-	static SmoothDriveThread_t_B[] STT_B_list = new SmoothDriveThread_t_B[10];
+	private static final SmoothDriveThread_t_B[] STT_B_list = new SmoothDriveThread_t_B[10];
 	static int STT_B_list_curr = 0;
 	static boolean[] STT_B_list_valid = new boolean[10];
-
-	static SmoothDriveThread_t_A STT_A = null;
 
 	static Thread UNUSED__SmoothDriveThread_A = new Thread(new Runnable()
 	{
@@ -7589,7 +7555,7 @@ public class NavitGraphics
 	{
 		boolean is_thread_cancel = false;
 
-		public void cancel_previous()
+		void cancel_previous()
 		{
 			is_thread_cancel = true;
 			// System.out.println("DO__DRAW:Java:cancel_previous");
@@ -8192,7 +8158,7 @@ public class NavitGraphics
 		// now move the map (to have smooth driving)
 		//System.out.println("" + xxx + "--set_vehicle_values_delta-- START");
 		//System.out.println("" + xxx + "--set_vehicle_values_delta-- Thread start");
-		STT_A = new SmoothDriveThread_t_A();
+		SmoothDriveThread_t_A STT_A = new SmoothDriveThread_t_A();
 		STT_A.start();
 		//System.out.println("translate, rotate");		
 		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:" + xxx + "--set_vehicle_values_delta-- END ++++++++++++");
@@ -8273,7 +8239,7 @@ public class NavitGraphics
 		}
 	}
 
-	static void activate_nav_wakelock()
+	private static void activate_nav_wakelock()
 	{
 		try
 		{
@@ -8488,6 +8454,7 @@ public class NavitGraphics
 		}
 		else if (id == 2)
 		{
+			boolean map_c_drawing = false;
 			if (i == 1)
 			{
 				// id=2,1 -> map draw finished
@@ -8553,7 +8520,7 @@ public class NavitGraphics
 					{
 						STT_B_list[2].cancel_previous();
 					}
-					STT_B = new SmoothDriveThread_t_B();
+					SmoothDriveThread_t_B STT_B = new SmoothDriveThread_t_B();
 					STT_B_list[2] = STT_B_list[1];
 					STT_B_list[1] = STT_B_list[0];
 					STT_B_list[0] = STT_B;
@@ -8667,16 +8634,16 @@ public class NavitGraphics
 		return (Bitmap.createBitmap(in, 0, 0, width, height, matrix, true));
 	}
 
-	public static class route_rect
+	static class route_rect
 	{
 		int x1;
 		int y1;
 		int x2;
 		int y2;
 		int order;
-	};
+	}
 
-	public static ArrayList<route_rect> route_rects = new ArrayList<route_rect>();
+	public static ArrayList<route_rect> route_rects = new ArrayList<>();
 
 	public static void send_alert_to_java(int id, String text)
 	{
@@ -8709,7 +8676,7 @@ public class NavitGraphics
 
 		if (route_rects == null)
 		{
-			route_rects = new ArrayList<route_rect>();
+			route_rects = new ArrayList<>();
 		}
 
 		// System.out.println("route_rect::send:" + order + ":" + x1 + " " + y1 + " " + x2 + " " + y2);
@@ -8744,7 +8711,7 @@ public class NavitGraphics
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.getBaseContext_.getResources().getDisplayMetrics());
 	}
 
-	public static void cancel_preview_map_drawing()
+	private static void cancel_preview_map_drawing()
 	{
 		// System.out.println("cancel_preview_map_drawing:001");
 
@@ -8759,5 +8726,5 @@ public class NavitGraphics
 		}
 	}
 
-	static long last_map_postInvalidate = -1L;
+	private static long last_map_postInvalidate = -1L;
 }

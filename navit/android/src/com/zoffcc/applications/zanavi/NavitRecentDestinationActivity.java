@@ -51,13 +51,12 @@ public class NavitRecentDestinationActivity extends ListActivity
 	private int selected_id = -1;
 	private int my_id = 0;
 	private String[] context_items = null;
-	static Navit_Point_on_Map t = null;
-	static int t_position = -1;
-	static int t_size = -1;
-	static Boolean refresh_items = false;
-	static NavitRecentDestinationActivity my = null;
-	private static ArrayList<String> listview_items = new ArrayList<String>();
-	private static ArrayList<String> listview_addons = new ArrayList<String>();
+	private static Navit_Point_on_Map t = null;
+	private static int t_position = -1;
+	private static int t_size = -1;
+	private static NavitRecentDestinationActivity my = null;
+	private static final ArrayList<String> listview_items = new ArrayList<>();
+	private static final ArrayList<String> listview_addons = new ArrayList<>();
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState)
@@ -121,7 +120,7 @@ public class NavitRecentDestinationActivity extends ListActivity
 		// gueard against nullpointer
 		if (Navit.map_points == null)
 		{
-			Navit.map_points = new ArrayList<Navit_Point_on_Map>();
+			Navit.map_points = new ArrayList<>();
 		}
 		// crash reported on google play store
 		// guard against nullpointer
@@ -177,7 +176,7 @@ public class NavitRecentDestinationActivity extends ListActivity
 		super.onPause();
 	}
 
-	public static Handler handler1 = new Handler()
+	private static final Handler handler1 = new Handler()
 	{
 		public void handleMessage(Message msg)
 		{
@@ -189,7 +188,7 @@ public class NavitRecentDestinationActivity extends ListActivity
 		}
 	};
 
-	public static void refresh_items(int i)
+	private static void refresh_items(int i)
 	{
 		Message msg = new Message();
 		Bundle b = new Bundle();
@@ -199,7 +198,7 @@ public class NavitRecentDestinationActivity extends ListActivity
 		handler1.sendMessage(msg);
 	}
 
-	public static void refresh_items_real(int i)
+	private static void refresh_items_real(int i)
 	{
 		String[] t = new String[Navit.map_points.size()];
 		String[] t_addons = new String[Navit.map_points.size()];
@@ -231,7 +230,6 @@ public class NavitRecentDestinationActivity extends ListActivity
 			listview_addons.add(null);
 		}
 		adapter.notifyDataSetChanged();
-		refresh_items = false;
 	}
 
 	@Override
@@ -269,8 +267,6 @@ public class NavitRecentDestinationActivity extends ListActivity
 			Navit.map_points.remove(t_size - t_position - 1);
 			// save it
 			Navit.write_map_points();
-			// refresh
-			refresh_items = true;
 			refresh_items(1);
 			break;
 		case 1:
@@ -287,8 +283,6 @@ public class NavitRecentDestinationActivity extends ListActivity
 					System.out.println("new=" + newname);
 					// save it
 					Navit.write_map_points();
-					// refresh
-					refresh_items = true;
 					refresh_items(0);
 				}
 			}
@@ -345,8 +339,6 @@ public class NavitRecentDestinationActivity extends ListActivity
 			Navit.map_points.add(NavitRecentDestinationActivity.t);
 			// save it
 			Navit.write_map_points();
-			// refresh
-			refresh_items = true;
 			refresh_items(0);
 			break;
 		}
@@ -359,10 +351,9 @@ public class NavitRecentDestinationActivity extends ListActivity
 		super.onListItemClick(l, v, position, id);
 		// Get the item that was clicked
 
-		int t_p = position;
 		int t_s = Navit.map_points.size();
 		// compensate "selected_id" for reverse listing order of items!
-		this.selected_id = t_s - t_p - 1;
+		this.selected_id = t_s - position - 1;
 		// close this activity
 		executeDone(0);
 	}

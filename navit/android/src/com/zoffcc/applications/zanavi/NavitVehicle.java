@@ -67,59 +67,50 @@ public class NavitVehicle
 {
 	private LocationManager locationManager = null;
 	private static LocationManager locationManager_s = null;
-	private String preciseProvider = null;
-	private String fastProvider = null;
 	private static LocationListener fastLocationListener_s = null;
 	private static LocationListener preciseLocationListener_s = null;
 	private static GpsStatus.Listener gps_status_listener_s = null;
 	private static float compass_heading;
 	private static float current_accuracy = 99999999F;
 	private static long last_real_gps_update = -1;
-	static boolean sat_status_enabled = false;
+	private static boolean sat_status_enabled = false;
 	static boolean sat_status_icon_updated = false;
 	static int sat_status_icon_last = -1;
 	static int sat_status_icon_now = -1;
-	static float gps_last_bearing = 0.0f;
-	static double gps_last_lat = 0.0d;
-	static double gps_last_lon = 0.0d;
-	static int gps_last_lat_1000 = 0;
-	static int gps_last_lon_1000 = 0;
-	static int fast_provider_status = 0;
-	static int disregard_first_fast_location = 0;
-	static String[] cmd_name = new String[4];
+	private static float gps_last_bearing = 0.0f;
+	private static int fast_provider_status = 0;
+	private static int disregard_first_fast_location = 0;
+	private static final String[] cmd_name = new String[4];
 
-	static long MILLIS_AFTER_GPS_FIX_IS_LOST = 2000;
+	private static final long MILLIS_AFTER_GPS_FIX_IS_LOST = 2000;
 
-	static TunnelExtrapolationThread te_thread = null;
+	private static TunnelExtrapolationThread te_thread = null;
 
 	static boolean is_pos_recording = false;
-	static File pos_recording_file;
-	// static File pos_recording_file_gpx;
-	static File speech_recording_file_gpx;
-	static BufferedWriter pos_recording_writer;
+	private static File pos_recording_file;
+	private static BufferedWriter pos_recording_writer;
 	// static BufferedWriter pos_recording_writer_gpx;
-	static BufferedWriter speech_recording_writer_gpx;
+	private static BufferedWriter speech_recording_writer_gpx;
 	static boolean speech_recording_started = false;
 	// DateFormat sdf = new DateFormat();
 
-	int sats1_old = -1;
-	int satsInFix1_old = -1;
+	private int sats1_old = -1;
+	private int satsInFix1_old = -1;
 
-	public static Handler vehicle_handler_ = null;
-	public static long lastcompass_update_timestamp = 0L;
+	private static long lastcompass_update_timestamp = 0L;
 
-	public static final float GPS_SPEED_ABOVE_USE_FOR_HEADING = (float) (9 / 3.6f); //  (9 km/h) / (3.6) ~= m/s
+	private static final float GPS_SPEED_ABOVE_USE_FOR_HEADING = (float) (9 / 3.6f); //  (9 km/h) / (3.6) ~= m/s
 
 	private static String preciseProvider_s = null;
-	static String fastProvider_s = null;
+	private static String fastProvider_s = null;
 
-	public static long last_p_fix = 0;
-	public static long last_f_fix = 0;
+	private static long last_p_fix = 0;
+	private static long last_f_fix = 0;
 	public Bundle gps_extras = null;
-	public static GpsStatus gps_status = null;
+	private static GpsStatus gps_status = null;
 	public static Boolean update_location_in_progress = false;
 
-	static long last_gps_status_update = 0L;
+	private static long last_gps_status_update = 0L;
 
 	static DecimalFormat df2 = new DecimalFormat("#.####");
 
@@ -167,10 +158,10 @@ public class NavitVehicle
 				if (Navit.NAVIT_DEBUG_TEXT_VIEW) ZANaviOSDDebug01.add_text(dd_text + "b=" + location.getBearing() + " lb=" + gps_last_bearing);
 
 				Navit.cwthr.VehicleCallback3(location);
-				gps_last_lat = location.getLatitude();
-				gps_last_lon = location.getLongitude();
-				gps_last_lat_1000 = (int) (gps_last_lat * 1000);
-				gps_last_lon_1000 = (int) (gps_last_lon * 1000);
+				double gps_last_lat = location.getLatitude();
+				double gps_last_lon = location.getLongitude();
+				int gps_last_lat_1000 = (int) (gps_last_lat * 1000);
+				int gps_last_lon_1000 = (int) (gps_last_lon * 1000);
 			}
 		}
 		else
@@ -203,13 +194,9 @@ public class NavitVehicle
 					{
 						GpsStatus stat = locationManager.getGpsStatus(gps_status);
 						gps_status = stat;
-						Iterator<GpsSatellite> localIterator = stat.getSatellites().iterator();
-						while (localIterator.hasNext())
-						{
-							GpsSatellite localGpsSatellite = (GpsSatellite) localIterator.next();
+						for (GpsSatellite localGpsSatellite : stat.getSatellites()) {
 							sats1++;
-							if (localGpsSatellite.usedInFix())
-							{
+							if (localGpsSatellite.usedInFix()) {
 								satsInFix1++;
 							}
 						}
@@ -306,7 +293,7 @@ public class NavitVehicle
 		// ---------------------
 		// ---------------------
 
-		vehicle_handler_ = Navit.vehicle_handler;
+		Handler vehicle_handler_ = Navit.vehicle_handler;
 
 		cmd_name[0] = "-";
 		cmd_name[1] = "POS";
@@ -507,6 +494,8 @@ public class NavitVehicle
 			e.printStackTrace();
 		}
 
+		String fastProvider = null;
+		String preciseProvider = null;
 		try
 		{
 			Log.e("NavitVehicle", "Providers " + locationManager.getAllProviders());
@@ -632,13 +621,9 @@ public class NavitVehicle
 
 						try
 						{
-							Iterator<GpsSatellite> localIterator = stat.getSatellites().iterator();
-							while (localIterator.hasNext())
-							{
-								GpsSatellite localGpsSatellite = (GpsSatellite) localIterator.next();
+							for (GpsSatellite localGpsSatellite : stat.getSatellites()) {
 								Navit.sats++;
-								if (localGpsSatellite.usedInFix())
-								{
+								if (localGpsSatellite.usedInFix()) {
 									Navit.satsInFix++;
 								}
 							}
@@ -986,7 +971,7 @@ public class NavitVehicle
 
 	}
 
-	public static void turn_off_precise_provider()
+	private static void turn_off_precise_provider()
 	{
 		try
 		{
@@ -1066,10 +1051,9 @@ public class NavitVehicle
 		}
 	}
 
-	public static class TunnelExtrapolationThread extends Thread
+	static class TunnelExtrapolationThread extends Thread
 	{
 		private Boolean running;
-		private static int interval_millis = 990;
 
 		TunnelExtrapolationThread()
 		{
@@ -1084,6 +1068,7 @@ public class NavitVehicle
 				// request tunnel extrapolation from C code ------------------
 				// request tunnel extrapolation from C code ------------------
 
+				int interval_millis = 990;
 				String extrapolated_post_string = NavitGraphics.CallbackGeoCalc(12, 1, interval_millis);
 
 				if (extrapolated_post_string == null)
@@ -1099,7 +1084,7 @@ public class NavitVehicle
 					try
 					{
 						// System.out.println("extrapolated pos:" + extrapolated_post_string);
-						String tmp[] = extrapolated_post_string.split(":", 3);
+						String[] tmp = extrapolated_post_string.split(":", 3);
 						float lat = Float.parseFloat(tmp[0]);
 						float lon = Float.parseFloat(tmp[1]);
 						float dir = Float.parseFloat(tmp[2]);
@@ -1130,7 +1115,7 @@ public class NavitVehicle
 			}
 		}
 
-		public void stop_me()
+		void stop_me()
 		{
 			this.running = false;
 			this.interrupt();
@@ -1294,7 +1279,8 @@ public class NavitVehicle
 		String gpx_header_1 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>" + "<gpx version=\"1.1\" creator=\"ZANavi http://zanavi.cc\"\n" + "     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" + "     xmlns=\"http://www.topografix.com/GPX/1/1\"\n" + "     xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n" + "<metadata>\n" + "	<name>ZANavi Debug log</name>\n" + "	<desc>ZANavi</desc>\n" + "	<author>\n"
 				+ "		<name>ZANavi</name>\n" + "	</author>\n" + "</metadata>\n";
 
-		speech_recording_file_gpx = new File(pos_recording_filename_gpx);
+		// static File pos_recording_file_gpx;
+		File speech_recording_file_gpx = new File(pos_recording_filename_gpx);
 
 		try
 		{
@@ -1403,7 +1389,7 @@ public class NavitVehicle
 		}
 	}
 
-	static public String customNumberFormat_(String pattern, double value)
+	private static String customNumberFormat_(String pattern, double value)
 	{
 		// NumberFormat myFormatter = DecimalFormat.getInstance(Locale.US);
 

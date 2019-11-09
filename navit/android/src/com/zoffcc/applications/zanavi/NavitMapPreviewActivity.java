@@ -58,15 +58,13 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 	private static Bitmap view_bitmap = null;
 	private static Canvas view_canvas_upper = null;
 	private static Bitmap view_bitmap_upper = null;
-	private int my_height = 0;
-	private int my_width = 0;
 	private float my_lat = 0f;
 	private float my_lon = 0f;
 	private static int mp_overview = 0;
 	private static final int MaxConfigs = 6;
 	private static final Paint paint = new Paint();
 
-	public static class MapPreviewConfig
+	static class MapPreviewConfig
 	{
 		int my_zoom;//= 14; // 14 -> detail || 7 -> overview || 5 -> o2       // show items like on this "order"-level
 		int my_scale;// = 16; // 16 -> detail  ||  1024 -> overview; || 8192 -> o2 // real zoom level
@@ -174,8 +172,8 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		mp_overview = 0;
 
 		Display display = getWindowManager().getDefaultDisplay();
-		my_width = display.getWidth();
-		my_height = display.getHeight();
+		int my_width = display.getWidth();
+		int my_height = display.getHeight();
 
 		try
 		{
@@ -280,7 +278,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 			header.setText("destination"); //TRANS
 		}
 		header.setTextSize(16);
-		if (this.my_height > this.my_width)
+		if (my_height > my_width)
 		{
 			header.setLines(2);
 		}
@@ -332,12 +330,12 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 				return false;
 			}
 		});
-		view.setLayoutParams(new LayoutParams((int) (this.my_width * 0.8), (int) (this.my_height * 0.4)));
+		view.setLayoutParams(new LayoutParams((int) (my_width * 0.8), (int) (my_height * 0.4)));
 
 		TextView dummy1 = new TextView(this);
 		dummy1.setText("");
 		// dummy1.setTextColor(color);
-		dummy1.setHeight(this.my_height * 15 / 800);
+		dummy1.setHeight(my_height * 15 / 800);
 
 		if (view_bitmap != null)
 		{
@@ -352,7 +350,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 				e.printStackTrace();
 			}
 		}
-		view_bitmap = Bitmap.createBitmap((int) (this.my_width * 0.8), (int) (this.my_height * 0.4), Bitmap.Config.ARGB_8888);
+		view_bitmap = Bitmap.createBitmap((int) (my_width * 0.8), (int) (my_height * 0.4), Bitmap.Config.ARGB_8888);
 		view_canvas = new Canvas(view_bitmap);
 
 		if (view_bitmap_upper != null)
@@ -368,13 +366,13 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 				e.printStackTrace();
 			}
 		}
-		view_bitmap_upper = Bitmap.createBitmap((int) (this.my_width * 0.8), (int) (this.my_height * 0.4), Bitmap.Config.ARGB_8888);
+		view_bitmap_upper = Bitmap.createBitmap((int) (my_width * 0.8), (int) (my_height * 0.4), Bitmap.Config.ARGB_8888);
 		view_canvas_upper = new Canvas(view_bitmap_upper);
 
 		LinearLayout relativelayout2 = new LinearLayout(this);
 		relativelayout2.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		relativelayout2.setOrientation(LinearLayout.HORIZONTAL);
-		relativelayout2.setPadding(this.my_height * 20 / 800, this.my_height * 20 / 800, this.my_height * 20 / 800, this.my_height * 20 / 800);
+		relativelayout2.setPadding(my_height * 20 / 800, my_height * 20 / 800, my_height * 20 / 800, my_height * 20 / 800);
 
 		relativelayout2.addView(view);
 		relativelayout2.setGravity(Gravity.CENTER_HORIZONTAL);

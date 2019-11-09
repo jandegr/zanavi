@@ -33,14 +33,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class ZANaviBusySpinner extends AppCompatImageView
 {
-	int mCanvasWidth;
-	int mCanvasHeight;
-	Paint paint;
-	RectF r;
-	int spinner_width;
+	private final Paint paint;
+	private RectF r;
+	private int spinner_width;
 	public static int spinner_size = 35;
 	public static Boolean active;
-	static RotateAnimation rotateAnim = null;
+	private static RotateAnimation rotateAnim = null;
 
 	public ZANaviBusySpinner(Context context)
 	{
@@ -95,61 +93,32 @@ public class ZANaviBusySpinner extends AppCompatImageView
 	public void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
-		this.mCanvasWidth = w;
-		this.mCanvasHeight = h;
-		this.r = new RectF((this.mCanvasWidth / 2) - spinner_size, (this.mCanvasHeight / 2) - spinner_size, (this.mCanvasWidth / 2) + spinner_size, (this.mCanvasHeight / 2) + spinner_size);
+		this.r = new RectF((w / 2) - spinner_size, (h / 2) - spinner_size, (w / 2) + spinner_size, (h / 2) + spinner_size);
 		cancelAnim(); // calc new since w,h has changed
 	}
 
-	private void createAnim(Canvas canvas)
+	private void createAnim()
 	{
-		try
-		{
-			rotateAnim = new RotateAnimation(0f, 359f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-			rotateAnim.setRepeatMode(Animation.RESTART);
-			rotateAnim.setRepeatCount(Animation.INFINITE);
-			rotateAnim.setDuration(2600L); // speed of the animation, higher value = lower speed
-			rotateAnim.setInterpolator(new LinearInterpolator());
-			startAnimation(rotateAnim);
-		}
-		catch (Exception e)
-		{
-			//e.printStackTrace();
-		}
+		rotateAnim = new RotateAnimation(0f, 359f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateAnim.setRepeatMode(Animation.RESTART);
+		rotateAnim.setRepeatCount(Animation.INFINITE);
+		rotateAnim.setDuration(2600L); // speed of the animation, higher value = lower speed
+		rotateAnim.setInterpolator(new LinearInterpolator());
+		startAnimation(rotateAnim);
 	}
+
 
 	static void cancelAnim()
 	{
-		try
+		if (rotateAnim != null) //gets called at first start even if there is no anim
 		{
-			// ******* rotateAnim.cancel(); // --> this works only on higher API levels!!
-
-			// --> so use these lines instead
-			rotateAnim.setRepeatMode(Animation.RESTART);
-			rotateAnim.setRepeatCount(0);
-			rotateAnim.setDuration(600L); // speed of the animation, higher value = lower speed
-			rotateAnim.setInterpolator(new LinearInterpolator());
-			// --> so use these lines instead
-
+			rotateAnim.cancel();
+            // it is -nulled- lower, so is this usefull ?? (JDG)
 			rotateAnim.reset();
-			//System.out.println("ZANaviBusySpinner cancel");
-		}
-		catch (Exception e)
-		{
-			//e.printStackTrace();
-		}
-
-		try
-		{
 			rotateAnim = null;
-			//System.out.println("ZANaviBusySpinner null");
 		}
-		catch (Exception e)
-		{
-			//e.printStackTrace();
-		}
-
 	}
+
 
 	public void onDraw(Canvas c)
 	{
@@ -158,7 +127,7 @@ public class ZANaviBusySpinner extends AppCompatImageView
 		{
 			if (rotateAnim == null)
 			{
-				createAnim(c);
+				createAnim();
 			}
 
 			//System.out.println("ZANaviBusySpinner draw");

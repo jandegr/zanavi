@@ -33,8 +33,6 @@ public class ZANaviLinearLayout extends LinearLayout
 	private boolean need_size_change = false;
 	private final Paint paint_crosshair = new Paint();
 	private final Paint paint_sat_status = new Paint();
-	private int delta_1 = 8;
-	private int delta_2 = 35;
 	private int wm;
 	private int hm;
 	private int sat_status_max_sats = 13;
@@ -73,27 +71,14 @@ public class ZANaviLinearLayout extends LinearLayout
 	@Override
 	public void onDraw(Canvas c)
 	{
-
-		// System.out.println("XYZ:ZANaviLinearLayout -> onDraw");
-
-		//		if (2 == 1 + 1)
-		//		{
-		//			return;
-		//		}
-
 		if (this.need_size_change)
 		{
 			// System.out.println("XYZ:ZANaviLinearLayout -> onDraw [need_size_change]");
 
-			int w = this.getWidth();
 			int h = this.getHeight();
 
 			float draw_factor = 1.0f;
-			if (Navit.my_display_density.compareTo("mdpi") == 0)
-			{
-				draw_factor = 1.0f;
-			}
-			else if (Navit.my_display_density.compareTo("ldpi") == 0)
+			if (Navit.my_display_density.compareTo("ldpi") == 0)
 			{
 				draw_factor = 0.7f;
 			}
@@ -110,22 +95,13 @@ public class ZANaviLinearLayout extends LinearLayout
 				NavitOSDJava.NavitStreetFontLetterWidth = (int) ((float) NavitOSDJava.NavitStreetFontLetterWidth_base * Navit.metrics.densityDpi / NavitGraphics.Global_want_dpi_other);
 			}
 
-			float real_factor = draw_factor2 / 1.5f;
-			//
-			//
-			//
 
 			sat_status_lt_w = (int) (8f * draw_factor);
 			sat_status_lt_h = (int) (h * 0.35);
 			sat_status_lt_x = (int) (2f * draw_factor);
-			sat_status_lt_y = (int) ((h / 2) - (sat_status_lt_h / 2));
+			sat_status_lt_y = (h / 2) - (sat_status_lt_h / 2);
 
 			r1.set(sat_status_lt_x, sat_status_lt_y, sat_status_lt_x + sat_status_lt_w, sat_status_lt_y + sat_status_lt_h);
-
-			int mCanvasWidth = w;
-			int mCanvasHeight = h;
-
-			LayoutParams params = null;
 
 			//
 			child1 = Navit.Global_Navit_Object.findViewById(R.id.top_bar);
@@ -159,18 +135,6 @@ public class ZANaviLinearLayout extends LinearLayout
 				child7.postInvalidate();
 				child8.postInvalidate();
 				child9.postInvalidate();
-			}
-			else
-			{
-				//				child1.postInvalidate();
-				//				child2.postInvalidate();
-				//				child3.postInvalidate();
-				//				child4.postInvalidate();
-				//				child5.postInvalidate();
-				//				child6.postInvalidate();
-				//				child7.postInvalidate();
-				//				child8.postInvalidate();
-				//				child9.postInvalidate();
 			}
 		}
 		catch (Exception e)
@@ -286,8 +250,8 @@ public class ZANaviLinearLayout extends LinearLayout
 			if (!NavitGraphics.MAP_DISPLAY_OFF)
 			{
 				// show cross hair
-				delta_1 = 8;
-				delta_2 = 35;
+				int delta_1 = 8;
+				int delta_2 = 35;
 				if (Navit.metrics.densityDpi >= 320) //&& (Navit.PREF_shrink_on_high_dpi))
 				{
 					paint_crosshair.setStrokeWidth(2);
@@ -380,10 +344,7 @@ public class ZANaviLinearLayout extends LinearLayout
 		this.hm = h / 2;
 
 		System.out.println("XYZ:ZANaviLinearLayout -> onSizeChanged w=" + w + " oldw=" + oldw + " h=" + h + " oldh=" + oldh);
-		if ((w == oldw) & (h == oldh))
-		{
-		}
-		else
+		if (!((w == oldw) & (h == oldh)))
 		{
 			this.need_size_change = true;
 		}

@@ -147,23 +147,26 @@
 
         <meta-data android:name="com.google.android.backup.api_key" android:value="xxxx" />
 
-		<activity android:name=".NavitAddressSearchCountrySelectActivity"></activity>
-		<activity android:name=".NavitAddressSearchActivity"></activity>
-		<activity android:name=".NavitDownloadSelectMapActivity"></activity>
-		<activity android:name=".NavitDeleteSelectMapActivity"></activity>
-		<activity android:name=".NavitAddressResultListActivity"></activity>
-		<activity android:name=".NavitMapPreviewActivity"></activity>
-		<activity android:name=".NavitRecentDestinationActivity"></activity>
-		<activity android:name=".NavitFeedbackFormActivity"></activity>
-		<activity android:name=".GeoCoordEnterDialog"></activity>
-		<activity android:name="com.lamerman.FileDialog"></activity>
-		<activity android:name=".ZANaviVoiceInput"></activity>
-		<activity android:name=".ZANaviDownloadMapCancelActivity"></activity>
-		<activity android:name=".ZANaviDonateActivity"></activity>
-		<activity android:name=".ZANaviNormalDonateActivity"></activity>
-		<activity android:name=".NavitPreferences" android:label="@string/set_preferences"></activity>
-		<activity android:name=".ZANaviMainIntroActivityStatic"
-		    android:configChanges="screenSize|locale|touchscreen|navigation|orientation|fontScale|keyboard|keyboardHidden"></activity>
-		<activity android:name=".ZANaviAboutPage"></activity>
+		<activity android:name=".NavitAddressSearchCountrySelectActivity" />
+		<activity android:name=".NavitAddressSearchActivity" />
+		<activity android:name=".NavitDownloadSelectMapActivity" />
+		<activity android:name=".NavitDeleteSelectMapActivity" />
+		<activity android:name=".NavitAddressResultListActivity" />
+		<activity android:name=".NavitMapPreviewActivity" />
+		<activity android:name=".NavitRecentDestinationActivity" />
+		<activity android:name=".NavitFeedbackFormActivity" />
+		<activity android:name=".GeoCoordEnterDialog" />
+		<activity android:name="com.lamerman.FileDialog" />
+		<activity android:name=".ZANaviVoiceInput" />
+		<activity android:name=".ZANaviDownloadMapCancelActivity" />
+		<activity android:name=".ZANaviDonateActivity" />
+		<activity android:name=".ZANaviNormalDonateActivity" />
+		<activity
+			android:name=".NavitPreferences"
+			android:label="@string/set_preferences" />
+		<activity
+			android:name=".ZANaviMainIntroActivityStatic"
+			android:configChanges="screenSize|locale|touchscreen|navigation|orientation|fontScale|keyboard|keyboardHidden" />
+		<activity android:name=".ZANaviAboutPage" />
     </application>
 </manifest>

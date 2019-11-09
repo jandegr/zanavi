@@ -51,7 +51,7 @@ public class ZANaviNormalDonateActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_normal_donate);
 
-		Toolbar bar = (Toolbar) findViewById(R.id.toolbar2nd);
+		Toolbar bar = findViewById(R.id.toolbar2nd);
 		bar.setTitle(Navit.get_text("Donate"));
 		bar.setNavigationOnClickListener(new View.OnClickListener()
 		{

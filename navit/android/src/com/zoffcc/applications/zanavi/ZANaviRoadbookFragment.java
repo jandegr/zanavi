@@ -19,11 +19,9 @@
 
 package com.zoffcc.applications.zanavi;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-
 import androidx.fragment.app.ListFragment;
 
 import com.zoffcc.applications.zanavi.ZANaviListViewAdapter.ListViewItem;
@@ -61,7 +59,6 @@ public class ZANaviRoadbookFragment extends ListFragment
 		// initialize the items list
 		// ListView items list
 		List<ListViewItem> mItems = new ArrayList<>();
-		Resources resources = getResources();
 		// initialize and set the list adapter
 		adapter = new ZANaviListViewAdapter(getActivity(), mItems);
 		setListAdapter(adapter);
@@ -144,7 +141,7 @@ public class ZANaviRoadbookFragment extends ListFragment
 		}
 	}
 
-	public synchronized void reload_items(List<ListViewItem> new_items)
+	synchronized void reload_items(List<ListViewItem> new_items)
 	{
 		if (active)
 		{
@@ -164,9 +161,6 @@ public class ZANaviRoadbookFragment extends ListFragment
 				// compatibility method ----------
 			}
 			adapter.notifyDataSetChanged();
-		}
-		else
-		{
 		}
 	}
 

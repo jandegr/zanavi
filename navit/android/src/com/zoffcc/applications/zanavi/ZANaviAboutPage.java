@@ -29,7 +29,7 @@ import mehdi.sakout.aboutpage.Element;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
-public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
+class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 {
 	ProgressDialog progressDialog2;
 
@@ -202,7 +202,7 @@ public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 
 		// reset message
 		ZANaviMainApplication.last_stack_trace_as_string = "";
-		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).commit();
+		PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("last_crash_text", ZANaviMainApplication.last_stack_trace_as_string).apply();
 
 		// reset flag
 		Navit.intro_flag_crash = false;
