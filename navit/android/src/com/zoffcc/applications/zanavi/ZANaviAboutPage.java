@@ -29,7 +29,7 @@ import mehdi.sakout.aboutpage.Element;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @SuppressLint("NewApi")
-class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
+public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 {
 	ProgressDialog progressDialog2;
 
