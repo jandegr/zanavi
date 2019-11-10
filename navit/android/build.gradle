@@ -25,7 +25,7 @@ android {
         }
         externalNativeBuild {
             cmake {
-                arguments '-DUSE_PLUGINS=y', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n'
+                //arguments '-DUSE_PLUGINS=n', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n'
             }
         }
     }

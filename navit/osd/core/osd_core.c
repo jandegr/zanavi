@@ -72,6 +72,10 @@ static double round(double x)
 }
 #endif /* MSC_VER */
 
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
+
 struct odometer;
 
 

@@ -93,7 +93,9 @@
 #ifdef HAVE_API_WIN32_CE
 #include "libc.h"
 #endif
-
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
 
 
 
@@ -469,7 +471,8 @@ __F_START__
 __F_END__
 }
 
-void navit_handle_resize(struct navit *this_, int w, int h)
+void
+navit_handle_resize(struct navit *this_, int w, int h)
 {
 __F_START__
 
@@ -503,7 +506,8 @@ __F_START__
 __F_END__
 }
 
-void navit_resize(void *data, int w, int h)
+void
+navit_resize(void *data, int w, int h)
 {
 	struct navit *this = data;
 	if (!this->ignore_graphics_events)
@@ -513,17 +517,20 @@ void navit_resize(void *data, int w, int h)
 	}
 }
 
-int navit_get_width(struct navit *this_)
+int
+navit_get_width(struct navit *this_)
 {
 	return this_->w;
 }
 
-int navit_get_height(struct navit *this_)
+int
+navit_get_height(struct navit *this_)
 {
 	return this_->h;
 }
 
-static void navit_popup(void *data)
+static void
+navit_popup(void *data)
 {
 	struct navit *this_ = data;
 	popup(this_, 1, &this_->pressed);
@@ -531,7 +538,8 @@ static void navit_popup(void *data)
 	this_->popped = 1;
 }
 
-int navit_ignore_button(struct navit *this_)
+int
+navit_ignore_button(struct navit *this_)
 {
 	if (this_->ignore_button)
 		return 1;
@@ -540,12 +548,14 @@ int navit_ignore_button(struct navit *this_)
 	return 0;
 }
 
-void navit_ignore_graphics_events(struct navit *this_, int ignore)
+void
+navit_ignore_graphics_events(struct navit *this_, int ignore)
 {
 	this_->ignore_graphics_events = ignore;
 }
 
-void update_transformation(struct transformation *tr, struct point *old, struct point *new, struct point *rot)
+void
+update_transformation(struct transformation *tr, struct point *old, struct point *new, struct point *rot)
 {
 	struct coord co, cn;
 	struct coord c, *cp;
@@ -1903,7 +1913,7 @@ static void navit_cmd_strjoin(struct navit *this, char *function, struct attr **
  * Call external program
  *
  * @param navit The navit instance
- * @param function unused (needed to match command function signiture)
+ * @param function unused (needed to match command function signature)
  * @param in input attributes in[0] - name of executable, in[1..] - parameters
  * @param out output attribute unused
  * @param valid unused 
@@ -4581,7 +4591,8 @@ int navit_get_attr(struct navit *this_, enum attr_type type, struct attr *attr, 
 	return ret;
 }
 
-void displaylist_shift_order_in_map_layers(struct navit *this_, int shift_value)
+void
+displaylist_shift_order_in_map_layers(struct navit *this_, int shift_value)
 {
 
 
@@ -4733,7 +4744,8 @@ void displaylist_shift_order_in_map_layers(struct navit *this_, int shift_value)
 #endif
 }
 
-void displaylist_shift_for_dpi_value_in_layers(struct navit *this_, double factor)
+void
+displaylist_shift_for_dpi_value_in_layers(struct navit *this_, double factor)
 {
 
 
@@ -4848,7 +4860,8 @@ void displaylist_shift_for_dpi_value_in_layers(struct navit *this_, double facto
 }
 
 
-static int navit_add_log(struct navit *this_, struct log *log)
+static int
+navit_add_log(struct navit *this_, struct log *log)
 {
 
 
@@ -4867,7 +4880,8 @@ static int navit_add_log(struct navit *this_, struct log *log)
 	return 0;
 }
 
-static int navit_add_layout(struct navit *this_, struct layout *layout)
+static int
+navit_add_layout(struct navit *this_, struct layout *layout)
 {
 
 
@@ -4883,7 +4897,8 @@ static int navit_add_layout(struct navit *this_, struct layout *layout)
 	return 0;
 }
 
-int navit_add_attr(struct navit *this_, struct attr *attr)
+int
+navit_add_attr(struct navit *this_, struct attr *attr)
 {
 
 
@@ -4946,7 +4961,8 @@ int navit_add_attr(struct navit *this_, struct attr *attr)
 	return ret;
 }
 
-int navit_remove_attr(struct navit *this_, struct attr *attr)
+int
+navit_remove_attr(struct navit *this_, struct attr *attr)
 {
 
 
@@ -4971,18 +4987,19 @@ struct attr_iter *
 navit_attr_iter_new(void)
 {
 
-
-return g_new0(struct attr_iter, 1);
+	return g_new0(struct attr_iter, 1);
 }
 
-void navit_attr_iter_destroy(struct attr_iter *iter)
+void
+navit_attr_iter_destroy(struct attr_iter *iter)
 {
 
 
 	g_free(iter);
 }
 
-void navit_add_callback(struct navit *this_, struct callback *cb)
+void
+navit_add_callback(struct navit *this_, struct callback *cb)
 {
 
 
@@ -4991,7 +5008,8 @@ void navit_add_callback(struct navit *this_, struct callback *cb)
 	callback_list_add(this_->attr_cbl, cb);
 }
 
-void navit_remove_callback(struct navit *this_, struct callback *cb)
+void
+navit_remove_callback(struct navit *this_, struct callback *cb)
 {
 
 
@@ -5006,7 +5024,8 @@ void navit_remove_callback(struct navit *this_, struct callback *cb)
  * @param navit The navit instance
  * @returns nothing
  */
-static void navit_vehicle_draw(struct navit *this_, struct navit_vehicle *nv, struct point *pnt)
+static void
+navit_vehicle_draw(struct navit *this_, struct navit_vehicle *nv, struct point *pnt)
 {
 __F_START__
 
@@ -5065,7 +5084,8 @@ __F_END__
 // --- this gets called at every positon update (from GPS, or demo vehicle!!) !! ------
 // --- this gets called at every positon update (from GPS, or demo vehicle!!) !! ------
 // --- this gets called at every positon update (from GPS, or demo vehicle!!) !! ------
-static void navit_vehicle_update(struct navit *this_, struct navit_vehicle *nv)
+static void
+navit_vehicle_update(struct navit *this_, struct navit_vehicle *nv)
 {
 
 __F_START__
@@ -5500,7 +5520,8 @@ __F_END__
 
 
 
-int navit_is_demo_vehicle()
+int
+navit_is_demo_vehicle()
 {
 	if (global_demo_vehicle == 1)
 	{
@@ -5518,7 +5539,8 @@ int navit_is_demo_vehicle()
  * @param c The coordinate to set as position
  * @returns nothing
  */
-void navit_set_position(struct navit *this_, struct pcoord *c)
+void
+navit_set_position(struct navit *this_, struct pcoord *c)
 {
 __F_START__
 
@@ -5545,7 +5567,8 @@ __F_END__
  * Set the position of the vehicle, without drawing the map
  *
  */
-void navit_set_position_without_map_drawing(struct navit *this_, struct pcoord *c)
+void
+navit_set_position_without_map_drawing(struct navit *this_, struct pcoord *c)
 {
 
 
@@ -5561,7 +5584,8 @@ void navit_set_position_without_map_drawing(struct navit *this_, struct pcoord *
 }
 
 
-int navit_set_vehicleprofile(struct navit *this_, char *name)
+int
+navit_set_vehicleprofile(struct navit *this_, char *name)
 {
 
 
@@ -5589,7 +5613,8 @@ int navit_set_vehicleprofile(struct navit *this_, char *name)
 	return 0;
 }
 
-static void navit_set_vehicle(struct navit *this_, struct navit_vehicle *nv)
+static void
+navit_set_vehicle(struct navit *this_, struct navit_vehicle *nv)
 {
 
 
@@ -5630,7 +5655,8 @@ static void navit_set_vehicle(struct navit *this_, struct navit_vehicle *nv)
  * @param v The vehicle instance
  * @returns 1 for success
  */
-int navit_add_vehicle(struct navit *this_, struct vehicle *v)
+int
+navit_add_vehicle(struct navit *this_, struct vehicle *v)
 {
 
 
@@ -5710,7 +5736,8 @@ navit_get_displaylist(struct navit *this_)
 	return this_->displaylist;
 }
 
-void navit_layout_switch(struct navit *n)
+void
+navit_layout_switch(struct navit *n)
 {
 
 
@@ -5804,7 +5831,8 @@ void navit_layout_switch(struct navit *n)
 	}
 }
 
-int navit_set_vehicle_by_name(struct navit *n, const char *name)
+int
+navit_set_vehicle_by_name(struct navit *n, const char *name)
 {
 
 
@@ -5834,7 +5862,8 @@ int navit_set_vehicle_by_name(struct navit *n, const char *name)
 	return 0;
 }
 
-int navit_set_layout_by_name(struct navit *n, const char *name)
+int
+navit_set_layout_by_name(struct navit *n, const char *name)
 {
 
 
@@ -5875,7 +5904,8 @@ int navit_set_layout_by_name(struct navit *n, const char *name)
 	return 0;
 }
 
-void navit_disable_suspend()
+void
+navit_disable_suspend()
 {
 
 
@@ -5892,7 +5922,8 @@ void navit_disable_suspend()
  * @param pretty	0 -> normal, 1 -> pretty output
  * @return string with attrs separated by '\n'
  */
-char* navit_item_dump(struct item *item, int pretty)
+char*
+navit_item_dump(struct item *item, int pretty)
 {
 	char *temp_str = NULL;
 	char *ret_value = NULL;
@@ -5989,7 +6020,8 @@ char* navit_item_dump(struct item *item, int pretty)
 	return ret_value;
 }
 
-int navit_normal_item(enum item_type type)
+int
+navit_normal_item(enum item_type type)
 {
 	if ((type > type_none) && (type < type_waypoint))
 	{
@@ -6091,7 +6123,8 @@ int navit_normal_item(enum item_type type)
 	return 0;
 }
 
-char* navit_find_nearest_item_dump(struct mapset *ms, struct pcoord *pc, int pretty)
+char*
+navit_find_nearest_item_dump(struct mapset *ms, struct pcoord *pc, int pretty)
 {
 	int max_dist = 0; // smallest rectangle possible
 	int dist, mindist = 0, pos;
@@ -6988,11 +7021,9 @@ GList* navit_route_export_to_java_string(struct navit *this_, int result_id)
 
 }
 
-void navit_route_export_gpx_to_file(struct navit *this_, char *filename)
+void
+navit_route_export_gpx_to_file(struct navit *this_, char *filename)
 {
-
-
-
 	dbg(0,"Dumping route to %s\n", filename);
 
 	struct point p;

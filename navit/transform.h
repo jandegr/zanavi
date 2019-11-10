@@ -134,6 +134,7 @@ double transform_distance(enum projection pro, struct coord *c1, struct coord *c
 void transform_project(enum projection pro, struct coord *c, int distance, int angle, struct coord *res);
 double transform_polyline_length(enum projection pro, struct coord *c, int count);
 int transform_distance_sq(struct coord *c1, struct coord *c2);
+int transform_distance_polyline_sq__v2(struct coord *c, int count, struct coord *ref);
 navit_float transform_distance_sq_float(struct coord *c1, struct coord *c2);
 int transform_distance_sq_pc(struct pcoord *c1, struct pcoord *c2);
 int transform_distance_line_sq(struct coord *l0, struct coord *l1, struct coord *ref, struct coord *lpnt);

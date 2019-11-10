@@ -58,6 +58,9 @@
 #include "callback.h"
 #include "types.h"
 #include "navit.h"
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
 
 static int map_id;
 
@@ -2549,7 +2552,8 @@ binmap_search_get_item(struct map_search_priv *map_search)
 					break;
 				case attr_house_number:
 					//if (it->type == type_house_number)
-					if ((it->type == type_house_number) || (type_house_number_interpolation_even) || (type_house_number_interpolation_odd) || (type_house_number_interpolation_all))
+					if ((it->type == type_house_number) || (it->type == type_house_number_interpolation_even)
+					|| (it->type == type_house_number_interpolation_odd) || (it->type == type_house_number_interpolation_all))
 					{
 						// is it a housenumber?
 						if (binfile_attr_get(it->priv_data, attr_house_number, &at))

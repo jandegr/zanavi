@@ -77,7 +77,7 @@
 #include "route.h"
 
 #ifdef HAVE_API_ANDROID
-// nothing todo for android
+#include "android.h"
 #else
 // linux seems to need this explicitly
 #include "pthread.h"

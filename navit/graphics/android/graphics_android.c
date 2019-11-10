@@ -654,8 +654,8 @@ static void murphy_wideline(uint32_t *map_buffer, int line_width, int height, in
 	
 	if (murphy.v > murphy.u) // steile linie (v > u)
 	{
-		/* deltay > deltax = octant 2
-		/* swap things if in 2 octant */
+		// deltay > deltax = octant 2
+		// swap things if in 2 octant
 		temp = murphy.u;
 		murphy.u = murphy.v;
 		murphy.v = temp;

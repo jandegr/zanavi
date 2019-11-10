@@ -60,7 +60,10 @@
 #include "roadprofile.h"
 #include "util.h"
 #include "config.h"
-
+#include "navigation.h"
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
 
 // #define NAVIT_FUNC_CALLS_DEBUG_PRINT 1
 

@@ -59,6 +59,9 @@
 #include "color.h"
 #include "layout.h"
 #include "vehicle.h"
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
 
 // forward rev
 struct navit *global_navit;

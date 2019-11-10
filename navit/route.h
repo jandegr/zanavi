@@ -215,14 +215,14 @@ struct route_graph_segment
 	// -- NEW --
 
 
-	// -- NEW -- jandgr --
+	// -- NEW -- jandegr --
 	int seg_start_out_cost;
 	int seg_end_out_cost;
 	struct route_graph_segment *start_from_seg;
 	struct route_graph_segment *end_from_seg;
 	struct fibheap_el *el_start;
 	struct fibheap_el *el_end;
-	// -- NEW -- jandgr --
+	// -- NEW -- jandegr --
 
 
 	struct route_segment_data data; /**< The segment data */
@@ -282,6 +282,9 @@ void route_after_destination_start_calc(struct route *this, int async);
 void route_set_destination_no_calc(struct route *this, struct pcoord *dst, int async);
 void route_add_destination_no_calc(struct route *this, struct pcoord *dst, int async);
 void route_find_next_lowest_segment_and_pin_it(struct route_graph_point *p, struct route_graph_segment *s, int min_value, int penalty);
+int route_get_real_oneway_flag(int road_flag, int oneway_flag_value);
+int route_road_to_road_angle_get_segs(struct route_graph_segment *s1, struct route_graph_segment *s2, int dir1, int *dir2, struct coord *cc, struct coord *cs, struct coord *ce, int abs);
+int is_turn_allowed(struct route_graph_point *p, struct route_graph_segment *from, struct route_graph_segment *to);
 
 /* end of prototypes */
 #ifdef __cplusplus

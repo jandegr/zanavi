@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <glib.h>
+#include <unistd.h>
 #include "config.h"
 #include "item.h"
 #include "debug.h"
@@ -136,7 +137,7 @@ speech_android_init(struct speech_priv *ret)
 {
 	dbg(0,"EEnter\n");
 
-	int thread_id = gettid();
+	pid_t thread_id = gettid();
 	dbg(0, "THREAD ID=%d\n", thread_id);
 
 	JNIEnv *jnienv2;

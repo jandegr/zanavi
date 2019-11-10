@@ -59,6 +59,10 @@
 #include "plugin.h"
 #include "navit_nls.h"
 
+#ifdef HAVE_API_ANDROID
+#include "android.h"
+#endif
+
 /* #define DEBUG */
 
 
@@ -2062,7 +2066,8 @@ static int navigation_split_string_to_list_2(struct navigation_way *way, char* r
  *
  *         thanks to jandegr
  */
-static navigation_select_announced_destinations(struct navigation_command *current_command)
+static char*
+navigation_select_announced_destinations(struct navigation_command *current_command)
 {
 	struct street_destination *current_destination = NULL;  /* the list pointer of the destination_names of the current command. */
 	struct street_destination *search_destination = NULL;   /* the list pointer of the destination_names of the respective search_command. */
@@ -2174,7 +2179,6 @@ static navigation_select_announced_destinations(struct navigation_command *curre
 #ifdef NAVIT_ROUTING_DEBUG_PRINT
 			dbg(0, "put exit_label into nav way (C) %s\n", current_command->itm->way.exit_label);
 #endif
-
 			return NULL;
 		}
 	}
@@ -2189,13 +2193,8 @@ static navigation_select_announced_destinations(struct navigation_command *curre
 #ifdef NAVIT_ROUTING_DEBUG_PRINT
 		dbg(0, "put exit_label into nav way (A) %s\n", current_command->itm->way.exit_label);
 #endif
-
 		return NULL;
 	}
-
-
-
-
 
 	/* return the best candidate, if there is any.*/
 	if ((current_nav_way) && (current_nav_way->street_dest_text))
@@ -2220,7 +2219,7 @@ static navigation_select_announced_destinations(struct navigation_command *curre
 }
 // -- NEW 002 --
 
-
+// fixme fixme JDG JDG the above differs from my other fork !!!
 
 
 static struct navigation_itm *

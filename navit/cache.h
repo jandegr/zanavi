@@ -33,6 +33,7 @@ void *cache_lookup(struct cache *cache, void *id);
 void cache_insert(struct cache *cache, void *data);
 void *cache_insert_new(struct cache *cache, void *id, int size);
 void cache_flush(struct cache *cache, void *id);
+void cache_flush_data(struct cache *cache, void *data);
 void cache_stats(struct cache *cache);
 void cache_dump(struct cache *cache);
 /* end of prototypes */

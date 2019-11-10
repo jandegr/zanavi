@@ -116,6 +116,7 @@ void navigation_unregister_callback(struct navigation *this_, enum attr_type typ
 struct map *navigation_get_map(struct navigation *this_);
 void navigation_set_route(struct navigation *this_, struct route *route);
 char *get_distance(struct navigation *nav, int dist, enum attr_type type, int is_length);
+int navigation_is_low_level_street(enum item_type t);
 void navigation_init(void);
 /* end of prototypes */
 #ifdef __cplusplus

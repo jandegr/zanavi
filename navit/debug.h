@@ -227,6 +227,10 @@ void debug_free_func(void *ptr);
 void debug_finished(void);
 void *debug_realloc(const char *where, int line, const char *func, void *ptr, int size);
 void debug_get_timestamp_millis(long *ts_millis);
+void debug_mrp(const char* function_name, clock_t diff);
+clock_t debug_measure_start(void);
+clock_t debug_measure_end(clock_t start_time);
+int debug_measure_end_tsecs(clock_t start_time);
 /* end of prototypes */
 
 

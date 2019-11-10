@@ -46,6 +46,7 @@
 #include <glib.h>
 #include <math.h>
 #include <time.h>
+#include <unistd.h>
 #include "debug.h"
 #include "callback.h"
 #include "plugin.h"
@@ -435,7 +436,7 @@ static int vehicle_android_init(struct vehicle_priv *ret)
 	dbg(0,"+#+:enter\n");
 #endif
 
-	int thread_id = gettid();
+	pid_t thread_id = gettid();
 	dbg(0, "THREAD ID=%d\n", thread_id);
 
 	JNIEnv *jnienv2;

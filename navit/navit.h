@@ -340,7 +340,31 @@ void navit_zoom_to_scale(struct navit *this_, int new_scale);
 
 void navit_set_cursors(struct navit *this_);
 
+#ifdef HAVE_API_ANDROID
+void navit_remove_cursors(struct navit *this_);
+void navit_add_waypoint_to_route(struct navit *this_, struct pcoord *c, const char *description, int async);
+void navit_layer_toggle_active(struct navit *this, char *name, int draw);
+void navit_remove_all_maps(struct navit *this_);
+void navit_add_all_maps(struct navit *this_);
+void navit_set_vehicle_position_to_screen_center_only_for_route_struct(struct navit *this_);
+void navit_cmd_announcer_off(struct navit *this_);
+void navit_cmd_announcer_on(struct navit *this_);
+void navit_zoom_to_scale_with_center_point(struct navit *this_, int new_scale, struct point *p);
+void navit_map_active_flag(struct navit *this_, int activate, const char *mapname);
+void navit_reset_cycleway(struct navit *this);
+void navit_enhance_cycleway(struct navit *this);
+int navit_set_vehicleprofile(struct navit *this_, char *name);
+GList* navit_route_export_to_java_string(struct navit *this_, int result_id);
+char* navit_find_nearest_street(struct mapset *ms, struct pcoord *pc);
+void update_transformation(struct transformation *tr, struct point *old, struct point *new, struct point *rot);
+char* navit_find_nearest_street_coords(struct mapset *ms, struct pcoord *pc);
+char* navit_find_nearest_street_hn(struct mapset *ms, struct pcoord *pc);
+char* navit_find_nearest_item_dump(struct mapset *ms, struct pcoord *pc, int pretty);
+void navit_route_export_gpx_to_file(struct navit *this_, char *filename);
+#endif
+
 #include "vehicle.h"
+
 int navit_add_vehicle(struct navit *this_, struct vehicle *v);
 
 int navit_set_layout_by_name(struct navit *n, const char *name);

@@ -21,11 +21,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include <ctype.h>
 #include "debug.h"
 #include "item.h"
 #include "country.h"
 #include "search.h"
 #include "navit_nls.h"
+#include "linguistics.h"
 
 
 
