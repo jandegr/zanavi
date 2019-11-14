@@ -1070,7 +1070,7 @@ Java_com_zoffcc_applications_zanavi_NavitWatch_WatchCallback(JNIEnv* env, jobjec
 	dbg(0,"+#+:enter\n");
 #endif
 	//DBG // dbg(0, "enter %p %p\n", thiz, (void *) id);
-	callback_call_0((struct callback *) id);
+	callback_call_0((struct callback *) (intptr_t)id);
 }
 
 // unused ? (jdg)
