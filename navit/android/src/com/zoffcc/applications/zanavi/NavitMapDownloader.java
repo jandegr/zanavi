@@ -155,7 +155,7 @@ public class NavitMapDownloader
 	private static final zanavi_osm_map_values z_Caribbean = new zanavi_osm_map_values("Caribbean", "caribbean.bin", -2, true, 136);
 	//
 	private static final zanavi_osm_map_values z_North_America = new zanavi_osm_map_values("North America", "north_america.bin", -2, true, 6);
-	private static final zanavi_osm_map_values z_Country_borders = new zanavi_osm_map_values("Country borders [detail]", "borders.bin", 6271108L, true, 0);
+	private static final zanavi_osm_map_values z_Country_borders = new zanavi_osm_map_values("Country borders [detail]", "borders.bin", 9025483L, true, 0);
 	private static final zanavi_osm_map_values z_Coastline = new zanavi_osm_map_values("Coastline", "coastline.bin", 173729342L, true, 0);
 	static final zanavi_osm_map_values z_Restl_welt = new zanavi_osm_map_values("Rest of the World", "restl_welt.bin", 657152543L, true, 0);
 	private static final zanavi_osm_map_values z_Planet = new zanavi_osm_map_values("Planet", "planet.bin", 17454169665L, true, 1);
