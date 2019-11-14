@@ -25,6 +25,9 @@ android {
         }
     }
 
+    //to be reviewed !!!
+    //https://medium.com/androiddevelopers/appcompat-v23-2-age-of-the-vectors-91cbafa87c88
+
     aaptOptions {
         additionalParameters "--no-version-vectors"
     }

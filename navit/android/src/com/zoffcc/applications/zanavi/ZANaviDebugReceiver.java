@@ -2149,7 +2149,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 						}
 						else if (line_parts[0].equals("POS"))
 						{
-							while (Navit.follow_current == Navit.follow_off)
+							while (Navit.follow_current == false)
 							{
 								try
 								{

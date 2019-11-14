@@ -221,8 +221,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static boolean intro_flag_nomaps = true;
 	static boolean intro_flag_indexmissing = false; // keep this "false" as default
 	private static int intro_show_count = -1;
-
-	private static int api_version_int = 6;
 	private static ProgressBar progressbar_main_activity = null;
 
 	static boolean PAINT_OLD_API = true;
@@ -353,7 +351,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static boolean Navit_doubleBackToExitPressedOnce = false;
 
 	// define graphics here (this is bad, please fix me!)
-	public static NavitGraphics N_NavitGraphics = null;
+	static NavitGraphics N_NavitGraphics = null;
 
 	public static int usedMegs_old = -1;
 	private static String usedMegs_str_old = "";
@@ -375,8 +373,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static NavitSpeech2 NSp = null;
 	public static drawOSDThread draw_osd_thread = null;
 
-	public static boolean use_index_search = false;
-	public static boolean index_search_realtime = false;
+	static boolean use_index_search = false;
+	static boolean index_search_realtime = false;
 
 	static AlertDialog.Builder generic_alert_box = null;
 
@@ -476,7 +474,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	public static final class Navit_Point_on_Map implements Serializable
+	static final class Navit_Point_on_Map implements Serializable
 	{
 		/**
 		 * struct for a point on the map
@@ -568,8 +566,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static AudioManager NavitAudioManager = null;
 	private static InputMethodManager mgr = null;
 	public static DisplayMetrics metrics = null;
-	public static Boolean show_soft_keyboard = false;
-	public static Boolean show_soft_keyboard_now_showing = false;
 	public static long last_pressed_menu_key = 0L;
 	public static long time_pressed_menu_key = 0L;
 	private static Intent startup_intent = null;
@@ -624,15 +620,15 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static String NavitSearchresultBar_text = "";
 	public static final List<Navit_Address_Result_Struct> NavitAddressResultList_foundItems = new ArrayList<>();
 
-	public static Boolean DemoVehicle = false;
+	static boolean DemoVehicle;
 
-	static Typeface NavitStreetnameFont = null;
+	static Typeface NavitStreetnameFont;
 
-	private SensorManager sensorManager = null;
+	private SensorManager sensorManager;
 	// static final float lux_darkness_value = 4;
 	private Sensor lightSensor = null;
-	private SensorEventListener lightSensorEventListener = null;
-	public static boolean night_mode = false;
+	private SensorEventListener lightSensorEventListener;
+	static boolean night_mode = false;
 	public static float debug_cur_lux_value = -1;
 	//private static SensorManager sensorManager_ = null;
 
@@ -662,25 +658,22 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	// ------- new features -----------
 	// ------- new features -----------
 
-	private static Bitmap long_green_arrow = null;
-	public static Bitmap menu_button = null;
-	public static RectF menu_button_rect = new RectF(-100, 1, 1, 1);
-	public static RectF menu_button_rect_touch = new RectF(-100, 1, 1, 1);
-	private static Bitmap follow_on = null;
-	public static Bitmap follow_off = null;
-	public static Bitmap follow_current = null;
+	static Bitmap menu_button = null;
+	static RectF menu_button_rect = new RectF(-100, 1, 1, 1);
+	static RectF menu_button_rect_touch = new RectF(-100, 1, 1, 1);
+	static boolean follow_current; //pin the mapview to position
 	public static Bitmap zoomin = null;
 	private static Bitmap zoomout = null;
 	// public static Bitmap bigmap_bitmap = null;
-	public static Bitmap oneway_arrow = null;
-	public static Bitmap oneway_bicycle_arrow = null;
-	public static Bitmap nav_arrow_stopped = null;
-	public static Bitmap nav_arrow_stopped_small = null;
-	public static Bitmap nav_arrow_moving = null;
-	public static Bitmap nav_arrow_moving_grey = null;
-	public static Bitmap nav_arrow_moving_small = null;
-	public static Bitmap nav_arrow_moving_shadow = null;
-	public static Bitmap nav_arrow_moving_shadow_small = null;
+	static Bitmap oneway_arrow;
+	static Bitmap oneway_bicycle_arrow;
+	static Bitmap nav_arrow_stopped;
+	static Bitmap nav_arrow_stopped_small;
+	static Bitmap nav_arrow_moving;
+	static Bitmap nav_arrow_moving_grey;
+	static Bitmap nav_arrow_moving_small;
+	static Bitmap nav_arrow_moving_shadow;
+	static Bitmap nav_arrow_moving_shadow_small;
 
 	public static String Navit_last_address_search_string = "";
 	public static String Navit_last_address_hn_string = "";
@@ -691,7 +684,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	public static Boolean Navit_last_address_partial_match = true;
 	public static Geocoder Navit_Geocoder = null;
 	public static String UserAgentString_bind = null;
-	public static Boolean first_ever_startup = false;
+	static Boolean first_ever_startup = false;
 
 	private static Boolean Navit_Announcer = true;
 
@@ -764,7 +757,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				FileInputStream resultfilestream = new FileInputStream(resultfile);
 				byte[] resourcebuf = new byte[1024];
 				byte[] resultbuf = new byte[1024];
-				int i = 0;
+				int i;
 
 				while ((i = resourcestream.read(resourcebuf)) != -1)
 				{
@@ -945,7 +938,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// -------------------------------------------------------------
 		// -------------------------- smaller top bar  -----------------
 		// -------------------------------------------------------------
-		RelativeLayout v11 = (RelativeLayout) findViewById(R.id.gui_top_container);
+		RelativeLayout v11 = findViewById(R.id.gui_top_container);
 		int h11 = getResources().getDimensionPixelSize(R.dimen.gui_top_container_height);
 		if (horizonzal)
 		{
@@ -965,12 +958,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	}
 
 	/** Called when the activity is first created. */
-	// ----------- remove later -------------
-	// ----------- remove later -------------
-	@SuppressLint("NewApi")
-	// ----------- remove later -------------
-	// ----------- remove later -------------
-	@TargetApi(Build.VERSION_CODES.FROYO)
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -1214,7 +1201,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// System.out.println("VVV:bottom_bar_slider_shadow_px:" + bottom_bar_slider_shadow_px);
 
 		// final RelativeLayout a = (RelativeLayout) findViewById(R.id.bottom_bar_container);
-		final FrameLayout a = (FrameLayout) findViewById(R.id.bottom_bar_slide);
+		final FrameLayout a = findViewById(R.id.bottom_bar_slide);
 		final RelativeLayout.LayoutParams pp22 = (RelativeLayout.LayoutParams) a.getLayoutParams();
 
 		// Calculate ToolBar height
@@ -1236,7 +1223,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			actionBarHeight = NavitGraphics.dp_to_px(144);
 		}
 
-		final Toolbar view_toolbar_top = (Toolbar) findViewById(R.id.toolbar);
+		final Toolbar view_toolbar_top = findViewById(R.id.toolbar);
 		ViewTreeObserver vto = view_toolbar_top.getViewTreeObserver();
 		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
@@ -1319,7 +1306,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		mGestureDetector = new GestureDetector(new MyGestureDetector());
 
-		push_pin_view = (ImageView) findViewById(R.id.bottom_slide_left_side);
+		push_pin_view = findViewById(R.id.bottom_slide_left_side);
 		push_pin_view.setOnClickListener(new ImageView.OnClickListener()
 		{
 			public void onClick(View v)
@@ -1511,14 +1498,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		System.out.println("Navit:onCreate:JTHREAD ID=" + Thread.currentThread().getId());
 		System.out.println("Navit:onCreate:THREAD ID=" + NavitGraphics.GetThreadId());
 
-		// bitmaps for lanes
-		Bitmap lane_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_left);
-		Bitmap lane_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_right);
-		Bitmap lane_merge_to_left = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_left);
-		Bitmap lane_merge_to_right = BitmapFactory.decodeResource(getResources(), R.drawable.lane_merge_to_right);
-		Bitmap lane_none = BitmapFactory.decodeResource(getResources(), R.drawable.lane_none);
-		// bitmaps for lanes
-
 		// paint for bitmapdrawing on map
 		NavitGraphics.paint_for_map_display.setAntiAlias(true);
 		NavitGraphics.paint_for_map_display.setFilterBitmap(true);
@@ -1678,7 +1657,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Log.e("Navit", "Language " + lang);
 		// get the local language -------------
 
-		TextView no_maps_text = (TextView) this.findViewById(R.id.no_maps_text);
+		TextView no_maps_text = this.findViewById(R.id.no_maps_text);
 		no_maps_text.setText("\n\n\n" + Navit.get_text("No Maps installed") + "\n" + Navit.get_text("Please download a map") + "\n\n");
 
 		//		if (api_version_int < 11)
@@ -1883,18 +1862,16 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (Navit.metrics.densityDpi >= 320) //&& (PREF_shrink_on_high_dpi))
 		{
-			Navit.menu_button = BitmapFactory.decodeResource(getResources(), R.drawable.menu_001);
+			menu_button = BitmapFactory.decodeResource(getResources(), R.drawable.menu_001);
 		}
 		else
 		{
-			Navit.menu_button = BitmapFactory.decodeResource(getResources(), R.drawable.menu_001_small);
+			menu_button = BitmapFactory.decodeResource(getResources(), R.drawable.menu_001_small);
 		}
 
-		Navit.long_green_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.long_green_arrow);
+		Bitmap long_green_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.long_green_arrow);
 
-		Navit.follow_on = BitmapFactory.decodeResource(getResources(), R.drawable.follow);
-		Navit.follow_off = BitmapFactory.decodeResource(getResources(), R.drawable.follow_off);
-		Navit.follow_current = Navit.follow_on;
+		follow_current = true;
 
 		if ((Navit.metrics.densityDpi >= 320) && (p.PREF_shrink_on_high_dpi))
 		{
@@ -1906,33 +1883,33 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			o.inDither = true;
 			//o.inScaled = true;
 			//o.inTargetDensity = NavitGraphics.Global_Scaled_DPI_normal;
-			Navit.nav_arrow_stopped = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_stopped, o);
-			Navit.nav_arrow_moving = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving, o);
-			Navit.nav_arrow_moving_grey = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_grey, o);
-			Navit.nav_arrow_moving_shadow = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_shadow, o);
+			nav_arrow_stopped = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_stopped, o);
+			nav_arrow_moving = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving, o);
+			nav_arrow_moving_grey = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_grey, o);
+			nav_arrow_moving_shadow = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_shadow, o);
 
-			Navit.nav_arrow_stopped_small = Bitmap.createScaledBitmap(Navit.nav_arrow_stopped, (int) (Navit.nav_arrow_stopped.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_stopped.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
-			Navit.nav_arrow_moving_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving, (int) (Navit.nav_arrow_moving.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_moving.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
-			Navit.nav_arrow_moving_shadow_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving_shadow, (int) (Navit.nav_arrow_moving_shadow.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_moving_shadow.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
+			nav_arrow_stopped_small = Bitmap.createScaledBitmap(Navit.nav_arrow_stopped, (int) (Navit.nav_arrow_stopped.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_stopped.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
+			nav_arrow_moving_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving, (int) (Navit.nav_arrow_moving.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_moving.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
+			nav_arrow_moving_shadow_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving_shadow, (int) (Navit.nav_arrow_moving_shadow.getWidth() / NavitGraphics.strech_factor_3d_map * factor), (int) (Navit.nav_arrow_moving_shadow.getHeight() / NavitGraphics.strech_factor_3d_map * factor), true);
 		}
 		else
 		{
-			Navit.nav_arrow_stopped = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_stopped);
-			Navit.nav_arrow_moving = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving);
-			Navit.nav_arrow_moving_grey = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_grey);
-			Navit.nav_arrow_moving_shadow = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_shadow);
+			nav_arrow_stopped = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_stopped);
+			nav_arrow_moving = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving);
+			nav_arrow_moving_grey = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_grey);
+			nav_arrow_moving_shadow = BitmapFactory.decodeResource(getResources(), R.drawable.navigation_arrow_moving_shadow);
 
-			Navit.nav_arrow_stopped_small = Bitmap.createScaledBitmap(Navit.nav_arrow_stopped, (int) (Navit.nav_arrow_stopped.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (Navit.nav_arrow_stopped.getHeight() / NavitGraphics.strech_factor_3d_map), true);
-			Navit.nav_arrow_moving_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving, (int) (Navit.nav_arrow_moving.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (1.5 * Navit.nav_arrow_moving.getHeight() / NavitGraphics.strech_factor_3d_map), true);
-			Navit.nav_arrow_moving_shadow_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving_shadow, (int) (Navit.nav_arrow_moving_shadow.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (1.5 * Navit.nav_arrow_moving_shadow.getHeight() / NavitGraphics.strech_factor_3d_map), true);
+			nav_arrow_stopped_small = Bitmap.createScaledBitmap(Navit.nav_arrow_stopped, (int) (Navit.nav_arrow_stopped.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (Navit.nav_arrow_stopped.getHeight() / NavitGraphics.strech_factor_3d_map), true);
+			nav_arrow_moving_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving, (int) (Navit.nav_arrow_moving.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (1.5 * Navit.nav_arrow_moving.getHeight() / NavitGraphics.strech_factor_3d_map), true);
+			nav_arrow_moving_shadow_small = Bitmap.createScaledBitmap(Navit.nav_arrow_moving_shadow, (int) (Navit.nav_arrow_moving_shadow.getWidth() / NavitGraphics.strech_factor_3d_map), (int) (1.5 * Navit.nav_arrow_moving_shadow.getHeight() / NavitGraphics.strech_factor_3d_map), true);
 		}
 
-		Navit.zoomin = BitmapFactory.decodeResource(getResources(), R.drawable.zoom_in_32_32);
-		Navit.zoomout = BitmapFactory.decodeResource(getResources(), R.drawable.zoom_out_32_32);
+		zoomin = BitmapFactory.decodeResource(getResources(), R.drawable.zoom_in_32_32);
+		zoomout = BitmapFactory.decodeResource(getResources(), R.drawable.zoom_out_32_32);
 
 		//Navit.oneway_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.oneway);
-		Navit.oneway_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.oneway_large);
-		Navit.oneway_bicycle_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.oneway_bicycle_large);
+		oneway_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.oneway_large);
+		oneway_bicycle_arrow = BitmapFactory.decodeResource(getResources(), R.drawable.oneway_bicycle_large);
 
 		// *******************
 		// *******************
@@ -2063,7 +2040,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//		Dalvik/1.2.0 (Linux; U; Android 2.2.1; GT-S5570L Build/FROYO)
 		//		Dalvik/1.2.0 (Linux; U; Android 2.2.1; GT-I9000 Build/FROYO)
 		//		Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; InfoPath.1)
-		String ANDROID = android.os.Build.VERSION.SDK; //The current development codename, or the string "REL" if this is a release build.
 		//String BOARD = android.os.Build.BOARD; //The name of the underlying board, like "goldfish".    
 		//String BOOTLOADER = android.os.Build.BOOTLOADER; //  The system bootloader version number.
 		String BRAND = android.os.Build.BRAND; //The brand (e.g., carrier) the software is customized for, if any.
@@ -2083,7 +2059,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//String TYPE = android.os.Build.TYPE; //The type of build, like "user" or "eng".
 		//String USER = android.os.Build.USER;
 
-		String android_version = "Android " + ANDROID;
+		String android_version = "Android " + android.os.Build.VERSION.SDK;
 		String android_device = MANUFACTURER + " " + BRAND + " " + DEVICE;
 
 		if (MANUFACTURER.equalsIgnoreCase("amazon"))
@@ -2301,36 +2277,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			e.printStackTrace();
 		}
 
-		//		if (api_version_int < 11)
-		//		{
-		//			//TRANS
-		//			infobox.setPositiveButton(Navit.get_text("Ok"), new DialogInterface.OnClickListener()
-		//			{
-		//				public void onClick(DialogInterface arg0, int arg1)
-		//				{
-		//					Log.e("Navit", "Ok, user saw the infobox");
-		//				}
-		//			});
-		//
-		//			//TRANS
-		//			infobox.setNeutralButton(Navit.get_text("More info"), new DialogInterface.OnClickListener()
-		//			{
-		//				public void onClick(DialogInterface arg0, int arg1)
-		//				{
-		//					Log.e("Navit", "user wants more info, show the website");
-		//					// URL to ZANavi Manual (in english language)
-		//					String url = "http://zanavi.cc/index.php/Manual";
-		//					if (FDBL)
-		//					{
-		//						url = "http://fd.zanavi.cc/manual";
-		//					}
-		//					Intent i = new Intent(Intent.ACTION_VIEW);
-		//					i.setData(Uri.parse(url));
-		//					startActivity(i);
-		//				}
-		//			});
-		//		}
-
 		boolean info_popup_seen_count_end = false;
 		File navit_first_startup = new File(FIRST_STARTUP_FILE);
 		// if file does NOT exist, show the info box
@@ -2345,7 +2291,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				info_popup_seen_count++;
 				fos_temp = new FileOutputStream(navit_first_startup);
-				fos_temp.write((int) info_popup_seen_count); // use to store info popup seen count
+				fos_temp.write(info_popup_seen_count); // use to store info popup seen count
 				fos_temp.flush();
 				fos_temp.close();
 			}
@@ -2383,7 +2329,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				{
 					info_popup_seen_count++;
 					fos_temp = new FileOutputStream(navit_first_startup);
-					fos_temp.write((int) info_popup_seen_count); // use to store info popup seen count
+					fos_temp.write(info_popup_seen_count); // use to store info popup seen count
 					fos_temp.flush();
 					fos_temp.close();
 				}
@@ -3320,7 +3266,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
-		Navit.show_mem_used();
+		show_mem_used();
 
 		super.onStart();
 
@@ -4513,7 +4459,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		activatePrefs();
 		sun_moon__mLastCalcSunMillis = -1L;
 
-		push_pin_view = (ImageView) findViewById(R.id.bottom_slide_left_side);
+		push_pin_view = findViewById(R.id.bottom_slide_left_side);
 		if (p.PREF_follow_gps)
 		{
 			push_pin_view.setImageResource(R.drawable.pin1_down);
@@ -4588,7 +4534,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				if (Navit_maps_too_old)
 				{
-					TextView no_maps_text = (TextView) this.findViewById(R.id.no_maps_text);
+					TextView no_maps_text = this.findViewById(R.id.no_maps_text);
 					no_maps_text.setText("\n\n\n" + Navit.get_text("Some Maps are too old!") + "\n" + Navit.get_text("Please update your maps") + "\n\n");
 
 					try
@@ -4613,7 +4559,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					allow_use_index_search();
 					if (Navit_index_on_but_no_idx_files)
 					{
-						TextView no_maps_text = (TextView) this.findViewById(R.id.no_maps_text);
+						TextView no_maps_text = this.findViewById(R.id.no_maps_text);
 						no_maps_text.setText("\n\n\n" + Navit.get_text("No Index for some Maps") + "\n" + Navit.get_text("Please update your maps") + "\n\n");
 
 						try
@@ -4761,7 +4707,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				Bundle b99a = new Bundle();
 				b99a.putInt("Callback", 100);
 				msg99a.setData(b99a);
-				N_NavitGraphics.callback_handler.sendMessage(msg99a);
+				NavitGraphics.callback_handler.sendMessage(msg99a);
 			}
 		}
 		catch (Exception e)
@@ -10571,7 +10517,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
-		Navit.follow_current = Navit.follow_on;
+		follow_current = true;
 		p.PREF_follow_gps = true;
 		editor.putBoolean("follow_gps", p.PREF_follow_gps);
 		editor.apply();
@@ -10647,7 +10593,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Navit.getBaseContext_);
 		SharedPreferences.Editor editor = prefs.edit();
-		Navit.follow_current = Navit.follow_off;
+		follow_current = false;
 		p.PREF_follow_gps = false;
 		editor.putBoolean("follow_gps", p.PREF_follow_gps);
 		editor.apply();
@@ -10712,7 +10658,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		SharedPreferences.Editor editor = prefs.edit();
 		if (p.PREF_follow_gps)
 		{
-			Navit.follow_current = Navit.follow_off;
+			follow_current = false;
 			p.PREF_follow_gps = false;
 
 			// follow mode OFF -----------
@@ -10733,7 +10679,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Navit.follow_current = Navit.follow_on;
+			follow_current = true;
 			p.PREF_follow_gps = true;
 
 			// follow mode ON -----------
@@ -11309,11 +11255,11 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// call some functions to activate the new settings
 		if (p.PREF_follow_gps)
 		{
-			Navit.follow_current = Navit.follow_on;
+			follow_current = true;
 		}
 		else
 		{
-			Navit.follow_current = Navit.follow_off;
+			follow_current = false;
 		}
 
 		if (p.PREF_use_fast_provider)
@@ -14950,7 +14896,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		return false;
 	}
 
-	public static void applySharedTheme(Activity act, int Theme_id)
+	static void applySharedTheme(Activity act, int Theme_id)
 	{
 		act.setTheme(Theme_id);
 	}
@@ -15207,7 +15153,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	private void animate_bottom_bar_up()
 	{
-		final FrameLayout a = (FrameLayout) findViewById(R.id.bottom_bar_slide);
+		final FrameLayout a = findViewById(R.id.bottom_bar_slide);
 		TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -cur_y_margin_bottom_bar_touch);
 		animation.setDuration(bottom_bar_snap_duration); // animation duration
 		animation.setFillAfter(true);
@@ -15246,7 +15192,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	static void animate_bottom_bar_down()
 	{
-		final FrameLayout a = (FrameLayout) Global_Navit_Object.findViewById(R.id.bottom_bar_slide);
+		final FrameLayout a = Global_Navit_Object.findViewById(R.id.bottom_bar_slide);
 
 		// System.out.println("FRAG:animate_bottom_bar_down:014");
 
@@ -15459,37 +15405,37 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					int h001;
 					android.view.ViewGroup.LayoutParams lp001;
 
-					View v003 = (View) findViewById(R.id.osd_nextturn_new);
+					View v003 = findViewById(R.id.osd_nextturn_new);
 					h001 = getResources().getDimensionPixelSize(R.dimen.osd_nextturn_new_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					v003 = (View) findViewById(R.id.bottom_bar);
+					v003 = findViewById(R.id.bottom_bar);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_bar_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					LinearLayout v002 = (LinearLayout) findViewById(R.id.bottom_slide_view);
+					LinearLayout v002 = findViewById(R.id.bottom_slide_view);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_slide_view_height);
 					lp001 = v002.getLayoutParams();
 					lp001.height = h001;
 					v002.requestLayout();
 
-					v003 = (View) findViewById(R.id.osd_timetodest_new);
+					v003 = findViewById(R.id.osd_timetodest_new);
 					h001 = getResources().getDimensionPixelSize(R.dimen.osd_timetodest_new_height);
 					lp001 = v003.getLayoutParams();
 					lp001.height = h001;
 					v003.requestLayout();
 
-					v002 = (LinearLayout) findViewById(R.id.bottom_line_container);
+					v002 = findViewById(R.id.bottom_line_container);
 					h001 = getResources().getDimensionPixelSize(R.dimen.bottom_line_container_height);
 					lp001 = v002.getLayoutParams();
 					lp001.height = h001;
 					v002.requestLayout();
 
-					RelativeLayout v001 = (RelativeLayout) findViewById(R.id.gui_top_container);
+					RelativeLayout v001 = findViewById(R.id.gui_top_container);
 					h001 = getResources().getDimensionPixelSize(R.dimen.gui_top_container_height);
 					lp001 = v001.getLayoutParams();
 					lp001.height = h001;
@@ -15497,7 +15443,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 					int ml = getResources().getDimensionPixelSize(R.dimen.margin_left_speeding);
 					int mb = getResources().getDimensionPixelSize(R.dimen.margin_bottom_speeding);
-					v003 = (View) findViewById(R.id.view_speeding);
+					v003 = findViewById(R.id.view_speeding);
 					RelativeLayout.LayoutParams relativeParams_001 = (RelativeLayout.LayoutParams) v003.getLayoutParams();
 					relativeParams_001.setMargins(ml, 0, 0, mb); // left, top, right, bottom
 					v003.setLayoutParams(relativeParams_001);
@@ -15568,7 +15514,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 					int ml = getResources().getDimensionPixelSize(R.dimen.margin_left_speeding);
 					int mb = getResources().getDimensionPixelSize(R.dimen.margin_bottom_speeding);
-					v003 = (View) findViewById(R.id.view_speeding);
+					v003 = findViewById(R.id.view_speeding);
 					RelativeLayout.LayoutParams relativeParams_001 = (RelativeLayout.LayoutParams) v003.getLayoutParams();
 					relativeParams_001.setMargins(ml, 0, 0, mb); // left, top, right, bottom
 					v003.setLayoutParams(relativeParams_001);
@@ -15627,7 +15573,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	public static void route_wrapper(String addr, float lat_start, float lon_start, boolean start_coords_valid, double lat_end, double lon_end, boolean remember_dest)
+	static void route_wrapper(String addr, float lat_start, float lon_start, boolean start_coords_valid, double lat_end, double lon_end, boolean remember_dest)
 	{
 		global_last_destination_name = NavitSpeech2.filter_out_special_chars_for_dest_string(addr);
 		// System.out.println("HOME002:" + addr + " = " + global_last_destination_name);
@@ -16074,7 +16020,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		return latLongList;
 	}
 
-	public static class geo_coord
+	static class geo_coord
 	{
 		public double Latitude;
 		public double Longitude;
@@ -16241,7 +16187,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	public static void runOnUI(Runnable runnable)
+	static void runOnUI(Runnable runnable)
 	{
 		UIHandler.post(runnable);
 	}
@@ -16858,7 +16804,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	// --------- make app crash ---------
 	// --------- make app crash ---------
 	// --------- make app crash ---------
-	public static void crash_app_java(int type)
+	static void crash_app_java(int type)
 	{
 		System.out.println("+++++======= CRASH  =======+++++");
 		System.out.println("+++++======= CRASH  =======+++++");
@@ -16882,7 +16828,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	public static void crash_app_C()
+	static void crash_app_C()
 	{
 		System.out.println("+++++======= CRASH  =======+++++");
 		System.out.println("+++++======= CRASH  =======+++++");
@@ -16901,7 +16847,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		i.byteValue();
 	}
 
-	public static native void AppCrashC();
+	static native void AppCrashC();
 
 	private static void Java_Crash_002()
 	{
