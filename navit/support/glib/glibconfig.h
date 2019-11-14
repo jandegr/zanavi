@@ -13,6 +13,10 @@
 #include <float.h>
 #include "config.h"
 
+#ifdef HAVE_API_WIN32_BASE
+#include <libgnuintl.h>
+#endif
+
 G_BEGIN_DECLS
 
 #define G_MINFLOAT	FLT_MIN
@@ -65,7 +69,7 @@ typedef unsigned __int64 guint64;
 #define G_GINT64_FORMAT "I64i"
 #define G_GUINT64_FORMAT "I64u"
 
-#if defined(_WIN64) || defined(_M_X64) || defined(_M_AMD64)
+#if defined(_WIN64) || defined(_M_X64) || defined(_M_AMD64) || defined(__LP64__)
 
 #define GLIB_SIZEOF_VOID_P 8
 #define GLIB_SIZEOF_LONG   4
@@ -103,7 +107,7 @@ typedef gint64 goffset;
 #define G_MINOFFSET	G_MININT64
 #define G_MAXOFFSET	G_MAXINT64
 
-#ifndef _WIN64
+#if !defined (_WIN64) && !defined (__LP64__)
 
 #define GPOINTER_TO_INT(p)	((gint)   (p))
 #define GPOINTER_TO_UINT(p)	((guint)  (p))
@@ -247,11 +251,7 @@ union _GSystemThread
 #define HAVE_GOOD_PRINTF
 #define NO_SYS_SIGLIST_DECL
 #define GLIB_STATIC_COMPILATION
-
-
 #define G_DISABLE_CHECKS
-
-
 /* A GPid is an abstraction for a process "handle". It is *not* an
  * abstraction for a process identifier in general. GPid is used in
  * GLib only for descendant processes spawned with the g_spawn*

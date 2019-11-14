@@ -362,7 +362,7 @@ ATTR(exit_to)
 ATTR(street_lanes_forward)
 ATTR(street_turn_lanes)
 ATTR(street_destination_lanes)
-
+ATTR(dbg_level)
 ATTR2(0x0003ffff,type_string_end)
 ATTR2(0x00040000,type_special_begin)
 ATTR(order)

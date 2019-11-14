@@ -568,7 +568,7 @@ static void file_process_headers(struct file *file, unsigned char *headers)
 	{
 		g_hash_table_destroy(file->headers);
 	}
-	file->headers = g_hash_table_new_full(g_str_hash, g_str_equal, g_free_func, NULL);
+	file->headers = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 	while ((tok = strtok((char*) headers, "\r\n")))
 	{
 		char *sep;

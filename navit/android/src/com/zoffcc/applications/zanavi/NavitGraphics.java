@@ -482,7 +482,7 @@ public class NavitGraphics
 					// catch (Throwable e)
 					catch (Exception e)
 					{
-						System.err.println(e);
+						Log.e("NavitGraphics", "exception" + e.getMessage());
 					}
 					this.running = false;
 				}
@@ -3668,7 +3668,7 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static native void TimeoutCallback(int del, int id);
+	public static native void TimeoutCallback(int del, long id);
 
 	public static native void SizeChangedCallbackReal(int w, int h, Bitmap main_map_bitmap);
 
@@ -3686,8 +3686,6 @@ public class NavitGraphics
 		Navit.cwthr.SizeChangedCallback(w, h, main_map_bitmap);
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
-
-	// public native void ButtonCallback(int pressed, int button, int x, int y);
 
 	public static native void MotionCallbackReal(int x1, int y1, int x2, int y2, int draw);
 
@@ -3709,13 +3707,6 @@ public class NavitGraphics
 	 * public void setSizeChangedCallback(int id)
 	 * {
 	 * SizeChangedCallbackID = id;
-	 * }
-	 */
-
-	/*
-	 * public void setButtonCallback(int id)
-	 * {
-	 * ButtonCallbackID = id;
 	 * }
 	 */
 
@@ -4818,12 +4809,7 @@ public class NavitGraphics
 		}
 	}
 	
-	/**
-	 * Make the preview bitmap the one produced with
-	 * openGL in native code.
-	 *
-	 * @param bitmap to use as preview
-	 */
+
 	static void Preview_set_bitmap(Bitmap bitmap)
 	{
 		preview_bitmap = bitmap;
@@ -6192,39 +6178,37 @@ public class NavitGraphics
 			e.printStackTrace();
 		}
 
-		String a = null;
-		String b = null;
-		String a1 = null;
-		String b1 = null;
-		String c = null;
-		String c1 = null;
-		String d = null;
-		String d1 = null;
+		String a;
+		String b;
+		String a1;
+		String b1;
+		String c;
+		String c1;
+		String d;
+		String d1;
 		int j;
-		//
-		//
-		//
+
 		a = "When possible, please turn around";
 		a1 = CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
-		//
+
 		a = "Enter the roundabout soon";
 		a1 = CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
-		//
+
 		a = "then you have reached your destination.";
 		a1 = CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
-		//
+
 		a = "In %s, enter the roundabout";
 		a1 = CallbackLocalizedString(a);
 		for (j = 1; j < 10; j++)
@@ -6288,7 +6272,7 @@ public class NavitGraphics
 				System.out.println(d1);
 			}
 		}
-		//
+
 		a = "Follow the road for the next %s";
 		a1 = CallbackLocalizedString(a);
 		for (j = 1; j < 10; j++)
@@ -6352,7 +6336,7 @@ public class NavitGraphics
 				System.out.println(d1);
 			}
 		}
-		//
+
 		a = "Leave the roundabout at the %s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
@@ -6361,7 +6345,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "Leave the roundabout at the %s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
@@ -6370,7 +6354,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "then leave the roundabout at the %s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
@@ -6379,7 +6363,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "then leave the roundabout at the %s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
@@ -6388,7 +6372,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "Take the %1$s road to the %2$s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "first", "left");
@@ -6397,7 +6381,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "Take the %1$s road to the %2$s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "first", "right");
@@ -6406,7 +6390,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "Take the %1$s road to the %2$s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "third", "left");
@@ -6415,7 +6399,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "Take the %1$s road to the %2$s";
 		a1 = CallbackLocalizedString(a);
 		b = String.format(a, "third", "right");
@@ -6424,7 +6408,7 @@ public class NavitGraphics
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
-		//
+
 		a = "You have reached your destination %s";
 		a1 = CallbackLocalizedString(a);
 		for (j = 1; j < 14; j++)
@@ -6511,7 +6495,7 @@ public class NavitGraphics
 				System.out.println(d1);
 			}
 		}
-		//
+
 		a = "Turn %1$s%2$s %3$s%4$s";
 		a1 = CallbackLocalizedString(a);
 		String xx = null;
@@ -6646,7 +6630,7 @@ public class NavitGraphics
 				}
 			}
 		}
-		//
+
 		a = "then turn %1$s%2$s %3$s%4$s";
 		a1 = CallbackLocalizedString(a);
 		xx = null;
@@ -6781,9 +6765,7 @@ public class NavitGraphics
 				}
 			}
 		}
-		//
-		//
-		//
+
 
 		/*
 		 * speech commands:

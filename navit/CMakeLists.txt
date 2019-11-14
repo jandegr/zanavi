@@ -4,19 +4,32 @@ include_directories( "${CMAKE_CURRENT_SOURCE_DIR}")
 include_directories( "${CMAKE_CURRENT_BINARY_DIR}")
 include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/support")
 
+IF(POLICY CMP0008)
+   cmake_policy(SET CMP0008 OLD)
+ENDIF()
+
 # navit
 set(NAVIT_SRC announcement.c atom.c attr.c cache.c callback.c command.c config_.c coord.c country.c data_window.c debug.c
    event.c file.c graphics.c gui.c item.c layout.c log.c main.c map.c
    linguistics.c mapset.c maptype.c menu.c messages.c bookmarks.c navit.c navigation.c osd.c param.c phrase.c plugin.c popup.c
    profile.c projection.c roadprofile.c route.c search.c speech.c start_real.c sunriset.c transform.c track.c
-   maptool/miniz.c coffeecatch.c
-   coffeejni.c snprintf.c
-   vehicle/android/vehicle_android.c vehicle/demo/vehicle_demo.c
-   gui/internal/gui_internal.c
-   graphics/android/graphics_android.c map/binfile/binfile.c
-   map/csv/csv.c map/csv/quadtree.c map/textfile/textfile.c
-   osd/core/osd_core.c speech/android/speech_android.c android.c
-   util.c vehicle.c vehicleprofile.c xmlconfig.c )
+   util.c vehicle.c vehicleprofile.c xmlconfig.c 
+   maptool/miniz.c
+
+
+        #snprintf.c
+
+#   coffeecatch.c coffeejni.c
+#   vehicle/android/vehicle_android.c vehicle/demo/vehicle_demo.c
+#   gui/internal/gui_internal.c
+#   graphics/android/graphics_android.c
+#        map/binfile/binfile.c
+#   map/csv/csv.c map/csv/quadtree.c
+#         map/textfile/textfile.c
+#   osd/core/osd_core.c
+#        speech/android/speech_android.c
+#        android.c
+   )
 
 if(NOT USE_PLUGINS)
   list(APPEND NAVIT_SRC  ${CMAKE_CURRENT_BINARY_DIR}/builtin.c)
@@ -62,7 +75,6 @@ endforeach()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/builtin.c.in ${CMAKE_CURRENT_BINARY_DIR}/builtin.c)
 
 include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/fib-1.1")
-include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/../intl")
 
 # Add module paths
 foreach (CURRENT_MODULE ${ALL_PLUGINS} ${ALL_MODULE_PLUGINS} ${ALL_MODULES})
@@ -72,7 +84,6 @@ foreach (CURRENT_MODULE ${ALL_PLUGINS} ${ALL_MODULE_PLUGINS} ${ALL_MODULES})
 endforeach()
 
 add_subdirectory (fib-1.1)
-add_subdirectory (../intl ./intl) # out-of-source dir needs bin dir
 
 if(NOT ANDROID)
    set(NAVIT_START_SRC start.c)
@@ -110,17 +121,18 @@ endif(SHARED_LIBNAVIT)
 if(NOT MSVC)
     SET(NAVIT_LIBS ${NAVIT_LIBS} m)
 endif(NOT MSVC)
-target_link_libraries(${NAVIT_LIBNAME}  ${MODULES_NAME} ${NAVIT_SUPPORT_LIBS} fib intl ${NAVIT_LIBS})
+target_link_libraries(${NAVIT_LIBNAME}  ${MODULES_NAME} ${NAVIT_SUPPORT_LIBS} fib ${NAVIT_LIBS})
 set_target_properties(${NAVIT_LIBNAME} PROPERTIES COMPILE_DEFINITIONS "MODULE=navit;LIBDIR=\"${CMAKE_INSTALL_PREFIX}/${LIB_DIR}\";PREFIX=\"${CMAKE_INSTALL_PREFIX}\"")
 if (DEFINED NAVIT_COMPILE_FLAGS)
    set_target_properties(${NAVIT_LIBNAME} PROPERTIES COMPILE_FLAGS "${NAVIT_COMPILE_FLAGS}")
 endif()
 
+
 ADD_CUSTOM_TARGET(
    git_version
    ${CMAKE_COMMAND} -D SRC=${CMAKE_CURRENT_SOURCE_DIR}/version.h.in
                     -D DST=${CMAKE_CURRENT_BINARY_DIR}/version.h
-		    -D NAME="GIT_VERSION"
+					-D NAME="GIT_VERSION"
                     -P ${PROJECT_SOURCE_DIR}/cmake/version.cmake
 )
 

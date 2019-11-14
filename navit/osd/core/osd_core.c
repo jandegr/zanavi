@@ -2405,7 +2405,7 @@ osd_text_format_attr(struct attr *attr, char *format, int imperial)
 		return format_float_0(*attr->u.numd);
 
 	case attr_position_magnetic_direction:
-		return g_strdup_printf("%d",attr->u.num);
+		return g_strdup_printf("%ld",attr->u.num);
 
 	case attr_position_coord_geo:
 		if ((!format) || (!strcmp(format,"pos_degminsec")))
@@ -3392,7 +3392,7 @@ osd_gps_status_draw(struct gps_status *this, struct navit *navit,
 			case 2:
 				strength=2;
 				if (vehicle_get_attr(vehicle_attr.u.vehicle, attr_position_sats_used, &attr, NULL)) {
-					dbg(1,"num=%d\n", attr.u.num);
+					dbg(0,"num=%ld\n", attr.u.num);
 					if (attr.u.num >= 3) 
 						strength=attr.u.num-1;
 					if (strength > 5)

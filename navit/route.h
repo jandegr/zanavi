@@ -285,6 +285,7 @@ void route_find_next_lowest_segment_and_pin_it(struct route_graph_point *p, stru
 int route_get_real_oneway_flag(int road_flag, int oneway_flag_value);
 int route_road_to_road_angle_get_segs(struct route_graph_segment *s1, struct route_graph_segment *s2, int dir1, int *dir2, struct coord *cc, struct coord *cs, struct coord *ce, int abs);
 int is_turn_allowed(struct route_graph_point *p, struct route_graph_segment *from, struct route_graph_segment *to);
+char *route_status_to_name(enum route_status s);
 
 /* end of prototypes */
 #ifdef __cplusplus

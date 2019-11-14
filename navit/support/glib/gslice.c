@@ -34,6 +34,7 @@
 #include "gthreadprivate.h"
 #include "glib.h"
 #include "galias.h"
+#include "fake.h"
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>             /* sysconf() */
 #endif
@@ -287,12 +288,12 @@ slice_config_init (SliceConfig *config)
   gint flags = !val ? 0 : g_parse_debug_string (val, keys, G_N_ELEMENTS (keys));
 #endif
   *config = slice_config;
-#if NOT_NEEDED_FOR_NAVIT
-  if (flags & (1 << 0))         /* always-malloc */
+//#if NOT_NEEDED_FOR_NAVIT
+//  if (flags & (1 << 0))         /* always-malloc */
     config->always_malloc = TRUE;
-  if (flags & (1 << 1))         /* debug-blocks */
-    config->debug_blocks = TRUE;
-#endif
+//  if (flags & (1 << 1))         /* debug-blocks */
+//    config->debug_blocks = TRUE;
+//#endif
 }
 
 static void
@@ -1265,17 +1266,17 @@ smc_notify_free (void   *pointer,
   found_one = smc_tree_lookup (adress, &real_size);
   if (!found_one)
     {
-      fprintf (stderr, "GSlice: MemChecker: attempt to release non-allocated block: %p size=%" G_GSIZE_FORMAT "\n", pointer, size);
+      //fprintf (stderr, "GSlice: MemChecker: attempt to release non-allocated block: %p size=%" G_GSIZE_FORMAT "\n", pointer, size);
       return 0;
     }
   if (real_size != size && (real_size || size))
     {
-      fprintf (stderr, "GSlice: MemChecker: attempt to release block with invalid size: %p size=%" G_GSIZE_FORMAT " invalid-size=%" G_GSIZE_FORMAT "\n", pointer, real_size, size);
+      //fprintf (stderr, "GSlice: MemChecker: attempt to release block with invalid size: %p size=%" G_GSIZE_FORMAT " invalid-size=%" G_GSIZE_FORMAT "\n", pointer, real_size, size);
       return 0;
     }
   if (!smc_tree_remove (adress))
     {
-      fprintf (stderr, "GSlice: MemChecker: attempt to release non-allocated block: %p size=%" G_GSIZE_FORMAT "\n", pointer, size);
+      //fprintf (stderr, "GSlice: MemChecker: attempt to release non-allocated block: %p size=%" G_GSIZE_FORMAT "\n", pointer, size);
       return 0;
     }
   return 1; /* all fine */

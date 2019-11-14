@@ -307,7 +307,7 @@ bookmarks_store_bookmarks_to_file(struct bookmarks *this_,  int limit,int replac
 	char *fullname;
 	const char *prostr;
 	int result;
-	GHashTable *dedup=g_hash_table_new_full(g_str_hash,g_str_equal,g_free_func,NULL);
+	GHashTable *dedup=g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 
 	f=fopen(this_->working_file, replace ? "w+" : "a+");
 	if (f==NULL) {

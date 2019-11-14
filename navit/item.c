@@ -1561,7 +1561,7 @@ item_hash_new(void)
 {
 	struct item_hash *ret=g_new(struct item_hash, 1);
 
-	ret->h = g_hash_table_new_full(item_hash_hash, item_hash_equal, g_free_func, NULL);
+	ret->h = g_hash_table_new_full(item_hash_hash, item_hash_equal, g_free, NULL);
 	return ret;
 }
 

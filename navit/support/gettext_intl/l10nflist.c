@@ -58,7 +58,7 @@
 # endif
 #else
 # ifndef HAVE_STPCPY
-char *stpcpy (char *dest, const char *src);
+static char *stpcpy (char *dest, const char *src);
 # endif
 #endif
 
@@ -152,7 +152,7 @@ argz_next__ (char *argz, size_t argz_len, const char *entry)
 
 
 /* Return number of bits set in X.  */
-static inline int
+static int
 pop (int x)
 {
   /* We assume that no more than 16 bits are used.  */
@@ -410,9 +410,8 @@ _nl_normalize_codeset (const char *codeset, size_t name_len)
    avoid the non-standard function stpcpy.  In GNU C Library this
    function is available, though.  Also allow the symbol HAVE_STPCPY
    to be defined.  */
-#if 0 // 4.8
 #if !_LIBC && !HAVE_STPCPY
-char *
+static char *
 stpcpy (char *dest, const char *src)
 {
   while ((*dest++ = *src++) != '\0')
@@ -420,5 +419,3 @@ stpcpy (char *dest, const char *src)
   return dest - 1;
 }
 #endif
-#endif
-

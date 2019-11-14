@@ -25,9 +25,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-public class NavitWatch implements Runnable
+class NavitWatch implements Runnable
 {
-	private Thread thread;
+	private final Thread thread;
 
 	public Handler handler;
 	/*
@@ -41,17 +41,17 @@ public class NavitWatch implements Runnable
 	 */
 
 	private boolean removed;
-	private int watch_fd;
-	private int watch_cond;
-	private int watch_callbackid;
+	private final long watch_fd;
+	private final int watch_cond;
+	private final long watch_callbackid;
 	private boolean callback_pending;
-	private Runnable callback_runnable;
+	private final Runnable callback_runnable;
 
-	public native void poll(int fd, int cond);
+	public native void poll(long fd, int cond);
 
-	public native void WatchCallback(int id);
+	public native void WatchCallback(long id);
 
-	NavitWatch(int fd, int cond, int callbackid)
+	NavitWatch(long fd, int cond, long callbackid)
 	{
 		Log.e("NavitWatch", "Creating new thread for " + fd + " " + cond + " from current thread " + java.lang.Thread.currentThread().getName());
 		watch_fd = fd;
@@ -106,7 +106,7 @@ public class NavitWatch implements Runnable
 		}
 	}
 
-	public void callback()
+	private void callback()
 	{
 		Log.e("NavitWatch", "Calling Callback");
 		if (!removed) WatchCallback(watch_callbackid);

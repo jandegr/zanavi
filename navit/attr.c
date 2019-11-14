@@ -182,13 +182,13 @@ attr_new_from_text(const char *name, const char *value)
 					 Relative values are from 0x40000001 - 0x80000000, with 0x60000000 being 0 */
 				if (strchr(value, '%')) {
 					if ((ret->u.num > 0x20000000) || (ret->u.num < -0x1FFFFFFF)) {
-						dbg(0, "Relative possibly-relative attribute with invalid value %i\n", ret->u.num);
+						dbg(0, "Relative possibly-relative attribute with invalid value %li\n", ret->u.num);
 					}
 
 					ret->u.num += 0x60000000;
 				} else {
 					if ((ret->u.num > 0x40000000) || (ret->u.num < -0x40000000)) {
-						dbg(0, "Non-relative possibly-relative attribute with invalid value %i\n", ret->u.num);
+						dbg(0, "Non-relative possibly-relative attribute with invalid value %li\n", ret->u.num);
 					}
 				}
 			} else 	if (attr >= attr_type_boolean_begin) { // also check for yes and no
@@ -314,7 +314,7 @@ attr_to_text(struct attr *attr, struct map *map, int pretty)
 	if (type == attr_flags || type == attr_through_traffic_flags)
 		return flags_to_text(attr->u.num);
 	if (type >= attr_type_int_begin && type <= attr_type_int_end) 
-		return g_strdup_printf("%d", attr->u.num);
+		return g_strdup_printf("%ld", attr->u.num);
 	if (type >= attr_type_int64_begin && type <= attr_type_int64_end) 
 		return g_strdup_printf(LONGLONG_FMT, *attr->u.num64);
 	if (type >= attr_type_double_begin && type <= attr_type_double_end) 
@@ -351,7 +351,8 @@ attr_to_text(struct attr *attr, struct map *map, int pretty)
 		return ret;
 	}
 	if (type >= attr_type_item_type_begin && type <= attr_type_item_type_end) {
-		return g_strdup_printf("0x%x[%s]",attr->u.num,item_to_name(attr->u.num));
+		// !!! is  0x%ld[%s] in my other fork (jdg)
+		return g_strdup_printf("0x%lx[%s]",attr->u.num,item_to_name(attr->u.num));
 	}
 	return g_strdup_printf("(no text[%s])", attr_to_name(type));	
 }

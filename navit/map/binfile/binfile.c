@@ -709,7 +709,7 @@ binfile_item_dup(struct map_priv *m, struct item *item, struct tile *t, int exte
 
 	memcpy(ret, t->pos, (size + 1) * sizeof(int));
 	if (!m->changes)
-		m->changes = g_hash_table_new_full(binfile_hash_entry_hash, binfile_hash_entry_equal, g_free_func, NULL);
+		m->changes = g_hash_table_new_full(binfile_hash_entry_hash, binfile_hash_entry_equal, g_free, NULL);
 	g_hash_table_replace(m->changes, entry, entry);
 	// dbg(0, "ret %p\n", ret);
 	return ret;
@@ -1727,7 +1727,7 @@ static void load_changes(struct map_priv *m)
 		g_free(changes_file);
 		return;
 	}
-	m->changes = g_hash_table_new_full(binfile_hash_entry_hash, binfile_hash_entry_equal, g_free_func, NULL);
+	m->changes = g_hash_table_new_full(binfile_hash_entry_hash, binfile_hash_entry_equal, g_free, NULL);
 	while (fread(&entry, sizeof(entry), 1, changes) == 1)
 	{
 		if (fread(&size, sizeof(size), 1, changes) != 1)
@@ -2339,7 +2339,7 @@ static int duplicate(struct map_search_priv *msp, struct item *item, enum attr_t
 
 	if (!msp->search_results)
 	{
-		msp->search_results = g_hash_table_new_full(duplicate_hash, duplicate_equal, g_free_func, NULL);
+		msp->search_results = g_hash_table_new_full(duplicate_hash, duplicate_equal, g_free, NULL);
 	}
 
 	binfile_attr_rewind(item->priv_data);

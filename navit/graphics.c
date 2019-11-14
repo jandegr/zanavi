@@ -75,6 +75,7 @@
 #include "track.h"
 #include "navit.h"
 #include "route.h"
+#include "navigation.h"
 
 #ifdef HAVE_API_ANDROID
 #include "android.h"
@@ -4052,7 +4053,7 @@ static void xdisplay_draw_layer(struct displaylist *display_list, struct graphic
 	{
 		// dummy "ready" signal ------------------------------------------
 		// dbg(0, "dummy \"ready\" signal (layers)\n");
-		gra->meth.draw_lines4(gra->priv, NULL, NULL, NULL, 1, 1, 96, 0, NULL, 1);
+		gra->meth.draw_lines4(gra->priv, NULL, NULL, 0, 1, 1, 96, 0, NULL, 1);
 		// dummy "ready" signal ------------------------------------------
 	}
 

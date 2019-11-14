@@ -1439,7 +1439,7 @@ void navit_reset_cycleway(struct navit *this)
 }
 
 
-void navit_layer_toggle_active(struct navit *this, char *name, int draw)
+void navit_layer_toggle_active(struct navit *this, const char *name, int draw)
 {
 	if (name)
 	{
@@ -1475,7 +1475,7 @@ void navit_layer_toggle_active(struct navit *this, char *name, int draw)
  * @param draw		0 -> dont redraw, 1 -> redraw
  * @returns			nothing
  */
-void navit_layer_set_active(struct navit *this, char *name, int active, int draw)
+void navit_layer_set_active(struct navit *this, const char *name, int active, int draw)
 {
 	if (name)
 	{
@@ -2649,7 +2649,7 @@ static void navit_window_roadbook_update(struct navit *this_)
 			param[0].name = _("Command");
 
 			item_attr_get(item, attr_length, &attr);
-			dbg(2, "Length=%d\n", attr.u.num);
+			dbg(2, "Length=%ld\n", attr.u.num);
 			param[1].name = _("Length");
 
 			if (attr.u.num >= 2000)
@@ -2658,11 +2658,11 @@ static void navit_window_roadbook_update(struct navit *this_)
 			}
 			else
 			{
-				param[1].value = g_strdup_printf("%7d %s", attr.u.num, _("m"));
+				param[1].value = g_strdup_printf("%7ld %s", attr.u.num, _("m"));
 			}
 
 			item_attr_get(item, attr_time, &attr);
-			dbg(2, "Time=%d\n", attr.u.num);
+			dbg(2, "Time=%ld\n", attr.u.num);
 			secs = attr.u.num / 10;
 			param[2].name = _("Time");
 			if (secs >= 3600)
@@ -2675,7 +2675,7 @@ static void navit_window_roadbook_update(struct navit *this_)
 			}
 
 			item_attr_get(item, attr_destination_length, &attr);
-			dbg(2, "Destlength=%d\n", attr.u.num);
+			dbg(2, "Destlength=%ld\n", attr.u.num);
 			param[3].name = _("Destination Length");
 			if (attr.u.num >= 2000)
 			{
@@ -2683,11 +2683,11 @@ static void navit_window_roadbook_update(struct navit *this_)
 			}
 			else
 			{
-				param[3].value = g_strdup_printf("%d %s", attr.u.num, _("m"));
+				param[3].value = g_strdup_printf("%ld %s", attr.u.num, _("m"));
 			}
 
 			item_attr_get(item, attr_destination_time, &attr);
-			dbg(2, "Desttime=%d\n", attr.u.num);
+			dbg(2, "Desttime=%ld\n", attr.u.num);
 			secs = attr.u.num / 10;
 			param[4].name = _("Destination Time");
 			if (secs >= 3600)
@@ -5585,7 +5585,7 @@ navit_set_position_without_map_drawing(struct navit *this_, struct pcoord *c)
 
 
 int
-navit_set_vehicleprofile(struct navit *this_, char *name)
+navit_set_vehicleprofile(struct navit *this_, const char *name)
 {
 
 
@@ -6640,8 +6640,7 @@ navit_find_nearest_street_coords(struct mapset *ms, struct pcoord *pc)
 
 
 	mindist = 10000; // start with small radius at the beginning!
-	street_coords = g_strdup_printf("", "");
-
+	street_coords = g_strdup("");
 	h = mapset_open(ms);
 
 	if (!h)
@@ -7022,7 +7021,7 @@ GList* navit_route_export_to_java_string(struct navit *this_, int result_id)
 }
 
 void
-navit_route_export_gpx_to_file(struct navit *this_, char *filename)
+navit_route_export_gpx_to_file(struct navit *this_, const char *filename)
 {
 	dbg(0,"Dumping route to %s\n", filename);
 

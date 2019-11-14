@@ -104,7 +104,7 @@ save_map_csv(struct map_priv *m)
 					}
 					if(found_attr) {
 						if(ATTR_IS_INT(*at)) {
-							tmpstr = g_strdup_printf("%d", found_attr->u.num);
+							tmpstr = g_strdup_printf("%ld", found_attr->u.num);
 						}
 						else if(ATTR_IS_DOUBLE(*at)) {
 							tmpstr = g_strdup_printf("%lf", *found_attr->u.numd);
@@ -113,7 +113,9 @@ save_map_csv(struct map_priv *m)
 							tmpstr = g_strdup(found_attr->u.str);
 						}
 					}
-					else {	//TODO handle this error
+					else {
+						//dbg(0,"No value defined for the atribute %s, assuming empty string\n",attr_to_name(*at));
+						tmpstr=g_strdup("");
 					}
 				}
 				oldstr = csv_line;
@@ -542,7 +544,7 @@ map_new_csv(struct map_methods *meth, struct attr **attrs, struct callback_list 
 	m = g_new0(struct map_priv, 1);
 	m->id = ++map_id;
 	m->qitem_hash = g_hash_table_new(g_int_hash, g_int_equal);
-	m->item_hash = g_hash_table_new_full(g_int_hash, g_int_equal,g_free_func,g_free_func);
+	m->item_hash = g_hash_table_new_full(g_int_hash, g_int_equal,g_free,g_free);
 
 	item_type  = attr_search(attrs, NULL, attr_item_type);
 	attr_types = attr_search(attrs, NULL, attr_attr_types);

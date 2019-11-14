@@ -810,7 +810,9 @@ _nl_locale_name (int category, const char *categoryname)
       switch (sub)
 	{
 	case SUBLANG_BENGALI_INDIA: return "bn_IN";
+#if 0 /* FIXME */
 	case SUBLANG_BENGALI_BANGLADESH: return "bn_BD";
+#endif
 	}
       return "bn";
     case LANG_BULGARIAN: return "bg_BG";
@@ -1020,7 +1022,9 @@ _nl_locale_name (int category, const char *categoryname)
       switch (sub)
 	{
 	case SUBLANG_PUNJABI_INDIA: return "pa_IN"; /* Gurmukhi script */
+#if 0 /* FIXME */
 	case SUBLANG_PUNJABI_PAKISTAN: return "pa_PK"; /* Arabic script */
+#endif
 	}
       return "pa";
     case LANG_RHAETO_ROMANCE: return "rm_CH";
@@ -1028,7 +1032,9 @@ _nl_locale_name (int category, const char *categoryname)
       switch (sub)
 	{
 	case SUBLANG_ROMANIAN_ROMANIA: return "ro_RO";
+#if 0 /* FIXME */
 	case SUBLANG_ROMANIAN_MOLDOVA: return "ro_MD";
+#endif
 	}
       return "ro";
     case LANG_RUSSIAN:

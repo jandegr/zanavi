@@ -27,9 +27,11 @@
 # include <config.h>
 #endif
 
+#include <stdlib.h>
 #include <sys/types.h>
 
 #ifdef __GNUC__
+# undef alloca
 # define alloca __builtin_alloca
 # define HAVE_ALLOCA 1
 #else
@@ -60,7 +62,6 @@ extern int errno;
 #endif
 
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 
 #if defined HAVE_UNISTD_H || defined _LIBC
@@ -144,15 +145,6 @@ extern int errno;
 # endif
 # define tfind __tfind
 #else
-//
-// # zoff ####
-// # zoff ####
-#ifdef HAVE_API_ANDROID
-# define HAVE_GETCWD
-#endif
-// # zoff ####
-// # zoff ####
-//
 # if !defined HAVE_GETCWD
 char *getwd ();
 #  define getcwd(buf, max) getwd (buf)
@@ -163,11 +155,8 @@ char *getwd ();
 char *getcwd ();
 #  endif
 # endif
-
-
-
 # ifndef HAVE_STPCPY
-char *stpcpy (char *dest, const char *src);
+static char *stpcpy (char *dest, const char *src);
 # endif
 # ifndef HAVE_MEMPCPY
 static void *mempcpy (void *dest, const void *src, size_t n);
@@ -1177,7 +1166,7 @@ guess_category_value (int category, const char *categoryname)
    function is available, though.  Also allow the symbol HAVE_STPCPY
    to be defined.  */
 #if !_LIBC && !HAVE_STPCPY
-char *
+static char *
 stpcpy (char *dest, const char *src)
 {
   while ((*dest++ = *src++) != '\0')

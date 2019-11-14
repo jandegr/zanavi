@@ -848,7 +848,7 @@ void spill_index()
 {
 }
 
-void search_v2(char *addr, char *town, char* hn, int partial, struct jni_object *jni)
+void search_v2(const char *addr, const char *town, const char* hn, int partial, struct jni_object *jni)
 {
 	//dbg(0,"+#+:enter\n");
 
@@ -993,7 +993,7 @@ void search_v2(char *addr, char *town, char* hn, int partial, struct jni_object 
 	//dbg(0,"+#+:leave\n");
 }
 
-int search_v2_work(char *addr, char *town, char* hn, int partial, struct jni_object *jni, const char* idxfile_name)
+int search_v2_work(const char *addr, const char *town, const char* hn, int partial, struct jni_object *jni, const char* idxfile_name)
 {
 	//dbg(0,"+#+:enter\n");
 

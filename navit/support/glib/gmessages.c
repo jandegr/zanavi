@@ -43,7 +43,7 @@
 
 #include "glib.h"
 #if NOT_NEEDED_FOR_NAVIT
-//#include "gdebug.h"
+#include "gdebug.h"
 #endif /* NOT_NEEDED_FOR_NAVIT */
 #include "gprintfint.h"
 #include "gthreadprivate.h"
@@ -981,13 +981,7 @@ g_print (const gchar *format,
   va_start (args, format);
   string = g_strdup_vprintf (format, args);
   va_end (args);
-
-//#ifdef HAVE_API_ANDROID
-	//#include "debug.h"
-	//dbg(0, string);
-//#endif
-
-#if 0
+  
   g_mutex_lock (g_messages_lock);
   local_glib_print_func = glib_print_func;
   g_mutex_unlock (g_messages_lock);
@@ -1009,8 +1003,6 @@ g_print (const gchar *format,
 	}
       fflush (stdout);
     }
-#endif
-
   g_free (string);
 }
 

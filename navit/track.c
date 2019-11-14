@@ -2636,7 +2636,7 @@ static int tracking_set_attr_do(struct tracking *tr, struct attr *attr, int init
 			return 1;
 		case attr_connected_pref:
 			tr->connected_pref = attr->u.num;
-			dbg(0, "connected_pref=%d\n", attr->u.num);
+			dbg(0, "connected_pref=%ld\n", attr->u.num);
 			return 1;
 		case attr_nostop_pref:
 			tr->nostop_pref = attr->u.num;

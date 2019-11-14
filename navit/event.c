@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include "event.h"
 #include "plugin.h"
+#include "config.h"
 #include "debug.h"
 
 static struct event_methods event_methods;

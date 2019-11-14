@@ -2170,13 +2170,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			// this hangs the emulator, if emulator < 2.3 (only works in emulator >= 2.3)!!
-			// when running on emulator set to true!!
-			Boolean NAVIT_IS_EMULATOR = false;
-			if (!NAVIT_IS_EMULATOR)
-			{
-				sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-			}
+			sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		}
 		catch (Exception e3)
 		{
@@ -2232,14 +2226,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 										draw_map();
 									}
 								}
-								else if (night_mode == true)
+								// night_mode == true
+								else if (event.values[0] > (p.PREF_night_mode_lux + p.PREF_night_mode_buffer))
 								{
-									if (event.values[0] > (p.PREF_night_mode_lux + p.PREF_night_mode_buffer))
-									{
-										night_mode = false;
-										set_night_mode(0);
-										draw_map();
-									}
+									night_mode = false;
+									set_night_mode(0);
+									draw_map();
 								}
 							}
 						}
@@ -2356,18 +2348,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				fos_temp.write((int) info_popup_seen_count); // use to store info popup seen count
 				fos_temp.flush();
 				fos_temp.close();
-
-				//				if (api_version_int < 11)
-				//				{
-				//					message.setLayoutParams(rlp);
-				//					//. TRANSLATORS: multiline info text for first startup of application (see en_US for english text)
-				//					final SpannableString s = new SpannableString(" " + Navit.get_text("__INFO_BOX_TEXT__")); //TRANS
-				//					Linkify.addLinks(s, Linkify.WEB_URLS);
-				//					message.setText(s);
-				//					message.setMovementMethod(LinkMovementMethod.getInstance());
-				//					infobox.setView(message);
-				//					infobox.show();
-				//				}
 			}
 			catch (Exception e)
 			{
@@ -2484,7 +2464,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// **screen can go off, cpu will stay on** // wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "NavitDoNotDimScreen");
 
 			// this works so far, lets the screen dim, but it cpu and screen stays on
-			wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "NavitDoNotDimScreen");
+			wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "Navit:DoNotDimScreen");
 		}
 		catch (Exception e)
 		{
@@ -2494,7 +2474,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ZANaviNeedCpu");
+			wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ZANavi:NeedCpu");
 		}
 		catch (Exception e)
 		{
@@ -2504,7 +2484,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			wl_navigating = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "ZANaviNavigationOn");
+			wl_navigating = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "ZANavi:NavigationOn");
 		}
 		catch (Exception e)
 		{
@@ -2629,7 +2609,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			}
 		}
 		// mdpi display (160 dpi)
-		else if ((Navit.metrics.densityDpi > 120) && (Navit.metrics.densityDpi <= 160))
+		else if ((Navit.metrics.densityDpi <= 160))
 		{
 			my_display_density = "mdpi";
 			if (xmlconfig_unpack_file)
@@ -2641,7 +2621,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			}
 		}
 		// hdpi display (240 dpi)
-		else if ((Navit.metrics.densityDpi > 160) && (Navit.metrics.densityDpi < 320))
+		else if ((Navit.metrics.densityDpi < 320))
 		//else if (Navit.metrics.densityDpi == 240)
 		{
 			my_display_density = "hdpi";
@@ -2653,8 +2633,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				}
 			}
 		}
-		// xhdpi display (320 dpi)
-		else if (Navit.metrics.densityDpi >= 320)
+		// xhdpi display >=320 dpi
+		else
 		{
 			// set the map display DPI down. otherwise everything will be very small and unreadable
 			// and performance will be very low
@@ -2675,18 +2655,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				}
 			}
 		}
-		else
-		{
-			/* default, meaning we just dont know what display this is */
-			if (xmlconfig_unpack_file)
-			{
-				if (!extractRes("navitmdpi", NAVIT_DATA_SHARE_DIR + "/navit.xml"))
-				{
-					Log.e("Navit", "Failed to extract navit.xml (default version)");
-				}
-			}
-		}
-		// Debug.startMethodTracing("calc");
 
 		int have_dpi = Navit.metrics.densityDpi;
 
@@ -3557,7 +3525,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//		// -------------- INTRO --------------
 
 		PackageInfo pkgInfo;
-		Boolean navit_Plugin_001_Installed = false;
+		boolean navit_Plugin_001_Installed = false;
 		try
 		{
 			// is the donate version installed?
@@ -4757,7 +4725,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.FROYO)
+
 	@Override
 	public void onPause()
 	{
@@ -6428,11 +6396,10 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 			try
 			{
-				float lat = 0;
-				float lon = 0;
+				//for debugging only (jdg)
+				float lat;
+				float lon;
 
-				lat = 0;
-				lon = 0;
 				String lat_lon = "";
 				if (Navit.GFX_OVERSPILL)
 				{
@@ -6593,9 +6560,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							msg.setData(b);
 							NavitGraphics.callback_handler.sendMessage(msg);
 
-							try {
+							try
+							{
 								Thread.sleep(100);
-							} catch (InterruptedException e) {
+							}
+							catch (InterruptedException e)
+							{
 							}
 
 							Log.d("Navit", "delete map id=" + Integer.parseInt(data.getStringExtra("selected_id")));
@@ -7401,7 +7371,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	class TCB_object
 	{
 		int del;
-		int id;
+		long id;
 		NavitTimeout nt;
 	}
 
@@ -7481,7 +7451,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void TimeoutCallback2(NavitTimeout nt, int del, int id)
+		void TimeoutCallback2(NavitTimeout nt, int del, long id)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7652,7 +7622,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// SUN ----------------
 			//
 			//
-			Boolean sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
+			boolean sun_moon__must_calc_new = (SystemClock.elapsedRealtime() - sun_moon__mLastCalcSunMillis) > (60000 * 3); // calc new every 3 minutes
 
 			if ((sun_moon__must_calc_new) || (azmiuth_cache == -1))
 			{
@@ -14988,8 +14958,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private final com.zoffcc.applications.zanavi_msg.ZListener.Stub zclientListener = new com.zoffcc.applications.zanavi_msg.ZListener.Stub()
 	{
 		@Override
-		public String handleUpdated(String data) throws RemoteException
-		{
+		public String handleUpdated(String data) {
 			// Log.i("NavitPlugin", "update from Plugin=" + data);
 			return "Navit says:\"PONG\"";
 		}

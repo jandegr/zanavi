@@ -53,6 +53,7 @@
 
 #if HAVE_API_ANDROID
 #include "android.h"
+#include "util.h"
 #endif
 #include "layout.h"
 #include "map.h"
@@ -61,8 +62,8 @@
 
 
 // func defs
-int search_v2_work(char *addr, char *town, char* hn, int partial, struct jni_object *jni, const char* idxfile_name);
-void search_v2(char *addr, char *town, char* hn, int partial, struct jni_object *jni);
+int search_v2_work(const char *addr, const char *town, const char* hn, int partial, struct jni_object *jni, const char* idxfile_name);
+//void search_v2(char *addr, char *town, char* hn, int partial, struct jni_object *jni);
 // func defs
 
 #include "s_index.h"
@@ -994,7 +995,7 @@ void search_init(void)
 }
 
 static char *
-search_fix_spaces(char *str)
+search_fix_spaces(const char *str)
 {
 	int i;
 	int len = strlen(str);
@@ -1002,7 +1003,7 @@ search_fix_spaces(char *str)
 
 	for (i = 0; i < len; i++)
 	{
-		if (ret[i] == ',' || ret[i] == ',' || ret[i] == '/')
+		if (ret[i] == ',' || ret[i] == '/')
 			ret[i] = ' ';
 	}
 	s = ret;
@@ -1099,12 +1100,12 @@ static int search_address_housenumber_for_street(char *hn_name_match, char *stre
 
 	if (!street_name_fold)
 	{
-		return NULL;
+		return 0;
 	}
 
 	if (!hn_fold)
 	{
-		return NULL;
+		return 0;
 	}
 
 	if (strlen(street_name_fold) < 1)
@@ -1118,7 +1119,7 @@ static int search_address_housenumber_for_street(char *hn_name_match, char *stre
 		{
 			g_free(street_name_fold);
 		}
-		return NULL;
+		return 0;
 	}
 
 	if (strlen(hn_fold) < 1)
@@ -1132,7 +1133,7 @@ static int search_address_housenumber_for_street(char *hn_name_match, char *stre
 		{
 			g_free(street_name_fold);
 		}
-		return NULL;
+		return 0;
 	}
 
 	//dbg(0, "SEARCH:HM:010a:townstr=%p", town_string);
@@ -1189,18 +1190,14 @@ static int search_address_housenumber_for_street(char *hn_name_match, char *stre
 							{
 								break;
 							}
-
 #ifdef DEBUG_GLIB_MEM_FUNCTIONS
 							g_mem_profile();
 #endif
-
 							if (item->type == type_house_number)
 							{
 								// does it have a housenumber?
 								if (item_attr_get(item, attr_house_number, &att))
 								{
-
-
 								// -- DEBUG -- //if (!strncmp(att.u.str, "11", 2))
 								//{
 
@@ -1253,14 +1250,7 @@ static int search_address_housenumber_for_street(char *hn_name_match, char *stre
 											}
 										}
 									}
-
-
-
-
-
 								//}
-
-
 								}
 							}
 						}
@@ -1772,7 +1762,7 @@ static int ascii_cmp_local_faster_DEBUG(char *name, char *match, int partial)
 
 struct navit *global_navit;
 
-void search_full_world(char *addr, int partial, int search_order, struct jni_object *jni, struct coord_geo *search_center, int search_radius)
+void search_full_world(const char *addr, int partial, int search_order, struct jni_object *jni, struct coord_geo *search_center, int search_radius)
 {
 	struct item *item;
 	struct map_rect *mr = NULL;
@@ -2147,7 +2137,8 @@ void search_full_world(char *addr, int partial, int search_order, struct jni_obj
 }
 
 GList *
-search_by_address(GList *result_list, struct mapset *ms, char *addr, int partial, struct jni_object *jni, int search_country_flags, char *search_country_string)
+search_by_address(GList *result_list, struct mapset *ms, const char *addr, int partial,
+		struct jni_object *jni, int search_country_flags, const char *search_country_string)
 {
 	char *str = search_fix_spaces(addr);
 	GList *tmp, *phrases = search_split_phrases(str);

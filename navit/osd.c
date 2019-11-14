@@ -156,7 +156,7 @@ osd_new(struct attr *parent, struct attr **attrs)
 		if (NULL == osd_hash)
 		{
 			//dbg(0, "oo 005\n");
-			osd_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free_func, NULL);
+			osd_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 		}
 		//dbg(0, "oo 006\n");
 		g_hash_table_insert(osd_hash, g_strdup(attr->u.str), o);

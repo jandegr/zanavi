@@ -6353,7 +6353,7 @@ __F_START__
 				// speak debug ----
 #endif
 
-				dbg(0, "SPEECH:[-NOOP-] 006: want to speak again in less than %d secs. level=%d\n", (((float)speech_time/10.0f) + 3), level );
+				dbg(0, "SPEECH:[-NOOP-] 006: want to speak again in less than %f secs. level=%d\n", (((float)speech_time/10.0f) + 3), level );
 				return2 g_strdup(""); // dont speak this command now!
 			}
 // ===========----------- LEVEL 3 -----------===========
@@ -6508,7 +6508,7 @@ __F_START__
 #endif
 
 
-					dbg(0, "SPEECH:[-NOOP-] 008: want to speak again in less than %d secs. level=%d\n", (((float)speech_time/10.0f) + 1), level);
+					dbg(0, "SPEECH:[-NOOP-] 008: want to speak again in less than %f secs. level=%d\n", (((float)speech_time/10.0f) + 1), level);
 					return2 g_strdup(""); // dont speak this command now!
 				}
 				else
@@ -7819,7 +7819,6 @@ navigation_map_get_item(struct map_rect_priv *priv)
 	int fake_dir2;
 
 	dbg(0, "NAVR:ROUTE:Enter:\n");
-	dbg(0, "NAVR:ROUTE:Enter:------------------------\n");
 
 	if (!priv->itm_next)
 	{

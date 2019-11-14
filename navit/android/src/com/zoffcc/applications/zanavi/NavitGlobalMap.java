@@ -22,12 +22,12 @@ package com.zoffcc.applications.zanavi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
-public class NavitGlobalMap extends ImageView
+public class NavitGlobalMap extends AppCompatImageView
 {
-	public int mCanvasHeight = 1;
-	public int mCanvasWidth = 1;
+	private int mCanvasHeight = 1;
+	private int mCanvasWidth = 1;
 
 	public NavitGlobalMap(Context context)
 	{

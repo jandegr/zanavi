@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2012 Zoff <zoff@zoff.cc>
  *
@@ -36,8 +36,8 @@ public class ZANaviBusySpinner extends AppCompatImageView
 	private final Paint paint;
 	private RectF r;
 	private int spinner_width;
-	public static int spinner_size = 35;
-	public static Boolean active;
+	static int spinner_size = 35;
+	static Boolean active;
 	private static RotateAnimation rotateAnim = null;
 
 	public ZANaviBusySpinner(Context context)
@@ -48,7 +48,6 @@ public class ZANaviBusySpinner extends AppCompatImageView
 		if (Navit.metrics.densityDpi >= 320)//&&(Navit.PREF_shrink_on_high_dpi))
 		{
 			float dpi_factor = ((float) NavitGraphics.Global_want_dpi_other / (float) Navit.metrics.densityDpi);
-			//System.out.println("FFFFFF==y:" + Navit.metrics.densityDpi);
 			//System.out.println("FFFFFF==y:" + dpi_factor);
 			spinner_size = (int) (35f / dpi_factor);
 			spinner_width = (int) (12f / dpi_factor);
@@ -73,7 +72,6 @@ public class ZANaviBusySpinner extends AppCompatImageView
 		if (Navit.metrics.densityDpi >= 320)//&&(Navit.PREF_shrink_on_high_dpi))
 		{
 			float dpi_factor = ((float) NavitGraphics.Global_want_dpi_other / (float) Navit.metrics.densityDpi);
-			//System.out.println("FFFFFF==y:" + Navit.metrics.densityDpi);
 			//System.out.println("FFFFFF==y:" + dpi_factor);
 			spinner_size = (int) (35f / dpi_factor);
 			spinner_width = (int) (12f / dpi_factor);
@@ -93,13 +91,15 @@ public class ZANaviBusySpinner extends AppCompatImageView
 	public void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
-		this.r = new RectF((w / 2) - spinner_size, (h / 2) - spinner_size, (w / 2) + spinner_size, (h / 2) + spinner_size);
-		cancelAnim(); // calc new since w,h has changed
+		this.r = new RectF((w / 2) - spinner_size, (h / 2) - spinner_size, (w / 2) +
+				spinner_size, (h / 2) + spinner_size);
+		cancelAnim(); // calc new since w,h has changed - IMHO it will be cancelled ??? jdg
 	}
 
 	private void createAnim()
 	{
-		rotateAnim = new RotateAnimation(0f, 359f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rotateAnim = new RotateAnimation(0f, 359f, Animation.RELATIVE_TO_SELF,
+				0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		rotateAnim.setRepeatMode(Animation.RESTART);
 		rotateAnim.setRepeatCount(Animation.INFINITE);
 		rotateAnim.setDuration(2600L); // speed of the animation, higher value = lower speed
@@ -112,8 +112,13 @@ public class ZANaviBusySpinner extends AppCompatImageView
 	{
 		if (rotateAnim != null) //gets called at first start even if there is no anim
 		{
-			rotateAnim.cancel();
-            // it is -nulled- lower, so is this usefull ?? (JDG)
+			//rotateAnim.cancel(); --> this works only on higher API levels!!
+			//  so use these lines instead -->
+			rotateAnim.setRepeatMode(Animation.RESTART);
+			rotateAnim.setRepeatCount(0);
+			rotateAnim.setDuration(2600L); // speed of the animation, higher value = lower speed
+			rotateAnim.setInterpolator(new LinearInterpolator());
+			// <-- so use these lines instead
 			rotateAnim.reset();
 			rotateAnim = null;
 		}
@@ -129,7 +134,6 @@ public class ZANaviBusySpinner extends AppCompatImageView
 			{
 				createAnim();
 			}
-
 			//System.out.println("ZANaviBusySpinner draw");
 			c.drawArc(this.r, 0, 310, false, this.paint);
 		}

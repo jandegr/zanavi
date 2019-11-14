@@ -127,7 +127,7 @@ country_search_new(struct attr *search, int partial)
 	return ret;
 }
 
-char* str_tolower(char *name)
+char* str_tolower(const char *name)
 {
 	int i;
 	char *str;

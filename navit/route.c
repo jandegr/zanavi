@@ -4163,7 +4163,6 @@ __F_START__
 	pos_segment = route_graph_get_segment(this, pos->street, pos_segment);
 
 
-
 	// calc segments lengths and values ------------
 	// loop over all segments that connect to the destination street ONLY !!
 	// calc segments lengths and values ------------
@@ -4194,7 +4193,7 @@ __F_START__
 		}
 		//dbg(0, "RR_SEG_DEBUG:009:9:val=%d\n", val);
 	}
-	// dbg(0, "RR_SEG_DEBUG:090\n");
+	//dbg(0, "RR_SEG_DEBUG:090\n");
 	// -------
 	// calc segments lengths and values ------------
 	// calc segments lengths and values ------------
@@ -4281,8 +4280,8 @@ __F_START__
 				if (item_is_equal(pos_segment->data.item,s->data.item))
 				{
 					max_cost = new;
-					// dbg(0,"new shortest path cost via end_out= %i\n",new);
-					// dbg(0,"number of edges visited =%i\n",edges_count);
+					//dbg(0,"new shortest path cost via end_out= %i\n",new);
+					//dbg(0,"number of edges visited =%i\n",edges_count);
 				}
 			}
 			s = s->start_next;
@@ -4337,14 +4336,14 @@ __F_START__
 				if (item_is_equal(pos_segment->data.item, s->data.item))
 				{
 					max_cost = new;
-					// dbg(0,"new shortest path cost via start_out= %i\n",new);
-					// dbg(0,"number of edges visited =%i\n",edges_count);
+					//dbg(0,"new shortest path cost via start_out= %i\n",new);
+					//dbg(0,"number of edges visited =%i\n",edges_count);
 				}
 			}
 			s = s->end_next;
 		}
 	}
-	// dbg(0,"number of edges visited =%i\n",edges_count);
+	//dbg(0,"number of edges visited =%i\n",edges_count);
 	debug_mrp("RR_TIM:g:003", debug_measure_end(s_));
 
 	fh_deleteheap(heap);
@@ -6924,7 +6923,7 @@ __F_START__
 			break;
 
 		default:
-			// dbg(0, "unsupported attribute: %s\n", attr_to_name(attr->type));
+			//dbg(0, "unsupported attribute: %s\n", attr_to_name(attr->type));
 			return2 0;
 	}
 

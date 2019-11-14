@@ -242,13 +242,14 @@ struct search_list_common *search_list_select(struct search_list *this_,
 struct search_list_result *search_list_get_result(struct search_list *this_);
 void search_list_destroy(struct search_list *this_);
 void search_init(void);
-GList * search_by_address(GList *result_list, struct mapset *ms, char *addr,
+GList * search_by_address(GList *result_list, struct mapset *ms, const char *addr,
 		int partial, struct jni_object *jni, int search_country_flags,
-		char *search_country_string);
-void search_full_world(char *addr, int partial, int search_order,
+		const char *search_country_string);
+void search_full_world(const char *addr, int partial, int search_order,
 		struct jni_object *jni, struct coord_geo *search_center,
 		int search_radius);
 void spill_index();
+void search_v2(const char *addr, const char *town, const char* hn, int partial, struct jni_object *jni);
 
 /* end of prototypes */
 #ifdef __cplusplus

@@ -161,7 +161,6 @@ static void vehicle_demo_timer(struct vehicle_priv *priv)
 	struct item *item = NULL;
 	int rdx = 0;
 	int rdy = 0;
-
 	//dbg(0,"stop demo vehicle=%d\n", global_stop_demo_vehicle);
 	if (global_stop_demo_vehicle == 1)
 	{
@@ -190,16 +189,16 @@ static void vehicle_demo_timer(struct vehicle_priv *priv)
 	}
 #endif
 
-	len = (priv->config_speed * priv->interval / 1000) / 3.6;
+	len = (int)((priv->config_speed * priv->interval / 1000) / 3.6);
 
-
+#ifdef DEMO_VEHICLE_FUZZY
 	if ((global_vehicle_profile == 1) || (global_vehicle_profile == 2))
 	{
 		// dont vary speed in bicycle navigationmode
 	}
 	else
 	{
-#ifdef DEMO_VEHICLE_FUZZY
+
 		// vary the speed of demo vehicle from (x - 20) to (x + 20)
 		if (priv->speed_dir == 1)
 		{
@@ -222,30 +221,31 @@ static void vehicle_demo_timer(struct vehicle_priv *priv)
 
 		priv->config_speed = priv->config_speed + priv->speed_dir + priv->speed_dir;
 		//dbg(0,"demo:speed=%d,speed_diff=%d speed_dir=%d\n", (int)priv->config_speed, (int)priv->speed_diff, (int)priv->speed_dir);
-#endif
+
 	}
+#endif
 
 	//dbg(0, "###### Entering simulation loop\n");
 	if (priv->navit)
 	{
 		route = navit_get_route(priv->navit);
 	}
-	//DBG dbg(0,"rr 1\n");
+	//dbg(0,"rr 1\n");
 	if (route)
 	{
 		route_map = route_get_map(route);
 	}
-	//DBG dbg(0,"rr 2\n");
+	//dbg(0,"rr 2\n");
 	if (route_map)
 	{
 		mr = map_rect_new(route_map, NULL);
 	}
-	//DBG dbg(0,"rr 3\n");
+	//dbg(0,"rr 3\n");
 	if (mr)
 	{
 		item = map_rect_get_item(mr);
 	}
-	//DBG dbg(0,"rr 4\n");
+	//dbg(0,"rr 4\n");
 	if (item && item->type == type_route_start)
 	{
 		item = map_rect_get_item(mr);
@@ -271,7 +271,7 @@ static void vehicle_demo_timer(struct vehicle_priv *priv)
 			}
 
 			//dbg(0, "next pos=0x%x,0x%x\n", c.x, c.y);
-			slen = transform_distance(projection_mg, &pos, &c);
+			slen = (int)transform_distance(projection_mg, &pos, &c);
 
 			////DBG dbg(0, "len=%d slen=%d\n", len, slen);
 			if (slen < len)
@@ -342,12 +342,12 @@ static void vehicle_demo_timer(struct vehicle_priv *priv)
 			callback_list_call_attr_0(priv->cbl, attr_position_coord_geo);
 		}
 	}
-	//DBG dbg(0,"rr 6\n");
+	//dbg(0,"rr 6\n");
 	if (mr)
 	{
 		map_rect_destroy(mr);
 	}
-	// dbg(0,"rr F\n");
+	//dbg(0,"rr F\n");
 }
 
 struct vehicle_priv *
@@ -356,7 +356,7 @@ vehicle_demo_new(struct vehicle_methods *meth, struct callback_list *cbl, struct
 	struct vehicle_priv *ret;
 	struct attr *interval, *speed, *position_coord_geo;
 
-	//DBG dbg(0, "enter\n");
+	//dbg(0, "enter\n");
 	ret = g_new0(struct vehicle_priv, 1);
 	ret->cbl = cbl;
 	ret->interval = 990;
@@ -397,7 +397,7 @@ vehicle_demo_new(struct vehicle_methods *meth, struct callback_list *cbl, struct
 	callback_add_names(ret->timer_callback, "vehicle_demo_new", "vehicle_demo_timer");
 	// dbg(0, "event_add_timeout %d,%d,%p", ret->interval, 1, ret->timer_callback);
 	ret->timer = event_add_timeout(ret->interval, 1, ret->timer_callback);
-	//DBG dbg(0, "leave\n");
+	//dbg(0, "leave\n");
 	return ret;
 }
 

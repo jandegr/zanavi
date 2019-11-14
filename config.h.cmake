@@ -44,7 +44,10 @@
 #cmakedefine DBUS_USE_SYSTEM_BUS 1
 
 #cmakedefine HAVE_SOCKET 1
+
 #cmakedefine HAVE_SNPRINTF 1
+
+#cmakedefine HAVE_DECL__SNPRINTF 1
 
 #cmakedefine HAVE_WINSOCK 1
 
@@ -61,6 +64,7 @@
 #cmakedefine HAVE_POPEN 1
 
 #cmakedefine HAVE_GETOPT_H 1
+
 #cmakedefine HAVE_GETTIMEOFDAY 1
 
 #cmakedefine HAVE__ATOI64 1
@@ -68,3 +72,16 @@
 #cmakedefine HAVE_STRING_H 1
 
 #cmakedefine EZXML_NOMMAP 0
+
+#cmakedefine HAVE_STDLIB_H 1
+
+#cmakedefine HAVE_STPCPY 1
+
+#cmakedefine HAVE_GETDELIM 1
+
+#cmakedefine HAVE_GETLINE 1
+
+#cmakedefine DEBUG_BUILD 1
+
+#define PLUGSSS 1
+

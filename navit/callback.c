@@ -24,6 +24,8 @@
 #include "callback.h"
 #include "navit.h"
 
+//#define NAVIT_CALLBACK_DEBUG_PRINT
+
 struct callback_list *
 callback_list_new(char *name)
 {
@@ -644,5 +646,3 @@ callback_list_destroy(struct callback_list *l)
 	g_free(l);
 
 }
-
-

@@ -434,7 +434,7 @@ void cache_stats(struct cache *cache)
 		c_ratio = (long) (cache->hits) * (long) (100L);
 		c_ratio = c_ratio / (long) (cache->hits + cache->misses);
 
-		dbg(0, "hits %lu misses %lu hitratio %d size %d entry_size %d id_size %d T1 target %d\n", cache->hits, cache->misses, c_ratio, cache->size, cache->entry_size, cache->id_size, cache->t1_target);
+		dbg(0, "hits %lu misses %lu hitratio %lu size %d entry_size %d id_size %d T1 target %d\n", cache->hits, cache->misses, c_ratio, cache->size, cache->entry_size, cache->id_size, cache->t1_target);
 
 		// if numbers are too big, reset them
 		if ((cache->hits > 1000000000) || (cache->misses > 1000000000))

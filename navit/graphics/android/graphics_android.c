@@ -2591,7 +2591,7 @@ event_android_add_watch(void *h, enum event_watch_cond cond, struct callback *cb
 {
 	// dbg(0,"enter\n");
 	jobject ret;
-	ret = (*jnienv)->NewObject(jnienv, NavitWatchClass, NavitWatch_init, (int) h, (int) cond, (int) cb);
+	ret = (*jnienv)->NewObject(jnienv, NavitWatchClass, NavitWatch_init, (jlong)h, (jint) cond, (jlong)cb);
 	// //DBG // dbg(0,"result for %p,%d,%p=%p\n",h,cond,cb,ret);
 	if (ret)
 	{
@@ -2631,7 +2631,8 @@ event_android_add_timeout(int timeout, int multi, struct callback *cb)
 
 	jobject ret;
 	jobject ret_g = NULL;
-	ret = (*jnienv2)->NewObject(jnienv2, NavitTimeoutClass, NavitTimeout_init, timeout, multi, (int) cb);
+
+	ret = (*jnienv2)->NewObject(jnienv2, NavitTimeoutClass, NavitTimeout_init, timeout, multi, (jlong)cb);
 	//// dbg(0, "result for %d,%d,%p\n", timeout, multi, cb);
 
 	if (ret)
@@ -2743,7 +2744,7 @@ event_android_new(struct event_methods *meth)
 		return NULL;
 
 	// dbg(0,"ev 001\n");
-	NavitTimeout_init = (*jnienv2)->GetMethodID(jnienv2, NavitTimeoutClass, "<init>", "(IZI)V");
+	NavitTimeout_init = (*jnienv2)->GetMethodID(jnienv2, NavitTimeoutClass, "<init>", "(IZJ)V");
 	if (NavitTimeout_init == NULL)
 		return NULL;
 	// dbg(0,"ev 002\n");
@@ -2765,7 +2766,7 @@ event_android_new(struct event_methods *meth)
 	if (!find_class_global("com/zoffcc/applications/zanavi/NavitWatch", &NavitWatchClass))
 		return NULL;
 	// dbg(0,"ev 004\n");
-	NavitWatch_init = (*jnienv2)->GetMethodID(jnienv2, NavitWatchClass, "<init>", "(III)V");
+	NavitWatch_init = (*jnienv2)->GetMethodID(jnienv2, NavitWatchClass, "<init>", "(JIJ)V");
 	if (NavitWatch_init == NULL)
 		return NULL;
 	// dbg(0,"ev 005\n");

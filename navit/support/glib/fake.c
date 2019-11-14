@@ -17,6 +17,8 @@
 
 #include <stdio.h>              /* fputs/fprintf */
 
+#include <sys/time.h>
+
 char* g_convert (const char  *in,
 	int        len,            
 	const char  *to_codeset,
@@ -53,6 +55,9 @@ g_private_new_navit ()
 #if HAVE_API_WIN32_BASE
 	int dwTlsIndex;
 
+#ifndef TLS_OUT_OF_INDEXES
+#define TLS_OUT_OF_INDEXES (-1)
+#endif
 	if ((dwTlsIndex = TlsAlloc()) == TLS_OUT_OF_INDEXES)
 	printf("TlsAlloc failed");
 	printf("return dwTlsIndex = 0x%x\n",dwTlsIndex);
@@ -72,25 +77,6 @@ g_private_new_navit ()
  *
  * Equivalent to the UNIX gettimeofday() function, but portable.
  **/
-
-
-#ifndef HAVE_API_ANDROID
-
-#ifdef HAVE_CYGWIN 
-// zoff for cygwin use this
-// but should be left out on linux
-// run "export C_FLAGS=-DHAVE_CYGWIN ; configure" on cygwin
-struct timeval {
-   time_t tv_sec;
-   suseconds_t tv_usec;
-};
-// zoff for cygwin
-#endif
-
-#endif
-
-
-
 void
 g_get_current_time (GTimeVal *result)
 {
@@ -129,8 +115,7 @@ g_get_current_time (GTimeVal *result)
 }
 
 // FIXME: should use real utf8-aware function
-gchar * g_utf8_casefold(const gchar *s, gssize len)
+gchar * g_utf8_casefold(const gchar *s, gssize len) 
 {
-	return g_ascii_strdown(s,len);
+  return g_ascii_strdown(s,len);
 }
-

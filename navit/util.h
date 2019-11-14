@@ -23,11 +23,18 @@
 #include <ctype.h>
 #include "config.h"
 
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b))
+
 void strtoupper(char *dest, const char *src);
 void strtolower(char *dest, const char *src);
+int navit_utf8_strcasecmp(const char *s1, const char *s2);
 GList * g_hash_to_list(GHashTable *h);
 GList * g_hash_to_list_keys(GHashTable *h);
 gchar * g_strconcat_printf(gchar *buffer, gchar *fmt, ...);
+#ifndef HAVE_GETLINE
+ssize_t getline (char **lineptr, size_t *n, FILE *stream);
+#endif
 #if defined(_WIN32) || defined(__CEGCC__) || defined (__APPLE__) || defined(HAVE_API_ANDROID)
 #if defined(_UNICODE)
 wchar_t* newSysString(const char *toconvert);
