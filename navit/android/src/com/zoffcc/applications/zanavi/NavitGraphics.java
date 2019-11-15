@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2015 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -92,7 +92,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class NavitGraphics
+class NavitGraphics
 {
 	private final int parent_num;
 	//private ArrayList overlays = new ArrayList();
@@ -199,25 +199,25 @@ public class NavitGraphics
 	private final static DashPathEffect h007 = new DashPathEffect(new float[] { 6, 3 }, 1);
 	private final static DashPathEffect l007 = new DashPathEffect(new float[] { 7, 2 }, 1);
 
-	public static final Paint paint_for_map_display = new Paint();
-	public static final Paint paint_sky_day = new Paint();
-	public static final Paint paint_sky_night = new Paint();
-	public static final Paint paint_sky_night_stars = new Paint();
-	public static final Paint paint_sky_twilight1 = new Paint();
-	public static final Paint paint_sky_twilight2 = new Paint();
-	public static final Paint paint_sky_twilight3 = new Paint();
+	static final Paint paint_for_map_display = new Paint();
+	static final Paint paint_sky_day = new Paint();
+	static final Paint paint_sky_night = new Paint();
+	static final Paint paint_sky_night_stars = new Paint();
+	static final Paint paint_sky_twilight1 = new Paint();
+	static final Paint paint_sky_twilight2 = new Paint();
+	static final Paint paint_sky_twilight3 = new Paint();
 
-	public static final int max_stars = 7;
-	public static final float[] stars_x = new float[max_stars + 1];
-	public static final float[] stars_y = new float[max_stars + 1];
-	public static final int[] stars_size = new int[max_stars + 1];
+	static final int max_stars = 7;
+	static final float[] stars_x = new float[max_stars + 1];
+	static final float[] stars_y = new float[max_stars + 1];
+	static final int[] stars_size = new int[max_stars + 1];
 
 	private final static DashPathEffect[] dashes__low = { null, l001, l002, l003, l004, l005, l006, l007 };
 	private final static DashPathEffect[] dashes__high = { null, h001, h002, h003, h004, h005, h006, h007 };
 
-	public static int navit_route_status = 0;
+	static int navit_route_status = 0;
 
-	public final float BIGMAP_FACTOR = (10465f / 2f) * 0.8f;
+	final float BIGMAP_FACTOR = (10465f / 2f) * 0.8f;
 	private final Paint paint_maptile = new Paint();
 	private final Matrix matrix_maptile = new Matrix();
 
@@ -230,7 +230,7 @@ public class NavitGraphics
 
 	private static Boolean wait_for_redraw_map = false;
 
-	public static final Boolean MAP_DISPLAY_OFF = false;
+	static final Boolean MAP_DISPLAY_OFF = false;
 
 	public static int mCanvasWidth = 1;
 	public static int mCanvasHeight = 1;
@@ -240,12 +240,12 @@ public class NavitGraphics
 	private static final Boolean DEBUG_TOUCH = false;
 	private static Boolean ZOOM_MODE_ACTIVE = false;
 	private static float ZOOM_MODE_SCALE = 1.0f;
-	public static Boolean DRAG_MODE_ACTIVE = false;
+	static Boolean DRAG_MODE_ACTIVE = false;
 
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
-	public static final Boolean DEBUG_SMOOTH_DRIVING = false; // for debugging only, set this to "false" on release builds!!
+	static final Boolean DEBUG_SMOOTH_DRIVING = false; // for debugging only, set this to "false" on release builds!!
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
@@ -275,13 +275,13 @@ public class NavitGraphics
 	private static final int DRAW_MORE_DETAILS_AT_ORDER = 9;
 	private static final int DRAW_MORE_DETAILS_TUNNEL_BRIDGES_AT_ORDER = 8;
 
-	public static final long[] OverlayDrawThread_cancel_drawing_timeout__options = { 300L, 900L, 2100L, 20000L }; // 900L normal, 300L short, 2100L long
-	public static final int[] OverlayDrawThread_cancel_thread_sleep_time__options = { 100, 200, 400, 400 };
-	public static final long[] OverlayDrawThread_cancel_thread_timeout__options = { 3000L, 3000L, 3000L, 22000L };
+	static final long[] OverlayDrawThread_cancel_drawing_timeout__options = { 300L, 900L, 2100L, 20000L }; // 900L normal, 300L short, 2100L long
+	static final int[] OverlayDrawThread_cancel_thread_sleep_time__options = { 100, 200, 400, 400 };
+	static final long[] OverlayDrawThread_cancel_thread_timeout__options = { 3000L, 3000L, 3000L, 22000L };
 
-	public static long OverlayDrawThread_cancel_drawing_timeout = OverlayDrawThread_cancel_drawing_timeout__options[1];
-	public static int OverlayDrawThread_cancel_thread_sleep_time = OverlayDrawThread_cancel_thread_sleep_time__options[1];
-	public static long OverlayDrawThread_cancel_thread_timeout = OverlayDrawThread_cancel_thread_timeout__options[1];
+	static long OverlayDrawThread_cancel_drawing_timeout = OverlayDrawThread_cancel_drawing_timeout__options[1];
+	static int OverlayDrawThread_cancel_thread_sleep_time = OverlayDrawThread_cancel_thread_sleep_time__options[1];
+	static long OverlayDrawThread_cancel_thread_timeout = OverlayDrawThread_cancel_thread_timeout__options[1];
 
 	int loc_dot_x = 0;
 	int loc_dot_y = 0;
@@ -323,7 +323,7 @@ public class NavitGraphics
 	private Boolean b_paint_antialias = true;
 	private final Path b_paint_path = new Path();
 
-	public static final Boolean in_map = true; // always in map mode, now
+	static final Boolean in_map = true; // always in map mode, now
 
 	// for menu key
 	private static long time_for_long_press = 300L;
@@ -338,29 +338,29 @@ public class NavitGraphics
 	//
 	// here you can draw all the nice things you want
 	// and get touch events for it (without touching C-code)
-	public NavitAndroidOverlay NavitAOverlay = null;
-	public static NavitAndroidOverlay NavitAOverlay_s = null;
+	NavitAndroidOverlay NavitAOverlay = null;
+	static NavitAndroidOverlay NavitAOverlay_s = null;
 	private NavitOSDJava NavitAOSDJava = null;
-	public static NavitOSDJava NavitAOSDJava_ = null;
-	public static TextView NavitMsgTv_ = null;
-	public ZANaviBusySpinner busyspinner = null;
-	public static ZANaviBusySpinner busyspinner_ = null;
-	public ZANaviBusyText busyspinnertext = null;
-	public static ZANaviBusyText busyspinnertext_ = null;
+	static NavitOSDJava NavitAOSDJava_ = null;
+	static TextView NavitMsgTv_ = null;
+	ZANaviBusySpinner busyspinner = null;
+	static ZANaviBusySpinner busyspinner_ = null;
+	ZANaviBusyText busyspinnertext = null;
+	static ZANaviBusyText busyspinnertext_ = null;
 
 	// public static EmulatedMenuView emu_menu_view;
 
 	private PointF touch_now_center = new PointF(0, 0);
 
-	public static TextView NavitMsgTv2_ = null;
+	static TextView NavitMsgTv2_ = null;
 
-	public static ScrollView NavitMsgTv2sc_ = null;
-	public static RelativeLayout no_maps_container = null;
-	public static RelativeLayout whats_here_container_wrap = null;
-	public static ImageView whats_here_pointer_image = null;
-	public static RelativeLayout.LayoutParams params_whats_here_container_wrap = new RelativeLayout.LayoutParams(10, 10);
-	public static RelativeLayout.LayoutParams params_whats_here_pointer_image = new RelativeLayout.LayoutParams(10, 10);
-	public static TextView whats_here_text;
+	static ScrollView NavitMsgTv2sc_ = null;
+	static RelativeLayout no_maps_container = null;
+	static RelativeLayout whats_here_container_wrap = null;
+	static ImageView whats_here_pointer_image = null;
+	static RelativeLayout.LayoutParams params_whats_here_container_wrap = new RelativeLayout.LayoutParams(10, 10);
+	static RelativeLayout.LayoutParams params_whats_here_pointer_image = new RelativeLayout.LayoutParams(10, 10);
+	static TextView whats_here_text;
 	// public static String whats_here_text_string = "";
 
 	private Scroller mScroller = null;
@@ -370,7 +370,7 @@ public class NavitGraphics
 
 //	private static NavitGlobalMap NavitGlobalMap_ = null;
 
-	public void SetCamera(int use_camera)
+	void SetCamera(int use_camera)
 	{
 		// ------ obsolete
 
@@ -510,7 +510,7 @@ public class NavitGraphics
 
 	// public static OverlayDrawThread overlay_draw_thread = null;
 
-	public static class OverlayDrawThread extends Thread
+	static class OverlayDrawThread extends Thread
 	{
 		private Boolean running = true;
 		private Boolean redraw = false;
@@ -688,8 +688,8 @@ public class NavitGraphics
 
 	}
 
-	@SuppressLint("NewApi")
-	public NavitGraphics(AppCompatActivity activity, int parent, int x, int y, int w, int h, int alpha, int wraparound, int use_camera)
+
+	NavitGraphics(AppCompatActivity activity, int parent, int x, int y, int w, int h, int alpha, int wraparound, int use_camera)
 	{
 		mScroller = new Scroller(activity);
 
@@ -1571,17 +1571,8 @@ public class NavitGraphics
 							// ------ ???????????????????????
 							// ------ ???????????????????????
 							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
 							draw_bitmap = Bitmap.createBitmap(w_dpi, h_dpi, Bitmap.Config.ARGB_8888); // _dpi or not ??????????????????????????
 							System.out.println("_BITM_:need w-h=" + w_dpi + "-" + h_dpi + " have w-h=" + mCanvasWidth + "-" + mCanvasHeight);
-							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
-							// ------ ???????????????????????
 							// ------ ???????????????????????
 							// ------ ???????????????????????
 							// ------ ???????????????????????
@@ -3228,8 +3219,6 @@ public class NavitGraphics
 				}
 			});
 
-			// Navit.Global_Navit_Object.glSurfaceView.bringToFront();
-
 			View view_srec = activity.findViewById(R.id.view_srec);
 
 			// Disable button if no recognition service is present
@@ -3668,9 +3657,9 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static native void TimeoutCallback(int del, long id);
+	static native void TimeoutCallback(int del, long id);
 
-	public static native void SizeChangedCallbackReal(int w, int h, Bitmap main_map_bitmap);
+	static native void SizeChangedCallbackReal(int w, int h, Bitmap main_map_bitmap);
 
 	// DrawLowqualMap_wrapper("" + my_lat + "#" + my_lon + "#" + 18, 400, 400, 11, 8192, 100000);
 	private static void DrawLowqualMap_wrapper(String latlonzoom, int w, int h, int fontsize, int scale, int selection_range)
@@ -3687,9 +3676,9 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static native void MotionCallbackReal(int x1, int y1, int x2, int y2, int draw);
+	static native void MotionCallbackReal(int x1, int y1, int x2, int y2, int draw);
 
-	public static void MotionCallback(int x1, int y1, int x2, int y2)
+	static void MotionCallback(int x1, int y1, int x2, int y2)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -3727,9 +3716,9 @@ public class NavitGraphics
 	 * }
 	 */
 
-	public static native void DrawLowqualMap(String latlonzoom, int width, int height, int font_size, int scale, int sel_range);
+	static native void DrawLowqualMap(String latlonzoom, int width, int height, int font_size, int scale, int sel_range);
 
-	public void NavitSetGrObj()
+	void NavitSetGrObj()
 	{
 		// set the (static) graphics object (this is bad, please fix me!!)
 		// **disabled** Navit.N_NavitGraphics = this;
@@ -5465,7 +5454,7 @@ public class NavitGraphics
 		// not used, but references somewhere. so dont delete!!!
 	}
 
-	public static void send_osd_values(String id, String text1, String text2, String text3, int i1, int i2, int i3, int i4, float f1, float f2, float f3)
+	static void send_osd_values(String id, String text1, String text2, String text3, int i1, int i2, int i3, int i4, float f1, float f2, float f3)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -5969,13 +5958,6 @@ public class NavitGraphics
 		//pos_y = y;
 	}
 
-	public static String getLocalizedString(String text)
-	{
-		String ret = CallbackLocalizedString(text);
-		//Log.e("NavitGraphics", "callback_handler -> lozalized string=" + ret);
-		return ret;
-	}
-
 	private static String __n_distance(int i)
 	{
 		String ret = "";
@@ -6165,7 +6147,7 @@ public class NavitGraphics
 		return ret;
 	}
 
-	public static void generate_all_speech_commands()
+	static void generate_all_speech_commands()
 	{
 		try
 		{
@@ -6189,34 +6171,34 @@ public class NavitGraphics
 		int j;
 
 		a = "When possible, please turn around";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
 		a = "Enter the roundabout soon";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
 		a = "then you have reached your destination.";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		NavitGraphics.NavitMsgTv2_.append(a + "\n");
 		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
 		a = "In %s, enter the roundabout";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		for (j = 1; j < 10; j++)
 		{
 			if ((j == 4) || (j == 5))
 			{
 				b = __get_distance(j, 1);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				c = String.format(b, 1, 4);
 				c1 = String.format(b1, 1, 4);
 				d = String.format(a, c);
@@ -6245,7 +6227,7 @@ public class NavitGraphics
 			else
 			{
 				b = __get_distance(j, 1);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				c = String.format(b, 250);
 				c1 = String.format(b1, 250);
 				d = String.format(a, c);
@@ -6274,13 +6256,13 @@ public class NavitGraphics
 		}
 
 		a = "Follow the road for the next %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		for (j = 1; j < 10; j++)
 		{
 			if ((j == 4) || (j == 5))
 			{
 				b = __get_distance(j, 1);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				c = String.format(b, 1, 4);
 				c1 = String.format(b1, 1, 4);
 				d = String.format(a, c);
@@ -6309,7 +6291,7 @@ public class NavitGraphics
 			else
 			{
 				b = __get_distance(j, 1);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				c = String.format(b, 250);
 				c1 = String.format(b1, 250);
 				d = String.format(a, c);
@@ -6338,79 +6320,79 @@ public class NavitGraphics
 		}
 
 		a = "Leave the roundabout at the %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
-		b1 = String.format(a1, CallbackLocalizedString("first exit"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first exit"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "Leave the roundabout at the %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
-		b1 = String.format(a1, CallbackLocalizedString("third exit"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third exit"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "then leave the roundabout at the %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
-		b1 = String.format(a1, CallbackLocalizedString("first exit"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first exit"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "then leave the roundabout at the %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
-		b1 = String.format(a1, CallbackLocalizedString("third exit"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third exit"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "Take the %1$s road to the %2$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first", "left");
-		b1 = String.format(a1, CallbackLocalizedString("first"), CallbackLocalizedString("left"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first"), NavitTextTranslations.CallbackLocalizedString("left"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "Take the %1$s road to the %2$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first", "right");
-		b1 = String.format(a1, CallbackLocalizedString("first"), CallbackLocalizedString("right"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first"), NavitTextTranslations.CallbackLocalizedString("right"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "Take the %1$s road to the %2$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third", "left");
-		b1 = String.format(a1, CallbackLocalizedString("third"), CallbackLocalizedString("left"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third"), NavitTextTranslations.CallbackLocalizedString("left"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "Take the %1$s road to the %2$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third", "right");
-		b1 = String.format(a1, CallbackLocalizedString("third"), CallbackLocalizedString("right"));
+		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third"), NavitTextTranslations.CallbackLocalizedString("right"));
 		NavitGraphics.NavitMsgTv2_.append(b + "\n");
 		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
 		a = "You have reached your destination %s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		for (j = 1; j < 14; j++)
 		{
 			if (j == 10)
@@ -6441,7 +6423,7 @@ public class NavitGraphics
 			else if (j == 12)
 			{
 				b = __n_distance(j);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				c = b.replace("%i", "3");
 				c1 = b1.replace("%i", "3");
 				d = String.format(a, c);
@@ -6470,7 +6452,7 @@ public class NavitGraphics
 			else
 			{
 				b = __n_distance(j);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 				d = String.format(a, b);
 				d1 = String.format(a1, b1);
 				try
@@ -6497,7 +6479,7 @@ public class NavitGraphics
 		}
 
 		a = "Turn %1$s%2$s %3$s%4$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		String xx = null;
 		String xx1 = null;
 		String yy = null;
@@ -6512,13 +6494,13 @@ public class NavitGraphics
 			else
 			{
 				b = __strength(j);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 			}
 
 			for (int k = 1; k < 3; k++)
 			{
 				c = __direction(k);
-				c1 = CallbackLocalizedString(c);
+				c1 = NavitTextTranslations.CallbackLocalizedString(c);
 
 				for (int m = 1; m < 14; m++)
 				{
@@ -6530,14 +6512,14 @@ public class NavitGraphics
 					else if (m == 12)
 					{
 						String zz = __n_distance(m);
-						String zz1 = CallbackLocalizedString(zz);
+						String zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 						xx = zz.replace("%i", "3");
 						xx1 = zz1.replace("%i", "3");
 					}
 					else
 					{
 						xx = __n_distance(m);
-						xx1 = CallbackLocalizedString(xx);
+						xx1 = NavitTextTranslations.CallbackLocalizedString(xx);
 					}
 
 					for (int o = 1; o < 9; o++)
@@ -6558,7 +6540,7 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							yy = String.format(zz, " ", "somestreet", " ", "A23");
 							yy1 = String.format(zz1, " ", "blablastrasse", " ", "A23");
 						}
@@ -6567,7 +6549,7 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							try
 							{
 								zz = zz.substring(0, zz.lastIndexOf("|"));
@@ -6592,14 +6574,14 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							yy = String.format(zz, " ", "A23");
 							yy1 = String.format(zz1, " ", "A23");
 						}
 						else
 						{
 							yy = __navigation_item_destination(o);
-							yy1 = " " + CallbackLocalizedString(yy);
+							yy1 = " " + NavitTextTranslations.CallbackLocalizedString(yy);
 							yy = " " + yy;
 						}
 
@@ -6632,7 +6614,7 @@ public class NavitGraphics
 		}
 
 		a = "then turn %1$s%2$s %3$s%4$s";
-		a1 = CallbackLocalizedString(a);
+		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		xx = null;
 		xx1 = null;
 		yy = null;
@@ -6647,13 +6629,13 @@ public class NavitGraphics
 			else
 			{
 				b = __strength(j);
-				b1 = CallbackLocalizedString(b);
+				b1 = NavitTextTranslations.CallbackLocalizedString(b);
 			}
 
 			for (int k = 1; k < 3; k++)
 			{
 				c = __direction(k);
-				c1 = CallbackLocalizedString(c);
+				c1 = NavitTextTranslations.CallbackLocalizedString(c);
 
 				for (int m = 1; m < 14; m++)
 				{
@@ -6665,14 +6647,14 @@ public class NavitGraphics
 					else if (m == 12)
 					{
 						String zz = __n_distance(m);
-						String zz1 = CallbackLocalizedString(zz);
+						String zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 						xx = zz.replace("%i", "3");
 						xx1 = zz1.replace("%i", "3");
 					}
 					else
 					{
 						xx = __n_distance(m);
-						xx1 = CallbackLocalizedString(xx);
+						xx1 = NavitTextTranslations.CallbackLocalizedString(xx);
 					}
 
 					for (int o = 1; o < 9; o++)
@@ -6693,7 +6675,7 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							yy = String.format(zz, " ", "somestreet", " ", "A23");
 							yy1 = String.format(zz1, " ", "blablastrasse", " ", "A23");
 						}
@@ -6702,7 +6684,7 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							try
 							{
 								zz = zz.substring(0, zz.lastIndexOf("|"));
@@ -6727,14 +6709,14 @@ public class NavitGraphics
 							String zz;
 							String zz1;
 							zz = __navigation_item_destination(o);
-							zz1 = CallbackLocalizedString(zz);
+							zz1 = NavitTextTranslations.CallbackLocalizedString(zz);
 							yy = String.format(zz, " ", "A23");
 							yy1 = String.format(zz1, " ", "A23");
 						}
 						else
 						{
 							yy = __navigation_item_destination(o);
-							yy1 = " " + CallbackLocalizedString(yy);
+							yy1 = " " + NavitTextTranslations.CallbackLocalizedString(yy);
 							yy = " " + yy;
 						}
 
@@ -6861,11 +6843,11 @@ public class NavitGraphics
 	/**
 	 * generic message channel to C-code
 	 */
-	public static native void CallbackMessageChannelReal(int i, String s);
+	static native void CallbackMessageChannelReal(int i, String s);
 
-	public static native int GetThreadId();
+	static native int GetThreadId();
 
-	public static void CallbackMessageChannel(int i, String s)
+	static void CallbackMessageChannel(int i, String s)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -6877,7 +6859,7 @@ public class NavitGraphics
 	/**
 	 * return search result from C-code
 	 */
-	public void fillStringArray(String s)
+	void fillStringArray(String s)
 	{
 
 		if (Navit.index_search_realtime)
@@ -6985,17 +6967,13 @@ public class NavitGraphics
 		//		Navit.msg_to_msg_handler(b, 10);
 	}
 
-	public void SearchResultList(int i, int partial_match, String text, String t_town, String t_hn, int flags, String country_iso2, String search_latlon, int search_radius)
+	void SearchResultList(int i, int partial_match, String text, String t_town, String t_hn, int flags, String country_iso2, String search_latlon, int search_radius)
 	{
 		CallbackSearchResultList(i, partial_match, text, t_town, t_hn, flags, country_iso2, search_latlon, search_radius);
 	}
 
-	public native void CallbackSearchResultList(int i, int partial_match, String s, String s_town, String s_hn, int flags, String country_iso2, String search_latlon, int search_radius);
+	native void CallbackSearchResultList(int i, int partial_match, String s, String s_town, String s_hn, int flags, String country_iso2, String search_latlon, int search_radius);
 
-	/**
-	 * get localized string
-	 */
-	public static native String CallbackLocalizedString(String s);
 
 	//
 	//
@@ -7014,16 +6992,16 @@ public class NavitGraphics
 	 * route_status_path_done_incremental=1|32, # 33 --> route found
 	 */
 	// now we get the value pushed from C automatically
-	public static int CallbackDestinationValid2()
+	static int CallbackDestinationValid2()
 	{
 		return NavitGraphics.navit_route_status;
 	}
 
 	// call C-function to get value --> not used anymore now!!
-	public static native int CallbackDestinationValid();
+	static native int CallbackDestinationValid();
 
-	public static final Handler callback_handler = Navit.callback_handler_55;
-	public static final Handler callback_handler_s = Navit.callback_handler_55;
+	static final Handler callback_handler = Navit.callback_handler_55;
+	static final Handler callback_handler_s = Navit.callback_handler_55;
 
 	//
 	//
@@ -7031,12 +7009,11 @@ public class NavitGraphics
 
 	// i=1 -> pixel a,b (x,y)      -> geo   string "lat(float)#lng(float)"
 	// i=2 -> geo   a,b (lat,lng)  -> pixel string "x(int)#y(int)"
-	public static native String CallbackGeoCalc(int i, float a, float b);
+	static native String CallbackGeoCalc(int i, float a, float b);
 
-	public static native String[] GetRoadBookItems(int result_id);
+	static native String[] GetRoadBookItems(int result_id);
 
-	@SuppressLint("NewApi")
-	public static void send_generic_text(int id, String text)
+	static void send_generic_text(int id, String text)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7273,7 +7250,7 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static void return_generic_int(int id, int i)
+	static void return_generic_int(int id, int i)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7294,7 +7271,7 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static void set_vehicle_values(int x, int y, int angle, int speed)
+	static void set_vehicle_values(int x, int y, int angle, int speed)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -7319,9 +7296,9 @@ public class NavitGraphics
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 	}
 
-	public static float ddx_last = 0;
-	public static float ddy_last = 0;
-	public static float dda_last = 0;
+	static float ddx_last = 0;
+	static float ddy_last = 0;
+	static float dda_last = 0;
 	private static float ddx = 0;
 	private static float ddz = 0;
 	private static float ddy = 0;
@@ -7331,7 +7308,7 @@ public class NavitGraphics
 	private static int Vehicle_smooth_moves_count = 3; // how many intermediate moves do we want to draw
 	private static int Vehicle_smooth_move_delay = 180;
 	private static int Vehicle_smooth_move_delay_real_used = Vehicle_smooth_move_delay;
-	public static int Vehicle_delay_real_gps_position = 650; // normal value for smooth delay = 450
+	static int Vehicle_delay_real_gps_position = 650; // normal value for smooth delay = 450
 	private static final int max_turn_angle = 190;
 
 	static class SmoothDriveThread_t_A extends Thread
@@ -7961,7 +7938,7 @@ public class NavitGraphics
 		}
 	});
 
-	public static void set_vehicle_values_delta(int dx, int dy, int dangle2, int dzoom, int l_old, int l_new)
+	static void set_vehicle_values_delta(int dx, int dy, int dangle2, int dzoom, int l_old, int l_new)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -8269,8 +8246,7 @@ public class NavitGraphics
 		}
 	}
 
-	@SuppressLint("NewApi")
-	public static void return_generic_int_real(int id, int i)
+	static void return_generic_int_real(int id, int i)
 	{
 		// System.out.println("id=" + id + " i=" + i);
 
@@ -8330,7 +8306,7 @@ public class NavitGraphics
 					msg.setData(b);
 					try
 					{
-						Navit.N_NavitGraphics.callback_handler.sendMessage(msg);
+						callback_handler.sendMessage(msg);
 					}
 					catch (Exception e)
 					{
@@ -8349,7 +8325,7 @@ public class NavitGraphics
 						msg.setData(b);
 						try
 						{
-							Navit.N_NavitGraphics.callback_handler.sendMessage(msg);
+							callback_handler.sendMessage(msg);
 						}
 						catch (Exception e)
 						{
@@ -8589,7 +8565,7 @@ public class NavitGraphics
 		}
 	}
 
-	public static Bitmap rotate_and_scale_bitmap(Bitmap in, int w, int h, int angle)
+	static Bitmap rotate_and_scale_bitmap(Bitmap in, int w, int h, int angle)
 	{
 		int width = in.getWidth();
 		int height = in.getHeight();
@@ -8625,9 +8601,9 @@ public class NavitGraphics
 		int order;
 	}
 
-	public static ArrayList<route_rect> route_rects = new ArrayList<>();
+	static ArrayList<route_rect> route_rects = new ArrayList<>();
 
-	public static void send_alert_to_java(int id, String text)
+	static void send_alert_to_java(int id, String text)
 	{
 		if (id == 1)
 		{
@@ -8640,7 +8616,7 @@ public class NavitGraphics
 	}
 
 	// values are NOT in pixels!! they need to be converted to pixels before drawing
-	public static void send_route_rect_to_java(int x1, int y1, int x2, int y2, int order)
+	static void send_route_rect_to_java(int x1, int y1, int x2, int y2, int order)
 	{
 		//System.out.println("send_route_rect_to_java: " + x1 + "," + y1 + " " + x2 + "," + y2 + " o=" + order);
 
@@ -8672,12 +8648,12 @@ public class NavitGraphics
 		route_rects.add(rr);
 	}
 
-	public static int sp_to_px(int sp)
+	static int sp_to_px(int sp)
 	{
 		return (int) ((float) sp * Navit.metrics.scaledDensity);
 	}
 
-	public static int dp_to_px(int dp)
+	static int dp_to_px(int dp)
 	{
 		// System.out.println("FFF:dp=" + dp + " px1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.getBaseContext_.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) dp * Global_dpi_factor_better) + 0.5f));
 
@@ -8685,7 +8661,7 @@ public class NavitGraphics
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.getBaseContext_.getResources().getDisplayMetrics());
 	}
 
-	public static int px_to_dp(int px)
+	static int px_to_dp(int px)
 	{
 		// System.out.println("FFF:px=" + px + " dp1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.getBaseContext_.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) px / Global_dpi_factor_better) + 0.5f));
 

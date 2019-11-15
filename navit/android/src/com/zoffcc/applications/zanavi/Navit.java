@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2015 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *

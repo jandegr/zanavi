@@ -5926,7 +5926,7 @@ void osm_end_way(struct maptool_osm *osm)
 					{
 						fprintf(stderr, "**ERROR** at fread 001a: wayid:%lld count=%d\n", osmid_attr_value, (int)i788);
 					}
-					else if ((osmid)w_node > 4994968164L)
+					else if ((osmid)w_node > 8994968164L)
 					{
 						fprintf(stderr, "**ERROR** at fread 001b: wayid:%lld count=%d w_node=%lld\n", osmid_attr_value, (int)i788, (osmid)w_node);
 					}
@@ -5953,7 +5953,7 @@ void osm_end_way(struct maptool_osm *osm)
 					{
 						fprintf(stderr, "**ERROR** at fread 001.1a: wayid:%lld count=%d\n", osmid_attr_value, (int)i788);
 					}
-					else if ((osmid)w_node > 4994968164L)
+					else if ((osmid)w_node > 8994968164L)
 					{
 						fprintf(stderr, "**ERROR** at fread 001.1b: wayid:%lld count=%d w_node=%lld\n", osmid_attr_value, (int)i788, (osmid)w_node);
 					}
@@ -8608,7 +8608,7 @@ osmid get_waynode_num(osmid way_id, int coord_num, int local_thread_num)
 	{
 		fprintf(stderr, "**ERROR** at fread 002b: wayid:%lld count=%d\n", way_id, coord_num);
 	}
-	else if ((osmid)nd > 4994968164L)
+	else if ((osmid)nd > 8994968164L)
 	{
 		fprintf(stderr, "**ERROR** at fread 002b: wayid:%lld count=%d w_node=%lld\n", way_id, coord_num, (osmid)nd);
 	}
@@ -8653,7 +8653,7 @@ osmid get_waynode_num_have_seekpos(osmid way_id, int coord_num, int local_thread
 	{
 		fprintf(stderr, "**ERROR** at fread 002b: wayid:%lld count=%d\n", way_id, coord_num);
 	}
-	else if ((osmid)nd > 4994968164L)
+	else if ((osmid)nd > 8994968164L)
 	{
 		fprintf(stderr, "**ERROR** at fread 002b: wayid:%lld count=%d w_node=%lld\n", way_id, coord_num, (osmid)nd);
 	}

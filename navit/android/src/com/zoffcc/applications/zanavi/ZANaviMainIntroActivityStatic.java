@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2016 Zoff <zoff@zoff.cc>
  *
@@ -168,13 +168,9 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			icon_res.add(R.drawable.crash_icon);
 		}
 
-		try
-		{
-			if (EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms))
-			{
-			}
-			else
-			{
+//		try
+//		{
+			if (!EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms)) {
 				layouts.add(R.layout.intro_slide_static_01);
 				colors.add(ContextCompat.getColor(this, R.color.zanavi_yellowbrown));
 				id_.add(ID_PERM);
@@ -182,10 +178,10 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 				desc_txt.add(Html.fromHtml(""));
 				icon_res.add(R.drawable.app_intro_permissions_v1);
 			}
-		}
-		catch (Exception e)
-		{
-		}
+//		}
+//		catch (Exception e)
+//		{
+//		}
 
 		if (Navit.intro_flag_firststart)
 		{
@@ -382,14 +378,14 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		{
 			System.out.println("ZANaviMainIntroActivity:" + "onResume:Ex02");
 
-			try
-			{
+//			try
+//			{
 				System.out.println("ZANaviMainIntroActivity:" + "onResume" + " finish4");
 				finish();
-			}
-			catch (Exception e4)
-			{
-			}
+//			}
+//			catch (Exception e4)
+//			{
+//			}
 		}
 
 		slide_press = -1;
@@ -521,25 +517,21 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		{
 			System.out.println("position, progress: " + screen_id_to_name(id_.get(position)) + ", " + screen_id_to_name(id_.get(progress)));
 
-			try
-			{
+//			try
+//			{
 				if (id_.get(progress) == ID_PERM)
 				{
 					// don't leave permission screen until granted
-					if (EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms))
-					{
-					}
-					else
-					{
+					if (!EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms)) {
 						System.out.println("intro_logic:dont leave permissions screen");
 						viewPager.setCurrentItem(progress, true);
 						return;
 					}
 				}
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
 			if ((id_.get(progress) == ID_CRASH) && (position > progress) && (Navit.intro_flag_crash == true))
 			{
@@ -629,59 +621,59 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			View view = layoutInflater.inflate(layouts.get(position), container, false);
-			TextView header_text = null;
-			TextView descr_text = null;
+			TextView header_text;
+			TextView descr_text;
 
 			int cur_id = id_.get(position);
 
-			try
-			{
+//			try
+//			{
 				header_text = view.findViewById(R.id.header_text_slide);
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
-			try
-			{
+//			try
+//			{
 				descr_text = view.findViewById(R.id.desc_text_slide);
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
-			try
-			{
+//			try
+//			{
 				descr_text.setMovementMethod(LinkMovementMethod.getInstance());
-			}
-			catch (Exception ee3)
-			{
-			}
+//			}
+//			catch (Exception ee3)
+//			{
+//			}
 
-			ImageView icon_slide = null;
-			try
-			{
+			ImageView icon_slide;
+//			try
+//			{
 				icon_slide = view.findViewById(R.id.icon_slide);
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
-			try
-			{
+//			try
+//			{
 				header_text.setText(title_txt.get(position));
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
-			try
-			{
+//			try
+//			{
 				descr_text.setText(desc_txt.get(position));
-			}
-			catch (Exception e)
-			{
-			}
+//			}
+//			catch (Exception e)
+//			{
+//			}
 
 			try
 			{
@@ -702,12 +694,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 				{
 					Button button_slide = view.findViewById(R.id.button_slide);
 
-					if (EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms))
-					{
-						// button_slide.setVisibility(View.GONE);
-					}
-					else
-					{
+					if (!EasyPermissions.hasPermissions(ZANaviMainIntroActivityStatic.this, Navit.perms)) {
 						button_slide.setText(Navit.get_text("Permissions"));
 						button_slide.setVisibility(View.VISIBLE);
 					}
@@ -812,14 +799,9 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 									catch (java.lang.NoSuchMethodError e2)
 									{
 										System.out.println("ZANaviMainIntroActivity:" + "callOnClick:Ex09");
-										try
-										{
-											System.out.println("ZANaviMainIntroActivity:" + "finish5");
-											finish();
-										}
-										catch (Exception e3)
-										{
-										}
+
+										System.out.println("ZANaviMainIntroActivity:" + "finish5");
+										finish();
 									}
 								}
 								catch (Exception e)
@@ -1511,11 +1493,8 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		@Override
 		protected Void doInBackground(Void... params)
 		{
-			int i = 0;
-
 			try
 			{
-
 				File f1 = new File(this.ff1.getCanonicalPath());
 				File f2 = new File(this.ff2.getCanonicalPath());
 				File f1full = new File(new File(this.ff1.getAbsolutePath() + "/../../").getCanonicalPath());

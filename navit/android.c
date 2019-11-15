@@ -2617,7 +2617,7 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackGeoCalc(JNIEnv* env, j
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackLocalizedString(JNIEnv* env, jclass thiz, jstring str)
+Java_com_zoffcc_applications_zanavi_NavitTextTranslations_CallbackLocalizedString(JNIEnv* env, jclass thiz, jstring str)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
 	dbg(0,"+#+:enter\n");

@@ -299,8 +299,8 @@ public class NavitMapDownloader
 	//
 	//
 	//
-	public static String[] OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE = null;
-	public static String[] OSM_MAP_NAME_LIST_ondisk = null;
+	static String[] OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE = null;
+	static String[] OSM_MAP_NAME_LIST_ondisk = null;
 
 	public static int[] OSM_MAP_NAME_ORIG_ID_LIST = null;
 	public static String[] OSM_MAP_NAME_ondisk_ORIG_LIST = null;
@@ -631,22 +631,22 @@ public class NavitMapDownloader
 
 	private class MultiStreamDownloaderThread extends Thread
 	{
-		Boolean running = false;
+		boolean running;
 		final Handler handler;
 		final zanavi_osm_map_values map_values;
 		final int map_num;
 		int my_dialog_num;
-		int my_num = 0;
-		int num_threads = 0;
-		String PATH = null;
-		String PATH2 = null;
-		String fileName = null;
-		String final_fileName = null;
-		String this_server_name = null;
-		String up_map = null;
-		long start_byte = 0L;
+		int my_num;
+		int num_threads;
+		String PATH;
+		String PATH2;
+		String fileName;
+		String final_fileName;
+		String this_server_name;
+		String up_map;
+		long start_byte;
 		long start_byte_count_now = 0L;
-		long end_byte = 0L;
+		long end_byte;
 
 		MultiStreamDownloaderThread(int num_threads, Handler h, zanavi_osm_map_values map_values, int map_num2, int c, String p, String p2, String fn, String ffn, String sn, String upmap, long start_byte, long end_byte)
 		{
@@ -761,7 +761,6 @@ public class NavitMapDownloader
 				int alt = UPDATE_PROGRESS_EVERY_CYCLE; // show progress about every xx cylces
 				int alt_cur = 0;
 				long alt_progress_update_timestamp = 0L;
-				int progress_update_intervall = PROGRESS_UPDATE_INTERVAL_VALUE; // show progress about every xx milliseconds
 
 				String kbytes_per_second = "";
 				long start_timestamp = System.currentTimeMillis();
@@ -904,7 +903,7 @@ public class NavitMapDownloader
 									already_read = already_read + len1;
 									read_per_interval = read_per_interval + len1;
 									alt_cur++;
-									if (alt_progress_update_timestamp + progress_update_intervall < System.currentTimeMillis())
+									if (alt_progress_update_timestamp + PROGRESS_UPDATE_INTERVAL_VALUE < System.currentTimeMillis())
 									{
 										// ======================== small delay ========================
 										// ======================== small delay ========================
@@ -1543,11 +1542,6 @@ public class NavitMapDownloader
 			temp_list.add(k.next());
 		}
 		int temp_list_prev_size = temp_list.size();
-		Boolean[] bits = new Boolean[temp_list_prev_size];
-		for (int h = 0; h < temp_list_prev_size; h++)
-		{
-			bits[h] = false;
-		}
 		// compare it with directory contents
 		File map_dir = new File(Navit.MAP_FILENAME_PATH);
 		File map_file_absolute_path = null;
@@ -1587,8 +1581,6 @@ public class NavitMapDownloader
 											String st = j.next();
 											if (st.split(":", 2)[0].equals(files_in_mapdir[i]))
 											{
-												found_in_maplist = true;
-												bits[t] = true;
 												System.out.println("found map: t=" + t + " map: " + files_in_mapdir[i]);
 
 												map_file_absolute_path = new File(map_dir + "/" + files_in_mapdir[i]);
@@ -1755,7 +1747,7 @@ public class NavitMapDownloader
 		String[] saved_lines = new String[50];
 		for (int x = 0; x < 50; x++)
 		{
-			saved_lines[x] = new String();
+			saved_lines[x] = "";
 
 		}
 
@@ -2010,7 +2002,7 @@ public class NavitMapDownloader
 		already_inited = true;
 	}
 
-	public static void init_ondisk_maps()
+	static void init_ondisk_maps()
 	{
 		Log.v("NavitMapDownloader", "init ondisk maps");
 
