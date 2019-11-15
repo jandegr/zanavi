@@ -174,6 +174,7 @@ static int attr_present_count;
 static struct item_bin item;
 
 int maxspeed_attr_value;
+int osm_layer_attr_value;
 
 char debug_attr_buffer[BUFFER_SIZE];
 
@@ -217,13 +218,18 @@ static long long seekpos1;
 
 enum attr_strings
 {
-	attr_string_phone, attr_string_fax, attr_string_email, attr_string_url, attr_string_street_name, attr_string_street_name_systematic, attr_string_house_number, attr_string_label, attr_string_label_alt, attr_string_label_real_alt, attr_string_postal,
+	attr_string_phone, attr_string_fax, attr_string_email, attr_string_url,
+	attr_string_street_name, attr_string_street_name_systematic,
+	attr_string_house_number, attr_string_label, attr_string_label_alt,
+	attr_string_label_real_alt, attr_string_postal,
     attr_string_population, attr_string_county_name, attr_string_colour_, attr_string_capacity,
 	attr_string_street_name_systematic_nat,
 	attr_string_street_name_systematic_int,
 	attr_string_ref,
 	attr_string_exit_to,
 	attr_string_street_destination,
+	attr_string_street_destination_forward,
+	attr_string_street_destination_backward,
 	attr_string_street_lanes,
 	// ----------
 	attr_string_street_lanes_forward,
@@ -1272,6 +1278,14 @@ xxxx: cycleway:right=track + cycleway:right:oneway=no
 			flags[0] |= NAVIT_AF_SPEED_LIMIT;
 		level = 5;
 	}
+	
+	if (!strcmp(k, "layer"))
+	{
+		osm_layer_attr_value = atoi(v);
+
+		level = 5;
+	}
+	
 	if (!strcmp(k, "toll"))
 	{
 		if (!strcmp(v, "1"))
@@ -1408,7 +1422,7 @@ xxxx: cycleway:right=track + cycleway:right:oneway=no
 	}
 	if (!strcmp(k, "addr:email"))
 	{
-		attr_strings_save(attr_string_email, v);
+		//attr_strings_save(attr_string_email, v);
 		level = 5;
 	}
 	if (!strcmp(k, "addr:housenumber"))
@@ -1428,12 +1442,12 @@ xxxx: cycleway:right=track + cycleway:right:oneway=no
 	}
 	if (!strcmp(k, "phone"))
 	{
-		attr_strings_save(attr_string_phone, v);
+		//attr_strings_save(attr_string_phone, v);
 		level = 5;
 	}
 	if (!strcmp(k, "fax"))
 	{
-		attr_strings_save(attr_string_fax, v);
+		//attr_strings_save(attr_string_fax, v);
 		level = 5;
 	}
 	if (!strcmp(k, "postal_code"))
@@ -1502,6 +1516,18 @@ xxxx: cycleway:right=track + cycleway:right:oneway=no
 			attr_strings_save(attr_string_street_destination, v);
 			//fprintf(stderr, "XYZ123!?:destination=%s\n", v);
 		}
+		level=5;
+	}
+	if (! strcmp(k,"destination:forward")) 
+	{
+		if (in_way)
+			attr_strings_save(attr_string_street_destination_forward, v);
+		level=5;
+	}
+	if (! strcmp(k,"destination:backward")) 
+	{
+		if (in_way)
+			attr_strings_save(attr_string_street_destination_backward, v);
 		level=5;
 	}
 	if (! strcmp(k,"exit_to"))
@@ -2095,6 +2121,7 @@ void osm_add_way(osmid id)
 	item.type = type_street_unkn;
 	debug_attr_buffer[0] = '\0';
 	maxspeed_attr_value = 0;
+	osm_layer_attr_value = 0;
 	flags_attr_value = 0;
 	memset(flags, 0, sizeof(flags));
 	debug_attr_buffer[0] = '\0';
@@ -5325,7 +5352,10 @@ static void osm_write_cycle_way(FILE *ways_file, int i, int type, struct coord *
 	{
 		item_bin_add_attr_int(item_bin, attr_maxspeed, maxspeed_attr_value);
 	}
-
+	if (osm_layer_attr_value)
+	{
+		item_bin_add_attr_int(item_bin, attr_osm_layer, osm_layer_attr_value);
+	}
 	// custom color attribute
 	if (attr_strings[attr_string_colour_])
 	{
@@ -6026,6 +6056,8 @@ void osm_end_way(struct maptool_osm *osm)
 		item_bin_add_attr_string(item_bin, attr_street_lanes_forward, attr_strings[attr_string_street_lanes_forward]);
 		item_bin_add_attr_string(item_bin, attr_street_turn_lanes, attr_strings[attr_string_street_turn_lanes]);
 		item_bin_add_attr_string(item_bin, attr_street_destination, attr_strings[attr_string_street_destination]);
+		item_bin_add_attr_string(item_bin, attr_street_destination_forward, attr_strings[attr_string_street_destination_forward]);
+		item_bin_add_attr_string(item_bin, attr_street_destination_backward, attr_strings[attr_string_street_destination_backward]);
 		item_bin_add_attr_string(item_bin, attr_street_destination_lanes, attr_strings[attr_string_street_destination_lanes]);
 		// -- NEW 001 --
 
@@ -6045,7 +6077,10 @@ void osm_end_way(struct maptool_osm *osm)
 		{
 			item_bin_add_attr_int(item_bin, attr_maxspeed, maxspeed_attr_value);
 		}
-
+		if (osm_layer_attr_value)
+		{
+			item_bin_add_attr_int(item_bin, attr_osm_layer, osm_layer_attr_value);
+		}
 		// custom color attribute
 		if (attr_strings[attr_string_colour_])
 		{

@@ -46,6 +46,11 @@ extern "C" {
 #include <stdarg.h>
 #include <string.h>
 
+#ifndef HAVE_API_ANDROID
+	//linux clock_t
+#include <time.h>
+#endif
+
 #ifdef DEBUG_BUILD
 #define _DEBUG_BUILD_
 #endif

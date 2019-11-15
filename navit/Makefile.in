@@ -134,8 +134,7 @@ am__lib@LIBNAVIT@_la_SOURCES_DIST = announcement.c atom.c attr.c \
 	route.h profile.h roadprofile.h search.h speech.h start_real.h \
 	transform.h track.h types.h util.h vehicle.h vehicleprofile.h \
 	window.h xmlconfig.h zipfile.h navit_nls.h sunriset.c \
-	sunriset.h glib_slice.h maptool/miniz.c coffeecatch.c \
-	coffeejni.c snprintf.c snprintf.h \
+	sunriset.h glib_slice.h maptool/miniz.c \
 	vehicle/android/vehicle_android.c vehicle/demo/vehicle_demo.c \
 	gui/internal/gui_internal.c \
 	graphics/android/graphics_android.c map/binfile/binfile.c \
@@ -158,8 +157,8 @@ am_lib@LIBNAVIT@_la_OBJECTS = announcement.lo atom.lo attr.lo cache.lo \
 	plugin.lo popup.lo profile.lo projection.lo roadprofile.lo \
 	route.lo routech.lo search.lo speech.lo start_real.lo \
 	transform.lo track.lo util.lo vehicle.lo vehicleprofile.lo \
-	xmlconfig.lo sunriset.lo miniz.lo coffeecatch.lo coffeejni.lo \
-	snprintf.lo $(am__objects_1) $(am__objects_2) $(am__objects_3)
+	xmlconfig.lo sunriset.lo miniz.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_3)
 lib@LIBNAVIT@_la_OBJECTS = $(am_lib@LIBNAVIT@_la_OBJECTS)
 lib@LIBNAVIT@_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -537,8 +536,8 @@ lib@LIBNAVIT@_la_SOURCES = announcement.c atom.c attr.c cache.c \
 	route.h profile.h roadprofile.h search.h speech.h start_real.h \
 	transform.h track.h types.h util.h vehicle.h vehicleprofile.h \
 	window.h xmlconfig.h zipfile.h navit_nls.h sunriset.c \
-	sunriset.h glib_slice.h maptool/miniz.c coffeecatch.c \
-	coffeejni.c snprintf.c snprintf.h $(am__append_7) \
+	sunriset.h glib_slice.h maptool/miniz.c \
+	$(am__append_7) \
 	$(am__append_8) $(am__append_9)
 @SUPPORT_ANDROID_FALSE@navit_SOURCES = start.c
 @SUPPORT_ANDROID_TRUE@navit_SOURCES = 
@@ -695,8 +694,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/builtin.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cache.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/callback.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/coffeecatch.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/coffeejni.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/command.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/compass.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/config_.Plo@am__quote@
@@ -738,7 +735,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/route.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/routech.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/search.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/snprintf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speech.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speech_android.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/start.Po@am__quote@
