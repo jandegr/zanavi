@@ -226,15 +226,16 @@ speech_android_new(struct speech_methods *meth, struct attr **attrs, struct attr
 		this=NULL;
 	}
 
-	if (android_version < 4)
-	{
-		this->flags=3;
-	}
+	// remove all below --jdg--
+//	if (android_version < 4)
+//	{
+//		this->flags=3;
+//	}
 
-	if ((flags = attr_search(attrs, NULL, attr_flags)))
-	{
-		this->flags=flags->u.num;
-	}
+//	if ((flags = attr_search(attrs, NULL, attr_flags)))
+//	{
+//		this->flags=flags->u.num;
+//	}
 	
 	return this;
 }

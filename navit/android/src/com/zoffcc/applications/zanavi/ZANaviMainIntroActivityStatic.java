@@ -418,7 +418,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 						String map_full_line = NavitMapDownloader.OSM_MAP_NAME_ondisk_ORIG_LIST[Integer.parseInt(data.getStringExtra("selected_id"))];
 						Log.d("Navit", "delete map full line=" + map_full_line);
 
-						String del_map_name = Navit.MAP_FILENAME_PATH + map_full_line.split(":", 2)[0];
+						String del_map_name = Navit.sNavitMapDirectory + map_full_line.split(":", 2)[0];
 						System.out.println("del map file :" + del_map_name);
 						// remove from cat file
 						NavitMapDownloader.remove_from_cat_file(map_full_line);
@@ -442,8 +442,8 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 								tmp = tmp.replace(" ", "");
 								tmp = tmp.replace(">", "");
 								tmp = tmp.replace("<", "");
-								System.out.println("removing md5 file:" + Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
-								File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + tmp + ".md5");
+								System.out.println("removing md5 file:" + Navit.getInstance().getMapMD5path() + tmp + ".md5");
+								File md5_final_filename = new File(Navit.getInstance().getMapMD5path() + tmp + ".md5");
 								md5_final_filename.delete();
 							}
 						} catch (Exception e) {
@@ -871,7 +871,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 
 					int count_sd_card = 1;
 					String avail_space_string2;
-					File f = new File(Navit.NavitDataDirectory_Maps);
+					File f = new File(Navit.sNavitMapDirectory);
 					int spinner_selection = 1;
 					custom_path_not_needed = false;
 
@@ -882,7 +882,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 					// --- custom location ---
 					// --- custom location ---
 					// --- custom location ---
-					String custom_map_path = new File(Navit.NavitDataDirectory_Maps).getAbsolutePath();
+					String custom_map_path = new File(Navit.sNavitMapDirectory).getAbsolutePath();
 					long avail_space2 = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(custom_map_path);
 					String avail_space_str2 = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(custom_map_path);
 					if (avail_space2 < 0)
@@ -906,12 +906,12 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 					// --- custom location ---
 					// --- custom location ---
 
-					for (int jj2 = 0; jj2 < Navit.NavitDataStorageDirs.length; jj2++)
+					for (int jj2 = 0; jj2 < Navit.sNavitDataStorageDirs.length; jj2++)
 					{
-						if (Navit.NavitDataStorageDirs[jj2] != null)
+						if (Navit.sNavitDataStorageDirs[jj2] != null)
 						{
-							long avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
-							String avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
+							long avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath());
+							String avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath());
 							String avail_space_string;
 							if (avail_space < 0)
 							{
@@ -919,7 +919,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 							}
 							else if (avail_space > 1200)
 							{
-								avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInGBformattedString(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
+								avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInGBformattedString(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath());
 								avail_space_string = " [" + avail_space_str + "GB free]";
 							}
 							else
@@ -930,26 +930,26 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 							if (jj2 == 0)
 							{
 								disk_locations.add("internal Storage" + avail_space_string);
-								disk_locations_long.add(disk_locations.get(disk_locations.size() - 1) + "\n" + split_every(Navit.NavitDataStorageDirs[jj2].getAbsolutePath(), 33));
+								disk_locations_long.add(disk_locations.get(disk_locations.size() - 1) + "\n" + split_every(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath(), 33));
 							}
 							else
 							{
 								disk_locations.add("SD Card " + count_sd_card + avail_space_string);
-								disk_locations_long.add(disk_locations.get(disk_locations.size() - 1) + "\n" + split_every(Navit.NavitDataStorageDirs[jj2].getAbsolutePath(), 33));
+								disk_locations_long.add(disk_locations.get(disk_locations.size() - 1) + "\n" + split_every(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath(), 33));
 								count_sd_card++;
 							}
 
 							System.out.println("map:has=" + f.getAbsolutePath());
-							System.out.println("map:sel=" + Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
+							System.out.println("map:sel=" + Navit.sNavitDataStorageDirs[jj2].getAbsolutePath());
 
-							if (custom_map_path.equals(Navit.NavitDataStorageDirs[jj2].getAbsolutePath()))
+							if (custom_map_path.equals(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath()))
 							{
 								custom_path_not_needed = true;
 							}
 
-							disk_locations_path.add(Navit.NavitDataStorageDirs[jj2].getAbsolutePath());
+							disk_locations_path.add(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath());
 
-							if (f.getAbsolutePath().equals(Navit.NavitDataStorageDirs[jj2].getAbsolutePath()))
+							if (f.getAbsolutePath().equals(Navit.sNavitDataStorageDirs[jj2].getAbsolutePath()))
 							{
 								spinner_selection = disk_locations.size() - 1;
 							}
@@ -1260,8 +1260,8 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		System.out.println("ZANaviMainIntroActivity:" + "processFinish");
 
 		String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-		String full_file_name = Navit.NAVIT_DATA_DEBUG_DIR + "/crashlog_" + date + ".txt";
-		String full_file_name_suppl = Navit.NAVIT_DATA_DEBUG_DIR + "/crashlog_single.txt";
+		String full_file_name = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/crashlog_" + date + ".txt";
+		String full_file_name_suppl = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/crashlog_single.txt";
 		String feedback_text = Navit.get_text("Crashlog") + "\n" + Navit.get_text("You can use our PGP-Key") + ": " + Navit.PGP_KEY_ID;
 
 		System.out.println("crashlogfile=" + full_file_name);
@@ -1317,7 +1317,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 		{
 		}
 
-		Navit.Global_Navit_Object.sendEmailWithAttachment(this, "feedback@zanavi.cc", "ZANavi Crashlog (v:" + subject_d_version + FD_addon + Navit.NavitAppVersion + " a:" + android.os.Build.VERSION.SDK + ")", feedback_text, full_file_name, full_file_name_suppl);
+		Navit.sNavitObject.sendEmailWithAttachment(this, "feedback@zanavi.cc", "ZANavi Crashlog (v:" + subject_d_version + FD_addon + Navit.NavitAppVersion + " a:" + android.os.Build.VERSION.SDK + ")", feedback_text, full_file_name, full_file_name_suppl);
 
 		// reset message
 		ZANaviMainApplication.last_stack_trace_as_string = "";

@@ -27,11 +27,11 @@ import java.util.Locale;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-@SuppressLint("NewApi")
+//@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//@SuppressLint("NewApi")
 public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 {
-	ProgressDialog progressDialog2;
+	private ProgressDialog progressDialog2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -104,21 +104,15 @@ public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 	}
 
 	@SuppressLint("DefaultLocale")
-	Element getCopyRightsElement()
+	private Element getCopyRightsElement()
 	{
 		Element copyRightsElement = new Element();
 		// final String copyrights = String.format("Copyright © %1$d", Calendar.getInstance().get(Calendar.YEAR));
-		final String copyrights = String.format("Copyright © 2016");
+		final String copyrights = "Copyright © 2016";
 		copyRightsElement.setTitle(copyrights);
-
-
 
 		//FIXME pls
 		//copyRightsElement.setColor(ContextCompat.getColor(this, mehdi.sakout.aboutpage.R.color.about_item_icon_color));
-
-
-
-
 
 		copyRightsElement.setGravity(Gravity.CENTER);
 		copyRightsElement.setOnClickListener(new View.OnClickListener()
@@ -141,8 +135,8 @@ public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 		System.out.println("ZANaviAboutPage:" + "processFinish");
 
 		String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-		String full_file_name = Navit.NAVIT_DATA_DEBUG_DIR + "/crashlog_" + date + ".txt";
-		String full_file_name_suppl = Navit.NAVIT_DATA_DEBUG_DIR + "/crashlog_single.txt";
+		String full_file_name = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/crashlog_" + date + ".txt";
+		String full_file_name_suppl = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/crashlog_single.txt";
 		String feedback_text = Navit.get_text("Crashlog") + "\n" + Navit.get_text("You can use our PGP-Key") + ": " + Navit.PGP_KEY_ID;
 
 		System.out.println("crashlogfile=" + full_file_name);
@@ -198,7 +192,7 @@ public class ZANaviAboutPage extends AppCompatActivity implements AsyncResponse
 		{
 		}
 
-		Navit.Global_Navit_Object.sendEmailWithAttachment(this, "feedback@zanavi.cc", "ZANavi Crashlog (v:" + subject_d_version + FD_addon + Navit.NavitAppVersion + " a:" + android.os.Build.VERSION.SDK + ")", feedback_text, full_file_name, full_file_name_suppl);
+		Navit.sNavitObject.sendEmailWithAttachment(this, "feedback@zanavi.cc", "ZANavi Crashlog (v:" + subject_d_version + FD_addon + Navit.NavitAppVersion + " a:" + android.os.Build.VERSION.SDK + ")", feedback_text, full_file_name, full_file_name_suppl);
 
 		// reset message
 		ZANaviMainApplication.last_stack_trace_as_string = "";

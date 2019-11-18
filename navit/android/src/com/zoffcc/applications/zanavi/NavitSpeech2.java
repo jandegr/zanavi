@@ -393,9 +393,9 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 
 				need_audio_focus = 0;
 
-				if (NavitGraphics.NavitMsgTv2_.getVisibility() == View.VISIBLE)
+				if (Navit.getInstance().getN_NavitGraphics().mNavitMsgTv2.getVisibility() == View.VISIBLE)
 				{
-					Navit.set_debug_messages_say_wrapper("SAY:" + what + "\n");
+					Navit.getInstance().set_debug_messages_say_wrapper("SAY:" + what + "\n");
 				}
 
 				if (Navit.p.PREF_show_debug_messages)

@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2012 Zoff <zoff@zoff.cc>
  *
@@ -31,13 +31,13 @@ public class NavitOSDJava // extends View
 {
 	public static int mCanvasWidth = 1;
 	public static int mCanvasHeight = 1;
-	public static float draw_factor = 1.0f;
+	static float draw_factor = 1.0f;
 
-	public static int OSD_element_bg_001;
-	public static int OSD_element_bg_001_compass;
-	public static int OSD_element_text_001;
-	public static int OSD_element_text_shadow_001;
-	public static int OSD_element_text_shadow_width;
+	static int OSD_element_bg_001;
+	static int OSD_element_bg_001_compass;
+	static int OSD_element_text_001;
+	static int OSD_element_text_shadow_001;
+	static int OSD_element_text_shadow_width;
 
 	int delta_1 = 8;
 	int delta_2 = 35;
@@ -49,7 +49,6 @@ public class NavitOSDJava // extends View
 	static int end_y;
 
 	private static Object sync_dummy_001 = new Object();
-	private static Boolean allow_drawing = true;
 	private static Integer synchro_obj = 0;
 	// private static Boolean in_draw_real = false;
 
@@ -400,6 +399,7 @@ public class NavitOSDJava // extends View
 		// ++NavitGraphics.NavitAOSDJava_.buffer_osd_c.clipRect(0, 0, NavitOSDJava.mCanvasWidth, NavitOSDJava.mCanvasHeight, Region.Op.REPLACE);
 		// ------------------ RESET ---------------
 
+		Boolean allow_drawing = true;
 		if (allow_drawing == false)
 		{
 			try

@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 Zoff <zoff@zoff.cc>
  *
@@ -42,8 +42,8 @@ public class NavitDeleteSelectMapActivity extends ListActivity
 {
 	private int selected_id = -1;
 	private int my_id = 0;
-	static String CANCELED_ID = "-canceled-";
-	static boolean is_canceled = true;
+	static final String CANCELED_ID = "-canceled-";
+	private static boolean is_canceled = true;
 
 	protected void onPostCreate(Bundle savedInstanceState)
 	{
@@ -60,7 +60,7 @@ public class NavitDeleteSelectMapActivity extends ListActivity
 		}
 		else
 		{
-			ViewGroup root_view = (ViewGroup) findViewById(android.R.id.content);
+			ViewGroup root_view = findViewById(android.R.id.content);
 			ListView content = (ListView) root_view.getChildAt(0);
 
 			root_view.removeAllViews();
@@ -109,7 +109,7 @@ public class NavitDeleteSelectMapActivity extends ListActivity
 		super.onCreate(savedInstanceState);
 
 		NavitMapDownloader.init_ondisk_maps();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_ondisk);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_ondisk);
 		setListAdapter(adapter);
 		this.getListView().setFastScrollEnabled(true);
 		try

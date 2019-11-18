@@ -104,15 +104,15 @@ public class ZANaviLinearLayout extends LinearLayout
 			r1.set(sat_status_lt_x, sat_status_lt_y, sat_status_lt_x + sat_status_lt_w, sat_status_lt_y + sat_status_lt_h);
 
 			//
-			child1 = Navit.Global_Navit_Object.findViewById(R.id.top_bar);
-			child2 = Navit.Global_Navit_Object.findViewById(R.id.osd_compass_new);
-			child3 = Navit.Global_Navit_Object.findViewById(R.id.osd_nextturn_new);
-			child4 = Navit.Global_Navit_Object.findViewById(R.id.osd_timetoturn_new);
-			child5 = Navit.Global_Navit_Object.findViewById(R.id.osd_timetodest_new);
-			child6 = Navit.Global_Navit_Object.findViewById(R.id.osd_roaddistance_new);
-			child7 = Navit.Global_Navit_Object.findViewById(R.id.osd_eta_new);
-			child8 = Navit.Global_Navit_Object.findViewById(R.id.view_speeding);
-			child9 = Navit.Global_Navit_Object.findViewById(R.id.view_laneassist);
+			child1 = Navit.sNavitObject.findViewById(R.id.top_bar);
+			child2 = Navit.sNavitObject.findViewById(R.id.osd_compass_new);
+			child3 = Navit.sNavitObject.findViewById(R.id.osd_nextturn_new);
+			child4 = Navit.sNavitObject.findViewById(R.id.osd_timetoturn_new);
+			child5 = Navit.sNavitObject.findViewById(R.id.osd_timetodest_new);
+			child6 = Navit.sNavitObject.findViewById(R.id.osd_roaddistance_new);
+			child7 = Navit.sNavitObject.findViewById(R.id.osd_eta_new);
+			child8 = Navit.sNavitObject.findViewById(R.id.view_speeding);
+			child9 = Navit.sNavitObject.findViewById(R.id.view_laneassist);
 			//
 
 			this.need_size_change = false;
@@ -173,11 +173,11 @@ public class ZANaviLinearLayout extends LinearLayout
 						//if (NavitVehicle.sat_status_icon_now == 1)
 						if (Navit.isGPSFix)
 						{
-							Navit.Global_Navit_Object.getSupportActionBar().setIcon(R.drawable.ic_action_location_found);
+							Navit.sNavitObject.getSupportActionBar().setIcon(R.drawable.ic_action_location_found);
 						}
 						else
 						{
-							Navit.Global_Navit_Object.getSupportActionBar().setIcon(R.drawable.ic_action_location_searching);
+							Navit.sNavitObject.getSupportActionBar().setIcon(R.drawable.ic_action_location_searching);
 						}
 					}
 					catch (Exception e)
@@ -231,7 +231,7 @@ public class ZANaviLinearLayout extends LinearLayout
 				{
 					try
 					{
-						Navit.Global_Navit_Object.getSupportActionBar().setIcon(R.drawable.icon);
+						Navit.sNavitObject.getSupportActionBar().setIcon(R.drawable.icon);
 					}
 					catch (Exception e)
 					{
@@ -289,15 +289,15 @@ public class ZANaviLinearLayout extends LinearLayout
 	{
 		try
 		{
-			//		child1 = Navit.Global_Navit_Object.findViewById(R.id.top_bar); // streetname
-			//		child2 = Navit.Global_Navit_Object.findViewById(R.id.osd_compass_new);
-			//		child3 = Navit.Global_Navit_Object.findViewById(R.id.osd_nextturn_new);
-			//		child4 = Navit.Global_Navit_Object.findViewById(R.id.osd_timetoturn_new);
-			//		child5 = Navit.Global_Navit_Object.findViewById(R.id.osd_timetodest_new);
-			//		child6 = Navit.Global_Navit_Object.findViewById(R.id.osd_roaddistance_new);
-			//		child7 = Navit.Global_Navit_Object.findViewById(R.id.osd_eta_new);
-			//		child8 = Navit.Global_Navit_Object.findViewById(R.id.view_speeding);
-			//		child9 = Navit.Global_Navit_Object.findViewById(R.id.view_laneassist);		
+			//		child1 = Navit.sNavitObject.findViewById(R.id.top_bar); // streetname
+			//		child2 = Navit.sNavitObject.findViewById(R.id.osd_compass_new);
+			//		child3 = Navit.sNavitObject.findViewById(R.id.osd_nextturn_new);
+			//		child4 = Navit.sNavitObject.findViewById(R.id.osd_timetoturn_new);
+			//		child5 = Navit.sNavitObject.findViewById(R.id.osd_timetodest_new);
+			//		child6 = Navit.sNavitObject.findViewById(R.id.osd_roaddistance_new);
+			//		child7 = Navit.sNavitObject.findViewById(R.id.osd_eta_new);
+			//		child8 = Navit.sNavitObject.findViewById(R.id.view_speeding);
+			//		child9 = Navit.sNavitObject.findViewById(R.id.view_laneassist);
 
 			switch (i)
 			{

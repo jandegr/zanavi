@@ -135,7 +135,7 @@ public class ZANaviMapDownloaderService extends Service
 		try
 		{
 			System.out.println("ZANaviMapDownloaderService: xxxxxxxx download start xxxxxxxx");
-			Navit.mapdownloader_pri = new NavitMapDownloader(Navit.Global_Navit_Object);
+			Navit.mapdownloader_pri = new NavitMapDownloader(Navit.sNavitObject);
 			progressThread_pri = Navit.mapdownloader_pri.new ProgressThread(Navit.Navit_progress_h, NavitMapDownloader.z_OSM_MAPS[Navit.download_map_id], Navit.MAP_NUM_PRIMARY);
 			progressThread_pri.start();
 		}

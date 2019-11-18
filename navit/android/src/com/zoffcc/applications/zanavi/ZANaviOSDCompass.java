@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2013 - 2015 Zoff <zoff@zoff.cc>
  *
@@ -30,15 +30,15 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class ZANaviOSDCompass extends AppCompatImageView
 {
-	int w = 10;
-	int h = 10;
-	float w2 = w / 2;
-	float h2 = h / 2;
-	Bitmap bitmap_measure = null;
-	Paint paint_2 = new Paint();
-	Paint paint_3 = new Paint();
-	int cx = 0;
-	int cy = 0;
+	private int w = 10;
+	private int h = 10;
+	private float w2 = w / 2;
+	private float h2 = h / 2;
+	private final Bitmap bitmap_measure;
+	private final Paint paint_2 = new Paint();
+	private final Paint paint_3 = new Paint();
+	private int cx = 0;
+	private int cy = 0;
 
 	public ZANaviOSDCompass(Context context)
 	{

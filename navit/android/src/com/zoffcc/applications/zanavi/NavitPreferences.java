@@ -515,17 +515,17 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 
 		try
 		{
-			if (Navit.NavitDataStorageDirs != null)
+			if (Navit.sNavitDataStorageDirs != null)
 			{
-				if (Navit.NavitDataStorageDirs.length > 0)
+				if (Navit.sNavitDataStorageDirs.length > 0)
 				{
 					//Preference a = findPreference("map_directory");
 					Preference b = findPreference("storage_directory");
 
 					int new_count = 0;
-					for (int ij = 0; ij < Navit.NavitDataStorageDirs.length; ij++)
+					for (int ij = 0; ij < Navit.sNavitDataStorageDirs.length; ij++)
 					{
-						if (Navit.NavitDataStorageDirs[ij] != null)
+						if (Navit.sNavitDataStorageDirs[ij] != null)
 						{
 							new_count++;
 						}
@@ -538,21 +538,21 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 					long avail_space = 0L;
 					String avail_space_string = "";
 					new_count = 0;
-					for (int ij = 0; ij < Navit.NavitDataStorageDirs.length; ij++)
+					for (int ij = 0; ij < Navit.sNavitDataStorageDirs.length; ij++)
 					{
-						System.out.println("DataStorageDir prefs list=" + Navit.NavitDataStorageDirs[ij]);
+						System.out.println("DataStorageDir prefs list=" + Navit.sNavitDataStorageDirs[ij]);
 
-						if (Navit.NavitDataStorageDirs[ij] != null)
+						if (Navit.sNavitDataStorageDirs[ij] != null)
 						{
-							avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(Navit.NavitDataStorageDirs[ij].getAbsolutePath());
-							String avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(Navit.NavitDataStorageDirs[ij].getAbsolutePath());
+							avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMB(Navit.sNavitDataStorageDirs[ij].getAbsolutePath());
+							String avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInMBformattedString(Navit.sNavitDataStorageDirs[ij].getAbsolutePath());
 							if (avail_space < 0)
 							{
 								avail_space_string = "";
 							}
 							else if (avail_space > 1200)
 							{
-								avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInGBformattedString(Navit.NavitDataStorageDirs[ij].getAbsolutePath());
+								avail_space_str = NavitAvailableSpaceHandler.getExternalAvailableSpaceInGBformattedString(Navit.sNavitDataStorageDirs[ij].getAbsolutePath());
 								avail_space_string = " \n[" + avail_space_str + "GB free]";
 							}
 							else
@@ -562,7 +562,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 
 							System.out.println("DataStorageDir avail space=" + avail_space);
 
-							entries[new_count + 1] = "SD Card:" + Navit.NavitDataStorageDirs[ij].getAbsolutePath() + avail_space_string;
+							entries[new_count + 1] = "SD Card:" + Navit.sNavitDataStorageDirs[ij].getAbsolutePath() + avail_space_string;
 							entryValues[new_count + 1] = "" + (ij + 1);
 
 							new_count++;

@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -64,18 +64,16 @@ import java.util.Map;
 
 public class NavitAddressResultListActivity extends ExpandableListActivity
 {
-	// public static NavitAddressResultListActivity self_ = null;
-	NavitSearchResultListArrayAdapter adapter_ = null;
 	private int selected_id = -1;
 	private int selected_id_passthru = -1;
 	static NavitAddressResultListActivity NavitAddressResultListActivity_s = null;
 	// private Boolean is_empty = true;
 	// public ArrayList<HashMap<Integer, search_result_entry>> result_list;
-	public Map<Integer, List<search_result_entry>> result_list;
+	private Map<Integer, List<search_result_entry>> result_list;
 
-	public static int mode = 1; // 0 .. hide towns if streets/housenumbers available
-								// 1 .. show towns and streets and housenumbers
-								// 2 .. show only towns
+	int mode = 1; // 0 .. hide towns if streets/housenumbers available
+					// 1 .. show towns and streets and housenumbers
+					// 2 .. show only towns
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState)
@@ -93,7 +91,7 @@ public class NavitAddressResultListActivity extends ExpandableListActivity
 		}
 		else
 		{
-			ViewGroup root_view = (ViewGroup) findViewById(android.R.id.content);
+			ViewGroup root_view = findViewById(android.R.id.content);
 			ListView content = (ListView) root_view.getChildAt(0);
 
 			root_view.removeAllViews();
@@ -183,10 +181,10 @@ public class NavitAddressResultListActivity extends ExpandableListActivity
 		Log.e("Navit", "########### final result count: " + Navit.NavitAddressResultList_foundItems.size());
 
 		// this.result_list = new String[Navit.NavitAddressResultList_foundItems.size()];
-		this.result_list = new LinkedHashMap<Integer, List<search_result_entry>>();
-		ArrayList<search_result_entry> l1 = new ArrayList<search_result_entry>();
-		ArrayList<search_result_entry> l2 = new ArrayList<search_result_entry>();
-		ArrayList<search_result_entry> l3 = new ArrayList<search_result_entry>();
+		this.result_list = new LinkedHashMap<>();
+		ArrayList<search_result_entry> l1 = new ArrayList<>();
+		ArrayList<search_result_entry> l2 = new ArrayList<>();
+		ArrayList<search_result_entry> l3 = new ArrayList<>();
 
 		int j = 0;
 		for (Iterator<Navit.Navit_Address_Result_Struct> i = Navit.NavitAddressResultList_foundItems.iterator(); i.hasNext();)
@@ -217,7 +215,8 @@ public class NavitAddressResultListActivity extends ExpandableListActivity
 		// self_ = this;
 
 		// adapter_ = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, result_list);
-		adapter_ = new NavitSearchResultListArrayAdapter(this, result_list);
+		// public static NavitAddressResultListActivity self_ = null;
+		NavitSearchResultListArrayAdapter adapter_ = new NavitSearchResultListArrayAdapter(this, result_list);
 
 		setListAdapter(adapter_);
 		// this.getListView().setFastScrollEnabled(true);

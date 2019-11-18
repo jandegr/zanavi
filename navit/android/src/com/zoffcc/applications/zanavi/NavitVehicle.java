@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2014 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -45,7 +45,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 
 import android.content.Context;
@@ -65,7 +64,7 @@ import android.util.Log;
 
 public class NavitVehicle
 {
-	private LocationManager locationManager = null;
+	private final LocationManager locationManager;
 	private static LocationManager locationManager_s = null;
 	private static LocationListener fastLocationListener_s = null;
 	private static LocationListener preciseLocationListener_s = null;
@@ -303,7 +302,7 @@ public class NavitVehicle
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationManager_s = locationManager;
 
-		LocationListener fastLocationListener = new LocationListener()
+		fastLocationListener_s = new LocationListener()
 		{
 			public void onLocationChanged(Location location)
 			{
@@ -314,7 +313,7 @@ public class NavitVehicle
 					disregard_first_fast_location--;
 					return;
 				}
-				
+
 				// if we are in tunnel-extrapolation mode, don't use 3g location
 				if (Navit.tunnel_extrapolation)
 				{
@@ -377,15 +376,14 @@ public class NavitVehicle
 						break;
 					}
 				}
-				catch (Exception e)
+				catch (Exception e1)
 				{
 
 				}
 			}
 		};
-		fastLocationListener_s = fastLocationListener;
 
-		LocationListener preciseLocationListener = new LocationListener()
+		preciseLocationListener_s = new LocationListener()
 		{
 			public void onLocationChanged(Location location)
 			{
@@ -457,13 +455,12 @@ public class NavitVehicle
 						break;
 					}
 				}
-				catch (Exception e)
+				catch (Exception e1)
 				{
 
 				}
 			}
 		};
-		preciseLocationListener_s = preciseLocationListener;
 
 		/*
 		 * Use 2 LocationProviders, one precise (usually GPS), and one
@@ -959,7 +956,7 @@ public class NavitVehicle
 			// try to download aGPS data!!
 			if (Navit.p.PREF_use_agps)
 			{
-				Navit.downloadGPSXtra(Navit.getBaseContext_);
+				Navit.downloadGPSXtra(Navit.getContext());
 			}
 		}
 		catch (Exception e)
@@ -1271,7 +1268,7 @@ public class NavitVehicle
 	{
 		speech_recording_started = true;
 
-		String pos_recording_filename_gpx_base = Navit.NAVIT_DATA_DEBUG_DIR + "zanavi_speech_recording";
+		String pos_recording_filename_gpx_base = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "zanavi_speech_recording";
 		String pos_recording_filename_gpx = pos_recording_filename_gpx_base + ".gpx";
 		String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
 		String pos_recording_filename_gpx_archive = pos_recording_filename_gpx_base + "_" + date + ".gpx";
@@ -1335,7 +1332,7 @@ public class NavitVehicle
 		is_pos_recording = true;
 
 		String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-		String pos_recording_filename_base = Navit.NAVIT_DATA_DEBUG_DIR + date + "-" + "zanavi_pos_recording";
+		String pos_recording_filename_base = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + date + "-" + "zanavi_pos_recording";
 		String pos_recording_filename = pos_recording_filename_base + ".txt";
 		// String pos_recording_filename_gpx_base = Navit.NAVIT_DATA_DEBUG_DIR + "zanavi_pos_recording";
 		//String pos_recording_filename_gpx = pos_recording_filename_gpx_base + ".gpx";
@@ -1478,12 +1475,12 @@ public class NavitVehicle
 					// before "CLR" rotate recording file --------------------------
 					// before "CLR" rotate recording file --------------------------
 					String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-					String pos_recording_filename_base = Navit.NAVIT_DATA_DEBUG_DIR + date + "-" + "zanavi_pos_recording";
+					String pos_recording_filename_base = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + date + "-" + "zanavi_pos_recording";
 					String pos_recording_filename = pos_recording_filename_base + ".txt";
 					String pos_recording_filename_archive = pos_recording_filename_base + "_" + date + ".txt";
 
 					//System.out.println("PRF:CLR:" + pos_recording_file.getName() + " " + pos_recording_filename_archive);
-					pos_recording_filename_archive = Navit.NAVIT_DATA_DEBUG_DIR + "arch_" + pos_recording_file.getName();
+					pos_recording_filename_archive = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "arch_" + pos_recording_file.getName();
 
 					//System.out.println("PRF:CLR:004:" + pos_recording_filename_archive);
 
@@ -1542,7 +1539,7 @@ public class NavitVehicle
 					if ((Navit.global_last_destination_name.compareTo("") != 0) && (pos_recording_file.getName().contains("zanavi_pos_recording")))
 					{
 						String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-						String pos_recording_filename_newname = Navit.NAVIT_DATA_DEBUG_DIR + "route-" + date + "-" + Navit.global_last_destination_name + ".txt";
+						String pos_recording_filename_newname = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "route-" + date + "-" + Navit.global_last_destination_name + ".txt";
 
 						//System.out.println("PRF:X02:" + pos_recording_filename_newname);
 

@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2013 Zoff <zoff@zoff.cc>
  *
@@ -23,35 +23,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class ZANaviOSDTimeToDest extends View
 {
 
-	private Paint paint = new Paint();
-	private RectF f;
-	int end_x;
-	int end_y;
-	int nt_text_start_x = 0;
-	int nt_text_start_y = 0;
-	int nt_font_size = 10;
-	float draw_factor = 1;
-	int OSD_element_bg_001 = Navit.OSD_blueish_bg_color; // Color.argb(255, 190, 190, 190); // Color.argb(140, 136, 136, 136);
-	int OSD_element_text_shadow_001 = Color.rgb(255, 255, 255); // text shadow
-	int OSD_element_text_001 = Color.rgb(244, 180, 0);
-	int OSD_element_text_shadow_width = 1;
-	String my_text = "";
-	int w2;
-	int h2;
-	int w3 = 10;
-	int h3;
-	int w;
-	int h;
-	int font_size = 10;
-	float textHeight = 0;
-	float textOffset = 0;
+	private final Paint paint = new Paint();
+	private final int OSD_element_text_shadow_001 = Color.rgb(255, 255, 255); // text shadow
+	private final int OSD_element_text_001 = Color.rgb(244, 180, 0);
+	private int OSD_element_text_shadow_width = 1;
+	private int h2;
+	private int w3 = 10;
+	private float textOffset = 0;
 
 	public ZANaviOSDTimeToDest(Context context)
 	{
@@ -69,20 +53,16 @@ public class ZANaviOSDTimeToDest extends View
 	public void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
-		this.w2 = w / 2;
 		this.h2 = h / 2;
-		this.w = w;
-		this.h = h;
-		this.h3 = (int) (h + (paint.ascent() / 2));
 
 		OSD_element_text_shadow_width = NavitGraphics.dp_to_px(2);
 		w3 = (w / 4);
 
-		font_size = Navit.find_max_font_size_for_height("+1 20h 10m", h, 95, 9);
+		int font_size = Navit.find_max_font_size_for_height("+1 20h 10m", h, 95, 9);
 		paint.setTextSize(font_size);
 		paint.setAntiAlias(true);
 
-		textHeight = paint.descent() - paint.ascent();
+		float textHeight = paint.descent() - paint.ascent();
 		textOffset = (textHeight / 2) - paint.descent();
 	}
 
@@ -95,19 +75,17 @@ public class ZANaviOSDTimeToDest extends View
 		{
 			if ((Navit.OSD_route_001.arriving_secs_to_dest_valid) && (dest_valid > 0))
 			{
-				my_text = Navit.OSD_route_001.arriving_secs_to_dest;
+				String my_text = Navit.OSD_route_001.arriving_secs_to_dest;
 
 				paint.setColor(OSD_element_text_shadow_001);
 				paint.setStrokeWidth(OSD_element_text_shadow_width);
 				paint.setStyle(Paint.Style.STROKE);
 				c.drawText(my_text, w3, h2 + textOffset, paint);
-				// c.drawText("26 min", w3, h2 + textOffset, paint);
 
 				paint.setColor(OSD_element_text_001);
 				paint.setStrokeWidth(3);
 				paint.setStyle(Paint.Style.FILL);
 				c.drawText(my_text, w3, h2 + textOffset, paint);
-				// c.drawText("26 min", w3, h2 + textOffset, paint);
 			}
 			else
 			{

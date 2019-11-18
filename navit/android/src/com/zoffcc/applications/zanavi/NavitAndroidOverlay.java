@@ -45,7 +45,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -58,61 +57,50 @@ import com.zoffcc.applications.zanavi.Navit.geo_coord;
 
 public class NavitAndroidOverlay extends View
 {
-	public Boolean draw_bubble = false;
-	public Boolean draw_bubble_first = false;
+	private Boolean draw_bubble = false;
+	private Boolean draw_bubble_first = false;
 	public static Boolean confirmed_bubble = false;
-	public static int confirmed_bubble_part = 0; // 0 -> left side, 1 -> right side
-	public long bubble_showing_since = 0L;
-	public static long bubble_max_showing_timespan = 5000L; // 5 secs.
-	// public RectF follow_button_rect = new RectF(-100, 1, 1, 1);
-	//public RectF voice_recog_rect = new RectF(-100, 1, 1, 1);
-	//public RectF zoomin_button_rect = new RectF(-100, 1, 1, 1);
-	//public RectF zoomout_button_rect = new RectF(-100, 1, 1, 1);
-	//public RectF mapdrawing_button_rect = new RectF(-100, 1, 1, 1);
-	public static int zoomin_ltx = 0;
-	public static int zoomin_lty = 0;
-	public static int zoomout_ltx = 0;
-	public static int zoomout_lty = 0;
-	public static int mapdrawing_ltx = 0;
-	public static int mapdrawing_lty = 0;
-	public int mCanvasHeight = 1;
-	public int mCanvasWidth = 1;
-	public static float draw_factor = 1.0f;
+	//private static int confirmed_bubble_part = 0; // 0 -> left side, 1 -> right side
+	private long bubble_showing_since = 0L;
+	private static final long bubble_max_showing_timespan = 5000L; // 5 secs.
+	RectF zoomin_button_rect = new RectF(-100, 1, 1, 1);
+	RectF zoomout_button_rect = new RectF(-100, 1, 1, 1);
+	private int mCanvasHeight = 1;
+	private static float draw_factor = 1.0f;
 	public static boolean voice_rec_bar_visible = false;
 	public static boolean voice_rec_bar_visible2 = false;
-	public static int voice_rec_bar_x = -10;
-	public static int voice_rec_bar_y = -10;
-	public static int voice_rec_bar_limit = 10;
+	//public static int voice_rec_bar_x = -10;
+	//public static int voice_rec_bar_y = -10;
+	//private static int voice_rec_bar_limit = 10;
 	Matrix lanes_scaleMatrix = new Matrix();
 	Matrix lanes_transMatrix = new Matrix();
 	RectF lanes_rectF = new RectF();
 
 	public static boolean measure_mode = false;
 	public static int measure_result_meters = -1;
-	static int measure_1_x = 0;
-	static int measure_1_y = 0;
-	static int measure_2_x = 0;
-	static int measure_2_y = 0;
-	static boolean measure_first = true;
-	static boolean measure_valid = false;
-	static Paint paint_measure = new Paint();
-	static int measure_point_radius = 3;
+	private static int measure_1_x = 0;
+	private static int measure_1_y = 0;
+	private static int measure_2_x = 0;
+	private static int measure_2_y = 0;
+	private static boolean measure_first = true;
+	private static boolean measure_valid = false;
+	private static final Paint paint_measure = new Paint();
+	private static int measure_point_radius = 3;
 
-	private Paint paint_replay = new Paint();
-	private Paint paint_rewind_small = new Paint();
-	private Paint paint_bubble_hotpoint = new Paint();
+	private final Paint paint_replay = new Paint();
+	private final Paint paint_rewind_small = new Paint();
+	private final Paint paint_bubble_hotpoint = new Paint();
 
-	Message msg_dd = null;
-	Bundle b_dd = new Bundle();
+	private final Bundle b_dd = new Bundle();
 
 	RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
 	Paint paint_speedwarning = new Paint(0);
 
-	static boolean no_draw = false;
+	//static boolean no_draw = false;
 
-	static Path pathForTurn = new Path();
+	//static Path pathForTurn = new Path();
 
-	public static BubbleThread bubble_thread = null;
+	private static BubbleThread bubble_thread = null;
 
 	public static NavitGraphics.OverlayDrawThread overlay_draw_thread1;
 
@@ -130,7 +118,7 @@ public class NavitAndroidOverlay extends View
 			//Log.e("Navit", "BubbleThread created");
 		}
 
-		public void stop_me()
+		void stop_me()
 		{
 			this.running = false;
 		}
@@ -166,7 +154,7 @@ public class NavitAndroidOverlay extends View
 		}
 	}
 
-	public static class NavitAndroidOverlayBubble
+	static class NavitAndroidOverlayBubble
 	{
 		int x;
 		int y;
@@ -304,7 +292,7 @@ public class NavitAndroidOverlay extends View
 	{
 		// bubble touched to confirm destination
 		confirmed_bubble = true;
-		confirmed_bubble_part = 1;
+		//confirmed_bubble_part = 1;
 		// draw confirmed bubble
 		//System.out.println("invalidate 003");
 		this.postInvalidate();
@@ -324,7 +312,7 @@ public class NavitAndroidOverlay extends View
 		{
 			String item_dump_pretty_parsed = "";
 			String[] item_dump_lines = item_dump_pretty.split("\n");
-			int jk = 0;
+			int jk;
 			String sep = "";
 			for (jk = 0; jk < item_dump_lines.length; jk++)
 			{
@@ -387,7 +375,7 @@ public class NavitAndroidOverlay extends View
 	{
 		// bubble touched to confirm destination
 		confirmed_bubble = true;
-		confirmed_bubble_part = 0;
+		//confirmed_bubble_part = 0;
 		// draw confirmed bubble
 		//System.out.println("invalidate 002");
 		this.postInvalidate();
@@ -439,7 +427,7 @@ public class NavitAndroidOverlay extends View
 	{
 		// bubble touched to confirm destination
 		confirmed_bubble = true;
-		confirmed_bubble_part = 0;
+		//confirmed_bubble_part = 0;
 		// draw confirmed bubble
 		//System.out.println("invalidate 002");
 		this.postInvalidate();
@@ -478,7 +466,7 @@ public class NavitAndroidOverlay extends View
 		{
 			int wait = 1;
 			int count = 0;
-			int max_count = 60;
+			final int max_count = 60;
 
 			@Override
 			public void run()
@@ -489,7 +477,7 @@ public class NavitAndroidOverlay extends View
 					{
 						if ((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33))
 						{
-							Navit.zoom_to_route();
+							Navit.getInstance().zoom_to_route();
 							wait = 0;
 						}
 						else
@@ -637,7 +625,6 @@ public class NavitAndroidOverlay extends View
 	public void onSizeChanged(int w, int h, int oldw, int oldh)
 	{
 		// super.onSizeChanged(w, h, oldw, oldh);
-		this.mCanvasWidth = w;
 		this.mCanvasHeight = h;
 
 		draw_factor = 1.0f;
@@ -666,7 +653,7 @@ public class NavitAndroidOverlay extends View
 
 		// rect to slide open voice recognition
 		// this.voice_recog_rect = new RectF(0, (this.mCanvasHeight / 2f) - 100 * draw_factor, 16 * draw_factor, (this.mCanvasHeight / 2f) + 100 * draw_factor);
-		NavitAndroidOverlay.voice_rec_bar_limit = this.mCanvasWidth / 2;
+		//NavitAndroidOverlay.voice_rec_bar_limit = w / 2;
 
 		/*
 		 * int w_2 = (int) ((0 / 1.5f) * draw_factor) + 5;
@@ -680,22 +667,27 @@ public class NavitAndroidOverlay extends View
 		int w_2 = (int) ((0 / 1.5f) * draw_factor) + 5;
 		int h_2 = (int) ((70f / 1.5f) * draw_factor) + 5 + 25;
 		int h_button_zoom = Navit.zoomin.getHeight();
-		zoomin_ltx = w_2;
-		zoomin_lty = h_2;
-		// this.zoomin_button_rect = new RectF(w_2, h_2, Navit.zoomin.getWidth() + w_2, h_button_zoom + h_2);
+		// public RectF follow_button_rect = new RectF(-100, 1, 1, 1);
+		//public RectF voice_recog_rect = new RectF(-100, 1, 1, 1);
+		//public RectF zoomin_button_rect = new RectF(-100, 1, 1, 1);
+		//public RectF zoomout_button_rect = new RectF(-100, 1, 1, 1);
+		//public RectF mapdrawing_button_rect = new RectF(-100, 1, 1, 1);
+		int zoomin_ltx = w_2;
+		int zoomin_lty = h_2;
+		this.zoomin_button_rect = new RectF(w_2, h_2, Navit.zoomin.getWidth() + w_2, h_button_zoom + h_2);
 
 		w_2 = (int) ((0 / 1.5f) * draw_factor) + 5;
 		h_2 = (int) ((2 * 70f / 1.5f) * draw_factor) + 5 + 25 + 25;
-		zoomout_ltx = w_2;
-		zoomout_lty = h_2;
-		// this.zoomout_button_rect = new RectF(w_2, h_2, Navit.zoomout.getWidth() + w_2, h_button_zoom + h_2);
+		int zoomout_ltx = w_2;
+		int zoomout_lty = h_2;
+		this.zoomout_button_rect = new RectF(w_2, h_2, Navit.zoomout.getWidth() + w_2, h_button_zoom + h_2);
 
 		int mapdrawing_width = (int) ((75f / 1.5f) * draw_factor);
 		int mapdrawing_height = (int) ((75f / 1.5f) * draw_factor);
-		w_2 = (int) ((this.mCanvasWidth - mapdrawing_width) - 5);
+		w_2 = (w - mapdrawing_width) - 5;
 		h_2 = (int) ((70f / 1.5f) * draw_factor) + 5 + 25;
-		mapdrawing_ltx = w_2;
-		mapdrawing_lty = h_2;
+		int mapdrawing_ltx = w_2;
+		int mapdrawing_lty = h_2;
 		// this.mapdrawing_button_rect = new RectF(w_2, h_2, mapdrawing_width + w_2, mapdrawing_height + h_2);
 
 		// on small screens (like the blackberry Q10) the follow button overlaps the 2d/3d button (mapdrawing button)
@@ -727,15 +719,15 @@ public class NavitAndroidOverlay extends View
 		// put menu button below "2D/3D" button
 		if (Navit.metrics.densityDpi >= 320) // && (Navit.PREF_shrink_on_high_dpi))
 		{
-			Navit.menu_button_rect = new RectF(this.mCanvasWidth - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, this.mCanvasWidth - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
-			Navit.menu_button_rect_touch = new RectF(this.mCanvasWidth - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, this.mCanvasWidth - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
+			Navit.menu_button_rect = new RectF(w - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
+			Navit.menu_button_rect_touch = new RectF(w - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
 		}
 		else
 		{
 			final int addon_left = 0; //50;
 			final int addon_down = 0; //40;
-			Navit.menu_button_rect = new RectF(this.mCanvasWidth - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, this.mCanvasWidth - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
-			Navit.menu_button_rect_touch = new RectF(this.mCanvasWidth - 10 - Navit.menu_button.getWidth() - addon_left, 10 + mapdrawing_height + h_2 + 5, this.mCanvasWidth - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5 + addon_down);
+			Navit.menu_button_rect = new RectF(w - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
+			Navit.menu_button_rect_touch = new RectF(w - 10 - Navit.menu_button.getWidth() - addon_left, 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5 + addon_down);
 		}
 	}
 
@@ -754,7 +746,7 @@ public class NavitAndroidOverlay extends View
 		int j = 0;
 		for (j = 0; j < parsed_num_lanes; j++)
 		{
-			String lanes_split_sub[] = lanes_split[j].split(";");
+			String[] lanes_split_sub = lanes_split[j].split(";");
 			int parsed_num_lanes_sub = lanes_split_sub.length;
 
 			k = 0;
@@ -865,6 +857,7 @@ public class NavitAndroidOverlay extends View
 
 			if (draw_bubble_first)
 			{
+				Message msg_dd = null;
 				try
 				{
 					System.out.println("BB:09");
@@ -943,7 +936,7 @@ public class NavitAndroidOverlay extends View
 					{
 						int j3;
 						int indent = 0;
-						for (j3 = 0; j3 < (int) (s[i3].length() / max_char); j3++)
+						for (j3 = 0; j3 < (s[i3].length() / max_char); j3++)
 						{
 							if (j3 > 0)
 							{
@@ -952,7 +945,7 @@ public class NavitAndroidOverlay extends View
 							c.drawText(s[i3].substring(j3 * max_char, ((j3 + 1) * max_char) - 0), start_x + indent, start_y + (i4 * line_size_y), paint);
 							i4++;
 						}
-						if ((((int) (s[i3].length() / max_char)) * max_char) < s[i3].length())
+						if (((s[i3].length() / max_char) * max_char) < s[i3].length())
 						{
 							indent = one_indent;
 							c.drawText(s[i3].substring(j3 * max_char), start_x + indent, start_y + (i4 * line_size_y), paint);

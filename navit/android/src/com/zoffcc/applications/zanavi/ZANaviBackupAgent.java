@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2013 Zoff <zoff@zoff.cc>
  *
@@ -48,9 +48,6 @@ public class ZANaviBackupAgent extends BackupAgentHelper
 			String data_dir = this.getFilesDir().getPath();
 			// System.out.println("XXYY data dir for backup=" + data_dir);
 			String my_DATA_SHARE_DIR = data_dir + "/share";
-
-			FileBackupHelper file1_helper = new FileBackupHelper(this, my_DATA_SHARE_DIR + Navit.Navit_CENTER_FILENAME);
-			addHelper(MY_PREFS_BACKUP_FILE1, file1_helper);
 
 			FileBackupHelper file2_helper = new FileBackupHelper(this, my_DATA_SHARE_DIR + Navit.Navit_DEST_FILENAME);
 			addHelper(MY_PREFS_BACKUP_FILE2, file2_helper);

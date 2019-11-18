@@ -556,7 +556,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 					is_searching = true;
 
 					Log.e("Navit", "SearchResultsThread args:pm=" + partial_match_i + " str=" + street_ + " town=" + town_ + " hn=" + hn_ + " cfl=" + Navit.Navit_last_address_search_country_flags + " iso=" + Navit.Navit_last_address_search_country_iso2_string);
-					Navit.N_NavitGraphics.SearchResultList(2, partial_match_i, street_, town_, hn_, Navit.Navit_last_address_search_country_flags, Navit.Navit_last_address_search_country_iso2_string, "0#0", 0);
+					Navit.getInstance().getN_NavitGraphics().SearchResultList(2, partial_match_i, street_, town_, hn_, Navit.Navit_last_address_search_country_flags, Navit.Navit_last_address_search_country_iso2_string, "0#0", 0);
 
 					is_searching = false;
 					Navit.search_ready = true;

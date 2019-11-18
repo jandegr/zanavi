@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2013 Zoff <zoff@zoff.cc>
  *
@@ -30,25 +30,12 @@ import android.view.View;
 public class ZANaviOSDDistToNextturn extends View
 {
 
-	private Paint paint = new Paint();
-	private Paint paint_p3 = new Paint();
-	private int OSD_element_text_shadow_001;
-	private int OSD_element_text_001;
-
-	private String my_text = "";
-
-	int nextt_str_start_x = 5;
-	int nextt_str_start_y = 5;
-	int nextt_str_font_size = 0;
-	int nextt_str_w = 0;
-	int nextt_str_h = 0;
-	int nextt_str_wB = 0;
-	int OSD_element_text_shadow_width;
-
-	float textHeight_p2;
-	float textOffset_p2;
-	float textHeight_p3;
-	float textOffset_p3;
+	private final Paint paint = new Paint();
+	private final Paint paint_p3 = new Paint();
+	private int nextt_str_start_x = 5;
+	private int nextt_str_start_y = 5;
+	private float textOffset_p2;
+	private float textOffset_p3;
 
 	public ZANaviOSDDistToNextturn(Context context)
 	{
@@ -69,8 +56,8 @@ public class ZANaviOSDDistToNextturn extends View
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
 
-		OSD_element_text_shadow_001 = Color.rgb(0, 0, 0); // text shadow
-		OSD_element_text_001 = Color.argb(255, 255, 255, 255); // text color
+		int OSD_element_text_shadow_001 = Color.rgb(0, 0, 0); // text shadow
+		int OSD_element_text_001 = Color.argb(255, 255, 255, 255); // text color
 
 		paint.setTextAlign(Align.CENTER);
 		paint_p3.setTextAlign(Paint.Align.CENTER);
@@ -78,13 +65,11 @@ public class ZANaviOSDDistToNextturn extends View
 		nextt_str_start_x = w / 2;
 		nextt_str_start_y = h / 2;
 
-		nextt_str_w = w;
-		nextt_str_h = h;
-
-		OSD_element_text_shadow_width = NavitGraphics.dp_to_px(2);
+		int OSD_element_text_shadow_width = NavitGraphics.dp_to_px(2);
 
 		int nextt_str_font_size_hh = Navit.find_max_font_size_for_height("3.000m", h, 190, 8);
 		int nextt_str_font_size_ww = Navit.find_max_font_size_for_width("3.000m", w, 190, 6);
+		int nextt_str_font_size = 0;
 		if (nextt_str_font_size_hh < nextt_str_font_size_ww)
 		{
 			nextt_str_font_size = nextt_str_font_size_hh;
@@ -132,9 +117,9 @@ public class ZANaviOSDDistToNextturn extends View
 		paint_p3.setStyle(Paint.Style.FILL);
 		paint_p3.setAntiAlias(true);
 
-		textHeight_p2 = paint.descent() - paint.ascent();
+		float textHeight_p2 = paint.descent() - paint.ascent();
 		textOffset_p2 = (textHeight_p2 / 2) - paint.descent();
-		textHeight_p3 = paint_p3.descent() - paint_p3.ascent();
+		float textHeight_p3 = paint_p3.descent() - paint_p3.ascent();
 		textOffset_p3 = (textHeight_p3 / 2) - paint_p3.descent();
 	}
 
@@ -147,7 +132,7 @@ public class ZANaviOSDDistToNextturn extends View
 		{
 			if ((Navit.OSD_nextturn.nextturn_distance_valid) && (dest_valid > 0))
 			{
-				my_text = Navit.OSD_nextturn.nextturn_distance;
+				String my_text = Navit.OSD_nextturn.nextturn_distance;
 				c.drawText(my_text, nextt_str_start_x, nextt_str_start_y + textOffset_p2, paint);
 				c.drawText(my_text, nextt_str_start_x, nextt_str_start_y + textOffset_p3, paint_p3);
 			}

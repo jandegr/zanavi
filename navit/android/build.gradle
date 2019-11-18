@@ -20,7 +20,7 @@ android {
         externalNativeBuild {
             cmake {
                 arguments '-DUSE_PLUGINS=n', '-DBUILD_MAPTOOL=n', '-DXSL_PROCESSING=n', '-DSAMPLE_MAP=n' ,
-                        '-DDEBUG_BUILD=y'
+                        '-DDEBUG_BUILD=n'
             }
         }
     }

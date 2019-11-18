@@ -19,13 +19,10 @@
 
 package com.zoffcc.applications.zanavi;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -117,7 +114,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 
 				try
 				{
-					Navit.getBaseContext_.stopService(Navit.ZANaviMapDownloaderServiceIntent);
+					Navit.getContext().stopService(Navit.ZANaviMapDownloaderServiceIntent);
 				}
 				catch (Exception e)
 				{

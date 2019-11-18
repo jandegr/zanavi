@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2015 Zoff <zoff@zoff.cc>
  *
@@ -33,8 +33,8 @@ public class ZANaviOSDSpeeding extends View
 {
 	int w = 10;
 	int h = 10;
-	RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
-	Paint paint_speedwarning = new Paint(0);
+	private RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
+	private final Paint paint_speedwarning = new Paint(0);
 	float textHeight = 10;
 	float textOffset = 10;
 

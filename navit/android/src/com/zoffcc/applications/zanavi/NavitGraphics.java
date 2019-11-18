@@ -352,15 +352,15 @@ class NavitGraphics
 
 	private PointF touch_now_center = new PointF(0, 0);
 
-	static TextView NavitMsgTv2_ = null;
+	static TextView mNavitMsgTv2 = null;
 
 	static ScrollView NavitMsgTv2sc_ = null;
 	static RelativeLayout no_maps_container = null;
 	static RelativeLayout whats_here_container_wrap = null;
-	static ImageView whats_here_pointer_image = null;
+	ImageView whats_here_pointer_image = null;
 	static RelativeLayout.LayoutParams params_whats_here_container_wrap = new RelativeLayout.LayoutParams(10, 10);
 	static RelativeLayout.LayoutParams params_whats_here_pointer_image = new RelativeLayout.LayoutParams(10, 10);
-	static TextView whats_here_text;
+	TextView whats_here_text;
 	// public static String whats_here_text_string = "";
 
 	private Scroller mScroller = null;
@@ -451,7 +451,7 @@ class NavitGraphics
 								//System.out.println("invalidate 009");
 								// System.out.println("DO__DRAW:Java:postInvalidate 004");
 								// SYN //
-								Navit.NG__map_main.view.postInvalidate();
+								Navit.getInstance().getN_NavitGraphics().view.postInvalidate(); //WTF ?? --jdg--
 								// map_postInvalidate();
 								//SurfaceView2 vw = (SurfaceView2) Navit.NG__map_main.view;
 								//vw.paint_me();
@@ -612,7 +612,7 @@ class NavitGraphics
 		}
 	}
 
-	private static void init_3d_mode()
+	private void init_3d_mode()
 	{
 		// 3D modus -----------------
 		NavitGraphics.cam_m.reset();
@@ -624,10 +624,10 @@ class NavitGraphics
 		// C-Code: (50 + offset) * height / 100 // offset = 30%
 		//float y_point = (bitmap_h - (bitmap_h * 0.7f));
 		float y_offset = 0; // 20
-		float y_point = Navit.NG__map_main.bitmap_h * 0.7f;
-		NavitGraphics.cam_m.preTranslate(-Navit.NG__map_main.bitmap_w / 2, -y_offset - y_point);
-		NavitGraphics.cam_m.postTranslate(Navit.NG__map_main.bitmap_w / 2, y_offset + y_point);
-		NavitGraphics.cam_m.postScale(strech_factor_3d_map, strech_factor_3d_map, Navit.NG__map_main.bitmap_w / 2, y_offset + y_point);
+		float y_point = bitmap_h * 0.7f;
+		NavitGraphics.cam_m.preTranslate(-bitmap_w / 2, -y_offset - y_point);
+		NavitGraphics.cam_m.postTranslate(bitmap_w / 2, y_offset + y_point);
+		NavitGraphics.cam_m.postScale(strech_factor_3d_map, strech_factor_3d_map, bitmap_w / 2, y_offset + y_point);
 		//
 		Matrix matrix_tmp = new Matrix();
 		//RectF src_rect = new RectF(0, 0, Navit.NG__map_main.bitmap_w, Navit.NG__map_main.bitmap_h);
@@ -636,23 +636,23 @@ class NavitGraphics
 		float[] dst = new float[8];
 		src[0] = 0;
 		src[1] = 0;
-		src[2] = Navit.NG__map_main.bitmap_w;
+		src[2] = bitmap_w;
 		src[3] = 0;
-		src[4] = Navit.NG__map_main.bitmap_w;
-		src[5] = Navit.NG__map_main.bitmap_h;
+		src[4] = bitmap_w;
+		src[5] = bitmap_h;
 		src[6] = 0;
-		src[7] = Navit.NG__map_main.bitmap_h;
+		src[7] = bitmap_h;
 		//
 		float _3d_skew_factor_top = 0f;
 		float _3d_skew_factor_bottom = 0.8f;
-		dst[0] = 0 + ((float) (Navit.NG__map_main.bitmap_w) * _3d_skew_factor_top);
+		dst[0] = 0 + ((float) (bitmap_w) * _3d_skew_factor_top);
 		dst[1] = 0;
-		dst[2] = Navit.NG__map_main.bitmap_w - ((float) (Navit.NG__map_main.bitmap_w) * _3d_skew_factor_top);
+		dst[2] = bitmap_w - ((float) (bitmap_w) * _3d_skew_factor_top);
 		dst[3] = 0;
-		dst[4] = Navit.NG__map_main.bitmap_w + ((float) (Navit.NG__map_main.bitmap_w) * _3d_skew_factor_bottom);
-		dst[5] = Navit.NG__map_main.bitmap_h;
-		dst[6] = 0f - ((float) (Navit.NG__map_main.bitmap_w) * _3d_skew_factor_bottom);
-		dst[7] = Navit.NG__map_main.bitmap_h;
+		dst[4] = bitmap_w + ((float) (bitmap_w) * _3d_skew_factor_bottom);
+		dst[5] = bitmap_h;
+		dst[6] = 0f - ((float) (bitmap_w) * _3d_skew_factor_bottom);
+		dst[7] = bitmap_h;
 		//
 		matrix_tmp.setPolyToPoly(src, 0, dst, 0, 4);
 		//*boolean bb = false;
@@ -662,7 +662,7 @@ class NavitGraphics
 		//NavitGraphics.cam_m.postTranslate(0, 50);
 		//
 		float[] pts = new float[2];
-		pts[0] = Navit.NG__map_main.bitmap_w / 2; // x0
+		pts[0] = bitmap_w / 2; // x0
 		pts[1] = 0; // y0
 		cam_m.mapPoints(pts); // now transform the points with the 3d matrix
 		//System.out.println("x1=" + pts[0] + " y1=" + pts[1]);
@@ -676,9 +676,9 @@ class NavitGraphics
 		NavitGraphics.camera.rotateX(rotate_3d_map_angle);
 		NavitGraphics.camera.getMatrix(NavitGraphics.cam_m_vehicle);
 		NavitGraphics.camera.restore();
-		NavitGraphics.cam_m_vehicle.preTranslate(-Navit.NG__map_main.bitmap_w / 2, -y_offset - y_point);
-		NavitGraphics.cam_m_vehicle.postTranslate(Navit.NG__map_main.bitmap_w / 2, y_offset + y_point);
-		NavitGraphics.cam_m_vehicle.postScale(strech_factor_3d_map, strech_factor_3d_map, Navit.NG__map_main.bitmap_w / 2, y_offset + y_point);
+		NavitGraphics.cam_m_vehicle.preTranslate(-bitmap_w / 2, -y_offset - y_point);
+		NavitGraphics.cam_m_vehicle.postTranslate(bitmap_w / 2, y_offset + y_point);
+		NavitGraphics.cam_m_vehicle.postScale(strech_factor_3d_map, strech_factor_3d_map, bitmap_w / 2, y_offset + y_point);
 		//matrix_tmp.reset();
 		//matrix_tmp.preScale(1 / strech_factor_3d_map, 1 / strech_factor_3d_map, Navit.NG__map_main.bitmap_w / 2, y_offset + y_point);
 		//NavitGraphics.cam_m_vehicle.setConcat(matrix_tmp, NavitGraphics.cam_m_vehicle);
@@ -753,8 +753,7 @@ class NavitGraphics
 
 		// shadow for text on map --------------
 
-		// --obsolote --- // NavitCamera camera;
-		AppCompatActivity activity1;
+
 		if (parent == 0)
 		{
 			this.gr_type = 1;
@@ -778,7 +777,6 @@ class NavitGraphics
 			System.out.println("Global_want_dpi=" + Global_want_dpi + ":" + Navit.metrics.densityDpi + ":" + NavitGraphics.Global_dpi_factor + ":" + NavitGraphics.Global_dpi_factor_better);
 			System.out.println("preview_coord_factor=" + preview_coord_factor);
 
-			activity1 = activity;
 			view = new view_map_custom(activity)
 			{
 				int touch_mode = NONE;
@@ -873,11 +871,11 @@ class NavitGraphics
 								{
 									if (Navit.GFX_OVERSPILL)
 									{
-										draw_canvas_screen2.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill, Global_Map_TransY + Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill);
+										draw_canvas_screen2.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + touch_now_center.x + mCanvasWidth_overspill, Global_Map_TransY + touch_now_center.y + mCanvasHeight_overspill);
 									}
 									else
 									{
-										draw_canvas_screen2.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + Navit.NG__map_main.touch_now_center.x, Global_Map_TransY + Navit.NG__map_main.touch_now_center.y);
+										draw_canvas_screen2.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + touch_now_center.x, Global_Map_TransY + touch_now_center.y);
 									}
 								}
 
@@ -1269,11 +1267,11 @@ class NavitGraphics
 								{
 									if (Navit.GFX_OVERSPILL)
 									{
-										canvas.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill, Global_Map_TransY + Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill);
+										canvas.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + touch_now_center.x + mCanvasWidth_overspill, Global_Map_TransY + touch_now_center.y + mCanvasHeight_overspill);
 									}
 									else
 									{
-										canvas.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + Navit.NG__map_main.touch_now_center.x, Global_Map_TransY + Navit.NG__map_main.touch_now_center.y);
+										canvas.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + touch_now_center.x, Global_Map_TransY + touch_now_center.y);
 									}
 								}
 
@@ -1364,7 +1362,7 @@ class NavitGraphics
 					// -- bottom bar --
 					try
 					{
-						final FrameLayout a = Navit.Global_Navit_Object.findViewById(R.id.bottom_bar_slide);
+						final FrameLayout a = Navit.sNavitObject.findViewById(R.id.bottom_bar_slide);
 						final RelativeLayout.LayoutParams pp22 = (RelativeLayout.LayoutParams) a.getLayoutParams();
 						// System.out.println("hhh:1=" + a.getHeight());
 						// System.out.println("hhh:3=" + pp22.topMargin);
@@ -1498,13 +1496,13 @@ class NavitGraphics
 					w_dpi = (int) ((float) w_overspill * Global_dpi_factor);
 					// System.out.println("Global_dpi_factor=" + Global_dpi_factor + " h_dpi=" + h_dpi + " w_dpi=" + w_dpi);
 
-					Global_dpi_factor_better = Navit.Global_Navit_Object.getResources().getDisplayMetrics().density;
+					Global_dpi_factor_better = Navit.sNavitObject.getResources().getDisplayMetrics().density;
 					// DPI
 
 					// check if we need to hide actionbar icons ---------------------
 					try
 					{
-						Navit.Global_Navit_Object.invalidateOptionsMenu();
+						Navit.sNavitObject.invalidateOptionsMenu();
 					}
 					catch (Exception e)
 					{
@@ -1820,7 +1818,7 @@ class NavitGraphics
 
 								System.out.println("Gesture:" + "scale_step=" + scale_step);
 
-								Navit.NG__map_main.touch_now_center = new PointF(e2.getX(0), e2.getY(0));// calc_center(e2); // new PointF(500, 500); // calc_center(event);
+								touch_now_center = new PointF(e2.getX(0), e2.getY(0));// calc_center(e2); // new PointF(500, 500); // calc_center(event);
 								// System.out.println("Gesture:" + "zoom point:" + Navit.NG__map_main.touch_now_center.x + "," + Navit.NG__map_main.touch_now_center.y);
 								force_finish_doubletap_zoom = false;
 
@@ -1830,7 +1828,8 @@ class NavitGraphics
 									scale = scale * scale_step;
 									ZOOM_MODE_SCALE = scale;
 									ZOOM_MODE_ACTIVE = true;
-									Navit.N_NavitGraphics.view.postInvalidate();
+									//Navit.N_NavitGraphics.view.postInvalidate(); ???? was zo, --jdg--
+									view.postInvalidate();
 									// System.out.println("Gesture:" + "zoom step #" + count + " scale=" + scale);
 									// simulate pinch zoom step -------------
 									try
@@ -1850,11 +1849,11 @@ class NavitGraphics
 
 								if (Navit.GFX_OVERSPILL)
 								{
-									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+									b.putString("s", (int) ((touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 								}
 								else
 								{
-									b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+									b.putString("s", (int) ((touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 								}
 								msg.setData(b);
 								try
@@ -2422,15 +2421,15 @@ class NavitGraphics
 										Navit.GlobalScaleLevel = (int) (Navit.GlobalScaleLevel / scale);
 										//System.out.println("sc1.1:" + Navit.GlobalScaleLevel);
 
-										Navit.NG__map_main.touch_now_center = calc_center(event);
+										touch_now_center = calc_center(event);
 										// zzzzzzzzzzzzz;
 										if (Navit.GFX_OVERSPILL)
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+											b.putString("s", (int) ((touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										else
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+											b.putString("s", (int) ((touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										msg.setData(b);
 										try
@@ -2517,15 +2516,15 @@ class NavitGraphics
 											Navit.GlobalScaleLevel = 2;
 										}
 										//System.out.println("sc2.1:" + Navit.GlobalScaleLevel);
-										Navit.NG__map_main.touch_now_center = calc_center(event);
+										touch_now_center = calc_center(event);
 
 										if (Navit.GFX_OVERSPILL)
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+											b.putString("s", (int) ((touch_now_center.x + mCanvasWidth_overspill) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y + mCanvasHeight_overspill) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										else
 										{
-											b.putString("s", (int) ((Navit.NG__map_main.touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((Navit.NG__map_main.touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
+											b.putString("s", (int) ((touch_now_center.x) * Global_dpi_factor) + "#" + (int) ((touch_now_center.y) * Global_dpi_factor) + "#" + Navit.GlobalScaleLevel);
 										}
 										msg.setData(b);
 										try
@@ -2774,7 +2773,7 @@ class NavitGraphics
 							// were are in the middle of a zooming action here ----------
 							// were are in the middle of a zooming action here ----------
 
-							Navit.NG__map_main.touch_now_center = calc_center(event);
+							touch_now_center = calc_center(event);
 							float newDist = spacing(event);
 							float scale = 1.0f;
 							try
@@ -3094,12 +3093,12 @@ class NavitGraphics
 			// android Speech Messages TextView
 			//Log.e("Navit", "create android Speech Messages TextView");
 			// x4x NavitMsgTv2 = new TextView(relativelayout.getContext());
-			// x4x NavitMsgTv2_ = NavitMsgTv2;
+			// x4x mNavitMsgTv2 = NavitMsgTv2;
 			// x4x RelativeLayout.LayoutParams NavitMsgTv_lp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
 			// x4x NavitMsgTv_lp2.leftMargin = 10;
 			// x4x NavitMsgTv_lp2.rightMargin = 10;
 			TextView navitMsgTv2 = activity.findViewById(R.id.NavitMsgTv2cc);
-			NavitMsgTv2_ = navitMsgTv2;
+			mNavitMsgTv2 = navitMsgTv2;
 			int tc2 = Color.argb(125, 0, 0, 0); // half transparent black
 			navitMsgTv2.setBackgroundColor(tc2);
 			navitMsgTv2.setTextSize(15);
@@ -3166,7 +3165,7 @@ class NavitGraphics
 			//			NavitGlobalMap_.invalidate();
 			// big map overlay
 
-			//			emu_menu_view = new EmulatedMenuView(relativelayout.getContext(), Navit.Global_Navit_Object);
+			//			emu_menu_view = new EmulatedMenuView(relativelayout.getContext(), Navit.sNavitObject);
 			//			RelativeLayout.LayoutParams emvlp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
 			//			emvlp.setMargins(dp_to_px(40), dp_to_px(30), dp_to_px(40), dp_to_px(30));
 			//			relativelayout.addView(emu_menu_view, emvlp);
@@ -3479,7 +3478,6 @@ class NavitGraphics
 			// DPI
 			//draw_canvas.setDensity(Global_want_dpi);
 
-			activity1 = activity;
 			view = new View(activity)
 			{
 				// Vehicle ---------------------------
@@ -6152,8 +6150,8 @@ class NavitGraphics
 		try
 		{
 			NavitGraphics.NavitMsgTv2sc_.setVisibility(View.VISIBLE);
-			NavitGraphics.NavitMsgTv2_.setVisibility(View.VISIBLE);
-			NavitGraphics.NavitMsgTv2_.setEnabled(true);
+			mNavitMsgTv2.setVisibility(View.VISIBLE);
+			mNavitMsgTv2.setEnabled(true);
 		}
 		catch (Exception e)
 		{
@@ -6172,22 +6170,22 @@ class NavitGraphics
 
 		a = "When possible, please turn around";
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
-		NavitGraphics.NavitMsgTv2_.append(a + "\n");
-		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
+		mNavitMsgTv2.append(a + "\n");
+		mNavitMsgTv2.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
 		a = "Enter the roundabout soon";
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
-		NavitGraphics.NavitMsgTv2_.append(a + "\n");
-		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
+		mNavitMsgTv2.append(a + "\n");
+		mNavitMsgTv2.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
 		a = "then you have reached your destination.";
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
-		NavitGraphics.NavitMsgTv2_.append(a + "\n");
-		NavitGraphics.NavitMsgTv2_.append(a1 + "\n");
+		mNavitMsgTv2.append(a + "\n");
+		mNavitMsgTv2.append(a1 + "\n");
 		System.out.println(a);
 		System.out.println(a1);
 
@@ -6219,8 +6217,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6248,8 +6246,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6283,8 +6281,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6312,8 +6310,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6323,8 +6321,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first exit"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6332,8 +6330,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third exit"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6341,8 +6339,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first exit");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first exit"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6350,8 +6348,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third exit");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third exit"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6359,8 +6357,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first", "left");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first"), NavitTextTranslations.CallbackLocalizedString("left"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6368,8 +6366,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "first", "right");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("first"), NavitTextTranslations.CallbackLocalizedString("right"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6377,8 +6375,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third", "left");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third"), NavitTextTranslations.CallbackLocalizedString("left"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6386,8 +6384,8 @@ class NavitGraphics
 		a1 = NavitTextTranslations.CallbackLocalizedString(a);
 		b = String.format(a, "third", "right");
 		b1 = String.format(a1, NavitTextTranslations.CallbackLocalizedString("third"), NavitTextTranslations.CallbackLocalizedString("right"));
-		NavitGraphics.NavitMsgTv2_.append(b + "\n");
-		NavitGraphics.NavitMsgTv2_.append(b1 + "\n");
+		mNavitMsgTv2.append(b + "\n");
+		mNavitMsgTv2.append(b1 + "\n");
 		System.out.println(b);
 		System.out.println(b1);
 
@@ -6415,8 +6413,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d + "\n");
 				System.out.println(d1 + "\n");
 			}
@@ -6444,8 +6442,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6471,8 +6469,8 @@ class NavitGraphics
 				{
 
 				}
-				NavitGraphics.NavitMsgTv2_.append(d + "\n");
-				NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+				mNavitMsgTv2.append(d + "\n");
+				mNavitMsgTv2.append(d1 + "\n");
 				System.out.println(d);
 				System.out.println(d1);
 			}
@@ -6604,8 +6602,8 @@ class NavitGraphics
 						{
 
 						}
-						NavitGraphics.NavitMsgTv2_.append(d + "\n");
-						NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+						mNavitMsgTv2.append(d + "\n");
+						mNavitMsgTv2.append(d1 + "\n");
 						System.out.println(d);
 						System.out.println(d1);
 					}
@@ -6739,8 +6737,8 @@ class NavitGraphics
 						{
 
 						}
-						NavitGraphics.NavitMsgTv2_.append(d + "\n");
-						NavitGraphics.NavitMsgTv2_.append(d1 + "\n");
+						mNavitMsgTv2.append(d + "\n");
+						mNavitMsgTv2.append(d1 + "\n");
 						System.out.println(d);
 						System.out.println(d1);
 					}
@@ -7022,9 +7020,9 @@ class NavitGraphics
 		if (id == 1)
 		{
 			// speech textblock
-			if (NavitGraphics.NavitMsgTv2_.getVisibility() == View.VISIBLE)
+			if (mNavitMsgTv2.getVisibility() == View.VISIBLE)
 			{
-				NavitMsgTv2_.append("TEXT:" + text);
+				mNavitMsgTv2.append("TEXT:" + text);
 			}
 		}
 		else if (id == 3)
@@ -7213,7 +7211,7 @@ class NavitGraphics
 				{
 					try
 					{
-						TextView no_maps_text = Navit.Global_Navit_Object.findViewById(R.id.no_maps_text);
+						TextView no_maps_text = Navit.sNavitObject.findViewById(R.id.no_maps_text);
 						no_maps_text.setText("\n\n\n" + Navit.get_text("Some Maps are too old!") + "\n" + Navit.get_text("Please update your maps") + "\n\n");
 
 						// *TODO*
@@ -7338,13 +7336,13 @@ class NavitGraphics
 
 			if (Navit.GFX_OVERSPILL)
 			{
-				Navit.NG__map_main.touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x - NavitGraphics.mCanvasWidth_overspill;
-				Navit.NG__map_main.touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y - NavitGraphics.mCanvasHeight_overspill;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x - NavitGraphics.mCanvasWidth_overspill;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y - NavitGraphics.mCanvasHeight_overspill;
 			}
 			else
 			{
-				Navit.NG__map_main.touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x;
-				Navit.NG__map_main.touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y;
 			}
 
 			// ------ make vehicle smooth zoom with vehicle as center point --------------------
@@ -7417,7 +7415,7 @@ class NavitGraphics
 					if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:" + (cur_count + 1));
 					// System.out.println("DO__DRAW:Java:postInvalidate 005");
 					// SYN //
-					Navit.NG__map_main.view.postInvalidate();
+					Navit.getInstance().getN_NavitGraphics().view.postInvalidate();
 					// map_postInvalidate();
 
 					//SurfaceView2 vw = (SurfaceView2) Navit.NG__map_main.view;
@@ -7549,7 +7547,7 @@ class NavitGraphics
 					return;
 				}
 
-				smooth_driving_tmptmp = -(System.currentTimeMillis() - (smooth_driving_ts002a + (Vehicle_smooth_moves_count + 0) * Vehicle_smooth_move_delay_real_used));
+				smooth_driving_tmptmp = -(System.currentTimeMillis() - (smooth_driving_ts002a + (Vehicle_smooth_moves_count) * Vehicle_smooth_move_delay_real_used));
 				if (smooth_driving_tmptmp <= 0)
 				{
 					smooth_driving_tmptmp = 0;
@@ -7750,7 +7748,7 @@ class NavitGraphics
 
 			if (!Global_onTouch_fingerdown)
 			{
-				smooth_driving_tmptmp = -(System.currentTimeMillis() - (smooth_driving_ts002a + (Vehicle_smooth_moves_count + 0) * Vehicle_smooth_move_delay_real_used));
+				smooth_driving_tmptmp = -(System.currentTimeMillis() - (smooth_driving_ts002a + (Vehicle_smooth_moves_count) * Vehicle_smooth_move_delay_real_used));
 				if (smooth_driving_tmptmp <= 0)
 				{
 					smooth_driving_tmptmp = 0;
@@ -8178,7 +8176,7 @@ class NavitGraphics
 				// turn off speech
 				try
 				{
-					Navit.Global_Navit_Object.mTts.stop();
+					Navit.sNavitObject.mTts.stop();
 				}
 				catch (Exception e)
 				{
@@ -8186,7 +8184,7 @@ class NavitGraphics
 
 				try
 				{
-					Navit.Global_Navit_Object.mTts.shutdown();
+					Navit.sNavitObject.mTts.shutdown();
 				}
 				catch (Exception e)
 				{
@@ -8333,7 +8331,7 @@ class NavitGraphics
 					}
 				}
 
-				Navit.Global_Navit_Object.invalidateOptionsMenu();
+				Navit.sNavitObject.invalidateOptionsMenu();
 				// create the options menu new
 			}
 			catch (Exception e)
@@ -8655,18 +8653,18 @@ class NavitGraphics
 
 	static int dp_to_px(int dp)
 	{
-		// System.out.println("FFF:dp=" + dp + " px1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.getBaseContext_.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) dp * Global_dpi_factor_better) + 0.5f));
+		// System.out.println("FFF:dp=" + dp + " px1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.sBaseContext.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) dp * Global_dpi_factor_better) + 0.5f));
 
 		// return (int) (((float) dp * Global_dpi_factor_better) + 0.5f);
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.getBaseContext_.getResources().getDisplayMetrics());
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, Navit.getContext().getResources().getDisplayMetrics());
 	}
 
 	static int px_to_dp(int px)
 	{
-		// System.out.println("FFF:px=" + px + " dp1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.getBaseContext_.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) px / Global_dpi_factor_better) + 0.5f));
+		// System.out.println("FFF:px=" + px + " dp1=" + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.sBaseContext.getResources().getDisplayMetrics()) + " ps2=" + (int) (((float) px / Global_dpi_factor_better) + 0.5f));
 
 		// return (int) (((float) px / Global_dpi_factor_better) + 0.5f);
-		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.getBaseContext_.getResources().getDisplayMetrics());
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, px, Navit.getContext().getResources().getDisplayMetrics());
 	}
 
 	private static void cancel_preview_map_drawing()

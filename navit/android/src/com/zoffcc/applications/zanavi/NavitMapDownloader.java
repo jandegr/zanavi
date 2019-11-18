@@ -433,7 +433,7 @@ public class NavitMapDownloader
 
 			// ----- service start -----
 			// ----- service start -----
-			// Navit.getBaseContext_.startService(Navit.ZANaviMapDownloaderServiceIntent);
+			// Navit.sBaseContext.startService(Navit.ZANaviMapDownloaderServiceIntent);
 			// ----- service start -----
 			// ----- service start -----
 
@@ -458,22 +458,22 @@ public class NavitMapDownloader
 
 			// ----- service stop -----
 			// ----- service stop -----
-			Navit.getBaseContext_.stopService(Navit.ZANaviMapDownloaderServiceIntent);
+			Navit.getContext().stopService(Navit.ZANaviMapDownloaderServiceIntent);
 			// ----- service stop -----
 			// ----- service stop -----
 
 			// clean up always
-			File tmp_downloadfile = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME);
+			File tmp_downloadfile = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME);
 			tmp_downloadfile.delete();
 			for (int jkl = 1; jkl < 51; jkl++)
 			{
-				File tmp_downloadfileSplit = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME + "." + jkl);
+				File tmp_downloadfileSplit = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME + "." + jkl);
 				tmp_downloadfileSplit.delete();
 			}
 			//
-			File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+			File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 			tmp_downloadfile_md5.delete();
-			File tmp_downloadfile_idx = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME + ".idx");
+			File tmp_downloadfile_idx = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME + ".idx");
 			tmp_downloadfile_idx.delete();
 			Log.d("NavitMapDownloader", "(a)removed " + tmp_downloadfile.getAbsolutePath());
 			// ok, remove dialog
@@ -551,7 +551,7 @@ public class NavitMapDownloader
 
 			// ----- service stop -----
 			// ----- service stop -----
-			// Navit.getBaseContext_.stopService(Navit.ZANaviMapDownloaderServiceIntent);
+			// Navit.sBaseContext.stopService(Navit.ZANaviMapDownloaderServiceIntent);
 			// ----- service stop -----
 			// ----- service stop -----
 
@@ -559,17 +559,17 @@ public class NavitMapDownloader
 			//Navit.default_brightness_screen(); // brightness ---------
 			//
 			// remove the tmp download file (if there is one)
-			File tmp_downloadfile = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME);
+			File tmp_downloadfile = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME);
 			tmp_downloadfile.delete();
 			for (int jkl = 1; jkl < 51; jkl++)
 			{
-				File tmp_downloadfileSplit = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME + "." + jkl);
+				File tmp_downloadfileSplit = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME + "." + jkl);
 				tmp_downloadfileSplit.delete();
 			}
 			//
-			File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+			File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 			tmp_downloadfile_md5.delete();
-			File tmp_downloadfile_idx = new File(Navit.CFG_FILENAME_PATH, DOWNLOAD_FILENAME + ".idx");
+			File tmp_downloadfile_idx = new File(Navit.getInstance().getCFGpath(), DOWNLOAD_FILENAME + ".idx");
 			tmp_downloadfile_idx.delete();
 			Log.d("NavitMapDownloader", "(b)removed " + tmp_downloadfile.getAbsolutePath());
 
@@ -1393,11 +1393,11 @@ public class NavitMapDownloader
 			bits[h] = false;
 		}
 
-		System.out.println("CI:Looking for maps in:" + Navit.MAP_FILENAME_PATH);
-		ZANaviLogMessages.ap("MapFilenamePath", Navit.MAP_FILENAME_PATH);
+		System.out.println("CI:Looking for maps in:" + Navit.sNavitMapDirectory);
+		ZANaviLogMessages.ap("MapFilenamePath", Navit.sNavitMapDirectory);
 
 		// compare it with directory contents
-		File map_dir = new File(Navit.MAP_FILENAME_PATH);
+		File map_dir = new File(Navit.sNavitMapDirectory);
 		File map_file_absolute_path = null;
 		String dateInUTC = "";
 		SimpleDateFormat lv_formatter = new SimpleDateFormat("yyyyMMddHHmm", Locale.US);
@@ -1543,7 +1543,7 @@ public class NavitMapDownloader
 		}
 		int temp_list_prev_size = temp_list.size();
 		// compare it with directory contents
-		File map_dir = new File(Navit.MAP_FILENAME_PATH);
+		File map_dir = new File(Navit.sNavitMapDirectory);
 		File map_file_absolute_path = null;
 		String dateInUTC = "";
 		SimpleDateFormat lv_formatter = new SimpleDateFormat("yyyyMMddHHmm", Locale.US);
@@ -1609,7 +1609,7 @@ public class NavitMapDownloader
 		Log.v("NavitMapDownloader", "read_cat_file");
 
 		//Get the text file
-		File file = new File(Navit.CFG_FILENAME_PATH + CAT_FILE);
+		File file = new File(Navit.getInstance().getCFGpath() + CAT_FILE);
 
 		//Read text from file
 		try
@@ -1658,7 +1658,7 @@ public class NavitMapDownloader
 		Log.v("NavitMapDownloader", "write_cat_file");
 
 		//Get the text file
-		File file = new File(Navit.CFG_FILENAME_PATH + CAT_FILE);
+		File file = new File(Navit.getInstance().getCFGpath() + CAT_FILE);
 		FileOutputStream fOut = null;
 		OutputStreamWriter osw = null;
 		try
@@ -1700,7 +1700,7 @@ public class NavitMapDownloader
 				{
 				}
 
-				Navit.Global_Navit_Object.show_case_001();
+				Navit.sNavitObject.show_case_001();
 
 				// show semi transparent box "no maps installed" ------------------
 				// show semi transparent box "no maps installed" ------------------
@@ -2120,8 +2120,8 @@ public class NavitMapDownloader
 		handler.sendMessage(msg);
 
 		// output filename
-		String PATH = Navit.MAP_FILENAME_PATH;
-		String PATH2 = Navit.CFG_FILENAME_PATH;
+		String PATH = Navit.sNavitMapDirectory;
+		String PATH2 = Navit.getInstance().getCFGpath();
 		String fileName = DOWNLOAD_FILENAME;
 		String final_fileName = "xxx";
 
@@ -2266,7 +2266,7 @@ public class NavitMapDownloader
 		// check if file fits onto maps dir
 		try
 		{
-			long avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInBytes(Navit.MAP_FILENAME_PATH);
+			long avail_space = NavitAvailableSpaceHandler.getExternalAvailableSpaceInBytes(Navit.sNavitMapDirectory);
 			System.out.println("avail space=" + avail_space + " map size=" + real_file_size);
 			if (avail_space <= real_file_size)
 			{
@@ -2555,7 +2555,8 @@ public class NavitMapDownloader
 			handler.sendMessage(msg);
 
 			outputFile.delete();
-			File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+			//File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+			File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 			tmp_downloadfile_md5.delete();
 
 			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "md5 mismatch server=" + md5_server + " local=" + md5sum_local_calculated);
@@ -2603,10 +2604,10 @@ public class NavitMapDownloader
 		}
 
 		// delete an already there md5 file, first
-		File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + map_values.url + ".md5");
+		File md5_final_filename = new File(Navit.getInstance().getMapMD5path() + map_values.url + ".md5");
 		md5_final_filename.delete();
 		// rename file to final name
-		File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+		File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 		tmp_downloadfile_md5.renameTo(md5_final_filename);
 
 		// ------------ activate screen and CPU (and WLAN) -- before index download starts ---------------------
@@ -2808,12 +2809,12 @@ public class NavitMapDownloader
 
 				// delete an already there idx file, first
 				//System.out.println("idx 001:" + Navit.MAP_FILENAME_PATH + final_fileName + ".idx");
-				File idx_final_filename = new File(Navit.MAP_FILENAME_PATH + final_fileName + ".idx");
+				File idx_final_filename = new File(Navit.sNavitMapDirectory + final_fileName + ".idx");
 				idx_final_filename.delete();
 				// rename file to final name
-				File tmp_downloadfile_idx = new File(Navit.CFG_FILENAME_PATH, fileName + ".idx");
+				File tmp_downloadfile_idx = new File(Navit.getInstance().getCFGpath(), fileName + ".idx");
 				//System.out.println("idx 002:" + Navit.CFG_FILENAME_PATH + fileName + ".idx");
-				File final_outputFile_idx = new File(Navit.MAP_FILENAME_PATH + final_fileName + ".idx");
+				File final_outputFile_idx = new File(Navit.sNavitMapDirectory + final_fileName + ".idx");
 				//System.out.println("idx 003:" + Navit.MAP_FILENAME_PATH + final_fileName + ".idx");
 				tmp_downloadfile_idx.renameTo(final_outputFile_idx);
 			}
@@ -3002,7 +3003,7 @@ public class NavitMapDownloader
 				{
 					if (str.length() > 5)
 					{
-						File tmp_downloadfile_md5 = new File(Navit.MAPMD5_FILENAME_PATH, MD5_DOWNLOAD_TEMPFILE);
+						File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 						tmp_downloadfile_md5.delete();
 						System.out.println("md5 from server=" + str);
 						FileOutputStream fos = null;
@@ -3078,7 +3079,7 @@ public class NavitMapDownloader
 		String md5_on_disk = null;
 
 		// try to read MD5 from disk - if it fails dont worry!!
-		File md5_final_filename = new File(Navit.MAPMD5_FILENAME_PATH + map_values.url + ".md5");
+		File md5_final_filename = new File(Navit.getInstance().getMapMD5path() + map_values.url + ".md5");
 		InputStream in2 = null;
 		try
 		{
@@ -3558,13 +3559,13 @@ public class NavitMapDownloader
 					{
 						if (parts == 0)
 						{
-							fis = new FileInputStream(Navit.CFG_FILENAME_PATH + DOWNLOAD_FILENAME);
-							System.out.println("calc_md5sum_on_device(split):found file=" + Navit.CFG_FILENAME_PATH + DOWNLOAD_FILENAME);
+							fis = new FileInputStream(Navit.getInstance().getCFGpath() + DOWNLOAD_FILENAME);
+							System.out.println("calc_md5sum_on_device(split):found file=" + Navit.getInstance().getCFGpath() + DOWNLOAD_FILENAME);
 						}
 						else
 						{
-							fis = new FileInputStream(Navit.CFG_FILENAME_PATH + DOWNLOAD_FILENAME + "." + parts);
-							System.out.println("calc_md5sum_on_device(split):found file=" + Navit.CFG_FILENAME_PATH + DOWNLOAD_FILENAME + "." + parts);
+							fis = new FileInputStream(Navit.getInstance().getCFGpath() + DOWNLOAD_FILENAME + "." + parts);
+							System.out.println("calc_md5sum_on_device(split):found file=" + Navit.getInstance().getCFGpath() + DOWNLOAD_FILENAME + "." + parts);
 						}
 						parts++;
 					}
@@ -3795,7 +3796,7 @@ public class NavitMapDownloader
 
 			try
 			{
-				fis = new FileInputStream(Navit.CFG_FILENAME_PATH + DOWNLOAD_FILENAME);
+				fis = new FileInputStream(Navit.getInstance().getCFGpath() + DOWNLOAD_FILENAME);
 			}
 			catch (FileNotFoundException e)
 			{

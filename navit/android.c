@@ -59,7 +59,6 @@ jobject *android_activity;
 jobject *main_map_bitmap;
 AndroidBitmapInfo *main_map_bitmapinfo;
 struct callback_list *android_activity_cbl;
-int android_version;
 
 jclass NavitGraphicsClass2 = NULL;
 jmethodID return_generic_int;
@@ -540,10 +539,11 @@ Java_com_zoffcc_applications_zanavi_Navit_AppCrashC(JNIEnv* env, jclass thiz)
 	// dbg(0,"app_crash_C:099\n");
 }
 
-
+// this sets some vars but does not start the lib yet
+// starting the lib is done lower in NavitActity
 JNIEXPORT void JNICALL
-Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject thiz, jobject activity,
-		jstring lang, jint version, jstring display_density_string, jstring n_datadir,
+Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject activity,
+		jstring lang, jstring display_density_string, jstring n_datadir,
 		jstring n_sharedir, jobject bitmap)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
@@ -594,7 +594,6 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject thiz, j
 	const char *langstr;
 	const char *displaydensitystr;
 	const char *s;
-	android_version = version;
 	//__android_log_print(ANDROID_LOG_ERROR,"test","called");
 	android_activity_cbl = callback_list_new("Java_com_zoffcc_applications_zanavi_Navit_NavitMain:android_activity_cbl");
 
@@ -789,6 +788,8 @@ Java_com_zoffcc_applications_zanavi_Navit_NavitMain(JNIEnv* env, jobject thiz, j
 //	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_Navit_NavitMain__XX_real(env, thiz, activity, lang, version, display_density_string, n_datadir, n_sharedir, bitmap));
 //}
 
+
+// the navit lib is started here
 JNIEXPORT void JNICALL
 Java_com_zoffcc_applications_zanavi_Navit_NavitActivity(JNIEnv* env, jobject thiz, jint param)
 {

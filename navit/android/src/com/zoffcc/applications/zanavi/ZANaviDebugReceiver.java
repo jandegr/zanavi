@@ -44,8 +44,9 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 	static boolean stop_me = false;
 	static boolean dont_save_loc = false;
+    private static int CI_TEST_CASE_NUM = -1;
 
-	private static int skip_count = 0;
+    private static int skip_count = 0;
 	private static int rewind_count = 0;
 	final private static int skip = 30;
 	static boolean is_replaying = false;
@@ -216,13 +217,13 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 	private static void DR_save_route_to_gpx_file()
 	{
-		ZANaviLogMessages.ap("RouteSaveGpxPath", Navit.NAVIT_DATA_DEBUG_DIR);
+		ZANaviLogMessages.ap("RouteSaveGpxPath", Navit.getInstance().getNAVIT_DATA_DEBUG_DIR());
 		
 		Message msg = new Message();
 		Bundle b = new Bundle();
 		b.putInt("Callback", 96);
 		String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
-		String filename = Navit.NAVIT_DATA_DEBUG_DIR + "/zanavi_route_" + date + ".gpx";
+		String filename = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/zanavi_route_" + date + ".gpx";
 		b.putString("s", filename);
 		msg.setData(b);
 		NavitGraphics.callback_handler.sendMessage(msg);
@@ -435,7 +436,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				// Thread.sleep(1200);
 				// Navit.draw_map();
 
-				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 				final Thread debug_zoom_to_route_001 = new Thread()
 				{
@@ -472,7 +473,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 									}
 								}
 
-								System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+								System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 								if (((NavitGraphics.navit_route_status == 17) || (NavitGraphics.navit_route_status == 33)) && (status_wrong == 0))
 								{
@@ -480,9 +481,9 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 									// Navit.static_show_route_graph(4);
 
-									Navit.zoom_to_route();
+									Navit.getInstance().zoom_to_route();
 									Thread.sleep(2000);
-									Navit.zoom_to_route();
+									Navit.getInstance().zoom_to_route();
 									Thread.sleep(15000);
 									//xy//Navit.draw_map();
 									//xy//Thread.sleep(15000);
@@ -588,7 +589,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 								File d2 = new File(f.getParent() + "/" + date + "/");
 								d2.mkdirs();
 								Navit.take_map_screenshot(f.getParent() + "/" + date + "/", f.getName());
-								// Navit.take_phone_screenshot(Navit.Global_Navit_Object, f.getParent() + "/" + date + "/", f.getName() + "_full");
+								// Navit.take_phone_screenshot(Navit.sNavitObject, f.getParent() + "/" + date + "/", f.getName() + "_full");
 
 								// save roadbook
 								String[] separated = NavitGraphics.GetRoadBookItems(9990001);
@@ -1098,7 +1099,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				final String city_str_f = city_str;
 				final String hn_str_f = hn_str;
 
-				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 				final Thread search_n_002 = new Thread()
 				{
@@ -1149,7 +1150,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 								while (Navit.search_ready == false)
 								{
 									System.out.println("search test 004:" + c4);
-									System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+									System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 									Thread.sleep(500);
 									c4++;
@@ -1172,7 +1173,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 									while (Navit.search_list_ready == false)
 									{
 										System.out.println("search test 004b:" + c4);
-										System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+										System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 										Thread.sleep(500);
 										c4++;
@@ -1480,7 +1481,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 				final String city_str_f = city_str;
 				final String hn_str_f = hn_str;
 
-				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+				System.out.println("ZANaviDebugReceiver:" + "mem0:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 				final Thread search_n_001 = new Thread()
 				{
@@ -1531,7 +1532,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 								while (Navit.search_ready == false)
 								{
 									System.out.println("search test 004:" + c4);
-									System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.Global_Navit_Object.getClass()));
+									System.out.println("ZANaviDebugReceiver:" + "mem1:" + Navit.logHeap_for_batch(Navit.sNavitObject.getClass()));
 
 									Thread.sleep(500);
 									c4++;
@@ -1558,8 +1559,8 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 										{
 											System.out.println("hide keyboard-1");
 											// now hide the keyboard
-											InputMethodManager inputManager = (InputMethodManager) Navit.Global_Navit_Object.getSystemService(Context.INPUT_METHOD_SERVICE);
-											inputManager.hideSoftInputFromWindow(Navit.Global_Navit_Object.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+											InputMethodManager inputManager = (InputMethodManager) Navit.sNavitObject.getSystemService(Context.INPUT_METHOD_SERVICE);
+											inputManager.hideSoftInputFromWindow(Navit.sNavitObject.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 											inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 											System.out.println("hide keyboard-2");
 										}
@@ -1825,7 +1826,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 	@SuppressWarnings("unused")
 	static void DR_run_all_yaml_tests()
 	{
-		String yaml_dir = Navit.NAVIT_DATA_DEBUG_DIR + "../yamltests/";
+		String yaml_dir = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "../yamltests/";
 		String duration_string = "";
 
 		System.out.println("CI:Looking for yamltests in:" + yaml_dir);
@@ -1912,11 +1913,11 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 
 					System.out.println("XXXX:2:1:" + "");
 
-					Navit.CI_TEST_CASE_NUM++;
-					Navit.CI_TEST_CASE_TEXT = Navit.CI_TEST_CASE_TEXT + "\n" + "===========" + Navit.CI_TEST_CASE_NUM + "===========" + "\n";
+					CI_TEST_CASE_NUM++;
+					Navit.CI_TEST_CASE_TEXT = Navit.CI_TEST_CASE_TEXT + "\n" + "===========" + CI_TEST_CASE_NUM + "===========" + "\n";
 					try
 					{
-						NavitGraphics.CallbackMessageChannelReal(115, "" + Navit.CI_TEST_CASE_NUM);
+						NavitGraphics.CallbackMessageChannelReal(115, "" + CI_TEST_CASE_NUM);
 					}
 					catch (Exception e)
 					{
@@ -2277,7 +2278,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 												msg.setData(b);
 												NavitGraphics.callback_handler.sendMessage(msg);
 
-												Navit.set_map_position_to_screen_center();
+												Navit.getInstance().set_map_position_to_screen_center();
 
 												// save route to gpx file
 												DR_save_route_to_gpx_file();
@@ -2347,7 +2348,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 												msg.setData(b);
 												NavitGraphics.callback_handler.sendMessage(msg);
 
-												Navit.set_map_position_to_screen_center();
+												Navit.getInstance().set_map_position_to_screen_center();
 
 												wait = 0;
 											}

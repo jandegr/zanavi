@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2015 Zoff <zoff@zoff.cc>
  *
@@ -32,19 +32,19 @@ import android.view.View;
 
 public class ZANaviOSDLaneAssist extends View
 {
-	int w = 10;
-	int h = 10;
+	private int w = 10;
+	private int h = 10;
 	//	RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
 	//	Paint paint_speedwarning = new Paint(0);
-	Paint paint = new Paint(0);
+	private final Paint paint = new Paint(0);
 	Paint paint2 = new Paint(0);
 	float textHeight = 10;
 	float textOffset = 10;
-	Matrix lanes_scaleMatrix = new Matrix();
-	Matrix lanes_transMatrix = new Matrix();
+	private final Matrix lanes_scaleMatrix = new Matrix();
+	private final Matrix lanes_transMatrix = new Matrix();
 	RectF lanes_rectF = new RectF();
-	boolean no_draw = false;
-	Path pathForTurn = new Path();
+	private boolean no_draw = false;
+	private final Path pathForTurn = new Path();
 
 	public ZANaviOSDLaneAssist(Context context)
 	{
@@ -66,27 +66,23 @@ public class ZANaviOSDLaneAssist extends View
 		lanes_transMatrix.setTranslate(0.0f, NavitGraphics.dp_to_px(40)); // works: 0.0f, 120.0f
 	}
 
-	int get_lanes_kind_count(int parsed_num_lanes, String[] lanes_split)
+	private int get_lanes_kind_count(int parsed_num_lanes, String[] lanes_split)
 	{
 		final int num_of_kinds = 6;
 		int[] lanes_kind = new int[num_of_kinds];
-		int lanes_kind_count = 0;
 
-		int k = 0;
-		for (k = 0; k < num_of_kinds; k++)
+		for (int k = 0; k < num_of_kinds; k++)
 		{
 			lanes_kind[k] = 0; // reset all
 		}
 
-		int j = 0;
-		for (j = 0; j < parsed_num_lanes; j++)
+		for (int j = 0; j < parsed_num_lanes; j++)
 		{
-			String lanes_split_sub[] = lanes_split[j].split(";");
+			String[] lanes_split_sub = lanes_split[j].split(";");
 			int parsed_num_lanes_sub = lanes_split_sub.length;
 
-			k = 0;
 			String single_arrow = "";
-			for (k = 0; k < parsed_num_lanes_sub; k++)
+			for (int k = 0; k < parsed_num_lanes_sub; k++)
 			{
 				single_arrow = lanes_split_sub[k].replaceAll("\\s", "");
 
@@ -139,15 +135,14 @@ public class ZANaviOSDLaneAssist extends View
 			}
 		}
 
-		lanes_kind_count = 0;
-		for (k = 0; k < num_of_kinds; k++)
+		int lanes_kind_count = 0;
+		for (int k = 0; k < num_of_kinds; k++)
 		{
 			if (lanes_kind[k] == 1)
 			{
 				lanes_kind_count++;
 			}
 		}
-
 		return lanes_kind_count;
 	}
 
@@ -183,7 +178,7 @@ public class ZANaviOSDLaneAssist extends View
 					//				paint.setTextSize(50);
 					//				c.drawText(Navit.lanes_num + ":" + Navit.lanes_num_forward + ":" + Navit.lanes_text, 120, 400, paint);
 
-					String lanes_split[] = Navit.lanes_text.split("\\|");
+					String[] lanes_split = Navit.lanes_text.split("\\|");
 					int parsed_num_lanes = lanes_split.length;
 
 					int lanes_choices_count = 0;
@@ -268,7 +263,6 @@ public class ZANaviOSDLaneAssist extends View
 								}
 
 								// sort entries (remember to also move the found "route" lane!!)
-								kk = 0;
 								int ll = 0;
 								int temp;
 								int max;
@@ -348,7 +342,7 @@ public class ZANaviOSDLaneAssist extends View
 							int j = 0;
 							for (j = 0; j < parsed_num_lanes; j++)
 							{
-								String lanes_split_sub[] = lanes_split[j].split(";");
+								String[] lanes_split_sub = lanes_split[j].split(";");
 								int parsed_num_lanes_sub = lanes_split_sub.length;
 
 								k = 0;
@@ -497,7 +491,7 @@ public class ZANaviOSDLaneAssist extends View
 						// move to next lane (move to right)
 						xx1 = xx1 + lane_symbol_width;
 
-						String lanes_split_sub[] = lanes_split[j].split(";");
+						String[] lanes_split_sub = lanes_split[j].split(";");
 						int parsed_num_lanes_sub = lanes_split_sub.length;
 
 						int k = 0;

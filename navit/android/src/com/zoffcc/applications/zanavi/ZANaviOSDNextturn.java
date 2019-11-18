@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2013 Zoff <zoff@zoff.cc>
  *
@@ -30,7 +30,6 @@ import android.view.View;
 public class ZANaviOSDNextturn extends View
 {
 
-	private Paint paint = new Paint();
 	private RectF f;
 
 	public ZANaviOSDNextturn(Context context)
@@ -39,6 +38,7 @@ public class ZANaviOSDNextturn extends View
 
 		f = new RectF(0, 0, 1, 1);
 
+		Paint paint = new Paint();
 		paint.setColor(Navit.OSD_blueish_bg_color);
 		paint.setStyle(Paint.Style.FILL);
 		paint.setAntiAlias(false);
@@ -63,20 +63,14 @@ public class ZANaviOSDNextturn extends View
 	{
 		super.onDraw(c);
 
-		try
+		if ((Navit.OSD_nextturn.nextturn_image_valid) && (NavitGraphics.CallbackDestinationValid2() > 0))
 		{
-			if ((Navit.OSD_nextturn.nextturn_image_valid) && (NavitGraphics.CallbackDestinationValid2() > 0))
-			{
-				c.drawBitmap(Navit.OSD_nextturn.nextturn_image, null, f, null);
-			}
-			else
+			c.drawBitmap(Navit.OSD_nextturn.nextturn_image, null, f, null);
+		}
+		else
 			{
 				c.drawColor(Color.TRANSPARENT);
 			}
-		}
-		catch (Exception e)
-		{
-		}
 		
 		// System.out.println("onDraw:OSDNextturn");
 
