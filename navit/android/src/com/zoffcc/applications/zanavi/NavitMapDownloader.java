@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2012 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -99,10 +99,8 @@ public class NavitMapDownloader
 	// ------- DEBUG DEBUG SETTINGS --------
 	// ------- DEBUG DEBUG SETTINGS --------
 
-	private final static boolean USE_OKHTTPCLIENT = false;
-
 	static int MULTI_NUM_THREADS_MAX = 5; // 5
-	static int MULTI_NUM_THREADS = 3; // 3 // how many download streams for a file
+	static int MULTI_NUM_THREADS = 3; // how many download streams for a file
 	private static int MULTI_NUM_THREADS_LOCAL = 1; // how many download streams for the current file from the current server
 
 	static class zanavi_osm_map_values
@@ -112,7 +110,7 @@ public class NavitMapDownloader
 		long est_size_bytes = 0;
 		String est_size_bytes_human_string = "";
 		String text_for_select_list = "";
-		Boolean is_continent = false;
+		boolean is_continent = false;
 		int continent_id = 0;
 
 		zanavi_osm_map_values(String mapname, String url, long bytes_est, Boolean is_con, int con_id)
@@ -143,8 +141,7 @@ public class NavitMapDownloader
 
 		public String toString()
 		{
-			String ret = "continent_id=" + this.continent_id + " est_size_bytes=" + this.est_size_bytes + " est_size_bytes_human_string=\"" + this.est_size_bytes_human_string + "\" map_name=\"" + this.map_name + "\" text_for_select_list=\"" + this.text_for_select_list + "\" url=" + this.url;
-			return ret;
+			return "continent_id=" + this.continent_id + " est_size_bytes=" + this.est_size_bytes + " est_size_bytes_human_string=\"" + this.est_size_bytes_human_string + "\" map_name=\"" + this.map_name + "\" text_for_select_list=\"" + this.text_for_select_list + "\" url=" + this.url;
 		}
 	}
 
@@ -343,10 +340,6 @@ public class NavitMapDownloader
 	private static float[] mapdownload_byte_per_second_now = null;
 	private static int mapdownload_error_code = 0;
 	private static Boolean mapdownload_stop_all_threads = false;
-
-	@SuppressWarnings("deprecation")
-	private static okhttp3.OkUrlFactory http_client_new_urlfactory = null;
-	private static okhttp3.OkHttpClient http_client_new = null;
 
 	private static final int MAX_MAP_COUNT = 500;
 	static boolean download_active = false;
@@ -636,17 +629,17 @@ public class NavitMapDownloader
 		final zanavi_osm_map_values map_values;
 		final int map_num;
 		int my_dialog_num;
-		int my_num;
-		int num_threads;
-		String PATH;
-		String PATH2;
-		String fileName;
-		String final_fileName;
-		String this_server_name;
-		String up_map;
-		long start_byte;
+		final int my_num;
+		final int num_threads;
+		final String PATH;
+		final String PATH2;
+		final String fileName;
+		final String final_fileName;
+		final String this_server_name;
+		final String up_map;
+		final long start_byte;
 		long start_byte_count_now = 0L;
-		long end_byte;
+		final long end_byte;
 
 		MultiStreamDownloaderThread(int num_threads, Handler h, zanavi_osm_map_values map_values, int map_num2, int c, String p, String p2, String fn, String ffn, String sn, String upmap, long start_byte, long end_byte)
 		{
@@ -3396,35 +3389,27 @@ public class NavitMapDownloader
 		handler.sendMessage(msg);
 	}
 
-	private Object d_open_file(String filename, long pos, int my_num)
+	private  RandomAccessFile d_open_file(String filename, long pos, int my_num)
 	{
-		return (Object) d_open_file_real(filename, pos, my_num, true);
-	}
-
-	private Object d_open_file_real(String filename, long pos, int my_num, boolean randomaccess)
-	{
-		// if ((randomaccess == true) || (pos <= 1900000000L))
 		{
-			RandomAccessFile f = null;
+			RandomAccessFile file = null;
 			System.out.println("d_open_file(rnd): " + my_num + " " + filename + " seek (start):" + pos);
 			try
 			{
-				f = new RandomAccessFile(filename, "rw");
-				// FileChannel fc1 = f.getChannel();
+				file = new RandomAccessFile(filename, "rw");
 
 				if (pos > 1900000000L)
 				{
 					System.out.println("open file: 1");
-					f.seek(1900000000L);
+					file.seek(1900000000L);
 					System.out.println("open file: 2");
 
 					int buf_size = 1000 * 64;
 					byte[] buffer_seek = new byte[buf_size];
 					int num_loops = (int) ((pos - 1900000000L - 1) / buf_size);
-					int j = 0;
-					for (j = 0; j < num_loops; j++)
+					for (int j = 0; j < num_loops; j++)
 					{
-						f.readFully(buffer_seek);
+						file.readFully(buffer_seek);
 						//					try
 						//					{
 						//						Thread.sleep(2);
@@ -3440,7 +3425,7 @@ public class NavitMapDownloader
 					if (buf_size > 0)
 					{
 						buffer_seek = new byte[buf_size];
-						f.readFully(buffer_seek);
+						file.readFully(buffer_seek);
 					}
 					System.out.println("open file: 4");
 
@@ -3450,7 +3435,7 @@ public class NavitMapDownloader
 				else
 				{
 					System.out.println("open file: 6");
-					f.seek(pos);
+					file.seek(pos);
 					System.out.println("open file: 7");
 				}
 			}
@@ -3466,13 +3451,13 @@ public class NavitMapDownloader
 
 			try
 			{
-				System.out.println("d_open_file:" + my_num + " f len(seek)=" + f.length());
+				System.out.println("d_open_file:" + my_num + " f len(seek)=" + file.length());
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			return (Object) f;
+			return file;
 		}
 	}
 
@@ -3522,9 +3507,8 @@ public class NavitMapDownloader
 		{
 			try
 			{
-				String s = "";
-				Message msg = null;
-				Bundle b = null;
+				Message msg;
+				Bundle b;
 				int size2 = (int) (size / 1000);
 				long cur_pos = 0L;
 
@@ -3770,9 +3754,8 @@ public class NavitMapDownloader
 
 		try
 		{
-			String s = "";
-			Message msg = null;
-			Bundle b = null;
+			Message msg;
+			Bundle b;
 			int size2 = (int) (size / 1000);
 			long cur_pos = 0L;
 
@@ -3936,7 +3919,7 @@ public class NavitMapDownloader
 			byte[] messageDigest = digest.digest();
 			// Create Hex String
 			StringBuffer hexString = new StringBuffer();
-			String t = "";
+			String t;
 			for (int i = 0; i < messageDigest.length; i++)
 			{
 				t = Integer.toHexString(0xFF & messageDigest[i]);
@@ -3992,36 +3975,16 @@ public class NavitMapDownloader
 	private static HttpURLConnection get_url_connection(URL u)
 	{
 		HttpURLConnection my_HttpURLConnection = null;
-
-		if (USE_OKHTTPCLIENT)
+			// --- old ---
+		try
 		{
-			// --- new ---
-			// --- new ---
-			if (http_client_new == null)
-			{
-				http_client_new = new okhttp3.OkHttpClient();
-				http_client_new_urlfactory = new okhttp3.OkUrlFactory(http_client_new);
-			}
-			my_HttpURLConnection = http_client_new_urlfactory.open(u);
-			// --- new ---
-			// --- new ---
+			my_HttpURLConnection = (HttpURLConnection) u.openConnection();
 		}
-		else
+		catch (Exception e)
 		{
-			// --- old ---
-			// --- old ---
-			try
-			{
-				my_HttpURLConnection = (HttpURLConnection) u.openConnection();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			// --- old ---
-			// --- old ---
+			e.printStackTrace();
 		}
-
+			// --- old ---
 		return my_HttpURLConnection;
 	}
 
