@@ -56,7 +56,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.DateFormat;
@@ -70,16 +69,12 @@ public class NavitVehicle
 	private static LocationListener preciseLocationListener_s = null;
 	private static GpsStatus.Listener gps_status_listener_s = null;
 	private static float compass_heading;
-	private static float current_accuracy = 99999999F;
 	private static long last_real_gps_update = -1;
-	private static boolean sat_status_enabled = false;
-	static boolean sat_status_icon_updated = false;
 	static int sat_status_icon_last = -1;
 	static int sat_status_icon_now = -1;
 	private static float gps_last_bearing = 0.0f;
 	private static int fast_provider_status = 0;
 	private static int disregard_first_fast_location = 0;
-	private static final String[] cmd_name = new String[4];
 
 	private static final long MILLIS_AFTER_GPS_FIX_IS_LOST = 2000;
 
@@ -91,7 +86,6 @@ public class NavitVehicle
 	// static BufferedWriter pos_recording_writer_gpx;
 	private static BufferedWriter speech_recording_writer_gpx;
 	static boolean speech_recording_started = false;
-	// DateFormat sdf = new DateFormat();
 
 	private int sats1_old = -1;
 	private int satsInFix1_old = -1;
@@ -107,22 +101,20 @@ public class NavitVehicle
 	private static long last_f_fix = 0;
 	public Bundle gps_extras = null;
 	private static GpsStatus gps_status = null;
-	public static Boolean update_location_in_progress = false;
+	static Boolean update_location_in_progress = false;
 
 	private static long last_gps_status_update = 0L;
 
-	static DecimalFormat df2 = new DecimalFormat("#.####");
-
-	public static Location last_location = null;
+	static Location last_location = null;
 
 	public static native void VehicleCallback(double lat, double lon, float speed, float direction, double height, float radius, long gpstime);
 
-	public static void VehicleCallback2(Location location)
+	static void VehicleCallback2(Location location)
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 		String dd_text = "";
 
-		if (Navit.Global_Init_Finished != 0)
+		if (Navit.sNavitObject.Global_Init_Finished != false)
 		{
 			if (Navit.Global_Location_update_not_allowed == 0)
 			{
@@ -157,10 +149,6 @@ public class NavitVehicle
 				if (Navit.NAVIT_DEBUG_TEXT_VIEW) ZANaviOSDDebug01.add_text(dd_text + "b=" + location.getBearing() + " lb=" + gps_last_bearing);
 
 				Navit.cwthr.VehicleCallback3(location);
-				double gps_last_lat = location.getLatitude();
-				double gps_last_lon = location.getLongitude();
-				int gps_last_lat_1000 = (int) (gps_last_lat * 1000);
-				int gps_last_lon_1000 = (int) (gps_last_lon * 1000);
 			}
 		}
 		else
@@ -292,13 +280,6 @@ public class NavitVehicle
 		// ---------------------
 		// ---------------------
 
-		Handler vehicle_handler_ = Navit.vehicle_handler;
-
-		cmd_name[0] = "-";
-		cmd_name[1] = "POS";
-		cmd_name[2] = "CLR";
-		cmd_name[3] = "DST";
-
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationManager_s = locationManager;
 
@@ -388,13 +369,8 @@ public class NavitVehicle
 			public void onLocationChanged(Location location)
 			{
 				last_p_fix = location.getTime();
-				current_accuracy = location.getAccuracy();
-
-				if (location != null)
-				{
-					Navit.mLastLocationMillis = SystemClock.elapsedRealtime();
-					Navit.mLastLocation = location;
-				}
+				Navit.mLastLocationMillis = SystemClock.elapsedRealtime();
+				Navit.mLastLocation = location;
 
 				if (Navit.p.PREF_follow_gps)
 				{
@@ -707,7 +683,7 @@ public class NavitVehicle
 
 	}
 
-	public static void set_mock_location__fast(Location mock_location)
+	static void set_mock_location__fast(Location mock_location)
 	{
 		float save_speed;
 
@@ -747,7 +723,7 @@ public class NavitVehicle
 		}
 	}
 
-	public static void set_mock_location__fast_no_speed(Location mock_location)
+	static void set_mock_location__fast_no_speed(Location mock_location)
 	{
 		try
 		{
@@ -766,13 +742,13 @@ public class NavitVehicle
 		}
 	}
 
-	public static class location_coords
+	static class location_coords
 	{
 		double lat;
 		double lon;
 	}
 
-	public static location_coords get_last_known_pos()
+	static location_coords get_last_known_pos()
 	{
 		location_coords ret = new location_coords();
 
@@ -830,7 +806,7 @@ public class NavitVehicle
 		return null;
 	}
 
-	public static void set_last_known_pos_precise_provider()
+	static void set_last_known_pos_precise_provider()
 	{
 		try
 		{
@@ -858,7 +834,7 @@ public class NavitVehicle
 		}
 	}
 
-	public static void set_last_known_pos_fast_provider()
+	static void set_last_known_pos_fast_provider()
 	{
 		// System.out.println("fast_provider_status=" + fast_provider_status);
 
@@ -1002,7 +978,6 @@ public class NavitVehicle
 					e3.printStackTrace();
 				}
 				locationManager_s.addGpsStatusListener(gps_status_listener_s);
-				sat_status_enabled = true;
 			}
 		}
 		catch (Exception e)
@@ -1018,7 +993,6 @@ public class NavitVehicle
 		{
 			Navit.sats = 0;
 			Navit.satsInFix = 0;
-			sat_status_enabled = true;
 
 			if (preciseProvider_s != null)
 			{
@@ -1264,6 +1238,7 @@ public class NavitVehicle
 		}
 	}
 
+	// wat staat dat hier te doen ???
 	static void speech_recording_start()
 	{
 		speech_recording_started = true;
@@ -1386,7 +1361,7 @@ public class NavitVehicle
 		}
 	}
 
-	private static String customNumberFormat_(String pattern, double value)
+	private static String customNumberFormat(String pattern, double value)
 	{
 		// NumberFormat myFormatter = DecimalFormat.getInstance(Locale.US);
 
@@ -1394,8 +1369,7 @@ public class NavitVehicle
 		otherSymbols.setDecimalSeparator('.');
 		DecimalFormat df = new DecimalFormat(pattern, otherSymbols);
 
-		String output = df.format(value);
-		return (output);
+		return (df.format(value));
 	}
 
 	static void speech_recording_add(double lat, double lon, String text, long time)
@@ -1405,9 +1379,9 @@ public class NavitVehicle
 			String date_time_gpx = (String) DateFormat.format("yyyy-MM-dd'T'HH:mm:ss'Z'", time);
 			// System.out.println("33XX"+date_time_gpx+"YY");
 
-			// speech_recording_writer_gpx.write(" <trkpt lat=\"" + customNumberFormat_("####.######", lat) + "\" lon=\"" + customNumberFormat_("####.######", lon) + "\"><time>2014-10-02T09:30:10Z</time><speed>" + customNumberFormat_("####.##", speed) + "</speed><course>" + customNumberFormat_("####.#", bearing) + "</course></trkpt>\n");
-			// speech_recording_writer_gpx.write(" <rtept lat=\"" + customNumberFormat_("####.######", lat) + "\" lon=\"" + customNumberFormat_("####.######", lon) + "\"><name>" + text + "</name></rtept>" + "\n");
-			speech_recording_writer_gpx.write(" <wpt lat=\"" + customNumberFormat_("####.######", lat) + "\" lon=\"" + customNumberFormat_("####.######", lon) + "\"><time>" + date_time_gpx + "</time>" + "<name>" + text + "</name><sym>Dot</sym><type>Dot</type></wpt>" + "\n");
+			// speech_recording_writer_gpx.write(" <trkpt lat=\"" + customNumberFormat("####.######", lat) + "\" lon=\"" + customNumberFormat("####.######", lon) + "\"><time>2014-10-02T09:30:10Z</time><speed>" + customNumberFormat("####.##", speed) + "</speed><course>" + customNumberFormat("####.#", bearing) + "</course></trkpt>\n");
+			// speech_recording_writer_gpx.write(" <rtept lat=\"" + customNumberFormat("####.######", lat) + "\" lon=\"" + customNumberFormat("####.######", lon) + "\"><name>" + text + "</name></rtept>" + "\n");
+			speech_recording_writer_gpx.write(" <wpt lat=\"" + customNumberFormat("####.######", lat) + "\" lon=\"" + customNumberFormat("####.######", lon) + "\"><time>" + date_time_gpx + "</time>" + "<name>" + text + "</name><sym>Dot</sym><type>Dot</type></wpt>" + "\n");
 		}
 		catch (Exception e)
 		{
@@ -1442,7 +1416,7 @@ public class NavitVehicle
 
 			//			try
 			//			{
-			//				pos_recording_writer_gpx.write(" <trkpt lat=\"" + customNumberFormat_("####.######", lat) + "\" lon=\"" + customNumberFormat_("####.######", lon) + "\"><time>2014-10-02T09:30:10Z</time><speed>" + customNumberFormat_("####.##", speed) + "</speed><course>" + customNumberFormat_("####.#", bearing) + "</course></trkpt>\n");
+			//				pos_recording_writer_gpx.write(" <trkpt lat=\"" + customNumberFormat("####.######", lat) + "\" lon=\"" + customNumberFormat("####.######", lon) + "\"><time>2014-10-02T09:30:10Z</time><speed>" + customNumberFormat("####.##", speed) + "</speed><course>" + customNumberFormat("####.#", bearing) + "</course></trkpt>\n");
 			//			}
 			//			catch (Exception e)
 			//			{
@@ -1450,7 +1424,7 @@ public class NavitVehicle
 
 			try
 			{
-				pos_recording_writer.write("POS:" + "\"" + customNumberFormat_("####.######", lat) + "," + customNumberFormat_("####.######", lon) + "," + customNumberFormat_("####.##", speed) + "," + customNumberFormat_("####.##", bearing) + "\"" + "\n");
+				pos_recording_writer.write("POS:" + "\"" + customNumberFormat("####.######", lat) + "," + customNumberFormat("####.######", lon) + "," + customNumberFormat("####.##", speed) + "," + customNumberFormat("####.##", bearing) + "\"" + "\n");
 				if (Navit.OSD_route_001.arriving_time_valid)
 				{
 					pos_recording_writer.write("REM:" + "\"ETA:" + Navit.OSD_route_001.arriving_time + "\"" + "\n");
@@ -1557,7 +1531,7 @@ public class NavitVehicle
 				}
 
 				pos_recording_writer.write("REM:" + "\"Date:" + currentDateandTime + "\"" + "\n");
-				pos_recording_writer.write("DST:" + "\"" + customNumberFormat_("####.######", lat) + "," + customNumberFormat_("####.######", lon) + "\"" + "\n");
+				pos_recording_writer.write("DST:" + "\"" + customNumberFormat("####.######", lat) + "," + customNumberFormat("####.######", lon) + "\"" + "\n");
 				if (Navit.global_last_destination_name.compareTo("") != 0)
 				{
 					pos_recording_writer.write("REM:" + "\"TO:" + Navit.global_last_destination_name + "\"" + "\n");

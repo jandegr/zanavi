@@ -26,24 +26,16 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class ZANaviOSDLaneAssist extends View
 {
-	private int w = 10;
-	private int h = 10;
 	//	RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
 	//	Paint paint_speedwarning = new Paint(0);
 	private final Paint paint = new Paint(0);
-	Paint paint2 = new Paint(0);
-	float textHeight = 10;
-	float textOffset = 10;
 	private final Matrix lanes_scaleMatrix = new Matrix();
 	private final Matrix lanes_transMatrix = new Matrix();
-	RectF lanes_rectF = new RectF();
-	private boolean no_draw = false;
 	private final Path pathForTurn = new Path();
 
 	public ZANaviOSDLaneAssist(Context context)
@@ -60,8 +52,6 @@ public class ZANaviOSDLaneAssist extends View
 	public void onSizeChanged(int w1, int h1, int oldw, int oldh)
 	{
 		super.onSizeChanged(w1, h1, oldw, oldh);
-		this.w = w1;
-		this.h = h1;
 		lanes_transMatrix.reset();
 		lanes_transMatrix.setTranslate(0.0f, NavitGraphics.dp_to_px(40)); // works: 0.0f, 120.0f
 	}
@@ -81,7 +71,7 @@ public class ZANaviOSDLaneAssist extends View
 			String[] lanes_split_sub = lanes_split[j].split(";");
 			int parsed_num_lanes_sub = lanes_split_sub.length;
 
-			String single_arrow = "";
+			String single_arrow;
 			for (int k = 0; k < parsed_num_lanes_sub; k++)
 			{
 				single_arrow = lanes_split_sub[k].replaceAll("\\s", "");
@@ -182,9 +172,9 @@ public class ZANaviOSDLaneAssist extends View
 					int parsed_num_lanes = lanes_split.length;
 
 					int lanes_choices_count = 0;
-					int lanes_choices_route = -1;
-					int[] lanes_choices_split_int = null;
-					String[] lanes_choices_split = null;
+
+					int[] lanes_choices_split_int;
+					String[] lanes_choices_split;
 					int highlight_kind = -1;
 
 					int[] lanes_kind = new int[10];
@@ -231,11 +221,12 @@ public class ZANaviOSDLaneAssist extends View
 					// sort and check lane choice -------------------------------------
 					if (Navit.lane_choices != null)
 					{
+
 						if (!Navit.lane_choices.equals(""))
 						{
 							lanes_choices_split = Navit.lane_choices.split("\\|");
 							lanes_choices_count = lanes_choices_split.length;
-							lanes_choices_route = -1;
+							int lanes_choices_route = -1;
 							lanes_choices_split_int = new int[lanes_choices_split.length];
 
 							//System.out.println("SORTED:---orig---=" + Navit.lane_choices);
@@ -243,7 +234,7 @@ public class ZANaviOSDLaneAssist extends View
 							if (lanes_choices_count > 1)
 							{
 								// find route lane
-								int kk = 0;
+								int kk;
 								for (kk = 0; kk < lanes_choices_count; kk++)
 								{
 									// System.out.println("SORTED:kk=" + kk + " lcs length=" + lanes_choices_split.length);
@@ -263,7 +254,7 @@ public class ZANaviOSDLaneAssist extends View
 								}
 
 								// sort entries (remember to also move the found "route" lane!!)
-								int ll = 0;
+								int ll;
 								int temp;
 								int max;
 								for (kk = 1; kk < lanes_choices_count; kk++)
@@ -331,21 +322,19 @@ public class ZANaviOSDLaneAssist extends View
 
 							final int num_of_kinds = 6;
 							lanes_kind = new int[num_of_kinds];
-							lanes_kind_count = 0;
 
-							int k = 0;
+							int k;
 							for (k = 0; k < num_of_kinds; k++)
 							{
 								lanes_kind[k] = 0; // reset all
 							}
 
-							int j = 0;
+							int j;
 							for (j = 0; j < parsed_num_lanes; j++)
 							{
 								String[] lanes_split_sub = lanes_split[j].split(";");
 								int parsed_num_lanes_sub = lanes_split_sub.length;
 
-								k = 0;
 								String single_arrow = "";
 								for (k = 0; k < parsed_num_lanes_sub; k++)
 								{
@@ -484,8 +473,7 @@ public class ZANaviOSDLaneAssist extends View
 						xx1 = xx1 + (lane_symbol_width) * 3;
 					}
 
-					int j = 0;
-					for (j = 0; j < parsed_num_lanes; j++)
+					for (int j = 0; j < parsed_num_lanes; j++)
 					{
 
 						// move to next lane (move to right)
@@ -494,8 +482,8 @@ public class ZANaviOSDLaneAssist extends View
 						String[] lanes_split_sub = lanes_split[j].split(";");
 						int parsed_num_lanes_sub = lanes_split_sub.length;
 
-						int k = 0;
-						String single_arrow = "";
+						int k;
+						String single_arrow;
 						for (k = 0; k < parsed_num_lanes_sub; k++)
 						{
 
@@ -528,7 +516,6 @@ public class ZANaviOSDLaneAssist extends View
 
 							pathForTurn.reset();
 							int ha = 72;
-							int wa = 72;
 
 							int th = 12 * 3; // (12) thickness
 							// pathForTurn.moveTo(wa / 2, ha - 1);
@@ -538,7 +525,7 @@ public class ZANaviOSDLaneAssist extends View
 							float sarrowL = 22 * 4; // (22) side of arrow ?
 							float harrowL = (float) (Math.sqrt(2) * sarrowL); // (float) (Math.sqrt(2) * sarrowL)
 							float spartArrowL = (float) ((sarrowL - th / Math.sqrt(2)) / 2); // (float) ((sarrowL - th / Math.sqrt(2)) / 2)
-							float hpartArrowL = ((float) (harrowL - th) / 2); // ((float) (harrowL - th) / 2)
+							float hpartArrowL = ((harrowL - th) / 2); // ((float) (harrowL - th) / 2)
 
 							// none
 							// through
@@ -553,7 +540,7 @@ public class ZANaviOSDLaneAssist extends View
 							// merge_to_left
 							// merge_to_right
 
-							no_draw = false;
+							boolean no_draw = false;
 
 							paint.setColor(Color.LTGRAY);
 

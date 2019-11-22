@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2014 Zoff <zoff@zoff.cc>
  *
@@ -37,17 +37,13 @@ import com.zoffcc.applications.zanavi.NavitMapDownloader.ProgressThread;
 public class ZANaviMapDownloaderService extends Service
 {
 	private static NotificationManager nm;
-	private static Notification notification;
 	private static final int NOTIFICATION_ID__DUMMY = 1;
-	public static int NOTIFICATION_ID__DUMMY2 = 2;
-	private static String Notification_header = "";
 	private static String Notification_text = "";
 	private static Intent notificationIntent = null;
 
-	private static NotificationCompat.Builder builder_ = null;
+	private static NotificationCompat.Builder sBuilder = null;
 
 	private static ProgressThread progressThread_pri = null;
-	private static boolean service_running = false;
 	private static ZANaviMapDownloaderService my_object = null;
 
 	@Override
@@ -55,7 +51,7 @@ public class ZANaviMapDownloaderService extends Service
 	{
 		System.out.println("ZANaviMapDownloaderService: ************************ start ************************");
 
-		Notification_header = "ZANavi";
+		String notification_header = "ZANavi";
 		Notification_text = Navit.get_text("downloading, please wait ...");
 
 		Context con = this;
@@ -69,22 +65,22 @@ public class ZANaviMapDownloaderService extends Service
 			notificationIntent = new Intent(con, ZANaviDownloadMapCancelActivity.class);
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			p_activity = PendingIntent.getActivity(con, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			builder_ = new NotificationCompat.Builder(con);
-			builder_.setAutoCancel(false);
-			builder_.setOngoing(true);
-			builder_.setSmallIcon(R.drawable.icon);
+			sBuilder = new NotificationCompat.Builder(con, Navit.CHANNEL_ID);
+			sBuilder.setAutoCancel(false);
+			sBuilder.setOngoing(true);
+			sBuilder.setSmallIcon(R.drawable.icon);
 			//			if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
 			//			{
 			//				builder_.setColor(Color.TRANSPARENT);
 			//			}
-			builder_.setContentTitle("ZANavi");
-			builder_.setProgress(100, 0, true);
-			builder_.setContentText(Notification_text);
-			builder_.setContentTitle(Notification_header);
-			builder_.setContentIntent(p_activity);
+			sBuilder.setContentTitle("ZANavi");
+			sBuilder.setProgress(100, 0, true);
+			sBuilder.setContentText(Notification_text);
+			sBuilder.setContentTitle(notification_header);
+			sBuilder.setContentIntent(p_activity);
 			Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-			builder_.setLargeIcon(bm);
-			notification = builder_.build();
+			sBuilder.setLargeIcon(bm);
+			notification = sBuilder.build();
 			notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 			System.out.println("Notifi:006:ok");
 		}
@@ -115,8 +111,6 @@ public class ZANaviMapDownloaderService extends Service
 				System.out.println("Notifi:004:Ex=" + e2.getMessage());
 			}
 		}
-
-		service_running = true;
 
 		start_map_download();
 		System.out.println("ZANaviMapDownloaderService: ************************ start(finished) ************************");
@@ -151,19 +145,19 @@ public class ZANaviMapDownloaderService extends Service
 			// System.out.println("ZANaviMapDownloaderService: !!!!!!!!! NOTIFY !!!!!!!!!" + " text=" + text + " con=" + con + " p_activity=" + p_activity);
 			// System.out.println("Notifi:002:" + "nm=" + nm + " text=" + text + " con=" + con + " p_activity=" + p_activity);
 			Notification_text = text;
-			builder_.setContentTitle("");
+			sBuilder.setContentTitle("");
 			if (percent > 0)
 			{
-				builder_.setProgress(100, percent, false);
+				sBuilder.setProgress(100, percent, false);
 			}
 			else
 			{
-				builder_.setProgress(100, 0, true);
+				sBuilder.setProgress(100, 0, true);
 			}
-			builder_.setContentText(Notification_text);
-			builder_.setOngoing(true);
+			sBuilder.setContentText(Notification_text);
+			sBuilder.setOngoing(true);
 
-			Notification notification = builder_.build();
+			Notification notification = sBuilder.build();
 			notification.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 			nm.notify(NOTIFICATION_ID__DUMMY, notification);
 		}
@@ -210,7 +204,7 @@ public class ZANaviMapDownloaderService extends Service
 
 		try
 		{
-			nm.cancel(NOTIFICATION_ID__DUMMY);
+			//nm.cancel(NOTIFICATION_ID__DUMMY);
 		}
 		catch (Exception e)
 		{
@@ -246,8 +240,6 @@ public class ZANaviMapDownloaderService extends Service
 		}
 
 		System.out.println("ZANaviMapDownloaderService: ####################### STOPPED #######################");
-
-		service_running = false;
 	}
 
 }

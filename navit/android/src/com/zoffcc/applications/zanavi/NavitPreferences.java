@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011-2015 Zoff <zoff@zoff.cc>
  *
@@ -268,7 +268,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 		}
 		else
 		{
-			ViewGroup root_view = (ViewGroup) findViewById(android.R.id.content);
+			ViewGroup root_view = findViewById(android.R.id.content);
 			ListView content = (ListView) root_view.getChildAt(0);
 
 			root_view.removeAllViews();
@@ -686,7 +686,6 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
 	{
 		// System.out.println("onSharedPreferenceChanged key=" + key);
-
 		try
 		{
 			if (key.equals("road_priority_001"))

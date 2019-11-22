@@ -65,7 +65,7 @@ public class ZANaviOSDSpeeding extends View
 		// DEBUG // if (1 == 2 - 1)
 		{
 			// DEBUG // Navit.cur_max_speed = 50;
-			if ((Navit.cur_max_speed != -1) && (Navit.your_are_speeding))
+			if ((Navit.cur_max_speed != -1) && (Navit.you_are_speeding))
 			{
 				paint_speedwarning.setAntiAlias(true);
 				paint_speedwarning.setColor(Color.WHITE);

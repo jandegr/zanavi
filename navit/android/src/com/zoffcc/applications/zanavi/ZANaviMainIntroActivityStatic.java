@@ -1517,8 +1517,8 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 				}
 
 				System.out.println("move from:" + f1full.getCanonicalPath() + " -> " + f2full.getCanonicalPath());
-				Navit.copyDirectoryOneLocationToAnotherLocation(f1full, f2full);
-				Navit.deleteRecursive(f1full);
+				Utils.copyDirectoryOneLocationToAnotherLocation(f1full, f2full);
+				Utils.deleteRecursive(f1full);
 
 				try
 				{

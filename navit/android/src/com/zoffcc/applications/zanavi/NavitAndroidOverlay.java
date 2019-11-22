@@ -63,8 +63,12 @@ public class NavitAndroidOverlay extends View
 	//private static int confirmed_bubble_part = 0; // 0 -> left side, 1 -> right side
 	private long bubble_showing_since = 0L;
 	private static final long bubble_max_showing_timespan = 5000L; // 5 secs.
+
+	@SuppressWarnings("unused")
 	RectF zoomin_button_rect = new RectF(-100, 1, 1, 1);
+	@SuppressWarnings("unused")
 	RectF zoomout_button_rect = new RectF(-100, 1, 1, 1);
+
 	private int mCanvasHeight = 1;
 	private static float draw_factor = 1.0f;
 	public static boolean voice_rec_bar_visible = false;
@@ -72,9 +76,6 @@ public class NavitAndroidOverlay extends View
 	//public static int voice_rec_bar_x = -10;
 	//public static int voice_rec_bar_y = -10;
 	//private static int voice_rec_bar_limit = 10;
-	Matrix lanes_scaleMatrix = new Matrix();
-	Matrix lanes_transMatrix = new Matrix();
-	RectF lanes_rectF = new RectF();
 
 	public static boolean measure_mode = false;
 	public static int measure_result_meters = -1;
@@ -729,91 +730,6 @@ public class NavitAndroidOverlay extends View
 			Navit.menu_button_rect = new RectF(w - 10 - Navit.menu_button.getWidth(), 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5);
 			Navit.menu_button_rect_touch = new RectF(w - 10 - Navit.menu_button.getWidth() - addon_left, 10 + mapdrawing_height + h_2 + 5, w - 10, Navit.menu_button.getHeight() + 10 + mapdrawing_height + h_2 + 5 + addon_down);
 		}
-	}
-
-	int get_lanes_kind_count(int parsed_num_lanes, String[] lanes_split)
-	{
-		final int num_of_kinds = 6;
-		int[] lanes_kind = new int[num_of_kinds];
-		int lanes_kind_count = 0;
-
-		int k = 0;
-		for (k = 0; k < num_of_kinds; k++)
-		{
-			lanes_kind[k] = 0; // reset all
-		}
-
-		int j = 0;
-		for (j = 0; j < parsed_num_lanes; j++)
-		{
-			String[] lanes_split_sub = lanes_split[j].split(";");
-			int parsed_num_lanes_sub = lanes_split_sub.length;
-
-			k = 0;
-			String single_arrow = "";
-			for (k = 0; k < parsed_num_lanes_sub; k++)
-			{
-				single_arrow = lanes_split_sub[k].replaceAll("\\s", "");
-
-				// none					3
-				// through				3
-				// left					1
-				// right				5
-				// slight_left			2
-				// slight_right			4
-				// sharp_left			1
-				// sharp_right			5
-				// mergeto_left			-
-				// mergeto_right		-
-				// merge_to_left		-
-				// merge_to_right		-
-
-				if (single_arrow.equalsIgnoreCase("sharp_left"))
-				{
-					lanes_kind[1] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("sharp_right"))
-				{
-					lanes_kind[5] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("none"))
-				{
-					lanes_kind[3] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("through"))
-				{
-					lanes_kind[3] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("left"))
-				{
-					lanes_kind[1] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("right"))
-				{
-					lanes_kind[5] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("slight_left"))
-				{
-					lanes_kind[2] = 1;
-				}
-				else if (single_arrow.equalsIgnoreCase("slight_right"))
-				{
-					lanes_kind[4] = 1;
-				}
-
-			}
-		}
-
-		lanes_kind_count = 0;
-		for (k = 0; k < num_of_kinds; k++)
-		{
-			if (lanes_kind[k] == 1)
-			{
-				lanes_kind_count++;
-			}
-		}
-
-		return lanes_kind_count;
 	}
 
 	@SuppressLint("NewApi")

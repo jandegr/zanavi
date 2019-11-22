@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2012 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -59,14 +59,10 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 {
 	private Navit navit;
 	int MY_DATA_CHECK_CODE = 1; // this needs to be "1" for the C-code !!
-	private Locale want_locale = null;
-	private int request_focus_result = 0;
+	private Locale want_locale;
 	private int need_audio_focus = 0;
-	float debug_lat = 0;
-	float debug_lon = 0;
-	HashMap<String, String> tts_params = new HashMap<String, String>();
+	private final HashMap<String, String> tts_params = new HashMap<>();
 
-	@SuppressWarnings("deprecation")
 	public void onInit(final int status)
 	{
 		if (status == TextToSpeech.SUCCESS)
@@ -171,7 +167,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 								{
 									if (need_audio_focus == 0)
 									{
-										Navit.NavitAudioManager.abandonAudioFocus(Navit.focusChangeListener);
+										Navit.sNavitAudioManager.abandonAudioFocus(Navit.focusChangeListener);
 									}
 								}
 								catch (Exception e44)
@@ -317,7 +313,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 	}
 
 	@SuppressLint("NewApi")
-	public void say(String what, int lat, int lon)
+	void say(String what, int lat, int lon)
 	{
 
 		if (Navit.p.PREF_enable_debug_write_gpx)
@@ -325,6 +321,8 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 			// ------- SPEECH DEBUG -------------------------------
 			// ------- SPEECH DEBUG -------------------------------
 			// ------- SPEECH DEBUG -------------------------------
+			float debug_lon;
+			float debug_lat;
 			if ((lat != 0) || (lon != 0))
 			{
 				debug_lat = (float) (lat) / 100000.0f;
@@ -356,7 +354,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 				{
 					need_audio_focus = 1;
 					// Request audio focus for playback
-					request_focus_result = Navit.NavitAudioManager.requestAudioFocus(Navit.focusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+					int request_focus_result = Navit.sNavitAudioManager.requestAudioFocus(Navit.focusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 					// AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK // --> other players just lower their audio volume 
 
 					//if (request_focus_result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
@@ -410,7 +408,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 		}
 	}
 
-	public static String filter_out_special_chars_google(String in)
+	private static String filter_out_special_chars_google(String in)
 	{
 		String out = in;
 		// google TTS seems to say "Staatsstrasse" instead of "St." , try to correct it here
@@ -419,7 +417,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 		return out;
 	}
 
-	public static String filter_out_special_chars(String in)
+	private static String filter_out_special_chars(String in)
 	{
 		String out = in;
 		out = out.replace("-", " ");
@@ -431,7 +429,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 		return out;
 	}
 
-	public static String filter_out_special_chars_for_dest_string(String in)
+	static String filter_out_special_chars_for_dest_string(String in)
 	{
 		String out = in;
 		out = out.replace(" ", "_");
@@ -447,7 +445,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 		return out;
 	}
 
-	public void resume_me()
+	void resume_me()
 	{
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
@@ -545,7 +543,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 		}
 	}
 
-	public void stop_me()
+	void stop_me()
 	{
 		Log.e("NavitSpeech2", "stop_me");
 		try

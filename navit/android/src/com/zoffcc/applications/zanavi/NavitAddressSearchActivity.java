@@ -1030,8 +1030,8 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 						selected_id_passthru = position;
 
 						Intent search_intent = new Intent(c, NavitMapPreviewActivity.class);
-						search_intent.putExtra("lat", (float) Navit.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(position).lat));
-						search_intent.putExtra("lon", (float) Navit.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(position).lon));
+						search_intent.putExtra("lat", (float) Utils.transform_to_geo_lat(Navit.NavitAddressResultList_foundItems.get(position).lat));
+						search_intent.putExtra("lon", (float) Utils.transform_to_geo_lon(Navit.NavitAddressResultList_foundItems.get(position).lon));
 
 						search_intent.putExtra("q", Navit.NavitAddressResultList_foundItems.get(position).addr);
 						startActivityForResult(search_intent, Navit.NavitMapPreview_id);

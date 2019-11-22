@@ -95,7 +95,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 class NavitGraphics
 {
 	private final int parent_num;
-	//private ArrayList overlays = new ArrayList();
 
 	private static Canvas draw_canvas_s;
 	static Bitmap draw_bitmap_s;
@@ -881,7 +880,7 @@ class NavitGraphics
 
 								if (Global_Map_Rotationangle != 0.0f)
 								{
-									draw_canvas_screen2.rotate(Global_Map_Rotationangle, Navit.NG__vehicle.vehicle_pos_x, Navit.NG__vehicle.vehicle_pos_y);
+									draw_canvas_screen2.rotate(Global_Map_Rotationangle, Navit.getInstance().getNG__vehicle().vehicle_pos_x, Navit.getInstance().getNG__vehicle().vehicle_pos_y);
 								}
 
 								if (Global_Map_Zoomfactor == 1.0f)
@@ -1277,7 +1276,7 @@ class NavitGraphics
 
 								if (Global_Map_Rotationangle != 0.0f)
 								{
-									canvas.rotate(Global_Map_Rotationangle, Navit.NG__vehicle.vehicle_pos_x, Navit.NG__vehicle.vehicle_pos_y);
+									canvas.rotate(Global_Map_Rotationangle, Navit.getInstance().getNG__vehicle().vehicle_pos_x, Navit.getInstance().getNG__vehicle().vehicle_pos_y);
 								}
 
 								if (Global_Map_Zoomfactor == 1.0f)
@@ -1304,7 +1303,7 @@ class NavitGraphics
 							// draw vehicle also (it seems on newer android API the vehicle view does not get updated automatically anymore)
 							if (!Navit.PAINT_OLD_API)
 							{
-								Navit.NG__vehicle.view.postInvalidate();
+								Navit.getInstance().getNG__vehicle().view.postInvalidate();
 							}
 
 							Global_Map_in_onDraw = false;
@@ -3011,9 +3010,9 @@ class NavitGraphics
 
 			// vehicle view
 			// x4x RelativeLayout.LayoutParams NavitVehicleGraph_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-			// x4x relativelayout.addView(Navit.NG__vehicle.view, NavitVehicleGraph_lp);
-			// x4x Navit.NG__vehicle.view.bringToFront();
-			// x4x Navit.NG__vehicle.view.postInvalidate();
+			// x4x relativelayout.addView(Navit.getInstance().getNG__vehicle().view, NavitVehicleGraph_lp);
+			// x4x Navit.getInstance().getNG__vehicle().view.bringToFront();
+			// x4x Navit.getInstance().getNG__vehicle().view.postInvalidate();
 			// vehicle view
 
 			// replace the vehicleview with real vehicleview!
@@ -3021,9 +3020,9 @@ class NavitGraphics
 			ViewGroup parent_v = (ViewGroup) dummy_v.getParent();
 			int index_v = parent_v.indexOfChild(dummy_v);
 			parent_v.removeView(dummy_v);
-			parent_v.addView(Navit.NG__vehicle.view, index_v);
-			Navit.NG__vehicle.view.bringToFront();
-			Navit.NG__vehicle.view.postInvalidate();
+			parent_v.addView(Navit.getInstance().getNG__vehicle().view, index_v);
+			Navit.getInstance().getNG__vehicle().view.bringToFront();
+			Navit.getInstance().getNG__vehicle().view.postInvalidate();
 
 			// android overlay
 			//Log.e("Navit", "create android overlay");
@@ -3500,7 +3499,7 @@ class NavitGraphics
 					{
 						if (Navit.DEBUG_DRAW_VEHICLE)
 						{
-							if (Navit.NG__vehicle.vehicle_speed < 3)
+							if (Navit.getInstance().getNG__vehicle().vehicle_speed < 3)
 							{
 								if (Navit.p.PREF_show_3d_map)
 								{
@@ -3512,28 +3511,28 @@ class NavitGraphics
 
 									if (Navit.GFX_OVERSPILL)
 									{
-										canvas.drawBitmap(Navit.nav_arrow_stopped_small, Navit.NG__vehicle.vehicle_pos_x - (Navit.nav_arrow_stopped_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - (Navit.nav_arrow_stopped_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
+										canvas.drawBitmap(Navit.nav_arrow_stopped_small, Navit.getInstance().getNG__vehicle().vehicle_pos_x - (Navit.nav_arrow_stopped_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - (Navit.nav_arrow_stopped_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
 									}
 									else
 									{
-										canvas.drawBitmap(Navit.nav_arrow_stopped_small, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_stopped_small.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_stopped_small.getHeight() / 2, null);
+										canvas.drawBitmap(Navit.nav_arrow_stopped_small, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_stopped_small.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_stopped_small.getHeight() / 2, null);
 									}
 									//}
 									//// 3D modus -----------------
 									//else
 									//{
-									//	canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_stopped.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_stopped.getHeight() / 2, null);
+									//	canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_stopped.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_stopped.getHeight() / 2, null);
 									//}
 								}
 								else
 								{
 									if (Navit.GFX_OVERSPILL)
 									{
-										canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.NG__vehicle.vehicle_pos_x - (Navit.nav_arrow_stopped.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - (Navit.nav_arrow_stopped.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
+										canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.getInstance().getNG__vehicle().vehicle_pos_x - (Navit.nav_arrow_stopped.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - (Navit.nav_arrow_stopped.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
 									}
 									else
 									{
-										canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_stopped.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_stopped.getHeight() / 2, null);
+										canvas.drawBitmap(Navit.nav_arrow_stopped, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_stopped.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_stopped.getHeight() / 2, null);
 									}
 								}
 								if (Navit.p.PREF_show_3d_map)
@@ -3546,15 +3545,15 @@ class NavitGraphics
 							else
 							// speed >= 3 -----------
 							{
-								if ((Navit.NG__vehicle.vehicle_direction != 0) || (Navit.p.PREF_show_3d_map))
+								if ((Navit.getInstance().getNG__vehicle().vehicle_direction != 0) || (Navit.p.PREF_show_3d_map))
 								{
 									canvas.save();
 								}
 
-								if (Navit.NG__vehicle.vehicle_direction != 0)
+								if (Navit.getInstance().getNG__vehicle().vehicle_direction != 0)
 								{
 									// rotate nav icon if needed
-									canvas.rotate(Navit.NG__vehicle.vehicle_direction, Navit.NG__vehicle.vehicle_pos_x, Navit.NG__vehicle.vehicle_pos_y);
+									canvas.rotate(Navit.getInstance().getNG__vehicle().vehicle_direction, Navit.getInstance().getNG__vehicle().vehicle_pos_x, Navit.getInstance().getNG__vehicle().vehicle_pos_y);
 								}
 
 								if (Navit.p.PREF_show_3d_map)
@@ -3566,22 +3565,22 @@ class NavitGraphics
 
 									if (Navit.GFX_OVERSPILL)
 									{
-										canvas.drawBitmap(Navit.nav_arrow_moving_shadow_small, 2 + Navit.NG__vehicle.vehicle_pos_x - (Navit.nav_arrow_moving_shadow_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, 8 + Navit.NG__vehicle.vehicle_pos_y - (Navit.nav_arrow_moving_shadow_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
-										canvas.drawBitmap(Navit.nav_arrow_moving_small, Navit.NG__vehicle.vehicle_pos_x - (Navit.nav_arrow_moving_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - (Navit.nav_arrow_moving_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_shadow_small, 2 + Navit.getInstance().getNG__vehicle().vehicle_pos_x - (Navit.nav_arrow_moving_shadow_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, 8 + Navit.getInstance().getNG__vehicle().vehicle_pos_y - (Navit.nav_arrow_moving_shadow_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_small, Navit.getInstance().getNG__vehicle().vehicle_pos_x - (Navit.nav_arrow_moving_small.getWidth() / 2) - NavitGraphics.mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - (Navit.nav_arrow_moving_small.getHeight() / 2) - NavitGraphics.mCanvasHeight_overspill, null);
 									}
 									else
 									{
 										// offset shadow x+2 , y+8
-										canvas.drawBitmap(Navit.nav_arrow_moving_shadow_small, 2 + Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_shadow_small.getWidth() / 2, 8 + Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_shadow_small.getHeight() / 2, null);
-										canvas.drawBitmap(Navit.nav_arrow_moving_small, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_small.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_small.getHeight() / 2, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_shadow_small, 2 + Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_shadow_small.getWidth() / 2, 8 + Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_shadow_small.getHeight() / 2, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_small, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_small.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_small.getHeight() / 2, null);
 									}
 									//}
 									//// 3D modus -----------------
 									//else
 									//{
 									//	// offset shadow x+2 , y+8
-									//	canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2, 8 + Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2, null);
-									//	canvas.drawBitmap(Navit.nav_arrow_moving, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2, null);
+									//	canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2, 8 + Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2, null);
+									//	canvas.drawBitmap(Navit.nav_arrow_moving, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2, null);
 									//}
 								}
 								else
@@ -3590,31 +3589,31 @@ class NavitGraphics
 									// offset shadow x+2 , y+8
 									if (Navit.GFX_OVERSPILL)
 									{
-										canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, 8 + Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, 8 + Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
 										if (Navit.tunnel_extrapolation)
 										{
-											canvas.drawBitmap(Navit.nav_arrow_moving_grey, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_grey.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_grey.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
+											canvas.drawBitmap(Navit.nav_arrow_moving_grey, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_grey.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_grey.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
 										}
 										else
 										{
-											canvas.drawBitmap(Navit.nav_arrow_moving, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
+											canvas.drawBitmap(Navit.nav_arrow_moving, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2 - NavitGraphics.mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2 - NavitGraphics.mCanvasHeight_overspill, null);
 										}
 									}
 									else
 									{
-										canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2, 8 + Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2, null);
+										canvas.drawBitmap(Navit.nav_arrow_moving_shadow, 2 + Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_shadow.getWidth() / 2, 8 + Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_shadow.getHeight() / 2, null);
 										if (Navit.tunnel_extrapolation)
 										{
-											canvas.drawBitmap(Navit.nav_arrow_moving_grey, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving_grey.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving_grey.getHeight() / 2, null);
+											canvas.drawBitmap(Navit.nav_arrow_moving_grey, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving_grey.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving_grey.getHeight() / 2, null);
 										}
 										else
 										{
-											canvas.drawBitmap(Navit.nav_arrow_moving, Navit.NG__vehicle.vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2, Navit.NG__vehicle.vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2, null);
+											canvas.drawBitmap(Navit.nav_arrow_moving, Navit.getInstance().getNG__vehicle().vehicle_pos_x - Navit.nav_arrow_moving.getWidth() / 2, Navit.getInstance().getNG__vehicle().vehicle_pos_y - Navit.nav_arrow_moving.getHeight() / 2, null);
 										}
 									}
 								}
 
-								if ((Navit.NG__vehicle.vehicle_direction != 0) || (Navit.p.PREF_show_3d_map))
+								if ((Navit.getInstance().getNG__vehicle().vehicle_direction != 0) || (Navit.p.PREF_show_3d_map))
 								{
 									canvas.restore();
 								}
@@ -3627,11 +3626,11 @@ class NavitGraphics
 							//							paint22.setColor(Color.RED);
 							//							if (Navit.GFX_OVERSPILL)
 							//							{
-							//								canvas.drawCircle(Navit.NG__vehicle.vehicle_pos_x - mCanvasWidth_overspill, Navit.NG__vehicle.vehicle_pos_y - mCanvasHeight_overspill, 5, paint22);
+							//								canvas.drawCircle(Navit.getInstance().getNG__vehicle().vehicle_pos_x - mCanvasWidth_overspill, Navit.getInstance().getNG__vehicle().vehicle_pos_y - mCanvasHeight_overspill, 5, paint22);
 							//							}
 							//							else
 							//							{
-							//								canvas.drawCircle(Navit.NG__vehicle.vehicle_pos_x, Navit.NG__vehicle.vehicle_pos_y, 5, paint22);
+							//								canvas.drawCircle(Navit.getInstance().getNG__vehicle().vehicle_pos_x, Navit.getInstance().getNG__vehicle().vehicle_pos_y, 5, paint22);
 							//							}
 							// paint the sweep spot of the vehicle position!!
 						}
@@ -5662,7 +5661,7 @@ class NavitGraphics
 						// System.out.println("load image: " + x);
 						try
 						{
-							int ResId = Navit.res_.getIdentifier("com.zoffcc.applications.zanavi:drawable/" + x, null, null);
+							int ResId = Navit.sResources.getIdentifier("com.zoffcc.applications.zanavi:drawable/" + x, null, null);
 
 							// *TODO*
 							if (ResId == 0)
@@ -5671,7 +5670,7 @@ class NavitGraphics
 							}
 
 							// System.out.println("ResId: " + ResId);
-							Navit.OSD_nextturn.nextturn_image = BitmapFactory.decodeResource(Navit.res_, ResId);
+							Navit.OSD_nextturn.nextturn_image = BitmapFactory.decodeResource(Navit.sResources, ResId);
 							Navit.OSD_nextturn.nextturn_image_valid = true;
 						}
 						catch (Exception e_image)
@@ -6999,7 +6998,6 @@ class NavitGraphics
 	static native int CallbackDestinationValid();
 
 	static final Handler callback_handler = Navit.callback_handler_55;
-	static final Handler callback_handler_s = Navit.callback_handler_55;
 
 	//
 	//
@@ -7181,13 +7179,13 @@ class NavitGraphics
 		}
 		else if (id == 21) // earth radius
 		{
-			Navit.__EARTH_RADIUS__ = Double.parseDouble(text);
-			System.out.println("__EARTH_RADIUS__=" + Navit.__EARTH_RADIUS__);
+			Utils.__EARTH_RADIUS__ = Double.parseDouble(text);
+			System.out.println("__EARTH_RADIUS__=" + Utils.__EARTH_RADIUS__);
 		}
 		else if (id == 22) // map accuarcy factor
 		{
-			Navit.__GEO_ACCURACY_FACTOR__ = Double.parseDouble(text);
-			System.out.println("__GEO_ACCURACY_FACTOR__=" + Navit.__GEO_ACCURACY_FACTOR__);
+			Utils.__GEO_ACCURACY_FACTOR__ = Double.parseDouble(text);
+			System.out.println("__GEO_ACCURACY_FACTOR__=" + Utils.__GEO_ACCURACY_FACTOR__);
 		}
 		else if (id == 31)
 		{
@@ -7260,7 +7258,7 @@ class NavitGraphics
 			b1.putInt("id", id);
 			b1.putInt("i", i);
 			msg1.setData(b1);
-			NavitGraphics.callback_handler_s.sendMessage(msg1);
+			NavitGraphics.callback_handler.sendMessage(msg1);
 		}
 		catch (Exception e)
 		{
@@ -7283,11 +7281,11 @@ class NavitGraphics
 			last_vehicle_position_timestamp = System.currentTimeMillis();
 
 			//System.out.println("vehiclepos:1:x=" + x + " y=" + y + " Global_dpi_factor=" + NavitGraphics.Global_dpi_factor);
-			Navit.NG__vehicle.vehicle_speed = speed;
-			Navit.NG__vehicle.vehicle_pos_x = (int) ((float) x / NavitGraphics.Global_dpi_factor);
-			Navit.NG__vehicle.vehicle_pos_y = (int) ((float) y / NavitGraphics.Global_dpi_factor);
-			//System.out.println("vehiclepos:2:x=" + Navit.NG__vehicle.vehicle_pos_x + " y=" + Navit.NG__vehicle.vehicle_pos_y);
-			Navit.NG__vehicle.vehicle_direction = angle;
+			Navit.getInstance().getNG__vehicle().vehicle_speed = speed;
+			Navit.getInstance().getNG__vehicle().vehicle_pos_x = (int) ((float) x / NavitGraphics.Global_dpi_factor);
+			Navit.getInstance().getNG__vehicle().vehicle_pos_y = (int) ((float) y / NavitGraphics.Global_dpi_factor);
+			//System.out.println("vehiclepos:2:x=" + Navit.getInstance().getNG__vehicle().vehicle_pos_x + " y=" + Navit.getInstance().getNG__vehicle().vehicle_pos_y);
+			Navit.getInstance().getNG__vehicle().vehicle_direction = angle;
 			//System.out.println("DO__DRAW:set_vehicle_values:end");
 		}
 
@@ -7326,23 +7324,23 @@ class NavitGraphics
 			smooth_driving_ts002a = System.currentTimeMillis();
 
 			//draw_canvas_screen2.scale(ZOOM_MODE_SCALE * Global_Map_Zoomfactor, ZOOM_MODE_SCALE * Global_Map_Zoomfactor, Global_Map_TransX + this.touch_now_center.x, Global_Map_TransY + this.touch_now_center.y);
-			//draw_canvas_screen2.rotate(Global_Map_Rotationangle, Navit.NG__vehicle.vehicle_pos_x, Navit.NG__vehicle.vehicle_pos_y);
+			//draw_canvas_screen2.rotate(Global_Map_Rotationangle, Navit.getInstance().getNG__vehicle().vehicle_pos_x, Navit.getInstance().getNG__vehicle().vehicle_pos_y);
 
 			// ------ make vehicle smooth zoom with vehicle as center point --------------------
 			// ------ because center point may be any point on screen from last finger movement!
 			//System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:sszz:tnc x=" + Navit.NG__map_main.touch_now_center.x + " y=" + Navit.NG__map_main.touch_now_center.y);
-			//System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:sszz:vhp x=" + Navit.NG__vehicle.vehicle_pos_x + " y=" + Navit.NG__vehicle.vehicle_pos_y);
+			//System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:sszz:vhp x=" + Navit.getInstance().getNG__vehicle().vehicle_pos_x + " y=" + Navit.getInstance().getNG__vehicle().vehicle_pos_y);
 			//System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:sszz:gmt x=" + Global_Map_TransX + " y=" + Global_Map_TransY);
 
 			if (Navit.GFX_OVERSPILL)
 			{
-				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x - NavitGraphics.mCanvasWidth_overspill;
-				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y - NavitGraphics.mCanvasHeight_overspill;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.getInstance().getNG__vehicle().vehicle_pos_x - NavitGraphics.mCanvasWidth_overspill;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.getInstance().getNG__vehicle().vehicle_pos_y - NavitGraphics.mCanvasHeight_overspill;
 			}
 			else
 			{
-				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.NG__vehicle.vehicle_pos_x;
-				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.NG__vehicle.vehicle_pos_y;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.x = Navit.getInstance().getNG__vehicle().vehicle_pos_x;
+				Navit.getInstance().getN_NavitGraphics().touch_now_center.y = Navit.getInstance().getNG__vehicle().vehicle_pos_y;
 			}
 
 			// ------ make vehicle smooth zoom with vehicle as center point --------------------
@@ -7963,8 +7961,8 @@ class NavitGraphics
 
 		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:00");
 
-		Navit.NG__vehicle.vehicle_pos_x_delta = dx;
-		Navit.NG__vehicle.vehicle_pos_y_delta = dy;
+		Navit.getInstance().getNG__vehicle().vehicle_pos_x_delta = dx;
+		Navit.getInstance().getNG__vehicle().vehicle_pos_y_delta = dy;
 		int dangle = dangle2;
 		if (dangle2 > max_turn_angle)
 		{
@@ -7977,8 +7975,8 @@ class NavitGraphics
 			dangle = dangle2 + 360;
 		}
 
-		Navit.NG__vehicle.vehicle_direction_delta = dangle;
-		Navit.NG__vehicle.vehicle_zoom_delta = dzoom;
+		Navit.getInstance().getNG__vehicle().vehicle_direction_delta = dangle;
+		Navit.getInstance().getNG__vehicle().vehicle_zoom_delta = dzoom;
 
 		Global_SmoothDrawing_stop = false;
 
@@ -7989,17 +7987,17 @@ class NavitGraphics
 			return;
 		}
 
-		//if (Navit.NG__vehicle.vehicle_speed < 3)
+		//if (Navit.getInstance().getNG__vehicle().vehicle_speed < 3)
 		//{
 		//	// too slow, dont use smooth moving
 		//	return;
 		//}
 
 		//
-		// Navit.NG__vehicle.vehicle_speed --> is in "km/h" !!
-		// System.out.println("DEBUG_SMOOTH_DRIVING:v speed=" + Navit.NG__vehicle.vehicle_speed);
+		// Navit.getInstance().getNG__vehicle().vehicle_speed --> is in "km/h" !!
+		// System.out.println("DEBUG_SMOOTH_DRIVING:v speed=" + Navit.getInstance().getNG__vehicle().vehicle_speed);
 		//
-		if ((Navit.NG__vehicle.vehicle_speed > 2) || (Navit.NG__vehicle.vehicle_direction_delta > 0))
+		if ((Navit.getInstance().getNG__vehicle().vehicle_speed > 2) || (Navit.getInstance().getNG__vehicle().vehicle_direction_delta > 0))
 		{
 			if (Navit.p.PREF_use_more_smooth_drawing)
 			{
@@ -8044,7 +8042,7 @@ class NavitGraphics
 				// Vehicle_smooth_move_delay = 160;
 			}
 		}
-		else if ((Navit.NG__vehicle.vehicle_speed >= 0) && (Navit.NG__vehicle.vehicle_direction_delta > 0))
+		else if ((Navit.getInstance().getNG__vehicle().vehicle_speed >= 0) && (Navit.getInstance().getNG__vehicle().vehicle_direction_delta > 0))
 		{
 			// really awesome smooth (9 steps) +1
 			// Vehicle_smooth_moves_count = 8;
@@ -8079,7 +8077,7 @@ class NavitGraphics
 
 		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:angle1:dx=" + dx + " dy=" + dy + " da=" + dangle2);
 		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:angle2:dx=" + dx + " dy=" + dy + " da=" + dangle);
-		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:globalzoom:dzoom=" + Navit.NG__vehicle.vehicle_zoom_delta);
+		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:globalzoom:dzoom=" + Navit.getInstance().getNG__vehicle().vehicle_zoom_delta);
 		if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:globalzoom:scale=" + Navit.GlobalScaleLevel);
 
 		if ((Math.abs(dangle) < 2) && (Math.abs(dx) < 1) && (Math.abs(dy) < 1))
@@ -8098,7 +8096,7 @@ class NavitGraphics
 		//ddx_last = (float) dx - (float) (Vehicle_smooth_moves_count + compensate) * ddx;
 		//ddy_last = (float) dy - (float) (Vehicle_smooth_moves_count + compensate) * ddy;
 
-		if (Navit.NG__vehicle.vehicle_zoom_delta != 0)
+		if (Navit.getInstance().getNG__vehicle().vehicle_zoom_delta != 0)
 		{
 			//System.out.println("zoom:ddz old=" + ddz);
 			ddz = (current_horizontal_zoom_factor - 1.0f) / (float) (Vehicle_smooth_moves_count + compensate);
@@ -8410,7 +8408,6 @@ class NavitGraphics
 		}
 		else if (id == 2)
 		{
-			boolean map_c_drawing = false;
 			if (i == 1)
 			{
 				// id=2,1 -> map draw finished
@@ -8442,7 +8439,6 @@ class NavitGraphics
 			{
 				// id=2,3 -> mapdraw cancel signal
 				//System.out.println("DO__DRAW:Java:cancel map");
-				map_c_drawing = false;
 
 				// draw_map_one_shot = true;
 				//copy_backwards_map_buffer();
@@ -8457,9 +8453,7 @@ class NavitGraphics
 				// draw_map_one_shot = true;
 				if (DEBUG_SMOOTH_DRIVING) System.out.println("DEBUG_SMOOTH_DRIVING:TMG-DEBUG:map draw ready");
 
-				map_c_drawing = false;
-
-				if ((Navit.p.PREF_use_smooth_drawing) && (Navit.NG__vehicle.vehicle_speed > 12))
+				if ((Navit.p.PREF_use_smooth_drawing) && (Navit.getInstance().getNG__vehicle().vehicle_speed > 12))
 				{
 					// delay vehicle and map update just a tiny little bit here!!  -- very experimental, also delays gps position !!!
 
@@ -8496,7 +8490,6 @@ class NavitGraphics
 			else if (i == 77)
 			{
 				//System.out.println("DEBUG_SMOOTH_DRIVING:map draw start -> signal received");
-				map_c_drawing = true;
 			}
 		}
 		else if (id == 3)
@@ -8532,7 +8525,7 @@ class NavitGraphics
 		else if (id == 7)
 		{
 			// is underground
-			Navit.pos_is_underground = i; // can be: 0 or 1
+			Navit.pos_is_underground = (i > 0); // can be: 0 or 1
 
 			// System.out.println("pos_is_underground=" + Navit.pos_is_underground);
 

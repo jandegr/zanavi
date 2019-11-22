@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2012 Zoff <zoff@zoff.cc>
  *
@@ -32,13 +32,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class NavitArrayAdapter extends BaseAdapter
+class NavitArrayAdapter extends BaseAdapter
 {
 	List<String> l;
 	List<String> a;
 	Context c;
 
-	public NavitArrayAdapter(Context context, List<String> objects, List<String> addons)
+	NavitArrayAdapter(Context context, List<String> objects, List<String> addons)
 	{
 		this.l = objects;
 		this.a = addons;
@@ -66,7 +66,7 @@ public class NavitArrayAdapter extends BaseAdapter
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		View itemView = null;
+		View itemView;
 
 		if (convertView == null)
 		{
@@ -77,12 +77,12 @@ public class NavitArrayAdapter extends BaseAdapter
 		{
 			itemView = convertView;
 		}
-		TextView text = (TextView) itemView.findViewById(R.id.text);
+		TextView text = itemView.findViewById(R.id.text);
 		text.setText(l.get(position));
 
 		try
 		{
-			ImageView imv = (ImageView) itemView.findViewById(R.id.icon_recent_dest);
+			ImageView imv = itemView.findViewById(R.id.icon_recent_dest);
 			if (a.get(position).equals("1"))
 			{
 				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
@@ -109,14 +109,13 @@ public class NavitArrayAdapter extends BaseAdapter
 			// remove icon for other location type (empty icon space!)
 			try
 			{
-				ImageView imv = (ImageView) itemView.findViewById(R.id.icon_recent_dest);
+				ImageView imv = itemView.findViewById(R.id.icon_recent_dest);
 				imv.setImageDrawable(null);
 			}
 			catch (Exception e2)
 			{
 			}
 		}
-
 		return itemView;
 	}
 }

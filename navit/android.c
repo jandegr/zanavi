@@ -1132,17 +1132,6 @@ Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback(JNIEnv *env, jc
 }
 
 
-//JNIEXPORT void JNICALL
-//Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback(JNIEnv *env, jclass thiz, jdouble lat,
-//		jdouble lon, jfloat speed, jfloat direction, jdouble height, jfloat radius, jlong gpstime)
-//{
-//	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_NavitVehicle_VehicleCallback__XX_real(env,
-//			thiz, lat, lon, speed, direction, height, radius, gpstime));
-//}
-
-
-
-
 void android_return_search_result(struct jni_object *jni_o, char *str)
 {
 #ifdef NAVIT_FUNC_CALLS_DEBUG_PRINT
@@ -1339,14 +1328,6 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList(JNIEn
 	(*env)->ReleaseStringUTFChars(env, str, s);
 }
 
-
-//JNIEXPORT void JNICALL
-//Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList(JNIEnv* env, jobject thiz,
-//		jint id, jint partial, jstring str, jstring str_town, jstring str_hn, jint search_flags,
-//		jstring search_country, jstring latlon, jint radius)
-//{
-//	COFFEE_TRY_JNI(env, Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackSearchResultList__XX_real(env, thiz, id, partial, str, str_town, str_hn, search_flags, search_country, latlon, radius));
-//}
 
 JNIEXPORT jint JNICALL
 Java_com_zoffcc_applications_zanavi_NavitGraphics_CallbackDestinationValid(JNIEnv* env, jclass thiz)
@@ -1678,13 +1659,6 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_DrawLowqualMap(JNIEnv* env, jc
 
 */
 }
-
-
-
-
-
-
-
 
 
 JNIEXPORT void JNICALL
@@ -2196,9 +2170,6 @@ Java_com_zoffcc_applications_zanavi_NavitGraphics_GetRoadBookItems(JNIEnv *env, 
 
     return(ret);
  }
-
-
-
 
 
 JNIEXPORT jstring JNICALL

@@ -182,7 +182,7 @@ public class ZANaviRoadbookFragment extends ListFragment
 
 		try
 		{
-			getListView().setDivider(Navit.res_.getDrawable(R.drawable.horizontal_divider));
+			getListView().setDivider(Navit.sResources.getDrawable(R.drawable.horizontal_divider));
 		}
 		catch (Exception e)
 		{

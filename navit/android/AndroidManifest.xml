@@ -36,6 +36,7 @@
 				 android:allowClearUserData="true"
 				 android:theme="@style/CustomActionBarTheme"
 				 android:name="com.zoffcc.applications.zanavi.ZANaviMainApplication"
+				 android:resizeableActivity="true"
 		         android:usesCleartextTraffic="true"
 	             android:backupAgent="com.zoffcc.applications.zanavi.ZANaviBackupAgent">
         <activity android:name="Navit"

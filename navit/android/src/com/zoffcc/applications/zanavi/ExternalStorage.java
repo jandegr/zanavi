@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2015 Zoff <zoff@zoff.cc>
  *
@@ -44,7 +44,7 @@ class ExternalStorage
 {
 
 	private static final String SD_CARD = "sdCard";
-	static final String EXTERNAL_SD_CARD = "externalSdCard";
+	private static final String EXTERNAL_SD_CARD = "externalSdCard";
 
 	/**
 	 * @return True if the external storage is available. False otherwise.
