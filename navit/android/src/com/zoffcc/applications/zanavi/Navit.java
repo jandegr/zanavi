@@ -4915,11 +4915,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		{
 		case 1:
 			// zoom in
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 1);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(1);
 			// if we zoom, hide the bubble
 			if (NG__map_main.NavitAOverlay != null)
 			{
@@ -4929,11 +4925,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			break;
 		case 2:
 			// zoom out
-			msg = new Message();
-			b = new Bundle();
-			b.putInt("Callback", 2);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(2);
 			// if we zoom, hide the bubble
 			if (NG__map_main.NavitAOverlay != null)
 			{
@@ -4993,11 +4985,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			break;
 		case 9:
 			// stop navigation (this menu should only appear when navigation is actually on!)
-			Message msg2 = new Message();
-			Bundle b2 = new Bundle();
-			b2.putInt("Callback", 7);
-			msg2.setData(b2);
-			NavitGraphics.callback_handler.sendMessage(msg2);
+			sendCallBackMessage(7);
 			Log.e(TAG, "stop navigation");
 			break;
 		case 10:
@@ -5022,11 +5010,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 			// announcer off
 			Navit_Announcer = false;
-			msg = new Message();
-			b = new Bundle();
-			b.putInt("Callback", 34);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(34);
 			try
 			{
 				invalidateOptionsMenu();
@@ -5038,11 +5022,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		case 13:
 			// announcer on
 			Navit_Announcer = true;
-			msg = new Message();
-			b = new Bundle();
-			b.putInt("Callback", 35);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(35);
 			try
 			{
 				invalidateOptionsMenu();
@@ -5196,18 +5176,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				}
 
 				// update route, if a route is set
-				msg = new Message();
-				b = new Bundle();
-				b.putInt("Callback", 73);
-				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
-
+				sendCallBackMessage(73);
 				// draw map no-async
-				msg = new Message();
-				b = new Bundle();
-				b.putInt("Callback", 64);
-				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sendCallBackMessage(64);
 			}
 			catch (Exception e)
 			{
@@ -5222,18 +5193,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				traffic_file.delete();
 
 				// update route, if a route is set
-				msg = new Message();
-				b = new Bundle();
-				b.putInt("Callback", 73);
-				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
-
+				sendCallBackMessage(73);
 				// draw map no-async
-				msg = new Message();
-				b = new Bundle();
-				b.putInt("Callback", 64);
-				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sendCallBackMessage(64);
 			}
 			catch (Exception e)
 			{
@@ -5247,11 +5209,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				gpx_file.delete();
 
 				// draw map no-async
-				msg = new Message();
-				b = new Bundle();
-				b.putInt("Callback", 64);
-				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sendCallBackMessage(64);
 			}
 			catch (Exception e)
 			{
@@ -5335,11 +5293,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 			Navit.DemoVehicle = true;
 
-			msg = new Message();
-			b = new Bundle();
-			b.putInt("Callback", 101);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(101);
 
 			final Thread demo_v_001 = new Thread()
 			{
@@ -5399,8 +5353,8 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			};
 			demo_v_001.start();
 
-			msg = new Message();
-			b = new Bundle();
+			Message msg = new Message();
+			Bundle b = new Bundle();
 			b.putInt("Callback", 51);
 
 			if (Navit.GFX_OVERSPILL)
@@ -5522,11 +5476,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			break;
 		case 606:
 			// DEBUG: spill contents of index file(s)
-			msg = new Message();
-			b = new Bundle();
-			b.putInt("Callback", 83);
-			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			sendCallBackMessage(83);
 			break;
 		case 607:
 			export_map_points_to_sdcard();
@@ -10577,13 +10527,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (p.PREF_use_imperial)
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 16);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(16);
 			}
 			catch (Exception e)
 			{
@@ -10591,13 +10537,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 15);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(15);
 			}
 			catch (Exception e)
 			{
@@ -10606,13 +10548,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (p.PREF_show_debug_messages)
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 24);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(24);
 			}
 			catch (Exception e)
 			{
@@ -10620,13 +10558,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 25);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(25);
 			}
 			catch (Exception e)
 			{
@@ -10664,13 +10598,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (p.PREF_use_lock_on_roads)
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 36);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(36);
 			}
 			catch (Exception e)
 			{
@@ -10678,13 +10608,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 37);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(37);
 			}
 			catch (Exception e)
 			{
@@ -10724,13 +10650,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (p.PREF_use_route_highways)
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 42);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(42);
 			}
 			catch (Exception e)
 			{
@@ -10738,13 +10660,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 43);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(43);
 			}
 			catch (Exception e)
 			{
@@ -10779,13 +10697,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (p.PREF_speak_street_names)
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 54);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(54);
 			}
 			catch (Exception e)
 			{
@@ -10793,13 +10707,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			Message msg = new Message();
-			Bundle b = new Bundle();
-			b.putInt("Callback", 53);
-			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				sNavitObject.sendCallBackMessage(53);
 			}
 			catch (Exception e)
 			{
@@ -10878,13 +10788,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// show route rectanlges -----
 		if (p.PREF_show_route_rects)
 		{
-			msg67 = new Message();
-			b67 = new Bundle();
-			b67.putInt("Callback", 76);
-			msg67.setData(b67);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg67);
+				sNavitObject.sendCallBackMessage(76);
 			}
 			catch (Exception e)
 			{
@@ -10892,13 +10798,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			msg67 = new Message();
-			b67 = new Bundle();
-			b67.putInt("Callback", 77);
-			msg67.setData(b67);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg67);
+				sNavitObject.sendCallBackMessage(77);
 			}
 			catch (Exception e)
 			{
@@ -10909,13 +10811,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// show route multipolygons -----
 		if (p.PREF_show_multipolygons)
 		{
-			msg67 = new Message();
-			b67 = new Bundle();
-			b67.putInt("Callback", 66);
-			msg67.setData(b67);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg67);
+				sNavitObject.sendCallBackMessage(66);
 			}
 			catch (Exception e)
 			{
@@ -10923,13 +10821,9 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 		else
 		{
-			msg67 = new Message();
-			b67 = new Bundle();
-			b67.putInt("Callback", 67);
-			msg67.setData(b67);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg67);
+				sNavitObject.sendCallBackMessage(67);
 			}
 			catch (Exception e)
 			{
@@ -11475,11 +11369,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		if (!at_startup)
 		{
-			Message msg2 = new Message();
-			Bundle b2 = new Bundle();
-			b2.putInt("Callback", 18);
-			msg2.setData(b2);
-			h_temp.sendMessage(msg2);
+			sNavitObject.sendCallBackMessage(18);
 		}
 
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
@@ -14851,11 +14741,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			setPrefs_search_country();
 
 			// show duplicates in search ------------
-			Message msg2 = new Message();
-			Bundle b2 = new Bundle();
-			b2.putInt("Callback", 44);
-			msg2.setData(b2);
-			NavitGraphics.callback_handler.sendMessage(msg2);
+			sNavitObject.sendCallBackMessage(44);
 			// show duplicates in search ------------
 
 			if (hide_dupl)
@@ -14863,11 +14749,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				search_hide_duplicates = true;
 				// hide duplicates when searching
 				// hide duplicates when searching
-				Message msg22 = new Message();
-				Bundle b22 = new Bundle();
-				b22.putInt("Callback", 45);
-				msg22.setData(b22);
-				NavitGraphics.callback_handler.sendMessage(msg22);
+				sNavitObject.sendCallBackMessage(45);
 				// hide duplicates when searching
 				// hide duplicates when searching
 			}
