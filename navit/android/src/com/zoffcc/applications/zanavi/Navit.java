@@ -145,6 +145,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -1087,11 +1088,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//		{
 		//		}
 
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		NotificationChannel channel;
-		channel = new NotificationChannel(CHANNEL_ID, "ZanaviNot",NotificationManager.IMPORTANCE_LOW);
-		channel.setDescription("Zanavi Notification Channel");
-		notificationManager.createNotificationChannel(channel);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+			NotificationChannel channel;
+			channel = new NotificationChannel(CHANNEL_ID, "ZanaviNot", NotificationManager.IMPORTANCE_LOW);
+			channel.setDescription("Zanavi Notification Channel");
+			notificationManager.createNotificationChannel(channel);
+		}
 
 		ZANaviMainApplication.restore_error_msg(this.getApplicationContext());
 
