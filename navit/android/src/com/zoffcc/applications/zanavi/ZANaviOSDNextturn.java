@@ -65,7 +65,12 @@ public class ZANaviOSDNextturn extends View
 
 		if ((Navit.OSD_nextturn.nextturn_image_valid) && (NavitGraphics.CallbackDestinationValid2() > 0))
 		{
-			c.drawBitmap(Navit.OSD_nextturn.nextturn_image, null, f, null);
+			// crash has happened with logcat showing
+			// NavitGraphics:== missing nav icon(1) ==:drawable/none_wh
+			if (Navit.OSD_nextturn.nextturn_image != null)
+			{
+				c.drawBitmap(Navit.OSD_nextturn.nextturn_image, null, f, null);
+			}
 		}
 		else
 			{
