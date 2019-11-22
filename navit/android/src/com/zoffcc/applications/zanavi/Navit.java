@@ -462,7 +462,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		int var = 0;
 	}
 
-	static String CHANNEL_ID = "Zanavi_channel_01";
+	static final String CHANNEL_ID = "Zanavi_channel_01";
 
 
 	static final Navit_OSD_compass OSD_compass = new Navit_OSD_compass();
@@ -9565,7 +9565,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//}
 
 		Message msg = Navit_progress_h.obtainMessage();
-		Bundle b;
 		msg.what = 32;
 		try
 		{

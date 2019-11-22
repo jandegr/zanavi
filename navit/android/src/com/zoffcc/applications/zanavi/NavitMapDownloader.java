@@ -761,15 +761,15 @@ public class NavitMapDownloader
 				NumberFormat formatter = new DecimalFormat("00000.0");
 				String eta_string = "";
 				float per_second_overall = 0f;
-				float per_second_now = 0f;
-				long bytes_remaining = 0;
-				int eta_seconds = 0;
+				float per_second_now;
+				long bytes_remaining;
+				int eta_seconds;
 
-				int current_split = 0;
-				int next_split = 0;
+				int current_split;
+				int next_split;
 
 				Message msg;
-				Bundle b = new Bundle();
+				Bundle b;
 
 				// while -------
 				while ((try_number < RETRIES) && (!download_success))
@@ -1371,12 +1371,8 @@ public class NavitMapDownloader
 		// make a copy
 		List<String> temp_list = new ArrayList<>();
 		temp_list.clear();
-		Iterator<String> k = map_catalogue.listIterator();
 
-		while (k.hasNext())
-		{
-			temp_list.add(k.next());
-		}
+		temp_list.addAll(map_catalogue);
 
 		int temp_list_prev_size = temp_list.size();
 		Boolean[] bits = new Boolean[temp_list_prev_size];
@@ -1492,12 +1488,7 @@ public class NavitMapDownloader
 
 		// use the corrected copy
 		map_catalogue.clear();
-		Iterator<String> m = temp_list.listIterator();
-
-		while (m.hasNext())
-		{
-			map_catalogue.add(m.next());
-		}
+		map_catalogue.addAll(temp_list);
 
 		// write the corrected file back to sdcard
 		write_cat_file();
@@ -1529,12 +1520,10 @@ public class NavitMapDownloader
 		// make a copy of current map_catalogue
 		List<String> temp_list = new ArrayList<>();
 		temp_list.clear();
-		Iterator<String> k = map_catalogue.listIterator();
-		while (k.hasNext())
-		{
-			temp_list.add(k.next());
-		}
+		temp_list.addAll(map_catalogue);
+
 		int temp_list_prev_size = temp_list.size();
+
 		// compare it with directory contents
 		File map_dir = new File(Navit.sNavitMapDirectory);
 		File map_file_absolute_path = null;
@@ -1757,8 +1746,6 @@ public class NavitMapDownloader
 
 		if (find_count == 0)
 		{
-			// clean up
-			saved_lines = null;
 			System.out.println("nothing to delete");
 			return;
 		}
@@ -1767,8 +1754,6 @@ public class NavitMapDownloader
 			System.out.println("removing: " + saved_lines[x]);
 			map_catalogue.remove(saved_lines[x]);
 		}
-		// clean up
-		saved_lines = null;
 		// write file
 		write_cat_file();
 	}

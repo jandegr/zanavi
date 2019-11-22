@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 Zoff <zoff@zoff.cc>
  *
@@ -200,7 +200,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		ll.setOrientation(LinearLayout.VERTICAL);
 
-		ViewGroup root_view = (ViewGroup) ll;
+		ViewGroup root_view = ll;
 		Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root_view, false);
 		bar.setTitle(Navit.get_text("Map Preview"));
 
