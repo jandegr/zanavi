@@ -27,6 +27,8 @@ struct roadprofile
 	int speed;
 	int route_weight;
 	int route_prio_weight;
+	int roundabout_weight;
+	int link_weight;
 	int maxspeed;
 };
 

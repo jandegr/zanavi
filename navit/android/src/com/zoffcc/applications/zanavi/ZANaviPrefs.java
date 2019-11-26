@@ -1,6 +1,6 @@
 package com.zoffcc.applications.zanavi;
 
-public class ZANaviPrefs
+class ZANaviPrefs
 {
 	boolean PREF_use_fast_provider;
 	boolean PREF_follow_gps;
@@ -54,7 +54,7 @@ public class ZANaviPrefs
 	boolean PREF_show_vehicle_3d = true;
 	boolean PREF_streets_only = false;
 	String PREF_routing_profile = "car"; // 'car' -> car , 'bike' -> bicycle
-	int PREF_road_prio_weight_street_1_city = 30;
+	private int PREF_road_prio_weight_street_1_city = 30;
 
 	int PREF_road_priority_001 = 68;
 	int PREF_road_priority_002 = 329;
@@ -67,8 +67,8 @@ public class ZANaviPrefs
 	String PREF_last_selected_dir_gpxfiles = "";
 	int PREF_tracking_connected_pref = 280;
 	int PREF_tracking_angle_pref = 40;
-	boolean PREF_roadspeed_warning = false; // warning of going faster than speed allowed on this road
-	int PREF_roadspeed_warning_margin = 20;
+	boolean PREF_roadspeed_warning = true; // warning of going faster than speed allowed on this road
+	int PREF_roadspeed_warning_margin = 5;
 	boolean PREF_lane_assist = false; // shows lanes to drive on next
 	int PREF_routing_engine = 0; // 0 -> offline-ZANavi, 1 -> online-OSRM
 	int PREF_traffic_speed_factor = 83;

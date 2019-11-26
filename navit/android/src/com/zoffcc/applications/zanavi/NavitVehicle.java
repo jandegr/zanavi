@@ -141,7 +141,7 @@ public class NavitVehicle
 				// change bearing/direction to last good bearing -------------------
 				// change bearing/direction to last good bearing -------------------
 
-				if (Navit.p.PREF_enable_debug_write_gpx)
+				if (Navit.preferences.PREF_enable_debug_write_gpx)
 				{
 					pos_recording_add(1, location.getLatitude(), location.getLongitude(), location.getSpeed(), location.getBearing(), location.getTime());
 				}
@@ -306,11 +306,11 @@ public class NavitVehicle
 				// and we dont have a GPS lock
 				if ((last_p_fix + 8000 < last_f_fix) && (Navit.satsInFix < 3))
 				{
-					if (Navit.p.PREF_follow_gps)
+					if (Navit.preferences.PREF_follow_gps)
 					{
-						if (Navit.p.PREF_use_compass_heading_base)
+						if (Navit.preferences.PREF_use_compass_heading_base)
 						{
-							if ((Navit.p.PREF_use_compass_heading_always) || (location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
+							if ((Navit.preferences.PREF_use_compass_heading_always) || (location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
 							{
 								// use compass heading
 								location.setBearing(compass_heading);
@@ -372,11 +372,11 @@ public class NavitVehicle
 				Navit.mLastLocationMillis = SystemClock.elapsedRealtime();
 				Navit.mLastLocation = location;
 
-				if (Navit.p.PREF_follow_gps)
+				if (Navit.preferences.PREF_follow_gps)
 				{
-					if (Navit.p.PREF_use_compass_heading_base)
+					if (Navit.preferences.PREF_use_compass_heading_base)
 					{
-						if ((Navit.p.PREF_use_compass_heading_always) || (location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
+						if ((Navit.preferences.PREF_use_compass_heading_always) || (location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
 						{
 							// use compass heading
 							location.setBearing(compass_heading);
@@ -503,7 +503,7 @@ public class NavitVehicle
 			}
 			else
 			{
-				if (Navit.p.PREF_use_fast_provider)
+				if (Navit.preferences.PREF_use_fast_provider)
 				{
 					//*in onresume()*//locationManager.requestLocationUpdates(fastProvider, 30000L, 8.0f, fastLocationListener); // (long)time [milliseconds], (float)minDistance [meters]
 				}
@@ -559,7 +559,7 @@ public class NavitVehicle
 						{
 						}
 
-						if (Navit.p.PREF_show_sat_status)
+						if (Navit.preferences.PREF_show_sat_status)
 						{
 							// redraw NavitOSDJava
 							// System.out.println("onDraw:show_sat_status:1");
@@ -606,7 +606,7 @@ public class NavitVehicle
 							if ((sats1_old != Navit.sats) || (satsInFix1_old != Navit.satsInFix))
 							{
 								//System.out.println("sat status update -> changed");
-								if (Navit.p.PREF_show_sat_status)
+								if (Navit.preferences.PREF_show_sat_status)
 								{
 									// redraw NavitOSDJava
 									// System.out.println("onDraw:show_sat_status:2");
@@ -642,7 +642,7 @@ public class NavitVehicle
 					{
 					}
 
-					if (Navit.p.PREF_show_sat_status)
+					if (Navit.preferences.PREF_show_sat_status)
 					{
 						// redraw NavitOSDJava
 						// System.out.println("onDraw:show_sat_status:3");
@@ -671,7 +671,7 @@ public class NavitVehicle
 					{
 					}
 
-					if (Navit.p.PREF_show_sat_status)
+					if (Navit.preferences.PREF_show_sat_status)
 					{
 						// redraw NavitOSDJava
 						// System.out.println("onDraw:show_sat_status:4");
@@ -777,7 +777,7 @@ public class NavitVehicle
 			// If the 2 providers are the same, only activate one listener
 			if (fastProvider_s != null)
 			{
-				if (Navit.p.PREF_use_fast_provider)
+				if (Navit.preferences.PREF_use_fast_provider)
 				{
 					if (!Navit.DemoVehicle)
 					{
@@ -817,7 +817,7 @@ public class NavitVehicle
 				{
 					if ((l.getLatitude() != 0) && (l.getLongitude() != 0))
 					{
-						if (Navit.p.PREF_follow_gps)
+						if (Navit.preferences.PREF_follow_gps)
 						{
 							// Log.e("NavitVehicle", "getLastKnownLocation precise (2) l=" + l.toString());
 							last_location = l;
@@ -848,7 +848,7 @@ public class NavitVehicle
 			// If the 2 providers are the same, only activate one listener
 			if (fastProvider_s != null)
 			{
-				if (Navit.p.PREF_use_fast_provider)
+				if (Navit.preferences.PREF_use_fast_provider)
 				{
 					if (!Navit.DemoVehicle)
 					{
@@ -860,7 +860,7 @@ public class NavitVehicle
 							{
 								if ((l.getLatitude() != 0) && (l.getLongitude() != 0))
 								{
-									if (Navit.p.PREF_follow_gps)
+									if (Navit.preferences.PREF_follow_gps)
 									{
 										// Log.e("NavitVehicle", "getLastKnownLocation fast (3) l=" + l.toString());
 										last_location = l;
@@ -891,11 +891,11 @@ public class NavitVehicle
 			// If the 2 providers are the same, only activate one listener
 			if (fastProvider_s != null)
 			{
-				if (Navit.p.PREF_use_fast_provider)
+				if (Navit.preferences.PREF_use_fast_provider)
 				{
 					if (!Navit.DemoVehicle)
 					{
-						disregard_first_fast_location = 2;
+						disregard_first_fast_location = 0; //jdg was 2
 						locationManager_s.requestLocationUpdates(fastProvider_s, 30000L, 8.0f, fastLocationListener_s); // (long)time [milliseconds], (float)minDistance [meters]
 
 						fast_provider_status = 1;
@@ -930,7 +930,7 @@ public class NavitVehicle
 		try
 		{
 			// try to download aGPS data!!
-			if (Navit.p.PREF_use_agps)
+			if (Navit.preferences.PREF_use_agps)
 			{
 				Navit.downloadGPSXtra(Navit.getContext());
 			}
@@ -1186,9 +1186,9 @@ public class NavitVehicle
 		// use compass heading
 		try
 		{
-			if (Navit.p.PREF_use_compass_heading_base)
+			if (Navit.preferences.PREF_use_compass_heading_base)
 			{
-				if ((Navit.p.PREF_use_compass_heading_always) || (last_location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
+				if ((Navit.preferences.PREF_use_compass_heading_always) || (last_location.getSpeed() < GPS_SPEED_ABOVE_USE_FOR_HEADING))
 				{
 					if ((lastcompass_update_timestamp + 400) > System.currentTimeMillis())
 					{

@@ -143,7 +143,7 @@ public class ZANaviLinearLayout extends LinearLayout
 
 		try
 		{
-			if (Navit.p.PREF_show_sat_status)
+			if (Navit.preferences.PREF_show_sat_status)
 			{
 				if (Navit.sats > sat_status_max_sats)
 				{
@@ -245,7 +245,7 @@ public class ZANaviLinearLayout extends LinearLayout
 			//e.printStackTrace();
 		}
 
-		if (!Navit.p.PREF_follow_gps)
+		if (!Navit.preferences.PREF_follow_gps)
 		{
 			if (!NavitGraphics.MAP_DISPLAY_OFF)
 			{

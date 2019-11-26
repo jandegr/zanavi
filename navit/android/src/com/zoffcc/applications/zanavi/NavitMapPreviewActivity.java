@@ -80,7 +80,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Navit.applySharedTheme(this, Navit.p.PREF_current_theme);
+		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
 
 		this.selected_id = -1;
 
@@ -456,7 +456,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 			paint.setTextSize(size / 15);
 			paint.setColor(Color.parseColor("#0A0A0A"));
 			paint.setStyle(Paint.Style.FILL);
-			paint.setAntiAlias(Navit.p.PREF_use_anti_aliasing);
+			paint.setAntiAlias(Navit.preferences.PREF_use_anti_aliasing);
 			if (dx == 0x10000 && dy == 0)
 			{
 				view_canvas_upper.drawText(text, x, y, paint);
@@ -480,7 +480,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 			//System.out.println("draw target x=" + x + " y=" + y);
 			// Paint paint = new Paint();
 			paint.setStrokeWidth(0);
-			paint.setAntiAlias(Navit.p.PREF_use_anti_aliasing);
+			paint.setAntiAlias(Navit.preferences.PREF_use_anti_aliasing);
 			paint.setStyle(Paint.Style.FILL);
 			paint.setColor(Color.parseColor("#FF0303"));
 			view_canvas.drawCircle(x, y, 10, paint);
@@ -496,7 +496,7 @@ public class NavitMapPreviewActivity extends AppCompatActivity
 		{
 			// Paint paint = new Paint();
 			paint.setStyle(Paint.Style.STROKE);
-			paint.setAntiAlias(Navit.p.PREF_use_anti_aliasing);
+			paint.setAntiAlias(Navit.preferences.PREF_use_anti_aliasing);
 			paint.setStrokeWidth(mapconf[mp_overview].my_strokewidth[type]);
 			paint.setColor(Color.parseColor(mapconf[mp_overview].my_color[type]));
 			Path path = new Path();

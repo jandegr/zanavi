@@ -30,15 +30,15 @@ public class ColorUtils
 	{
 		int c0;
 		int c1;
-		// if (p <= 0.5f)
+		// if (preferences <= 0.5f)
 		{
-			// p *= 2;
+			// preferences *= 2;
 			c0 = col_1;
 			c1 = col_2;
 		}
 		//		else
 		//		{
-		//			p = (p - 0.5f) * 2;
+		//			preferences = (preferences - 0.5f) * 2;
 		//			c0 = col_right;
 		//			c1 = col_left;
 		//		}

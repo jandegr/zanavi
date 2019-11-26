@@ -31,12 +31,8 @@ import android.view.View;
 
 public class ZANaviOSDSpeeding extends View
 {
-	int w = 10;
-	int h = 10;
 	private RectF bounds_speedwarning = new RectF(120, 800, 120 + 200, 800 + 200);
 	private final Paint paint_speedwarning = new Paint(0);
-	float textHeight = 10;
-	float textOffset = 10;
 
 	public ZANaviOSDSpeeding(Context context)
 	{
@@ -52,8 +48,6 @@ public class ZANaviOSDSpeeding extends View
 	public void onSizeChanged(int w1, int h1, int oldw, int oldh)
 	{
 		super.onSizeChanged(w1, h1, oldw, oldh);
-		this.w = w1;
-		this.h = h1;
 		bounds_speedwarning = new RectF(NavitGraphics.dp_to_px(5), NavitGraphics.dp_to_px(5), w1 - NavitGraphics.dp_to_px(5), h1 - NavitGraphics.dp_to_px(5));
 	}
 
@@ -61,7 +55,7 @@ public class ZANaviOSDSpeeding extends View
 	{
 		super.onDraw(c);
 
-		if (Navit.p.PREF_roadspeed_warning)
+		if (Navit.preferences.PREF_roadspeed_warning)
 		// DEBUG // if (1 == 2 - 1)
 		{
 			// DEBUG // Navit.cur_max_speed = 50;
@@ -80,7 +74,7 @@ public class ZANaviOSDSpeeding extends View
 				paint_speedwarning.setColor(Color.BLACK);
 				paint_speedwarning.setStyle(Style.FILL_AND_STROKE);
 				paint_speedwarning.setStrokeWidth(2);
-				if (Navit.p.PREF_use_imperial)
+				if (Navit.preferences.PREF_use_imperial)
 				{
 					Navit.cur_max_speed_corr = (int) ((((float) Navit.cur_max_speed) / 1.6f) + 0.5f);
 				}
@@ -98,8 +92,8 @@ public class ZANaviOSDSpeeding extends View
 					paint_speedwarning.setTextSize(NavitGraphics.dp_to_px(23));
 				}
 				paint_speedwarning.setTextAlign(Align.CENTER);
-				textHeight = paint_speedwarning.descent() - paint_speedwarning.ascent();
-				textOffset = (textHeight / 2) - paint_speedwarning.descent();
+				float textHeight = paint_speedwarning.descent() - paint_speedwarning.ascent();
+				float textOffset = (textHeight / 2) - paint_speedwarning.descent();
 				c.drawText("" + Navit.cur_max_speed_corr, bounds_speedwarning.centerX(), bounds_speedwarning.centerY() + textOffset, paint_speedwarning);
 			}
 		}
@@ -107,7 +101,6 @@ public class ZANaviOSDSpeeding extends View
 		{
 			c.drawColor(Color.TRANSPARENT);
 		}
-		
 		// System.out.println("onDraw:OSDSpeeding");
 	}
 }

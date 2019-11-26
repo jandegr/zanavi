@@ -7818,11 +7818,11 @@ navigation_map_get_item(struct map_rect_priv *priv)
 	int fake_dir1;
 	int fake_dir2;
 
-	dbg(0, "NAVR:ROUTE:Enter:\n");
+	//dbg(0, "NAVR:ROUTE:Enter:\n");
 
 	if (!priv->itm_next)
 	{
-		dbg(0, "NAVR:ROUTE:006:0000\n");
+		//dbg(0, "NAVR:ROUTE:006:0000\n");
 		return NULL;
 	}
 
@@ -7835,7 +7835,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 		{
 			int count_back = (save_last_dest_count - priv->itm->dest_count - 1);
 			int count_forw = count_back;
-			dbg(0, "NAVR:ROUTE:006:cback:%d = (%d - %d - 1)\n", count_back, save_last_dest_count, priv->itm->dest_count);
+			//dbg(0, "NAVR:ROUTE:006:cback:%d = (%d - %d - 1)\n", count_back, save_last_dest_count, priv->itm->dest_count);
 
 			struct navigation_itm *i = priv->itm;
 
@@ -7846,7 +7846,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 				if (i->prev)
 				{
 					i = i->prev;
-					dbg(0, "NAVR:ROUTE:006:cback:stepping back to item #%d dir=%d\n", i->dest_count, i->way.dir);
+					//dbg(0, "NAVR:ROUTE:006:cback:stepping back to item #%d dir=%d\n", i->dest_count, i->way.dir);
 				}
 			}
 
@@ -7855,7 +7855,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 			{
 				if (i)
 				{
-					dbg(0, "NAVR:ROUTE:006:cback:stepping forw to item #%d dir=%d\n", i->dest_count, i->way.dir);
+					//dbg(0, "NAVR:ROUTE:006:cback:stepping forw to item #%d dir=%d\n", i->dest_count, i->way.dir);
 
 					if ((i->way.dir == 99) || (i->way.dir == -99))
 					{
@@ -7863,7 +7863,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 						priv->itm = i;
 						stepped_to_waypoint = 1;
 
-						dbg(0, "NAVR:ROUTE:006:cback:stepping found waypoint item #%d dir=%d itm=%p\n", priv->itm->dest_count, priv->itm->way.dir, priv->itm);
+						//dbg(0, "NAVR:ROUTE:006:cback:stepping found waypoint item #%d dir=%d itm=%p\n", priv->itm->dest_count, priv->itm->way.dir, priv->itm);
 
 						break;
 					}
@@ -7883,13 +7883,13 @@ navigation_map_get_item(struct map_rect_priv *priv)
 
 	if (priv->itm)
 	{
-		dbg(0, "NAVR:ROUTE:006:8888:1: %p dir=%d DST_COUNT(1)=%d\n", priv->itm, priv->itm->way.dir, priv->itm->dest_count);
+		//dbg(0, "NAVR:ROUTE:006:8888:1: %p dir=%d DST_COUNT(1)=%d\n", priv->itm, priv->itm->way.dir, priv->itm->dest_count);
 		fake_dir1 = priv->itm->way.dir;
 		save_last_dest_count = priv->itm->dest_count;
 	}
 	else
 	{
-		dbg(0, "NAVR:ROUTE:006:8888:1: NULL\n");
+		//dbg(0, "NAVR:ROUTE:006:8888:1: NULL\n");
 		fake_dir1 = 0;
 		save_last_dest_count = -1;
 	}
@@ -7901,7 +7901,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 
 
 	fake_dir2 = priv->itm->way.dir;
-	dbg(0, "NAVR:ROUTE:006:8888:2: %p dir=%d DST_COUNT(2)=%d\n", priv->itm, priv->itm->way.dir, priv->itm->dest_count);
+	//dbg(0, "NAVR:ROUTE:006:8888:2: %p dir=%d DST_COUNT(2)=%d\n", priv->itm, priv->itm->way.dir, priv->itm->dest_count);
 	priv->cmd = priv->cmd_next;
 	priv->cmd_itm = priv->cmd_itm_next;
 
@@ -7914,7 +7914,7 @@ navigation_map_get_item(struct map_rect_priv *priv)
 
 		priv->itm_next = priv->itm->next;
 
-		dbg(0, "NAVR:ROUTE:006:fake:%s dir=%d ,,,,,\n", item_to_name(ret->type), priv->itm->way.dir);
+		//dbg(0, "NAVR:ROUTE:006:fake:%s dir=%d ,,,,,\n", item_to_name(ret->type), priv->itm->way.dir);
 
 		return ret;
 	}
@@ -7925,14 +7925,14 @@ navigation_map_get_item(struct map_rect_priv *priv)
 
 	if (!priv->cmd)
 	{
-		dbg(0, "NAVR:ROUTE:006:1111\n");
+		//dbg(0, "NAVR:ROUTE:006:1111\n");
 		return NULL;
 	}
 
 
 	if (!priv->show_all && priv->itm->prev != NULL)
 	{
-		dbg(0, "NAVR:ROUTE:006:112a\n");
+		//dbg(0, "NAVR:ROUTE:006:112a\n");
 		priv->itm = priv->cmd->itm;
 	}
 
@@ -7947,12 +7947,12 @@ navigation_map_get_item(struct map_rect_priv *priv)
 		ret->type = type_nav_position;
 	}
 
-	dbg(0, "NAVR:ROUTE:006:2222 %p dir=%d\n", priv->itm, priv->itm->way.dir);
+	//dbg(0, "NAVR:ROUTE:006:2222 %p dir=%d\n", priv->itm, priv->itm->way.dir);
 
 	if (priv->cmd->itm == priv->itm)
 	{
 
-		dbg(0, "NAVR:ROUTE:006:3333 %p dir=%d %p\n", priv->itm, priv->itm->way.dir, route_get_map(global_navit->route));
+		//dbg(0, "NAVR:ROUTE:006:3333 %p dir=%d %p\n", priv->itm, priv->itm->way.dir, route_get_map(global_navit->route));
 		// item_dump_coords(priv->itm, route_get_map(global_navit->route));
 
 		priv->cmd_itm_next = priv->cmd->itm;

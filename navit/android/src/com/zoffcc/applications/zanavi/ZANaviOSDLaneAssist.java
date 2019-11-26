@@ -140,7 +140,7 @@ public class ZANaviOSDLaneAssist extends View
 	{
 		super.onDraw(c);
 
-		if (Navit.p.PREF_lane_assist)
+		if (Navit.preferences.PREF_lane_assist)
 		{
 			if ((Navit.lanes_text == null) || (Navit.lanes_text.equals("")))
 			{

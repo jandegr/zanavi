@@ -22,17 +22,15 @@
     </string-array>
     <string-array name="roadspeed_warning_marginValues">
         <item>0</item>
+        <item>5</item>
         <item>10</item>
         <item>20</item>
-        <item>25</item>
-        <item>30</item>
     </string-array>
     <string-array name="roadspeed_warning_marginArray">
         <item>exact</item>
+        <item>+5% or +5km/h if speed &lt; 100 km/h</item>
         <item>+10%</item>
-        <item>+20% *default*</item>
-        <item>+25%</item>
-        <item>+30%</item>
+        <item>+20%</item>
     </string-array>
     <string-array name="routing_profileValues">
         <item>car</item>

@@ -820,7 +820,7 @@ public class NavitAndroidOverlay extends View
 			// ------- DEBUG --------------
 		}
 
-		if (Navit.p.PREF_item_dump)
+		if (Navit.preferences.PREF_item_dump)
 		{
 			if (!Navit.debug_item_dump.equals(""))
 			{

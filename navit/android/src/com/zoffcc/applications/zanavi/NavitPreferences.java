@@ -300,7 +300,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Navit.applySharedTheme(this, Navit.p.PREF_current_theme);
+		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
 
 		super.onCreate(savedInstanceState);
 
@@ -361,7 +361,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("road_priority_001", (68 - 10)) + 10;
 			road_prof_001.setSummary(road_prof_001.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(road_prof_001);
@@ -382,7 +382,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("road_priority_002", (329 - 10)) + 10;
 			road_prof_002.setSummary(road_prof_002.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(road_prof_002);
@@ -403,7 +403,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("road_priority_003", (5000 - 10)) + 10;
 			road_prof_003.setSummary(road_prof_003.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(road_prof_003);
@@ -424,7 +424,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("road_priority_004", (5 - 0)) + 0;
 			road_prof_004.setSummary(road_prof_004.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(road_prof_004);
@@ -445,7 +445,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("tracking_connected_pref", (250 - 0)) + 0;
 			a.setSummary(a.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(a);
@@ -466,7 +466,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 			int read_value = PreferenceManager.getDefaultSharedPreferences(this).getInt("tracking_angle_pref", (40 - 0)) + 0;
 			a.setSummary(a.getSummary() + " [" + read_value + "]");
 
-			if (!Navit.p.PREF_enable_debug_functions)
+			if (!Navit.preferences.PREF_enable_debug_functions)
 			{
 				PreferenceCategory cat = (PreferenceCategory) findPreference("category_tracking");
 				cat.removePreference(a);
@@ -623,8 +623,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 		final String[] PrefTransTexts = new String[] { "use_fast_provider", "use_agps", "follow_gps", "use_lock_on_roads", "show_vehicle_in_center", "show_sat_status", "use_compass_heading_base", "use_compass_heading_always", "use_compass_heading_fast", "use_imperial", "use_route_highways", "use_index_search", "trafficlights_delay", "speak_street_names", "speak_filter_special_chars", "route_style", "show_3d_map", "show_2d3d_toggle", "save_zoomlevel", "autozoom_flag", "use_anti_aliasing",
 				"use_map_filtering", "use_custom_font", "use_smooth_drawing", "use_more_smooth_drawing", "show_multipolygons", "show_vehicle_3d", "map_font_size", "drawatorder", "more_map_detail", "mapcache", "streetsearch_r", "gui_oneway_arrows", "show_debug_messages", "enable_debug_functions", "navit_lang", "map_directory", "shrink_on_high_dpi", "streets_only" };
 
-		int i = 0;
-		for (i = 0; i < PrefTransTexts.length; i++)
+		for (int i = 0; i < PrefTransTexts.length; i++)
 		{
 			try
 			{
@@ -823,7 +822,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 
 	}
 
-	void disable_pref(String pref_name, boolean large_donate_only, boolean debug_function)
+	private void disable_pref(String pref_name, boolean large_donate_only, boolean debug_function)
 	{
 		try
 		{
@@ -837,7 +836,7 @@ public class NavitPreferences extends PreferenceActivity implements OnSharedPref
 				a.setEnabled(false);
 			}
 
-			if ((debug_function) && (!Navit.p.PREF_enable_debug_functions))
+			if ((debug_function) && (!Navit.preferences.PREF_enable_debug_functions))
 			{
 				a.setEnabled(false);
 			}

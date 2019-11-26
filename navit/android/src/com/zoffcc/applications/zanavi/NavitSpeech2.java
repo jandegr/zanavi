@@ -316,7 +316,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 	void say(String what, int lat, int lon)
 	{
 
-		if (Navit.p.PREF_enable_debug_write_gpx)
+		if (Navit.preferences.PREF_enable_debug_write_gpx)
 		{
 			// ------- SPEECH DEBUG -------------------------------
 			// ------- SPEECH DEBUG -------------------------------
@@ -366,7 +366,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 				{
 				}
 
-				if (Navit.p.PREF_speak_filter_special_chars)
+				if (Navit.preferences.PREF_speak_filter_special_chars)
 				{
 					what = filter_out_special_chars(what);
 				}
@@ -396,7 +396,7 @@ public class NavitSpeech2 implements TextToSpeech.OnInitListener, NavitActivityR
 					Navit.getInstance().set_debug_messages_say_wrapper("SAY:" + what + "\n");
 				}
 
-				if (Navit.p.PREF_show_debug_messages)
+				if (Navit.preferences.PREF_show_debug_messages)
 				{
 					Navit.set_debug_messages3_wrapper(what);
 				}

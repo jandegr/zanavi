@@ -360,7 +360,7 @@ vehicle_demo_new(struct vehicle_methods *meth, struct callback_list *cbl, struct
 	ret = g_new0(struct vehicle_priv, 1);
 	ret->cbl = cbl;
 	ret->interval = 990;
-	ret->config_speed = 41;
+	ret->config_speed = 65;
 	ret->speed_diff = 0;
 	ret->speed_dir = 1;
 	ret->direction_dir = 1;

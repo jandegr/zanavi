@@ -157,7 +157,7 @@ public class ZANaviOSDStreetname extends View
 			else
 			{
 
-				if ((Navit.OSD_nextturn.nextturn_streetname != null) || (Navit.p.PREF_follow_gps))
+				if ((Navit.OSD_nextturn.nextturn_streetname != null) || (Navit.preferences.PREF_follow_gps))
 				{
 					String my_text = Navit.OSD_nextturn.nextturn_streetname;
 					String my_text_systematic = Navit.OSD_nextturn.nextturn_streetname_systematic;

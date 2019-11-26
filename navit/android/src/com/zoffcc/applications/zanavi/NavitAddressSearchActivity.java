@@ -135,7 +135,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 				convertView = inflater.inflate(R.layout.search_result_item_street, null);
 
 				ImageView icon_view = (ImageView) convertView.findViewById(R.id.icon);
-				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
+				if (Navit.preferences.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
 				{
 					// leave it as it is
 				}
@@ -159,7 +159,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 				convertView = inflater.inflate(R.layout.search_result_item_poi, null);
 
 				ImageView icon_view = (ImageView) convertView.findViewById(R.id.icon);
-				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
+				if (Navit.preferences.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
 				{
 					// leave it as it is
 				}
@@ -182,7 +182,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 				convertView = inflater.inflate(R.layout.search_result_item_town, null);
 
 				ImageView icon_view = (ImageView) convertView.findViewById(R.id.icon);
-				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
+				if (Navit.preferences.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
 				{
 					// leave it as it is
 				}
@@ -600,7 +600,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Navit.applySharedTheme(this, Navit.p.PREF_current_theme);
+		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
 
 		super.onCreate(savedInstanceState);
 
@@ -890,7 +890,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 
 			// address: text field -> with autocomplete dropdown
 			address_string = (ZANaviAutoCompleteTextViewSearchLocation) findViewById(R.id.et_address_string);
-			ArrayAdapter addr_view_autocomplete_adapter = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, Navit.p.PREF_StreetSearchStrings);
+			ArrayAdapter addr_view_autocomplete_adapter = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, Navit.preferences.PREF_StreetSearchStrings);
 			address_string.setCompletionHint(Navit.get_text("last searches")); // TRANS
 			if (this.search_type.equals("offline"))
 			{

@@ -99,7 +99,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 			{
 				System.out.println("ZANaviDebugReceiver:" + "ENABLE normal location");
 
-				if (Navit.p.PREF_use_fast_provider)
+				if (Navit.preferences.PREF_use_fast_provider)
 				{
 					NavitVehicle.turn_on_fast_provider();
 				}
@@ -2203,7 +2203,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		if (Navit.p.PREF_enable_debug_enable_comm)
+		if (Navit.preferences.PREF_enable_debug_enable_comm)
 		{
 			System.out.println("ZANaviDebugReceiver:" + "enter");
 			try

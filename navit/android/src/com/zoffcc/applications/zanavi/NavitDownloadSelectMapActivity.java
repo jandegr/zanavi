@@ -126,7 +126,7 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Navit.applySharedTheme(this, Navit.p.PREF_current_theme);
+		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
 
 		super.onCreate(savedInstanceState);
 		//Log.e("Navit", "all ok");
@@ -147,7 +147,7 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 		{
 			if (Build.VERSION.SDK_INT >= 16)
 			{
-				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_DARK)
+				if (Navit.preferences.PREF_current_theme == Navit.DEFAULT_THEME_OLD_DARK)
 				{
 					this.getListView().setBackgroundColor(Color.BLACK);
 				}
@@ -174,7 +174,7 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 		// String keyword = o.toString();
 		this.selected_id = position;
 		//Toast.makeText(this, "You selected: " + position + " " + keyword, Toast.LENGTH_LONG).show();
-		Log.e("Navit", "p:" + position);
+		Log.e("Navit", "preferences:" + position);
 		Log.e("Navit", "i:" + id);
 
 		// close this activity

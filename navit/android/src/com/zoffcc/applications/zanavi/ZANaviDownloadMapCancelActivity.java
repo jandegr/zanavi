@@ -51,7 +51,7 @@ public class ZANaviDownloadMapCancelActivity extends AppCompatActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Navit.applySharedTheme(this, Navit.p.PREF_current_theme);
+		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
 
 		super.onCreate(savedInstanceState);
 

@@ -85,7 +85,7 @@ class NavitArrayAdapter extends BaseAdapter
 			ImageView imv = itemView.findViewById(R.id.icon_recent_dest);
 			if (a.get(position).equals("1"))
 			{
-				if (Navit.p.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
+				if (Navit.preferences.PREF_current_theme == Navit.DEFAULT_THEME_OLD_LIGHT)
 				{
 					imv.setImageResource(R.drawable.homeicon);
 				}

@@ -133,6 +133,8 @@ struct route_segment_data
 	struct item item; /**< The item (e.g. street) that this segment represents. */
 	int flags;
 	int len; /**< Length of this segment */
+	int angle_start;
+	int angle_end;
 /*NOTE: After a segment, various fields may follow, depending on what flags are set. Order of fields:
  1.) maxspeed			Maximum allowed speed on this segment. Present if NAVIT_AF_SPEED_LIMIT is set.
  2.) offset				If the item is segmented (i.e. represented by more than one segment), this
@@ -191,6 +193,8 @@ struct route_graph_segment_data
 	int maxspeed;
 	struct size_weight_limit size_weight;
 	int dangerous_goods;
+	int angle_start;
+	int angle_end;
 };
 
 /**
@@ -208,13 +212,6 @@ struct route_graph_segment
 	struct route_graph_point *start; /**< Pointer to the point this segment starts at. */
 	struct route_graph_point *end; /**< Pointer to the point this segment ends at. */
 
-
-	// -- NEW --
-	struct coord c_start_plus_1;	// second coord
-	struct coord c_end_minus_1;		// second to last coord
-	// -- NEW --
-
-
 	// -- NEW -- jandegr --
 	int seg_start_out_cost;
 	int seg_end_out_cost;
@@ -223,7 +220,6 @@ struct route_graph_segment
 	struct fibheap_el *el_start;
 	struct fibheap_el *el_end;
 	// -- NEW -- jandegr --
-
 
 	struct route_segment_data data; /**< The segment data */
 };
@@ -283,7 +279,6 @@ void route_set_destination_no_calc(struct route *this, struct pcoord *dst, int a
 void route_add_destination_no_calc(struct route *this, struct pcoord *dst, int async);
 void route_find_next_lowest_segment_and_pin_it(struct route_graph_point *p, struct route_graph_segment *s, int min_value, int penalty);
 int route_get_real_oneway_flag(int road_flag, int oneway_flag_value);
-int route_road_to_road_angle_get_segs(struct route_graph_segment *s1, struct route_graph_segment *s2, int dir1, int *dir2, struct coord *cc, struct coord *cs, struct coord *ce, int abs);
 int is_turn_allowed(struct route_graph_point *p, struct route_graph_segment *from, struct route_graph_segment *to);
 char *route_status_to_name(enum route_status s);
 
