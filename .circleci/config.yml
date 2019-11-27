@@ -29,10 +29,11 @@ jobs:
             cd bin
             ../configure --disable-samplemap --disable-graphics-opengl --disable-svg --disable-svg2png --disable-binding-python --disable-fastmath --disable-gui-gtk --disable-gui-win32 --disable-gui-qml
             make
+            cd navit
             make version.h
       - run:
-          name: Get OSM data for France
-          command: wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/france-latest.osm.bz2
+          name: Get OSM data
+          command: wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
