@@ -27,6 +27,8 @@ jobs:
             mkdir bin
             cd bin
             ../configure --disable-samplemap --disable-graphics-opengl --disable-svg --disable-svg2png --disable-binding-python --disable-fastmath --disable-gui-gtk --disable-gui-win32 --disable-gui-qml
+            make
+            make version.h
       - run:
           name: Get OSM data for France
           command: wget -c -O france-latest.osm.pbf http://download.geofabrik.de/europe/france-latest.osm.pbf
