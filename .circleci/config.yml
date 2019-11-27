@@ -48,7 +48,7 @@ jobs:
           command: |
             cd bin/navit/maptool
             ls -la
-            bzcat map1.osm.bz2 | ./maptool -o runtimes.sqlite -6 -k -n -U testmap.bin
+            bzcat map1.osm.bz2 | ./maptool -o runtimes.sqlite -6 -j 2 -k -n -U map.bin
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
