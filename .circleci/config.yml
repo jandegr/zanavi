@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAPTOOL_CMD: "bin/navit/maptool/maptool -P  -6 -k"
+      MAP: "luxembourg"
     steps:
       - checkout
       - run:
@@ -40,7 +40,7 @@ jobs:
           name: Get OSM data
           command: |
             cd bin/navit/maptool
-            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/france-latest.osm.bz2
+            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/$MAP-latest.osm.bz2
             ls -la
           no_output_timeout: 120m
       - run:
@@ -69,8 +69,8 @@ jobs:
           command: |
             mkdir out
             ls -la
-            split -b 2G bin/navit/maptool/map.bin out/MAP
-            cp bin/navit/maptool/map.bin.idx out/map.bin.idx
+            split -b 2G bin/navit/maptool/map.bin out/$MAP
+            cp bin/navit/maptool/map.bin.idx out/$MAP.bin.idx
             ls -la
             ls -la out
             
