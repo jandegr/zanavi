@@ -67,18 +67,17 @@ jobs:
       - run:
           name: split binfile
           command: |
-            cd bin/navit/maptool
+            mkdir out
             ls -la
-            mkdir root/project/out
-            split -b 2G map.bin root/project/out/MAP
-            cp ../map.bin.idx root/project/out/map.bin.idx
+            cd 
+            split -b 2G bin/navit/maptool/map.bin out/MAP
+            cp bin/navit/maptool/map.bin.idx out/map.bin.idx
             ls -la
-            cd ..
-            ls -la
+            ls -la out
             
 # join them with cmd /c copy /b BFRLaa+BFRLab BFRLtoday.bin
       - store_artifacts:
-          path: root/project/out
+          path: out
 workflows:
   version: 2
   build_all:
