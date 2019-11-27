@@ -35,9 +35,14 @@ jobs:
             make
             ldd maptool
             ls -la
+      
       - run:
           name: Get OSM data
-          command: wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
+          command: wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
+          no_output_timeout: 120m
+      - run:
+          name: Convert map
+          command: bzcat ~/map1.osm.bz2 | "$_MT_BUILDDIR"/navit/maptool/maptool -o runtimes.sqlite -6 -k -n -U testmap.bin
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
@@ -54,59 +59,16 @@ jobs:
 #          name: Combine PBF's
 #          command: osmium merge -v belgium-latest.osm.pbf luxembourg-latest.osm.pbf france-latest.osm.pbf -o europe-latest.osm.pbf
       - run:
-          name: Maptool Phase 1 reading input data
-          command: $MAPTOOL_CMD -s1 -e1 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 2 counting references and resolving ways
-          command: $MAPTOOL_CMD -s2 -e2 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 3 converting ways to pois
-          command: $MAPTOOL_CMD -s3 -e3 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 4 splitting at intersections
-          command: $MAPTOOL_CMD -s4 -e4 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 5 generating coastlines
-          command: $MAPTOOL_CMD -s5 -e5 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 6 assigning towns to countries
-          command: $MAPTOOL_CMD -s6 -e6 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 7 sorting countries
-          command: $MAPTOOL_CMD -s7 -e7 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 8 generating turn restrictions
-          command: $MAPTOOL_CMD -s8 -e8 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 9 processing associated street relations
-          command: $MAPTOOL_CMD -s9 -e9 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 10 processing house number interpolations
-          command: $MAPTOOL_CMD -s10 -e10 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
-          name: Maptool Phase 11 generating tiles      Phase 12 assembling map
-          command: $MAPTOOL_CMD -s11 -i europe-latest.osm.pbf BFRL.bin
-          no_output_timeout: 120m
-      - run:
           name: split binfile
           command: |
+            ls -la
             mkdir out
             cd out
-            split -b 2G ../BFRL.bin BFRL
+            split -b 2G ../map.bin MAP
             ls -la
             cd ..
             ls -la
-            cp tilesdir_.* out
+            
 # join them with cmd /c copy /b BFRLaa+BFRLab BFRLtoday.bin
       - store_artifacts:
           path: out
