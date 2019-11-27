@@ -67,6 +67,7 @@ jobs:
       - run:
           name: split binfile
           command: |
+            cd bin/navit/maptool
             ls -la
             mkdir out
             cd out
