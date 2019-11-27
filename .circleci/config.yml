@@ -38,11 +38,15 @@ jobs:
       
       - run:
           name: Get OSM data
-          command: wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
+          command: |
+            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
+            ls -la
           no_output_timeout: 120m
       - run:
           name: Convert map
-          command: bzcat ~/map1.osm.bz2 | ./maptool -o runtimes.sqlite -6 -k -n -U testmap.bin
+          command: |
+            ls -la
+            bzcat map1.osm.bz2 | ./maptool -o runtimes.sqlite -6 -k -n -U testmap.bin
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
