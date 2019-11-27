@@ -28,9 +28,13 @@ jobs:
             mkdir bin
             cd bin
             ../configure --disable-samplemap --disable-graphics-opengl --disable-svg --disable-svg2png --disable-binding-python --disable-fastmath --disable-gui-gtk --disable-gui-win32 --disable-gui-qml
-            make
             cd navit
+            make
             make version.h
+            cd maptool
+            make
+            ldd maptool
+            ls -la
       - run:
           name: Get OSM data
           command: wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
