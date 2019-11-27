@@ -17,11 +17,12 @@ jobs:
           command: |
             apt-get update
             apt-get install -y libpng-dev libfreetype6-dev libdbus-glib-1-dev libgtk2.0-dev curl
-            apt-get install -y libtool-bin libssl-dev autoconf
+            apt-get install -y libtool-bin libssl-dev autoconf wget
       - run:
           name: Build for Linux
           command: |
             export CFLAGS=" -finline-limit=1 -fkeep-inline-functions -O0 -DNO_GTYPES_ -DPLUGSSS -g -DONLY_C_BORDER -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -ldl -lpthread "
+            export CFLAGS=" -DNAVIT_TRANS_LAT_LON_GEO_NOFUNCS -DMAPTOOL ""$CFLAGS" ;
             ./autogen.sh
             ls -la ../
             mkdir bin
@@ -31,7 +32,7 @@ jobs:
             make version.h
       - run:
           name: Get OSM data for France
-          command: wget -c -O france-latest.osm.pbf http://download.geofabrik.de/europe/france-latest.osm.pbf
+          command: wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/france-latest.osm.bz2
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
