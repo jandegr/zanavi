@@ -69,7 +69,6 @@ jobs:
           command: |
             mkdir out
             ls -la
-            cd 
             split -b 2G bin/navit/maptool/map.bin out/MAP
             cp bin/navit/maptool/map.bin.idx out/map.bin.idx
             ls -la
