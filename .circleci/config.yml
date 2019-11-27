@@ -40,7 +40,7 @@ jobs:
           name: Get OSM data
           command: |
             cd bin/navit/maptool
-            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/luxembourg-latest.osm.bz2
+            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/france-latest.osm.bz2
             ls -la
           no_output_timeout: 120m
       - run:
