@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "france"
+      MAP: "netherlands"
     steps:
       - checkout
       - run:
@@ -49,7 +49,7 @@ jobs:
           command: |
             cd bin/navit/maptool
             ls -la
-            bzcat map1.osm.bz2 | ./maptool -q -o runtimes.sqlite -6 -j 2 -k -n -U -S 500000000 map.bin
+            bzcat map1.osm.bz2 | ./maptool -q -o runtimes.sqlite -6 -k -n -U -S 500000000 map.bin
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
