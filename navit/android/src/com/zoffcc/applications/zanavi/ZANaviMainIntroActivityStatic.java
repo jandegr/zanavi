@@ -407,7 +407,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 						Bundle b = new Bundle();
 						b.putInt("Callback", 19);
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 
 						try {
 							Thread.sleep(100);
@@ -460,7 +460,7 @@ public class ZANaviMainIntroActivityStatic extends AppCompatActivity implements 
 						b = new Bundle();
 						b.putInt("Callback", 20);
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 
 						System.out.println("Global_Location_update_not_allowed = 0");
 						Navit.Global_Location_update_not_allowed = 0; // DO allow location updates now!

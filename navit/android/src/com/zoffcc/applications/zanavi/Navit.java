@@ -371,6 +371,11 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		return sNavitObject.getBaseContext();
 	}
 
+	private static void CallbackMessageChannel(int i, String s)
+	{
+		cwthr.CallbackMessageChannel(i, s);
+	}
+
 	String getMapMD5path() {
 		return sNavitMapDirectory + "/../MD5/";
 	}
@@ -487,7 +492,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	// public static Vibrator vibrator = null;
 
-	public Handler handler;
+	Handler handler;
 	static PowerManager.WakeLock wl;
 	static PowerManager.WakeLock wl_cpu;
 	static PowerManager.WakeLock wl_navigating;
@@ -1055,7 +1060,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Bundle b2 = new Bundle();
 		b2.putInt("Callback", i);
 		msg2.setData(b2);
-		NavitGraphics.callback_handler.sendMessage(msg2);
+		callback_handler_55.sendMessage(msg2);
 	}
 
 	@Override
@@ -3648,7 +3653,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						b.putString("lon", lon);
 						b.putString("q", q);
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						callback_handler_55.sendMessage(msg);
 
 						Log.e(TAG, "destination zou gezet zijn ?? ");
 
@@ -5348,7 +5353,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 						// b.putString("s", "20");
 
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						callback_handler_55.sendMessage(msg);
 					}
 					catch (Exception e)
 					{
@@ -5372,7 +5377,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("y", (int) (NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2));
 			}
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 
 			break;
 		case 602:
@@ -5414,7 +5419,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b.putInt("Callback", 52);
 			b.putString("s", "800"); // speed in ~km/h of Demo-Vehicle
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 
 			msg = new Message();
 			b = new Bundle();
@@ -5430,7 +5435,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("y", (int) (NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2));
 			}
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 
 			try
 			{
@@ -5476,7 +5481,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			Navit.Routgraph_enabled = 1 - Navit.Routgraph_enabled;
 			b.putString("s", "" + Navit.Routgraph_enabled);
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 			break;
 		case 606:
 			// DEBUG: spill contents of index file(s)
@@ -6488,7 +6493,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
 		}
 
-		public void CallbackMessageChannel(int i, String s)
+		void CallbackMessageChannel(int i, String s)
 		{
 			// if (Navit.METHOD_DEBUG) Navit.my_func_name(0, "id=" + i);
 			CMC_object cmco = new CMC_object();
@@ -6627,18 +6632,16 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				ZANaviLinearLayout.redraw_OSD(8);
 			}
 
-			if (queue6.size() > 5)
+
+			while (queue6.size() > 2)
 			{
-				while (queue6.size() > 5)
+				try
 				{
-					try
-					{
-						// if too many gps updates are waiting, then only process the last few entry!!
-						queue6.poll();
-					}
-					catch (Exception e)
-					{
-					}
+					// if too many gps updates are waiting, then only process the last few entry!!
+					queue6.poll();
+				}
+				catch (Exception e)
+				{
 				}
 			}
 
@@ -6805,7 +6808,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							b2.putInt("Callback", 78);
 							b2.putString("s", "" + preferences.PREF_more_map_detail);
 							msg2.setData(b2);
-							NavitGraphics.callback_handler.sendMessage(msg2);
+							callback_handler_55.sendMessage(msg2);
 						}
 					}
 					catch (Exception e)
@@ -6828,7 +6831,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							b2.putInt("Callback", 81);
 							b2.putString("s", "" + factor);
 							msg2.setData(b2);
-							NavitGraphics.callback_handler.sendMessage(msg2);
+							callback_handler_55.sendMessage(msg2);
 						}
 					}
 					catch (Exception e)
@@ -7719,7 +7722,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		this.startActivityForResult(address_result_list_activity, Navit.NavitAddressResultList_id);
 	}
 
-	static Handler callback_handler_55 = new Handler()
+	static final Handler callback_handler_55 = new Handler()
 	{
 		public void handleMessage(Message msg)
 		{
@@ -7729,17 +7732,17 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			if (msg.getData().getInt("Callback") == 1)
 			{
 				// zoom in
-				NavitGraphics.CallbackMessageChannel(1, "");
+				CallbackMessageChannel(1, "");
 			}
 			else if (msg.getData().getInt("Callback") == 2)
 			{
 				// zoom out
-				NavitGraphics.CallbackMessageChannel(2, "");
+				CallbackMessageChannel(2, "");
 			}
 			else if (msg.getData().getInt("Callback") == 55599)
 			{
 				// calc route after adding points
-				NavitGraphics.CallbackMessageChannel(55599, "");
+				CallbackMessageChannel(55599, "");
 			}
 			else if (msg.getData().getInt("Callback") == 55503)
 			{
@@ -7757,7 +7760,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				String lon = msg.getData().getString("lon");
 				String q = msg.getData().getString("q");
 				// set routing target to lat,lon
-				NavitGraphics.CallbackMessageChannel(55503, lat + "#" + lon + "#" + q);
+				CallbackMessageChannel(55503, lat + "#" + lon + "#" + q);
 			}
 			else if (msg.getData().getInt("Callback") == 3)
 			{
@@ -7775,7 +7778,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				String lon = msg.getData().getString("lon");
 				String q = msg.getData().getString("q");
 				// set routing target to lat,lon
-				NavitGraphics.CallbackMessageChannel(3, lat + "#" + lon + "#" + q);
+				CallbackMessageChannel(3, lat + "#" + lon + "#" + q);
 			}
 			else if (msg.getData().getInt("Callback") == 55548)
 			{
@@ -7792,7 +7795,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				String lon = msg.getData().getString("lon");
 				String q = msg.getData().getString("q");
 				// append to routing, add waypoint at lat,lon
-				NavitGraphics.CallbackMessageChannel(55548, lat + "#" + lon + "#" + q);
+				CallbackMessageChannel(55548, lat + "#" + lon + "#" + q);
 			}
 			else if (msg.getData().getInt("Callback") == 48)
 			{
@@ -7809,7 +7812,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				String lon = msg.getData().getString("lon");
 				String q = msg.getData().getString("q");
 				// append to routing, add waypoint at lat,lon
-				NavitGraphics.CallbackMessageChannel(48, lat + "#" + lon + "#" + q);
+				CallbackMessageChannel(48, lat + "#" + lon + "#" + q);
 			}
 			else if (msg.getData().getInt("Callback") == 4)
 			{
@@ -7817,7 +7820,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				int x = msg.getData().getInt("x");
 				int y = msg.getData().getInt("y");
 
-				NavitGraphics.CallbackMessageChannel(4, "" + x + "#" + y);
+				CallbackMessageChannel(4, "" + x + "#" + y);
 				try
 				{
 					Navit.follow_button_on();
@@ -7833,7 +7836,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				int x = msg.getData().getInt("x");
 				int y = msg.getData().getInt("y");
 
-				NavitGraphics.CallbackMessageChannel(49, "" + x + "#" + y);
+				CallbackMessageChannel(49, "" + x + "#" + y);
 				try
 				{
 					Navit.follow_button_on();
@@ -7847,15 +7850,15 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				// toggle layer on/off
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(5, s);
+				CallbackMessageChannel(5, s);
 			}
 			else if (msg.getData().getInt("Callback") == 7)
 			{
-				NavitGraphics.CallbackMessageChannel(7, "");
+				CallbackMessageChannel(7, "");
 			}
 			else if ((msg.getData().getInt("Callback") > 7) && (msg.getData().getInt("Callback") < 21))
 			{
-				NavitGraphics.CallbackMessageChannel(msg.getData().getInt("Callback"), "");
+				CallbackMessageChannel(msg.getData().getInt("Callback"), "");
 			}
 			else if (msg.getData().getInt("Callback") == 21)
 			{
@@ -7906,130 +7909,130 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				// 2D
 				// String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(30, "");
+				CallbackMessageChannel(30, "");
 			}
 			else if (msg.getData().getInt("Callback") == 31)
 			{
 				// 3D
 				// String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(31, "");
+				CallbackMessageChannel(31, "");
 			}
 			else if (msg.getData().getInt("Callback") == 32)
 			{
 				// switch to specific 3D pitch
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(32, s);
+				CallbackMessageChannel(32, s);
 			}
 			else if (msg.getData().getInt("Callback") == 33)
 			{
 				// zoom to specific zoomlevel
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(33, s);
+				CallbackMessageChannel(33, s);
 			}
 			else if (msg.getData().getInt("Callback") == 34)
 			{
 				// announcer voice OFF
-				NavitGraphics.CallbackMessageChannel(34, "");
+				CallbackMessageChannel(34, "");
 			}
 			else if (msg.getData().getInt("Callback") == 35)
 			{
 				// announcer voice ON
-				NavitGraphics.CallbackMessageChannel(35, "");
+				CallbackMessageChannel(35, "");
 			}
 			else if (msg.getData().getInt("Callback") == 36)
 			{
 				// switch "Lock on road" ON
-				NavitGraphics.CallbackMessageChannel(36, "");
+				CallbackMessageChannel(36, "");
 			}
 			else if (msg.getData().getInt("Callback") == 37)
 			{
 				// switch "Lock on road" OFF
-				NavitGraphics.CallbackMessageChannel(37, "");
+				CallbackMessageChannel(37, "");
 			}
 			else if (msg.getData().getInt("Callback") == 38)
 			{
 				// switch "Northing" ON
-				NavitGraphics.CallbackMessageChannel(38, "");
+				CallbackMessageChannel(38, "");
 			}
 			else if (msg.getData().getInt("Callback") == 39)
 			{
 				// switch "Northing" OFF
-				NavitGraphics.CallbackMessageChannel(39, "");
+				CallbackMessageChannel(39, "");
 			}
 			else if (msg.getData().getInt("Callback") == 40)
 			{
 				// switch "Map follows Vehicle" ON
-				NavitGraphics.CallbackMessageChannel(40, "");
+				CallbackMessageChannel(40, "");
 			}
 			else if (msg.getData().getInt("Callback") == 41)
 			{
 				// switch "Map follows Vehicle" OFF
-				NavitGraphics.CallbackMessageChannel(41, "");
+				CallbackMessageChannel(41, "");
 			}
 			else if (msg.getData().getInt("Callback") == 42)
 			{
 				// routing mode "highways"
-				NavitGraphics.CallbackMessageChannel(42, "");
+				CallbackMessageChannel(42, "");
 			}
 			else if (msg.getData().getInt("Callback") == 43)
 			{
 				// routing mode "normal roads"
-				NavitGraphics.CallbackMessageChannel(43, "");
+				CallbackMessageChannel(43, "");
 			}
 			else if (msg.getData().getInt("Callback") == 44)
 			{
 				// show duplicates in search results
-				NavitGraphics.CallbackMessageChannel(44, "");
+				CallbackMessageChannel(44, "");
 			}
 			else if (msg.getData().getInt("Callback") == 45)
 			{
 				// filter duplicates in search results
-				NavitGraphics.CallbackMessageChannel(45, "");
+				CallbackMessageChannel(45, "");
 			}
 			else if (msg.getData().getInt("Callback") == 46)
 			{
 				// stop searching and show results found until now
-				NavitGraphics.CallbackMessageChannel(46, "");
+				CallbackMessageChannel(46, "");
 			}
 			else if (msg.getData().getInt("Callback") == 47)
 			{
 				// change maps data dir
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(47, s);
+				CallbackMessageChannel(47, s);
 			}
 			else if (msg.getData().getInt("Callback") == 50)
 			{
 				// we request to stop drawing the map
-				NavitGraphics.CallbackMessageChannel(50, "");
+				CallbackMessageChannel(50, "");
 			}
 			else if (msg.getData().getInt("Callback") == 51)
 			{
 				// set position to pixel x,y
 				int x = msg.getData().getInt("x");
 				int y = msg.getData().getInt("y");
-				NavitGraphics.CallbackMessageChannel(51, "" + x + "#" + y);
+				CallbackMessageChannel(51, "" + x + "#" + y);
 			}
 			else if (msg.getData().getInt("Callback") == 52)
 			{
 				// switch to demo vehicle
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(52, s);
+				CallbackMessageChannel(52, s);
 			}
 			else if (msg.getData().getInt("Callback") == 53)
 			{
 				// dont speak streetnames
-				NavitGraphics.CallbackMessageChannel(53, "");
+				CallbackMessageChannel(53, "");
 			}
 			else if (msg.getData().getInt("Callback") == 54)
 			{
 				// speak streetnames
-				NavitGraphics.CallbackMessageChannel(54, "");
+				CallbackMessageChannel(54, "");
 			}
 			else if (msg.getData().getInt("Callback") == 55)
 			{
 				// set cache size for (map-)files
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(55, s);
+				CallbackMessageChannel(55, s);
 			}
 			//			else if (msg.getData().getInt("Callback") == 56)
 			//			{
@@ -8041,78 +8044,78 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				// keep drawing streets as if at "order" level xxx
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(57, s);
+				CallbackMessageChannel(57, s);
 			}
 			else if (msg.getData().getInt("Callback") == 58)
 			{
 				// street search radius factor (multiplier)
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(58, s);
+				CallbackMessageChannel(58, s);
 			}
 			else if (msg.getData().getInt("Callback") == 59)
 			{
 				// enable layer "name"
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(59, s);
+				CallbackMessageChannel(59, s);
 			}
 			else if (msg.getData().getInt("Callback") == 60)
 			{
 				// disable layer "name"
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(60, s);
+				CallbackMessageChannel(60, s);
 			}
 			else if (msg.getData().getInt("Callback") == 61)
 			{
 				// zoom to specific zoomlevel at given point as center
 				// pixel-x#pixel-y#zoom-level
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(61, s);
+				CallbackMessageChannel(61, s);
 			}
 			else if (msg.getData().getInt("Callback") == 62)
 			{
 				// disable map drawing
-				NavitGraphics.CallbackMessageChannel(62, "");
+				CallbackMessageChannel(62, "");
 			}
 			else if (msg.getData().getInt("Callback") == 63)
 			{
 				// enable map drawing
-				NavitGraphics.CallbackMessageChannel(63, "");
+				CallbackMessageChannel(63, "");
 			}
 			else if (msg.getData().getInt("Callback") == 64)
 			{
 				// draw map
-				NavitGraphics.CallbackMessageChannel(64, "");
+				CallbackMessageChannel(64, "");
 			}
 			else if (msg.getData().getInt("Callback") == 65)
 			{
 				// draw map async
-				NavitGraphics.CallbackMessageChannel(65, "");
+				CallbackMessageChannel(65, "");
 			}
 			else if (msg.getData().getInt("Callback") == 66)
 			{
 				// enable "multipolygons"
-				NavitGraphics.CallbackMessageChannel(66, "");
+				CallbackMessageChannel(66, "");
 			}
 			else if (msg.getData().getInt("Callback") == 67)
 			{
 				// disable "multipolygons"
-				NavitGraphics.CallbackMessageChannel(67, "");
+				CallbackMessageChannel(67, "");
 			}
 			else if (msg.getData().getInt("Callback") == 68)
 			{
 				// shift "order" by this value (only for drawing objects)
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(68, s);
+				CallbackMessageChannel(68, s);
 			}
 			else if (msg.getData().getInt("Callback") == 69)
 			{
 				// stop drawing map
-				NavitGraphics.CallbackMessageChannel(69, "");
+				CallbackMessageChannel(69, "");
 			}
 			else if (msg.getData().getInt("Callback") == 70)
 			{
 				// allow drawing map
-				NavitGraphics.CallbackMessageChannel(70, "");
+				CallbackMessageChannel(70, "");
 			}
 			else if (msg.getData().getInt("Callback") == 71)
 			{
@@ -8120,141 +8123,141 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				// 0 -> deactivate
 				// 1 -> activate
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(71, s);
+				CallbackMessageChannel(71, s);
 			}
 			else if (msg.getData().getInt("Callback") == 72)
 			{
 				// update the route path and route graph (e.g. after setting new roadblocks)
 				// does not update destinations!!!
-				NavitGraphics.CallbackMessageChannel(72, "");
+				CallbackMessageChannel(72, "");
 			}
 			else if (msg.getData().getInt("Callback") == 73)
 			{
 				// update the route path and route graph (e.g. after setting new roadblocks)
 				// this destroys the route graph and calcs everything totally new!
-				NavitGraphics.CallbackMessageChannel(73, "");
+				CallbackMessageChannel(73, "");
 			}
 
 			else if (msg.getData().getInt("Callback") == 74)
 			{
 				// allow demo vechile to move
-				NavitGraphics.CallbackMessageChannel(74, "");
+				CallbackMessageChannel(74, "");
 			}
 			else if (msg.getData().getInt("Callback") == 75)
 			{
 				// stop demo vechile
-				NavitGraphics.CallbackMessageChannel(75, "");
+				CallbackMessageChannel(75, "");
 			}
 			else if (msg.getData().getInt("Callback") == 76)
 			{
 				// show route rectangles
-				NavitGraphics.CallbackMessageChannel(76, "");
+				CallbackMessageChannel(76, "");
 			}
 			else if (msg.getData().getInt("Callback") == 77)
 			{
 				// do not show route rectangles
-				NavitGraphics.CallbackMessageChannel(77, "");
+				CallbackMessageChannel(77, "");
 			}
 			else if (msg.getData().getInt("Callback") == 78)
 			{
 				// shift layout "order" values
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(78, s);
+				CallbackMessageChannel(78, s);
 			}
 			else if (msg.getData().getInt("Callback") == 79)
 			{
 				// set traffic light delay/cost
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(79, s);
+				CallbackMessageChannel(79, s);
 			}
 			else if (msg.getData().getInt("Callback") == 80)
 			{
 				// set autozoom flag to 0 or 1
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(80, s);
+				CallbackMessageChannel(80, s);
 			}
 			else if (msg.getData().getInt("Callback") == 81)
 			{
 				// resize layout items by factor
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(81, s);
+				CallbackMessageChannel(81, s);
 			}
 			else if (msg.getData().getInt("Callback") == 82)
 			{
 				// report share dir
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(82, s);
+				CallbackMessageChannel(82, s);
 			}
 			else if (msg.getData().getInt("Callback") == 83)
 			{
 				// spill all the index files to log output
-				NavitGraphics.CallbackMessageChannel(83, "");
+				CallbackMessageChannel(83, "");
 			}
 			else if (msg.getData().getInt("Callback") == 84)
 			{
 				// report data dir
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(84, s);
+				CallbackMessageChannel(84, s);
 			}
 			else if (msg.getData().getInt("Callback") == 85)
 			{
 				// C linedrawing flag
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(85, s);
+				CallbackMessageChannel(85, s);
 			}
 			else if (msg.getData().getInt("Callback") == 86)
 			{
 				// avoid sharp turns flag to 0 or 1
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(86, s);
+				CallbackMessageChannel(86, s);
 			}
 			else if (msg.getData().getInt("Callback") == 87)
 			{
 				// // avoid sharp turns minimum angle. if turn is harder than this angle then set penalty
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(87, s);
+				CallbackMessageChannel(87, s);
 			}
 			else if (msg.getData().getInt("Callback") == 88)
 			{
 				// avoid sharp turns penalty
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(88, s);
+				CallbackMessageChannel(88, s);
 			}
 			else if (msg.getData().getInt("Callback") == 89)
 			{
 				// search radius for housenumbers for streets
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(89, s);
+				CallbackMessageChannel(89, s);
 			}
 			else if (msg.getData().getInt("Callback") == 90)
 			{
 				// set vehicleprofile to value of string s ('car','bike')
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(90, s);
+				CallbackMessageChannel(90, s);
 			}
 			else if (msg.getData().getInt("Callback") == 91)
 			{
 				// change vehicle profile's roadprofile values
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(91, s);
+				CallbackMessageChannel(91, s);
 			}
 			else if (msg.getData().getInt("Callback") == 92)
 			{
 				// change vehicle profile's roadprofile values 2
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(92, s);
+				CallbackMessageChannel(92, s);
 			}
 			else if (msg.getData().getInt("Callback") == 93)
 			{
 				// change vehicle profile's roadprofile values 3
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(93, s);
+				CallbackMessageChannel(93, s);
 			}
 			else if (msg.getData().getInt("Callback") == 94)
 			{
 				// change priority for cycle lanes
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(94, s);
+				CallbackMessageChannel(94, s);
 			}
 			//else if (msg.getData().getInt("Callback") == 95)
 			//{
@@ -8266,7 +8269,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			{
 				// dump route to GPX file, "s" -> full pathname to output file
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(96, s);
+				CallbackMessageChannel(96, s);
 			}
 			else if (msg.getData().getInt("Callback") == 97)
 			{
@@ -8274,41 +8277,41 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				String lat = msg.getData().getString("lat");
 				String lon = msg.getData().getString("lon");
 				String q = msg.getData().getString("q");
-				NavitGraphics.CallbackMessageChannel(97, lat + "#" + lon + "#" + q);
+				CallbackMessageChannel(97, lat + "#" + lon + "#" + q);
 			}
 			else if (msg.getData().getInt("Callback") == 98)
 			{
 				// set connected_pref value
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(98, s);
+				CallbackMessageChannel(98, s);
 			}
 			else if (msg.getData().getInt("Callback") == 99)
 			{
 				// set angle_pref value
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(99, s);
+				CallbackMessageChannel(99, s);
 			}
 			else if (msg.getData().getInt("Callback") == 100)
 			{
 				// dump callbacks to log
-				NavitGraphics.CallbackMessageChannel(100, "");
+				CallbackMessageChannel(100, "");
 			}
 			else if (msg.getData().getInt("Callback") == 101)
 			{
 				// set demo vehicle flag for tracking
-				NavitGraphics.CallbackMessageChannel(101, "");
+				CallbackMessageChannel(101, "");
 			}
 			else if (msg.getData().getInt("Callback") == 102)
 			{
 				// set gpsfix flag
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(102, s);
+				CallbackMessageChannel(102, s);
 			}
 			else if (msg.getData().getInt("Callback") == 103)
 			{
 				// draw location of self (car) x% lower than screen center
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(103, s);
+				CallbackMessageChannel(103, s);
 			}
 			else if (msg.getData().getInt("Callback") == 104)
 			{
@@ -8323,72 +8326,72 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 					s = "" + 100;
 				}
 
-				NavitGraphics.CallbackMessageChannel(104, s);
+				CallbackMessageChannel(104, s);
 			}
 			else if (msg.getData().getInt("Callback") == 105)
 			{
 				// zoom to specific zoomlevel without redrawing the map!
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(105, s);
+				CallbackMessageChannel(105, s);
 			}
 			else if (msg.getData().getInt("Callback") == 106)
 			{
 				// factor for routing/road speed
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(106, s);
+				CallbackMessageChannel(106, s);
 			}
 			else if (msg.getData().getInt("Callback") == 107)
 			{
 				// level 0 announcement seconds
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(107, s);
+				CallbackMessageChannel(107, s);
 			}
 			else if (msg.getData().getInt("Callback") == 108)
 			{
 				// level 1 announcement seconds
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(108, s);
+				CallbackMessageChannel(108, s);
 			}
 			else if (msg.getData().getInt("Callback") == 109)
 			{
 				// level 2 announcement seconds
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(109, s);
+				CallbackMessageChannel(109, s);
 			}
 			else if (msg.getData().getInt("Callback") == 110)
 			{
 				// generic int option CallBack [<option name>:<option value "int">]
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(110, s);
+				CallbackMessageChannel(110, s);
 			}
 			else if (msg.getData().getInt("Callback") == 111)
 			{
 				// show real gps position on map
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(111, s);
+				CallbackMessageChannel(111, s);
 			}
 			else if (msg.getData().getInt("Callback") == 112)
 			{
 				// show maps debug view
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(112, s);
+				CallbackMessageChannel(112, s);
 			}
 			else if (msg.getData().getInt("Callback") == 113)
 			{
 				// cancel preview map drawing
-				NavitGraphics.CallbackMessageChannel(113, "x");
+				CallbackMessageChannel(113, "x");
 			}
 			else if (msg.getData().getInt("Callback") == 114)
 			{
 				// set night mode 0|1
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(114, s);
+				CallbackMessageChannel(114, s);
 			}
 			else if (msg.getData().getInt("Callback") == 115)
 			{
 				// set debug test number
 				String s = msg.getData().getString("s");
-				NavitGraphics.CallbackMessageChannel(115, s);
+				CallbackMessageChannel(115, s);
 			}
 			else if (msg.getData().getInt("Callback") == 9901)
 			{
@@ -9511,8 +9514,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// follow mode OFF -----------
 		sNavitObject.sendCallBackMessage(75);
 
-		Message msg = new Message();
-		Bundle b = new Bundle();
+		Message msg;
 		msg = Navit_progress_h.obtainMessage();
 		msg.what = 32;
 		try
@@ -9871,7 +9873,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		preferences.PREF_item_dump = prefs.getBoolean("item_dump", false);
 		preferences.PREF_show_route_rects = prefs.getBoolean("show_route_rects", false);
 		preferences.PREF_trafficlights_delay = prefs.getString("trafficlights_delay", "0");
-		boolean tmp = prefs.getBoolean("avoid_sharp_turns", false);
 		preferences.PREF_avoid_sharp_turns = "0";
 		//if (tmp)
 		//{
@@ -9899,7 +9900,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		}
 
 		// send to C code --------
-		NavitGraphics.CallbackMessageChannel(55598, "" + preferences.PREF_routing_engine);
+		CallbackMessageChannel(55598, "" + preferences.PREF_routing_engine);
 		// send to C code --------
 
 		preferences.PREF_routing_profile = prefs.getString("routing_profile", "car");
@@ -10018,7 +10019,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 				Navit.GlobalScaleLevel = preferences.PREF_zoomlevel_num;
 				//System.out.println("5 restore zoom level: " + PREF_zoomlevel_num);
 			}
@@ -10048,7 +10049,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		b.putInt("Callback", on_);
 		b.putString("s", "TurnRestrictions");
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		callback_handler_55.sendMessage(msg);
 	}
 
 	private static void set_poi_layers()
@@ -10070,14 +10071,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		b.putInt("Callback", on_);
 		b.putString("s", "POI Symbols");
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		callback_handler_55.sendMessage(msg);
 
 		msg = new Message();
 		b = new Bundle();
 		b.putInt("Callback", on_);
 		b.putString("s", "POI Labels");
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		callback_handler_55.sendMessage(msg);
 
 		// toggle full POI icons on/off
 		msg = new Message();
@@ -10085,14 +10086,14 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		b.putInt("Callback", off_);
 		b.putString("s", "Android-POI-Icons-full");
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		callback_handler_55.sendMessage(msg);
 
 		msg = new Message();
 		b = new Bundle();
 		b.putInt("Callback", off_);
 		b.putString("s", "Android-POI-Labels-full");
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		callback_handler_55.sendMessage(msg);
 
 		// draw_map();
 	}
@@ -10100,6 +10101,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	private static void activatePrefsReal()
 	{
 
+	    // fixme --jdg--jdg-- apparently this is wip, needs to be implemented for real
 		boolean need_recalc_route = false; // do we need to recalc the route?
 
 		// call some functions to activate the new settings
@@ -10161,7 +10163,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10177,7 +10179,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10194,7 +10196,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10209,7 +10211,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10226,7 +10228,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10241,7 +10243,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{
@@ -10256,7 +10258,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg43.setData(b43);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg43);
+			callback_handler_55.sendMessage(msg43);
 		}
 		catch (Exception e)
 		{
@@ -10273,7 +10275,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg43a.setData(b43a);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg43a);
+				callback_handler_55.sendMessage(msg43a);
 			}
 			catch (Exception e)
 			{
@@ -10291,7 +10293,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg99a.setData(b99a);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg99a);
+			callback_handler_55.sendMessage(msg99a);
 		}
 		catch (Exception e)
 		{
@@ -10305,7 +10307,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg99a.setData(b99a);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg99a);
+			callback_handler_55.sendMessage(msg99a);
 		}
 		catch (Exception e)
 		{
@@ -10324,7 +10326,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10338,7 +10340,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10352,7 +10354,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10366,7 +10368,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10380,7 +10382,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10395,7 +10397,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10413,7 +10415,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10428,7 +10430,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg43b.setData(b43b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg43b);
+					callback_handler_55.sendMessage(msg43b);
 				}
 				catch (Exception e)
 				{
@@ -10446,7 +10448,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg43b.setData(b43b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg43b);
+				callback_handler_55.sendMessage(msg43b);
 			}
 			catch (Exception e)
 			{
@@ -10461,7 +10463,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			msg43b.setData(b43b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg43b);
+				callback_handler_55.sendMessage(msg43b);
 			}
 			catch (Exception e)
 			{
@@ -10504,7 +10506,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg.setData(b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg);
+					callback_handler_55.sendMessage(msg);
 				}
 				catch (Exception e)
 				{
@@ -10519,7 +10521,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				msg.setData(b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg);
+					callback_handler_55.sendMessage(msg);
 				}
 				catch (Exception e)
 				{
@@ -10541,7 +10543,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg33.setData(b33);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg33);
+			callback_handler_55.sendMessage(msg33);
 		}
 		catch (Exception e88)
 		{
@@ -10698,7 +10700,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg7.setData(b7);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg7);
+			callback_handler_55.sendMessage(msg7);
 		}
 		catch (Exception e)
 		{
@@ -10711,7 +10713,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg7.setData(b7);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg7);
+			callback_handler_55.sendMessage(msg7);
 		}
 		catch (Exception e)
 		{
@@ -10760,7 +10762,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10773,7 +10775,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10786,7 +10788,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10800,7 +10802,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10863,7 +10865,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10878,7 +10880,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10891,7 +10893,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10904,7 +10906,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10926,7 +10928,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		msg67.setData(b67);
 		try
 		{
-			NavitGraphics.callback_handler.sendMessage(msg67);
+			callback_handler_55.sendMessage(msg67);
 		}
 		catch (Exception e)
 		{
@@ -10962,84 +10964,84 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b31.putInt("Callback", 60);
 			b31.putString("s", "polygons001");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "polygons");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "POI Symbols");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "POI Labels");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "Android-POI-Icons-full");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "Android-POI-Labels-full");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets_1");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets_2");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets_1_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets_2_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 			// ----------------------- streets only pref -------------------
 		}
 		else
@@ -11052,84 +11054,84 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b31.putInt("Callback", 59);
 			b31.putString("s", "polygons001");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "polygons");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "POI Symbols");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "POI Labels");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "Android-POI-Icons-full");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "Android-POI-Labels-full");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets_1");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 59);
 			b31.putString("s", "streets_2");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets_1_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 
 			msg31 = new Message();
 			b31 = new Bundle();
 			b31.putInt("Callback", 60);
 			b31.putString("s", "streets_2_STR_ONLY");
 			msg31.setData(b31);
-			NavitGraphics.callback_handler.sendMessage(msg31);
+			callback_handler_55.sendMessage(msg31);
 			// ----------------------- streets only pref -------------------
 		}
 
@@ -11141,7 +11143,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b_ss1.putInt("Callback", 106);
 			b_ss1.putString("s", Integer.toString(preferences.PREF_traffic_speed_factor));
 			msg_ss1.setData(b_ss1);
-			NavitGraphics.callback_handler.sendMessage(msg_ss1);
+			callback_handler_55.sendMessage(msg_ss1);
 		}
 		catch (Exception e)
 		{
@@ -11379,7 +11381,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		//System.out.println("xxxxxxxx************XXXXXXXXXXX");
 
 		Handler h_temp;
-		h_temp = NavitGraphics.callback_handler;
+		h_temp = callback_handler_55;
 		//System.out.println("handler 1=" + h_temp.toString());
 
 		Message msg1 = new Message();
@@ -11484,7 +11486,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
 
 		Handler h_temp2;
-		h_temp2 = NavitGraphics.callback_handler;
+		h_temp2 = callback_handler_55;
 		System.out.println("activatePrefs_mapcache ");
 		Message msg7 = new Message();
 		Bundle b7 = new Bundle();
@@ -11685,7 +11687,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("y", (int) (NavitGraphics.Global_dpi_factor * NG__map_main.view.getHeight() / 2));
 			}
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 		}
 		catch (Exception e)
 		{
@@ -13066,7 +13068,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							b.putString("s", filename);
 							System.out.println("Debug:" + "file=" + filename);
 							msg.setData(b);
-							NavitGraphics.callback_handler.sendMessage(msg);
+							callback_handler_55.sendMessage(msg);
 
 							Message msg7 = Navit_progress_h.obtainMessage();
 							Bundle b7 = new Bundle();
@@ -13355,7 +13357,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b.putInt("Callback", 33);
 			b.putString("s", Integer.toString(want_zoom_level));
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 		}
 		catch (Exception e)
 		{
@@ -13372,7 +13374,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b.putInt("Callback", 105);
 			b.putString("s", Integer.toString(want_zoom_level));
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 		}
 		catch (Exception e)
 		{
@@ -13864,7 +13866,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b.putString("lon", "" + lon_end);
 			b.putString("q", addr);
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 		}
 		else
 		{
@@ -13877,7 +13879,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			b.putString("lon", "" + lon_end);
 			b.putString("q", addr);
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			callback_handler_55.sendMessage(msg);
 		}
 
 	}
@@ -14117,12 +14119,12 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 											if (first_found == 1)
 											{
 												first_found = 0;
-												NavitGraphics.CallbackMessageChannel(55503, corr.Latitude + "#" + corr.Longitude + "#" + "");
+												CallbackMessageChannel(55503, corr.Latitude + "#" + corr.Longitude + "#" + "");
 												// System.out.println("XML:rR:" + loop + " " + corr.Latitude + " " + corr.Longitude);
 											}
 											else
 											{
-												NavitGraphics.CallbackMessageChannel(55548, corr.Latitude + "#" + corr.Longitude + "#" + "");
+												CallbackMessageChannel(55548, corr.Latitude + "#" + corr.Longitude + "#" + "");
 												// System.out.println("XML:rw:" + loop + " " + corr.Latitude + " " + corr.Longitude);
 											}
 											// Thread.sleep(25);
@@ -14160,7 +14162,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 							{
 								// System.out.println("XML:calc:");
 								Thread.sleep(10);
-								NavitGraphics.callback_handler.sendMessage(msg);
+								callback_handler_55.sendMessage(msg);
 							}
 							catch (Exception e)
 							{
@@ -14641,7 +14643,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("Callback", 71);
 				b.putString("s", "" + Navit.Routgraph_enabled);
 				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			else if (v == 0)
 			{
@@ -14652,7 +14654,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("Callback", 71);
 				b.putString("s", "" + Navit.Routgraph_enabled);
 				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 			else
 			{
@@ -14663,7 +14665,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("Callback", 71);
 				b.putString("s", "" + Navit.Routgraph_enabled);
 				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 
 				Thread.sleep(350);
 
@@ -14674,7 +14676,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				b.putInt("Callback", 71);
 				b.putString("s", "" + v);
 				msg.setData(b);
-				NavitGraphics.callback_handler.sendMessage(msg);
+				callback_handler_55.sendMessage(msg);
 			}
 		}
 		catch (Exception e)

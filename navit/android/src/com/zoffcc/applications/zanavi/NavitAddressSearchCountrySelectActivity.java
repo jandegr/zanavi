@@ -29,9 +29,9 @@ import android.widget.ListView;
 
 public class NavitAddressSearchCountrySelectActivity extends ListActivity
 {
-	public static String[] CountryList = null;
+	private static String[] CountryList = null;
 
-	public static String[][] CountryList_Human = { { "*D", "*DD", "*DEFAULT*" }, { "*A", "*AA", "*ALL*" }, { "AD", "AND", /* 020 */"Andorra" }, { "AE", "ARE", /* 784 */"United Arab Emirates" }, { "AF", "AFG", /* 004 */"Afghanistan" }, { "AG", "ATG", /* 028 */"Antigua and Barbuda" }, { "AI", "AIA", /* 660 */"Anguilla" }, { "AL", "ALB", /* 008 */"Albania" }, { "AM", "ARM", /* 051 */"Armenia" }, { "AN", "ANT", /* 530 */"Netherlands Antilles" }, { "AO", "AGO", /* 024 */"Angola" },
+	public static final String[][] CountryList_Human = { { "*D", "*DD", "*DEFAULT*" }, { "*A", "*AA", "*ALL*" }, { "AD", "AND", /* 020 */"Andorra" }, { "AE", "ARE", /* 784 */"United Arab Emirates" }, { "AF", "AFG", /* 004 */"Afghanistan" }, { "AG", "ATG", /* 028 */"Antigua and Barbuda" }, { "AI", "AIA", /* 660 */"Anguilla" }, { "AL", "ALB", /* 008 */"Albania" }, { "AM", "ARM", /* 051 */"Armenia" }, { "AN", "ANT", /* 530 */"Netherlands Antilles" }, { "AO", "AGO", /* 024 */"Angola" },
 			{ "AQ", "ATA", /* 010 */"Antarctica" }, { "AR", "ARG", /* 032 */"Argentina" }, { "AS", "ASM", /* 016 */"American Samoa" }, { "AT", "AUT", /* 040 */"Austria" }, { "AU", "AUS", /* 036 */"Australia" }, { "AW", "ABW", /* 533 */"Aruba" }, { "AX", "ALA", /* 248 */"Aland Islands" }, { "AZ", "AZE", /* 031 */"Azerbaijan" }, { "BA", "BIH", /* 070 */"Bosnia and Herzegovina" }, { "BB", "BRB", /* 052 */"Barbados" }, { "BD", "BGD", /* 050 */"Bangladesh" }, { "BE", "BEL", /* 056 */"Belgium" },
 			{ "BF", "BFA", /* 854 */"Burkina Faso" }, { "BG", "BGR", /* 100 */"Bulgaria" }, { "BH", "BHR", /* 048 */"Bahrain" }, { "BI", "BDI", /* 108 */"Burundi" }, { "BJ", "BEN", /* 204 */"Benin" }, { "BL", "BLM", /* 652 */"Saint Barthelemy" }, { "BM", "BMU", /* 060 */"Bermuda" }, { "BN", "BRN", /* 096 */"Brunei Darussalam" }, { "BO", "BOL", /* 068 */"Bolivia" }, { "BR", "BRA", /* 076 */"Brazil" }, { "BS", "BHS", /* 044 */"Bahamas" }, { "BT", "BTN", /* 064 */"Bhutan" },
 			{ "BV", "BVT", /* 074 */"Bouvet Island" }, { "BW", "BWA", /* 072 */"Botswana" }, { "BY", "BLR", /* 112 */"Belarus" }, { "BZ", "BLZ", /* 084 */"Belize" }, { "CA", "CAN", /* 124 */"Canada" }, { "CC", "CCK", /* 166 */"Cocos (Keeling) Islands" }, { "CD", "COD", /* 180 */"Congo, Democratic Republic of the" }, { "CF", "CAF", /* 140 */"Central African Republic" }, { "CG", "COG", /* 178 */"Congo" }, { "CH", "CHE", /* 756 */"Switzerland" }, { "CI", "CIV", /* 384 */"Cote d'Ivoire" },
@@ -62,14 +62,14 @@ public class NavitAddressSearchCountrySelectActivity extends ListActivity
 		super.onCreate(savedInstanceState);
 
 		int l = CountryList_Human.length;
-		int i = 0;
+		int i;
 		CountryList = new String[l];
 		for (i = 0; i < l; i++)
 		{
 			CountryList[i] = CountryList_Human[i][2];
 		}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NavitAddressSearchCountrySelectActivity.CountryList);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, NavitAddressSearchCountrySelectActivity.CountryList);
 		setListAdapter(adapter);
 		this.getListView().setFastScrollEnabled(true);
 	}

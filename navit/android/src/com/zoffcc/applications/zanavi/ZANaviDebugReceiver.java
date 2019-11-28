@@ -146,7 +146,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 			b.putString("lon", String.valueOf(lon));
 			b.putString("q", "DEST 001");
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			Navit.callback_handler_55.sendMessage(msg);
 		}
 		else
 		{
@@ -157,7 +157,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 			b.putString("lon", String.valueOf(lon));
 			b.putString("q", "DEST");
 			msg.setData(b);
-			NavitGraphics.callback_handler.sendMessage(msg);
+			Navit.callback_handler_55.sendMessage(msg);
 		}
 
 		System.out.println("ZANaviDebugReceiver:" + String.format("%s %s (%s)", key, value.toString(), value.getClass().getName()));
@@ -226,7 +226,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		String filename = Navit.getInstance().getNAVIT_DATA_DEBUG_DIR() + "/zanavi_route_" + date + ".gpx";
 		b.putString("s", filename);
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		Navit.callback_handler_55.sendMessage(msg);
 		System.out.println("ZANaviDebugReceiver:" + "file=" + filename);
 	}
 
@@ -238,7 +238,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		// String date = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.GERMAN).format(new Date());
 		b.putString("s", name);
 		msg.setData(b);
-		NavitGraphics.callback_handler.sendMessage(msg);
+		Navit.callback_handler_55.sendMessage(msg);
 		System.out.println("ZANaviDebugReceiver:" + "file=" + name);
 	}
 
@@ -249,7 +249,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 		Bundle b2 = new Bundle();
 		b2.putInt("Callback", 7);
 		msg2.setData(b2);
-		NavitGraphics.callback_handler.sendMessage(msg2);
+		Navit.callback_handler_55.sendMessage(msg2);
 		System.out.println("ZANaviDebugReceiver:" + "clear route");
 	}
 
@@ -2230,7 +2230,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 							b.putString("lon", String.valueOf(lon));
 							b.putString("q", "POSITION");
 							msg.setData(b);
-							NavitGraphics.callback_handler.sendMessage(msg);
+							Navit.callback_handler_55.sendMessage(msg);
 
 							break;
 						}
@@ -2276,7 +2276,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 												Bundle b = new Bundle();
 												b.putInt("Callback", 17);
 												msg.setData(b);
-												NavitGraphics.callback_handler.sendMessage(msg);
+												Navit.callback_handler_55.sendMessage(msg);
 
 												Navit.getInstance().set_map_position_to_screen_center();
 
@@ -2346,7 +2346,7 @@ public class ZANaviDebugReceiver extends BroadcastReceiver
 												Bundle b = new Bundle();
 												b.putInt("Callback", 17);
 												msg.setData(b);
-												NavitGraphics.callback_handler.sendMessage(msg);
+												Navit.callback_handler_55.sendMessage(msg);
 
 												Navit.getInstance().set_map_position_to_screen_center();
 

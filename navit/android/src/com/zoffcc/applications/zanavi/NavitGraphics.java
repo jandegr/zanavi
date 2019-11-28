@@ -59,7 +59,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -1150,7 +1149,7 @@ class NavitGraphics
 											msg2.setData(b2);
 											try
 											{
-												callback_handler.sendMessage(msg2);
+												Navit.callback_handler_55.sendMessage(msg2);
 											}
 											catch (Exception e)
 											{
@@ -1438,7 +1437,7 @@ class NavitGraphics
 					msg33.setData(b33);
 					try
 					{
-						NavitGraphics.callback_handler.sendMessage(msg33);
+						Navit.callback_handler_55.sendMessage(msg33);
 					}
 					catch (Exception e88)
 					{
@@ -1704,7 +1703,7 @@ class NavitGraphics
 						Bundle b = new Bundle();
 						b.putInt("Callback", 8);
 						msg.setData(b);
-						callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 					}
 
 					// if (Navit.METHOD_DEBUG) Navit.my_func_name(1);
@@ -1765,7 +1764,7 @@ class NavitGraphics
 						msg.setData(b);
 						try
 						{
-							callback_handler.sendMessage(msg);
+							Navit.callback_handler_55.sendMessage(msg);
 						}
 						catch (Exception e3)
 						{
@@ -1838,7 +1837,7 @@ class NavitGraphics
 								msg.setData(b);
 								try
 								{
-									callback_handler.sendMessage(msg);
+									Navit.callback_handler_55.sendMessage(msg);
 								}
 								catch (Exception e)
 								{
@@ -1871,7 +1870,7 @@ class NavitGraphics
 								msg2.setData(b2);
 								try
 								{
-									callback_handler.sendMessage(msg2);
+									Navit.callback_handler_55.sendMessage(msg2);
 								}
 								catch (Exception e)
 								{
@@ -2115,7 +2114,7 @@ class NavitGraphics
 						msg.setData(b);
 						try
 						{
-							callback_handler.sendMessage(msg);
+							Navit.callback_handler_55.sendMessage(msg);
 						}
 						catch (Exception e)
 						{
@@ -2277,7 +2276,7 @@ class NavitGraphics
 								msg2.setData(b2);
 								try
 								{
-									callback_handler.sendMessage(msg2);
+									Navit.callback_handler_55.sendMessage(msg2);
 								}
 								catch (Exception e)
 								{
@@ -2412,7 +2411,7 @@ class NavitGraphics
 										msg.setData(b);
 										try
 										{
-											callback_handler.sendMessage(msg);
+											Navit.callback_handler_55.sendMessage(msg);
 											//System.out.println("touch: set zoom(in) level: " + Navit.GlobalScaleLevel);
 										}
 										catch (Exception e)
@@ -2507,7 +2506,7 @@ class NavitGraphics
 										msg.setData(b);
 										try
 										{
-											callback_handler.sendMessage(msg);
+											Navit.callback_handler_55.sendMessage(msg);
 											//System.out.println("touch: set zoom(out) level: " + Navit.GlobalScaleLevel);
 										}
 										catch (Exception e)
@@ -2630,7 +2629,7 @@ class NavitGraphics
 								msg2.setData(b2);
 								try
 								{
-									callback_handler.sendMessage(msg2);
+									Navit.callback_handler_55.sendMessage(msg2);
 								}
 								catch (Exception e)
 								{
@@ -2842,7 +2841,7 @@ class NavitGraphics
 						msg2.setData(b2);
 						try
 						{
-							callback_handler.sendMessage(msg2);
+							Navit.callback_handler_55.sendMessage(msg2);
 						}
 						catch (Exception e)
 						{
@@ -6818,15 +6817,6 @@ class NavitGraphics
 
 	static native int GetThreadId();
 
-	static void CallbackMessageChannel(int i, String s)
-	{
-		// if (Navit.METHOD_DEBUG) Navit.my_func_name(0);
-
-		Navit.cwthr.CallbackMessageChannel(i, s);
-
-		// if (Navit.METHOD_DEBUG) Navit.my_func_name(2);
-	}
-
 	/**
 	 * return search result from C-code
 	 */
@@ -6970,8 +6960,6 @@ class NavitGraphics
 
 	// call C-function to get value --> not used anymore now!!
 	static native int CallbackDestinationValid();
-
-	static final Handler callback_handler = Navit.callback_handler_55;
 
 	//
 	//
@@ -7232,7 +7220,7 @@ class NavitGraphics
 			b1.putInt("id", id);
 			b1.putInt("i", i);
 			msg1.setData(b1);
-			NavitGraphics.callback_handler.sendMessage(msg1);
+			Navit.callback_handler_55.sendMessage(msg1);
 		}
 		catch (Exception e)
 		{
@@ -8271,7 +8259,7 @@ class NavitGraphics
 					msg.setData(b);
 					try
 					{
-						callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 					}
 					catch (Exception e)
 					{
@@ -8290,7 +8278,7 @@ class NavitGraphics
 						msg.setData(b);
 						try
 						{
-							callback_handler.sendMessage(msg);
+							Navit.callback_handler_55.sendMessage(msg);
 						}
 						catch (Exception e)
 						{

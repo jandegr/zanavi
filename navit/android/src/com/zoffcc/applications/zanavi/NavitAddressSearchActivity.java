@@ -415,7 +415,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 				msg.setData(b);
 				try
 				{
-					NavitGraphics.callback_handler.sendMessage(msg);
+					Navit.callback_handler_55.sendMessage(msg);
 				}
 				catch (Exception e)
 				{
@@ -444,7 +444,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 			msg.setData(b);
 			try
 			{
-				NavitGraphics.callback_handler.sendMessage(msg);
+				Navit.callback_handler_55.sendMessage(msg);
 			}
 			catch (Exception e)
 			{

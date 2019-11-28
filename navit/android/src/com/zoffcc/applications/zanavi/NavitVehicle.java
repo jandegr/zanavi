@@ -553,7 +553,7 @@ public class NavitVehicle
 								b.putString("s", "0");
 							}
 							msg.setData(b);
-							NavitGraphics.callback_handler.sendMessage(msg);
+							Navit.callback_handler_55.sendMessage(msg);
 						}
 						catch (Exception e)
 						{
@@ -636,7 +636,7 @@ public class NavitVehicle
 						b.putInt("Callback", 102);
 						b.putString("s", "1");
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 					}
 					catch (Exception e)
 					{
@@ -665,7 +665,7 @@ public class NavitVehicle
 						b.putInt("Callback", 102);
 						b.putString("s", "0");
 						msg.setData(b);
-						NavitGraphics.callback_handler.sendMessage(msg);
+						Navit.callback_handler_55.sendMessage(msg);
 					}
 					catch (Exception e)
 					{
