@@ -35,6 +35,7 @@ jobs:
             make
             ldd maptool
             ls -la
+            gcc --static -static -O2 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -lpthread -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wpointer-arith -Wreturn-type -D_GNU_SOURCE  -o maptool_linux64_static maptool.o -lglib-2.0 .libs/libmaptool.a -lgthread-2.0 -lgmodule-2.0 -ldl -lrt -lz ../.libs/libnavit.a -pthread -lgthread-2.0 -lrt -lglib-2.0 -pthread -lgmodule-2.0 -lrt -lglib-2.0 -lz p2t/.libs/libp2tc.a refine/.libs/libp2tc-refine.a libcfu-0.03-zanavi/src/libcfu.a -lm -lcrypto -ldl
       
       - run:
           name: Get OSM data
