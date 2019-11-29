@@ -2270,11 +2270,18 @@ int main(int argc, char **argv)
 	}
 	else if (protobuf)
 	{
+		time(&start_tt);
 		if (verbose_mode)
 		{
 			fprintf(stderr, "**phase1:B**\n");
 		}
+		ways_processed_count = 0;
 		map_collect_data_osm_protobuf(input_file, &osm);
+		time(&end_tt);
+		diff_tt = difftime(end_tt, start_tt);
+		char outstring[200];
+		convert_to_human_time(diff_tt, outstring);
+		fprintf(stderr, "-RUNTIME-PHASE1: %s\n", outstring);
 	}
 	else
 	{
