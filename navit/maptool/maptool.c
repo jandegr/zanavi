@@ -1298,31 +1298,31 @@ void sql_db_init(int startup)
 		//               40 --> POI (masked as way)
 		char create_table1[200] = "CREATE TABLE IF NOT EXISTS way (id integer, town_id integer, ind integer, lat real,lon real, name text, name_fold text, name_fold_idx text, waytype integer)";
 		retval = sqlite3_exec(sql_handle, create_table1, 0, 0, 0);
-
+		fprintf_(stderr, "table way : %d\n", retval);
 		char create_table2[200] = "CREATE TABLE IF NOT EXISTS way_node(way_id integer,node_id integer, s integer, seekpos1)";
 		retval = sqlite3_exec(sql_handle004, create_table2, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table way_node 004 : %d\n", retval);
 		retval = sqlite3_exec(sql_handle005, create_table2, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table way_node 005 : %d\n", retval);
 		retval = sqlite3_exec(sql_handle006, create_table2, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table way_node 006 : %d\n", retval);
 		retval = sqlite3_exec(sql_handle007, create_table2, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table way_node 007 : %d\n", retval);
 
 		char create_table15[200] = "CREATE TABLE IF NOT EXISTS boundary(rel_id integer primary key asc,admin_level integer, done integer, parent_rel_id integer, country_id integer, lat real, lon real, name text)";
 		retval = sqlite3_exec(sql_handle, create_table15, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table boundary : %d\n", retval);
 
 		char create_table3[200] = "CREATE TABLE IF NOT EXISTS node(id integer primary key asc,lat real,lon real)";
 		//char create_table3[200] = "CREATE TABLE IF NOT EXISTS node(id integer ,lat real,lon real)";
 		retval = sqlite3_exec(sql_handle002a, create_table3, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table node 002a : %d\n", retval);
 		retval = sqlite3_exec(sql_handle003a, create_table3, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table node 003a : %d\n", retval);
 		retval = sqlite3_exec(sql_handle002b, create_table3, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table node 002b : %d\n", retval);
 		retval = sqlite3_exec(sql_handle003b, create_table3, 0, 0, 0);
-		fprintf_(stderr, "table:%d\n", retval);
+		fprintf_(stderr, "table node 003b : %d\n", retval);
 
 		//char create_table7[200] = "CREATE TABLE IF NOT EXISTS nodei(id integer primary key asc,lat integer,lon integer)";
 		//retval = sqlite3_exec(sql_handle002, create_table7, 0, 0, 0);
