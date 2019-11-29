@@ -49,7 +49,7 @@ jobs:
           command: |
             cd bin/navit/maptool
             ls -la
-            ./maptool -P -i map1.osm.pbf -q -o runtimes.sqlite -6 -k -n -U -S 500000000 map.bin
+            ./maptool -P -i map1.osm.pbf -o runtimes.sqlite -6 -k -n -U -S 500000000 map.bin
           no_output_timeout: 120m
 #      - run:
 #          name: Get OSM data for Belgium
