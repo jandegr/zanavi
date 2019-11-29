@@ -41,7 +41,7 @@ jobs:
           name: Get OSM data
           command: |
             cd bin/navit/maptool
-            wget -c -O map1.osm.bz2 http://download.geofabrik.de/europe/$MAP-latest.osm.pbf
+            wget -c -O map1.osm.pbf http://download.geofabrik.de/europe/$MAP-latest.osm.pbf
             ls -la
           no_output_timeout: 120m
       - run:
