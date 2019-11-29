@@ -1665,7 +1665,7 @@ static void usage(FILE *f)
 	fprintf(f, "-n                       : ignore unknown types\n");
 	fprintf(f, "-o                       : filename including path to sqlite db to record maptool runtimes\n");
 	// fprintf(f, "-o (--coverage)          : map every street to item coverage\n");
-	// fprintf(f, "-P (--protobuf)          : input file is protobuf\n");
+	fprintf(f, "-P (--protobuf)          : input file is protobuf\n");
 	fprintf(f, "-r (--rule-file)         : read mapping rules from specified file\n");
 	//	fprintf(f, "-s (--start)             : start at specified phase\n");
 	fprintf(f, "-S (--slice-size)        : defines the amount of memory to use, in bytes. Default is 1GB\n");
@@ -1846,7 +1846,7 @@ int main(int argc, char **argv)
 				{	"db", 1, 0, 'd'},
 #endif
 				{ "dedupe-ways", 0, 0, 'w' }, { "dump", 0, 0, 'D' }, { "dump-coordinates", 0, 0, 'c' }, { "end", 1, 0, 'e' }, { "help", 0, 0, 'h' }, { "keep-tmpfiles", 0, 0, 'k' }, { "nodes-only", 0, 0, 'N' }, { "plugin", 1, 0, 'p' },
-				// { "protobuf", 0, 0, 'P' },
+				{ "protobuf", 0, 0, 'P' },
 				{ "start", 1, 0, 's' }, { "input-file", 1, 0, 'i' }, { "rule-file", 1, 0, 'r' }, { "ignore-unknown", 0, 0, 'n' }, { "url", 1, 0, 'u' }, { "ways-only", 0, 0, 'W' }, { "slice-size", 1, 0, 'S' }, { "unknown-country", 0, 0, 'U' }, { 0, 0, 0, 0 } };
 		c = getopt_long(argc, argv, "5:6B:DF:NO:PWS:a:bc"
 #ifdef HAVE_POSTGRESQL
@@ -1887,9 +1887,9 @@ int main(int argc, char **argv)
 				//	protobufdb_operation = optarg;
 				//	output = 1;
 				//	break;
-				//case 'P':
-				//	protobuf = 1;
-				//	break;
+			case 'P':
+				protobuf = 1;
+				break;
 			case 'S':
 				slice_size = atoll(optarg);
 
@@ -2274,7 +2274,7 @@ int main(int argc, char **argv)
 		{
 			fprintf(stderr, "**phase1:B**\n");
 		}
-		// ---obsolete--- // map_collect_data_osm_protobuf(input_file, &osm);
+		map_collect_data_osm_protobuf(input_file, &osm);
 	}
 	else
 	{
