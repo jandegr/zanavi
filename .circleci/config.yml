@@ -17,7 +17,7 @@ jobs:
           command: |
             apt-get update
             apt-get install -y libpng-dev curl
-            apt-get install -y libtool-bin libssl-dev autoconf wget mingw-w64
+            apt-get install -y libtool-bin libssl-dev autoconf wget mingw-w64 mingw-w64-tools
       - run:
           name: Build for WFRW
           command: |
