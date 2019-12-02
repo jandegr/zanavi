@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "belarus"
+      MAP: "belgium"
     steps:
       - checkout
       - run:
