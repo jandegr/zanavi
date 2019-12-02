@@ -60,7 +60,7 @@ jobs:
             cp bin/navit/maptool/map.bin out/$MAP.bin
             ls -la
             cd out
-            md5sum $MAP.map.bin > $MAP.bin.md5
+            md5sum $MAP.bin > $MAP.bin.md5
             ls -la out
       - store_artifacts:
           path: out
