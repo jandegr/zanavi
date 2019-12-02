@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "norway"
+      MAP: "luxembourg"
     steps:
       - checkout
       - run:
@@ -58,6 +58,7 @@ jobs:
             ls -la
             cp bin/navit/maptool/map.bin.idx out/$MAP.bin.idx
             cp bin/navit/maptool/map.bin out/$MAP.bin
+            md5sum bin/navit/maptool/map.bin > out/$MAP.md5
             ls -la
             ls -la out
       - store_artifacts:
