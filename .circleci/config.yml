@@ -51,20 +51,6 @@ jobs:
             ls -la
             bzcat map1.osm.bz2 | ./maptool -o runtimes.sqlite -6 -k -n -U -S 500000000 map.bin
           no_output_timeout: 120m
-#      - run:
-#          name: Get OSM data for Belgium
-#          command: wget -c -O belgium-latest.osm.pbf http://download.geofabrik.de/europe/belgium-latest.osm.pbf
-#          no_output_timeout: 120m
-#      - run:
-#          name: Get OSM data for Luxembourg
-#          command: wget -c -O luxembourg-latest.osm.pbf http://download.geofabrik.de/europe/luxembourg-latest.osm.pbf
-#          no_output_timeout: 120m
-#      - run:
-#          name: Setup Osmium
-#          command: apt-get install -y osmium-tool
-#      - run:
-#          name: Combine PBF's
-#          command: osmium merge -v belgium-latest.osm.pbf luxembourg-latest.osm.pbf france-latest.osm.pbf -o europe-latest.osm.pbf
       - run:
           name: split binfile
           command: |
@@ -74,8 +60,6 @@ jobs:
             cp bin/navit/maptool/map.bin out/$MAP.bin
             ls -la
             ls -la out
-            
-# join them with cmd /c copy /b BFRLaa+BFRLab BFRLtoday.bin
       - store_artifacts:
           path: out
 workflows:
