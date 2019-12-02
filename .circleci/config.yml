@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "bosnia-herzegovina"
+      MAP: "albania"
     steps:
       - checkout
       - run:
@@ -70,7 +70,6 @@ jobs:
           command: |
             mkdir out
             ls -la
-#            split -b 2G bin/navit/maptool/map.bin out/$MAP
             cp bin/navit/maptool/map.bin.idx out/$MAP.bin.idx
             cp bin/navit/maptool/map.bin out/$MAP.bin
             ls -la
