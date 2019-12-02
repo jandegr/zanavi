@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "isle-of-man"
+      MAP: "italy"
     steps:
       - checkout
       - run:
