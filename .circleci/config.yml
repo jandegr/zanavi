@@ -61,7 +61,7 @@ jobs:
             ls -la
             cd out
             md5sum $MAP.bin > $MAP.bin.md5
-            ls -la out
+            ls -la
       - store_artifacts:
           path: out
 workflows:
