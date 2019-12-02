@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "faroe-islands"
+      MAP: "finland"
     steps:
       - checkout
       - run:
