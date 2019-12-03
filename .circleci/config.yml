@@ -55,7 +55,6 @@ jobs:
           name: split binfile
           command: |
             mkdir out
-            ls -la
             cp bin/navit/maptool/map.bin.idx out/$MAP.bin.idx
             cp bin/navit/maptool/map.bin out/$MAP.bin
             ls -la
