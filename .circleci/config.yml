@@ -6,7 +6,7 @@ jobs:
   build_linux:
     <<: *defaults
     environment:
-      MAP: "norway"
+      MAP: "azores"
     steps:
       - checkout
       - run:
