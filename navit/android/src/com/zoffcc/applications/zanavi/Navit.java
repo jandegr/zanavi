@@ -13309,7 +13309,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 		Navit.download_map_id = -1;
 		for (int i = 0; i < count; i++)
 		{
-			if (!NavitMapDownloader.z_OSM_MAPS[i].is_continent)
+			if (!NavitMapDownloader.z_OSM_MAPS[i].isContinent())
 			{
 				// System.out.println("mmm1=" + NavitMapDownloader.z_OSM_MAPS[i].url);
 				if (NavitMapDownloader.z_OSM_MAPS[i].url.equals(map_name))

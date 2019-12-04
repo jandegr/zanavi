@@ -80,8 +80,11 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+
 public class NavitMapDownloader
 {
+	private static final String TAG="NavitMapDownLoader";
 	static final String ZANAVI_MAPS_AGE_URL = "http://maps.zanavi.cc/maps_age.html";
 
 	private static String ZANAVI_MAPS_SEVERTEXT_URL = "http://dl.zanavi.cc/server.txt";
@@ -103,190 +106,153 @@ public class NavitMapDownloader
 	static int MULTI_NUM_THREADS = 3; // how many download streams for a file
 	private static int MULTI_NUM_THREADS_LOCAL = 1; // how many download streams for the current file from the current server
 
-	static class zanavi_osm_map_values
-	{
-		String map_name = "";
-		String url = "";
-		long est_size_bytes = 0;
-		String est_size_bytes_human_string = "";
-		String text_for_select_list = "";
-		boolean is_continent = false;
-		int continent_id = 0;
-
-		zanavi_osm_map_values(String mapname, String url, long bytes_est, Boolean is_con, int con_id)
-		{
-			this.is_continent = is_con;
-			this.continent_id = con_id;
-			this.map_name = mapname;
-			this.url = url;
-			this.est_size_bytes = bytes_est;
-			if (this.est_size_bytes <= 0)
-			{
-				// dummy entry, dont show size!
-				this.est_size_bytes_human_string = "";
-			}
-			else
-			{
-				if (((int) ((float) (this.est_size_bytes) / 1024f / 1024f)) > 0)
-				{
-					this.est_size_bytes_human_string = " " + (int) ((float) (this.est_size_bytes) / 1024f / 1024f) + "MB";
-				}
-				else
-				{
-					this.est_size_bytes_human_string = " " + (int) ((float) (this.est_size_bytes) / 1024f) + "kB";
-				}
-			}
-			this.text_for_select_list = this.map_name + " " + this.est_size_bytes_human_string;
-		}
-
-		public String toString()
-		{
-			return "continent_id=" + this.continent_id + " est_size_bytes=" + this.est_size_bytes + " est_size_bytes_human_string=\"" + this.est_size_bytes_human_string + "\" map_name=\"" + this.map_name + "\" text_for_select_list=\"" + this.text_for_select_list + "\" url=" + this.url;
-		}
-	}
 
 	//
 	// define the maps here
 	//
 	//
-	private static final zanavi_osm_map_values z_Caribbean = new zanavi_osm_map_values("Caribbean", "caribbean.bin", -2, true, 136);
+	private static final ZanaviOsmMapValue z_Caribbean = new ZanaviOsmMapValue("Caribbean", "caribbean.bin", -2, true, 136);
 	//
-	private static final zanavi_osm_map_values z_North_America = new zanavi_osm_map_values("North America", "north_america.bin", -2, true, 6);
-	private static final zanavi_osm_map_values z_Country_borders = new zanavi_osm_map_values("Country borders [detail]", "borders.bin", 9025483L, true, 0);
-	private static final zanavi_osm_map_values z_Coastline = new zanavi_osm_map_values("Coastline", "coastline.bin", 173729342L, true, 0);
-	static final zanavi_osm_map_values z_Restl_welt = new zanavi_osm_map_values("Rest of the World", "restl_welt.bin", 657152543L, true, 0);
-	private static final zanavi_osm_map_values z_Planet = new zanavi_osm_map_values("Planet", "planet.bin", 17454169665L, true, 1);
-	private static final zanavi_osm_map_values z_Europe = new zanavi_osm_map_values("Europe", "europe.bin", 4591607513L, true, 3);
-	private static final zanavi_osm_map_values z_Africa = new zanavi_osm_map_values("Africa", "africa.bin", 1037269390L, true, 4);
-	private static final zanavi_osm_map_values z_Asia = new zanavi_osm_map_values("Asia", "asia.bin", 2747994511L, true, 5);
-	private static final zanavi_osm_map_values z_USA = new zanavi_osm_map_values("USA", "usa.bin", 2795629945L, true, 27);
-	private static final zanavi_osm_map_values z_Central_America = new zanavi_osm_map_values("Central America", "central_america.bin", 157073876L, true, 7);
-	private static final zanavi_osm_map_values z_South_America = new zanavi_osm_map_values("South America", "south_america.bin", 616648903L, true, 8);
-	private static final zanavi_osm_map_values z_Australia_and_Oceania = new zanavi_osm_map_values("Australia and Oceania", "australia_oceania.bin", 290908706L, true, 9);
-	private static final zanavi_osm_map_values z_Albania = new zanavi_osm_map_values("Albania", "albania.bin", 11868865L, false, 3);
-	private static final zanavi_osm_map_values z_Alps = new zanavi_osm_map_values("Alps", "alps.bin", 1093343815L, false, 3);
-	private static final zanavi_osm_map_values z_Andorra = new zanavi_osm_map_values("Andorra", "andorra.bin", 895533L, false, 3);
-	private static final zanavi_osm_map_values z_Austria = new zanavi_osm_map_values("Austria", "austria.bin", 291266612L, false, 3);
-	private static final zanavi_osm_map_values z_Azores = new zanavi_osm_map_values("Azores", "azores.bin", 3896636L, false, 3);
-	private static final zanavi_osm_map_values z_Belarus = new zanavi_osm_map_values("Belarus", "belarus.bin", 35370454L, false, 3);
-	private static final zanavi_osm_map_values z_Belgium = new zanavi_osm_map_values("Belgium", "belgium.bin", 173281928L, false, 3);
-	private static final zanavi_osm_map_values z_Bosnia_Herzegovina = new zanavi_osm_map_values("Bosnia-Herzegovina", "bosnia-herzegovina.bin", 20965766L, false, 3);
-	private static final zanavi_osm_map_values z_British_Isles = new zanavi_osm_map_values("British Isles", "british_isles.bin", 287714717L, false, 3);
-	private static final zanavi_osm_map_values z_Bulgaria = new zanavi_osm_map_values("Bulgaria", "bulgaria.bin", 45515055L, false, 3);
-	private static final zanavi_osm_map_values z_Croatia = new zanavi_osm_map_values("Croatia", "croatia.bin", 19816810L, false, 3);
-	private static final zanavi_osm_map_values z_Cyprus = new zanavi_osm_map_values("Cyprus", "cyprus.bin", 3062844L, false, 3);
-	private static final zanavi_osm_map_values z_Czech_Republic = new zanavi_osm_map_values("Czech Republic", "czech_republic.bin", 277514973L, false, 3);
-	private static final zanavi_osm_map_values z_Denmark = new zanavi_osm_map_values("Denmark", "denmark.bin", 134521370L, false, 3);
-	private static final zanavi_osm_map_values z_Estonia = new zanavi_osm_map_values("Estonia", "estonia.bin", 16299316L, false, 3);
-	private static final zanavi_osm_map_values z_Faroe_Islands = new zanavi_osm_map_values("Faroe Islands", "faroe_islands.bin", 601782L, false, 3);
-	private static final zanavi_osm_map_values z_Finland = new zanavi_osm_map_values("Finland", "finland.bin", 175651343L, false, 3);
-	private static final zanavi_osm_map_values z_France = new zanavi_osm_map_values("France", "france.bin", 2135649463L, false, 3);
-	private static final zanavi_osm_map_values z_Germany = new zanavi_osm_map_values("Germany", "germany.bin", 1691074126L, false, 3);
-	private static final zanavi_osm_map_values z_Great_Britain = new zanavi_osm_map_values("Great Britain", "great_britain.bin", 545499632L, false, 3);
-	private static final zanavi_osm_map_values z_Greece = new zanavi_osm_map_values("Greece", "greece.bin", 100282275L, false, 3);
-	private static final zanavi_osm_map_values z_Hungary = new zanavi_osm_map_values("Hungary", "hungary.bin", 82373691L, false, 3);
-	private static final zanavi_osm_map_values z_Iceland = new zanavi_osm_map_values("Iceland", "iceland.bin", 20290432L, false, 3);
-	private static final zanavi_osm_map_values z_Ireland = new zanavi_osm_map_values("Ireland", "ireland.bin", 75768095L, false, 3);
-	private static final zanavi_osm_map_values z_Isle_of_man = new zanavi_osm_map_values("Isle of man", "isle_of_man.bin", 876966L, false, 3);
-	private static final zanavi_osm_map_values z_Italy = new zanavi_osm_map_values("Italy", "italy.bin", 798327717L, false, 3);
-	private static final zanavi_osm_map_values z_Kosovo = new zanavi_osm_map_values("Kosovo", "kosovo.bin", 2726077L, false, 3);
-	private static final zanavi_osm_map_values z_Latvia = new zanavi_osm_map_values("Latvia", "latvia.bin", 19153876L, false, 3);
-	private static final zanavi_osm_map_values z_Liechtenstein = new zanavi_osm_map_values("Liechtenstein", "liechtenstein.bin", 1215152L, false, 3);
-	private static final zanavi_osm_map_values z_Lithuania = new zanavi_osm_map_values("Lithuania", "lithuania.bin", 15062324L, false, 3);
-	private static final zanavi_osm_map_values z_Luxembourg = new zanavi_osm_map_values("Luxembourg", "luxembourg.bin", 10258179L, false, 3);
-	private static final zanavi_osm_map_values z_Macedonia = new zanavi_osm_map_values("Macedonia", "macedonia.bin", 3652744L, false, 3);
-	private static final zanavi_osm_map_values z_Malta = new zanavi_osm_map_values("Malta", "malta.bin", 665042L, false, 3);
-	private static final zanavi_osm_map_values z_Moldova = new zanavi_osm_map_values("Moldova", "moldova.bin", 7215780L, false, 3);
-	private static final zanavi_osm_map_values z_Monaco = new zanavi_osm_map_values("Monaco", "monaco.bin", 91311L, false, 3);
-	private static final zanavi_osm_map_values z_Montenegro = new zanavi_osm_map_values("Montenegro", "montenegro.bin", 2377175L, false, 3);
-	private static final zanavi_osm_map_values z_Netherlands = new zanavi_osm_map_values("Netherlands", "netherlands.bin", 555738939L, false, 3);
-	private static final zanavi_osm_map_values z_Norway = new zanavi_osm_map_values("Norway", "norway.bin", 252172059L, false, 3);
-	private static final zanavi_osm_map_values z_Poland = new zanavi_osm_map_values("Poland", "poland.bin", 547877032L, false, 3);
-	private static final zanavi_osm_map_values z_Portugal = new zanavi_osm_map_values("Portugal", "portugal.bin", 103467963L, false, 3);
-	private static final zanavi_osm_map_values z_Romania = new zanavi_osm_map_values("Romania", "romania.bin", 39689553L, false, 3);
-	private static final zanavi_osm_map_values z_Russia_European_part = new zanavi_osm_map_values("Russia European part", "russia-european-part.bin", 476175240L, false, 3);
-	private static final zanavi_osm_map_values z_Serbia = new zanavi_osm_map_values("Serbia", "serbia.bin", 11166698L, false, 3);
-	private static final zanavi_osm_map_values z_Slovakia = new zanavi_osm_map_values("Slovakia", "slovakia.bin", 100067631L, false, 3);
-	private static final zanavi_osm_map_values z_Slovenia = new zanavi_osm_map_values("Slovenia", "slovenia.bin", 85291657L, false, 3);
-	private static final zanavi_osm_map_values z_Spain = new zanavi_osm_map_values("Spain", "spain.bin", 416456620L, false, 3);
-	private static final zanavi_osm_map_values z_Sweden = new zanavi_osm_map_values("Sweden", "sweden.bin", 208091370L, false, 3);
-	private static final zanavi_osm_map_values z_Switzerland = new zanavi_osm_map_values("Switzerland", "switzerland.bin", 166727088L, false, 3);
-	private static final zanavi_osm_map_values z_Turkey = new zanavi_osm_map_values("Turkey", "turkey.bin", 33231427L, false, 3);
-	private static final zanavi_osm_map_values z_Ukraine = new zanavi_osm_map_values("Ukraine", "ukraine.bin", 58070734L, false, 3);
-	private static final zanavi_osm_map_values z_Canari_Islands = new zanavi_osm_map_values("Canari Islands", "canari_islands.bin", 7125254L, false, 4);
-	private static final zanavi_osm_map_values z_India = new zanavi_osm_map_values("India", "india.bin", 46569907L, false, 5);
-	private static final zanavi_osm_map_values z_Israel_and_Palestine = new zanavi_osm_map_values("Israel and Palestine", "israel_and_palestine.bin", 15630491L, false, 5);
-	private static final zanavi_osm_map_values z_China = new zanavi_osm_map_values("China", "china.bin", 49738512L, false, 5);
-	private static final zanavi_osm_map_values z_Japan = new zanavi_osm_map_values("Japan", "japan.bin", 413065433L, false, 5);
-	private static final zanavi_osm_map_values z_Taiwan = new zanavi_osm_map_values("Taiwan", "taiwan.bin", 5689334L, false, 5);
-	private static final zanavi_osm_map_values z_Canada = new zanavi_osm_map_values("Canada", "canada.bin", 830908722L, false, 6);
-	private static final zanavi_osm_map_values z_Greenland = new zanavi_osm_map_values("Greenland", "greenland.bin", 500803L, false, 6);
-	private static final zanavi_osm_map_values z_Mexico = new zanavi_osm_map_values("Mexico", "mexico.bin", 29858297L, false, 6);
-	private static final zanavi_osm_map_values z_US_Midwest = new zanavi_osm_map_values("US-Midwest", "us-midwest.bin", 495302706L, false, 27);
-	private static final zanavi_osm_map_values z_US_Northeast = new zanavi_osm_map_values("US-Northeast", "us-northeast.bin", 206503509L, false, 27);
-	private static final zanavi_osm_map_values z_US_Pacific = new zanavi_osm_map_values("US-Pacific", "us-pacific.bin", 11527206L, false, 27);
-	private static final zanavi_osm_map_values z_US_South = new zanavi_osm_map_values("US-South", "us-south.bin", 803391332L, false, 27);
-	private static final zanavi_osm_map_values z_US_West = new zanavi_osm_map_values("US-West", "us-west.bin", 506304481L, false, 27);
-	private static final zanavi_osm_map_values z_Alabama = new zanavi_osm_map_values("Alabama", "alabama.bin", 35081542L, false, 27);
-	private static final zanavi_osm_map_values z_Alaska = new zanavi_osm_map_values("Alaska", "alaska.bin", 7844950L, false, 27);
-	private static final zanavi_osm_map_values z_Arizona = new zanavi_osm_map_values("Arizona", "arizona.bin", 33938704L, false, 27);
-	private static final zanavi_osm_map_values z_Arkansas = new zanavi_osm_map_values("Arkansas", "arkansas.bin", 22029069L, false, 27);
-	private static final zanavi_osm_map_values z_California = new zanavi_osm_map_values("California", "california.bin", 203758150L, false, 27);
-	private static final zanavi_osm_map_values z_North_Carolina = new zanavi_osm_map_values("North Carolina", "north-carolina.bin", 128642801L, false, 27);
-	private static final zanavi_osm_map_values z_South_Carolina = new zanavi_osm_map_values("South Carolina", "south-carolina.bin", 41257655L, false, 27);
-	private static final zanavi_osm_map_values z_Colorado = new zanavi_osm_map_values("Colorado", "colorado.bin", 67174144L, false, 27);
-	private static final zanavi_osm_map_values z_North_Dakota = new zanavi_osm_map_values("North Dakota", "north-dakota.bin", 45925872L, false, 27);
-	private static final zanavi_osm_map_values z_South_Dakota = new zanavi_osm_map_values("South Dakota", "south-dakota.bin", 13888265L, false, 27);
-	private static final zanavi_osm_map_values z_District_of_Columbia = new zanavi_osm_map_values("District of Columbia", "district-of-columbia.bin", 5693682L, false, 27);
-	private static final zanavi_osm_map_values z_Connecticut = new zanavi_osm_map_values("Connecticut", "connecticut.bin", 7189491L, false, 27);
-	private static final zanavi_osm_map_values z_Delaware = new zanavi_osm_map_values("Delaware", "delaware.bin", 3089068L, false, 27);
-	private static final zanavi_osm_map_values z_Florida = new zanavi_osm_map_values("Florida", "florida.bin", 49772033L, false, 27);
-	private static final zanavi_osm_map_values z_Georgia = new zanavi_osm_map_values("Georgia", "georgia.bin", 83076475L, false, 27);
-	private static final zanavi_osm_map_values z_New_Hampshire = new zanavi_osm_map_values("New Hampshire", "new-hampshire.bin", 13900082L, false, 27);
-	private static final zanavi_osm_map_values z_Hawaii = new zanavi_osm_map_values("Hawaii", "hawaii.bin", 3670926L, false, 27);
-	private static final zanavi_osm_map_values z_Idaho = new zanavi_osm_map_values("Idaho", "idaho.bin", 27122570L, false, 27);
-	private static final zanavi_osm_map_values z_Illinois = new zanavi_osm_map_values("Illinois", "illinois.bin", 64992622L, false, 27);
-	private static final zanavi_osm_map_values z_Indiana = new zanavi_osm_map_values("Indiana", "indiana.bin", 23877847L, false, 27);
-	private static final zanavi_osm_map_values z_Iowa = new zanavi_osm_map_values("Iowa", "iowa.bin", 47021367L, false, 27);
-	private static final zanavi_osm_map_values z_New_Jersey = new zanavi_osm_map_values("New Jersey", "new-jersey.bin", 25412463L, false, 27);
-	private static final zanavi_osm_map_values z_Kansas = new zanavi_osm_map_values("Kansas", "kansas.bin", 22432235L, false, 27);
-	private static final zanavi_osm_map_values z_Kentucky = new zanavi_osm_map_values("Kentucky", "kentucky.bin", 34892443L, false, 27);
-	private static final zanavi_osm_map_values z_Louisiana = new zanavi_osm_map_values("Louisiana", "louisiana.bin", 40739401L, false, 27);
-	private static final zanavi_osm_map_values z_Maine = new zanavi_osm_map_values("Maine", "maine.bin", 14716304L, false, 27);
-	private static final zanavi_osm_map_values z_Maryland = new zanavi_osm_map_values("Maryland", "maryland.bin", 27470086L, false, 27);
-	private static final zanavi_osm_map_values z_Massachusetts = new zanavi_osm_map_values("Massachusetts", "massachusetts.bin", 42398142L, false, 27);
-	private static final zanavi_osm_map_values z_New_Mexico = new zanavi_osm_map_values("New Mexico", "new-mexico.bin", 26815652L, false, 27);
-	private static final zanavi_osm_map_values z_Michigan = new zanavi_osm_map_values("Michigan", "michigan.bin", 44192808L, false, 27);
-	private static final zanavi_osm_map_values z_Minnesota = new zanavi_osm_map_values("Minnesota", "minnesota.bin", 82203062L, false, 27);
-	private static final zanavi_osm_map_values z_Mississippi = new zanavi_osm_map_values("Mississippi", "mississippi.bin", 31680044L, false, 27);
-	private static final zanavi_osm_map_values z_Missouri = new zanavi_osm_map_values("Missouri", "missouri.bin", 39762823L, false, 27);
-	private static final zanavi_osm_map_values z_Montana = new zanavi_osm_map_values("Montana", "montana.bin", 22707427L, false, 27);
-	private static final zanavi_osm_map_values z_Nebraska = new zanavi_osm_map_values("Nebraska", "nebraska.bin", 25624308L, false, 27);
-	private static final zanavi_osm_map_values z_Nevada = new zanavi_osm_map_values("Nevada", "nevada.bin", 21979548L, false, 27);
-	private static final zanavi_osm_map_values z_Ohio = new zanavi_osm_map_values("Ohio", "ohio.bin", 40769081L, false, 27);
-	private static final zanavi_osm_map_values z_Oklahoma = new zanavi_osm_map_values("Oklahoma", "oklahoma.bin", 55866120L, false, 27);
-	private static final zanavi_osm_map_values z_Oregon = new zanavi_osm_map_values("Oregon", "oregon.bin", 36940277L, false, 27);
-	private static final zanavi_osm_map_values z_Pennsylvania = new zanavi_osm_map_values("Pennsylvania", "pennsylvania.bin", 51500049L, false, 27);
-	private static final zanavi_osm_map_values z_Rhode_Island = new zanavi_osm_map_values("Rhode Island", "rhode-island.bin", 3691209L, false, 27);
-	private static final zanavi_osm_map_values z_Tennessee = new zanavi_osm_map_values("Tennessee", "tennessee.bin", 30511825L, false, 27);
-	private static final zanavi_osm_map_values z_Texas = new zanavi_osm_map_values("Texas", "texas.bin", 108367999L, false, 27);
-	private static final zanavi_osm_map_values z_Utah = new zanavi_osm_map_values("Utah", "utah.bin", 19254246L, false, 27);
-	private static final zanavi_osm_map_values z_Vermont = new zanavi_osm_map_values("Vermont", "vermont.bin", 7917383L, false, 27);
-	private static final zanavi_osm_map_values z_Virginia = new zanavi_osm_map_values("Virginia", "virginia.bin", 98109314L, false, 27);
-	private static final zanavi_osm_map_values z_West_Virginia = new zanavi_osm_map_values("West Virginia", "west-virginia.bin", 12267128L, false, 27);
-	private static final zanavi_osm_map_values z_Washington = new zanavi_osm_map_values("Washington", "washington.bin", 34281164L, false, 27);
-	private static final zanavi_osm_map_values z_Wisconsin = new zanavi_osm_map_values("Wisconsin", "wisconsin.bin", 44033160L, false, 27);
-	private static final zanavi_osm_map_values z_Wyoming = new zanavi_osm_map_values("Wyoming", "wyoming.bin", 15865183L, false, 27);
-	private static final zanavi_osm_map_values z_New_York = new zanavi_osm_map_values("New York", "new-york.bin", 39570304L, false, 27);
-	private static final zanavi_osm_map_values z_USA_minor_Islands = new zanavi_osm_map_values("USA minor Islands", "usa_minor_islands.bin", 24705L, false, 27);
-	private static final zanavi_osm_map_values z_Panama = new zanavi_osm_map_values("Panama", "panama.bin", 4836548L, false, 7);
-	private static final zanavi_osm_map_values z_Haiti_and_Dom_Rep_ = new zanavi_osm_map_values("Haiti and Dom.Rep.", "haiti_and_domrep.bin", 35886979L, false, 136);
-	private static final zanavi_osm_map_values z_Cuba = new zanavi_osm_map_values("Cuba", "cuba.bin", 11981430L, false, 136);
-	private static final zanavi_osm_map_values z_Rest_of_World = new zanavi_osm_map_values("Rest of World", "restl_welt.bin", 657152543L, false, 1);
+	private static final ZanaviOsmMapValue z_North_America = new ZanaviOsmMapValue("North America", "north_america.bin", -2, true, 6);
+	private static final ZanaviOsmMapValue z_Country_borders = new ZanaviOsmMapValue("Country borders [detail]", "borders.bin", 9025483L, true, 0);
+	private static final ZanaviOsmMapValue z_Coastline = new ZanaviOsmMapValue("Coastline", "coastline.bin", 173729342L, true, 0);
+	static final ZanaviOsmMapValue z_Restl_welt = new ZanaviOsmMapValue("Rest of the World", "restl_welt.bin", 657152543L, true, 0);
+	private static final ZanaviOsmMapValue z_Planet = new ZanaviOsmMapValue("Planet", "planet.bin", 17454169665L, true, 1);
+	private static final ZanaviOsmMapValue z_Europe = new ZanaviOsmMapValue("Europe", "europe.bin", 4591607513L, true, 3);
+	private static final ZanaviOsmMapValue z_Africa = new ZanaviOsmMapValue("Africa", "africa.bin", 1037269390L, true, 4);
+	private static final ZanaviOsmMapValue z_Asia = new ZanaviOsmMapValue("Asia", "asia.bin", 2747994511L, true, 5);
+	private static final ZanaviOsmMapValue z_USA = new ZanaviOsmMapValue("USA", "usa.bin", 2795629945L, true, 27);
+	private static final ZanaviOsmMapValue z_Central_America = new ZanaviOsmMapValue("Central America", "central_america.bin", 157073876L, true, 7);
+	private static final ZanaviOsmMapValue z_South_America = new ZanaviOsmMapValue("South America", "south_america.bin", 616648903L, true, 8);
+	private static final ZanaviOsmMapValue z_Australia_and_Oceania = new ZanaviOsmMapValue("Australia and Oceania", "australia_oceania.bin", 290908706L, true, 9);
+	private static final ZanaviOsmMapValue z_Albania = new ZanaviOsmMapValue("Albania", "albania.bin", 11868865L, false, 3);
+	private static final ZanaviOsmMapValue z_Alps = new ZanaviOsmMapValue("Alps", "alps.bin", 1093343815L, false, 3);
+	private static final ZanaviOsmMapValue z_Andorra = new ZanaviOsmMapValue("Andorra", "andorra.bin", 895533L, false, 3);
+	private static final ZanaviOsmMapValue z_Austria = new ZanaviOsmMapValue("Austria", "austria.bin", 291266612L, false, 3);
+	//private static final ZanaviOsmMapValue z_Azores = new ZanaviOsmMapValue("Azores", "azores.bin", 3896636L, false, 3);
+	private static final ZanaviOsmMapValue z_Azores = new ZanaviOsmMapValue("Azores", "azores.bin", 5964800L, false, 3,"https://257-93310424-gh.circle-artifacts.com/0/root/project/out/", 226624L, "03/12/2019" );
+	private static final ZanaviOsmMapValue z_Belarus = new ZanaviOsmMapValue("Belarus", "belarus.bin", 35370454L, false, 3);
+	private static final ZanaviOsmMapValue z_Belgium = new ZanaviOsmMapValue("Belgium", "belgium.bin",211522251L, false, 3, "https://261-93310424-gh.circle-artifacts.com/0/root/project/out/", 7166987L, "04/12/2019");
+	//private static final ZanaviOsmMapValue z_Belgium = new ZanaviOsmMapValue("Belgium", "belgium.bin", 173281928L, false, 3);
+	private static final ZanaviOsmMapValue z_Bosnia_Herzegovina = new ZanaviOsmMapValue("Bosnia-Herzegovina", "bosnia-herzegovina.bin", 20965766L, false, 3);
+	private static final ZanaviOsmMapValue z_British_Isles = new ZanaviOsmMapValue("British Isles", "british_isles.bin", 287714717L, false, 3);
+	private static final ZanaviOsmMapValue z_Bulgaria = new ZanaviOsmMapValue("Bulgaria", "bulgaria.bin", 45515055L, false, 3);
+	private static final ZanaviOsmMapValue z_Croatia = new ZanaviOsmMapValue("Croatia", "croatia.bin", 19816810L, false, 3);
+	private static final ZanaviOsmMapValue z_Cyprus = new ZanaviOsmMapValue("Cyprus", "cyprus.bin", 3062844L, false, 3);
+	private static final ZanaviOsmMapValue z_Czech_Republic = new ZanaviOsmMapValue("Czech Republic", "czech_republic.bin", 277514973L, false, 3);
+	private static final ZanaviOsmMapValue z_Denmark = new ZanaviOsmMapValue("Denmark", "denmark.bin", 134521370L, false, 3);
+	private static final ZanaviOsmMapValue z_Estonia = new ZanaviOsmMapValue("Estonia", "estonia.bin", 16299316L, false, 3);
+	private static final ZanaviOsmMapValue z_Faroe_Islands = new ZanaviOsmMapValue("Faroe Islands", "faroe_islands.bin", 601782L, false, 3);
+	private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 175651343L, false, 3);
+	private static final ZanaviOsmMapValue z_France = new ZanaviOsmMapValue("France", "france.bin", 2135649463L, false, 3);
+	private static final ZanaviOsmMapValue z_Germany = new ZanaviOsmMapValue("Germany", "germany.bin", 1691074126L, false, 3);
+	private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 545499632L, false, 3);
+	private static final ZanaviOsmMapValue z_Greece = new ZanaviOsmMapValue("Greece", "greece.bin", 100282275L, false, 3);
+	private static final ZanaviOsmMapValue z_Hungary = new ZanaviOsmMapValue("Hungary", "hungary.bin", 82373691L, false, 3);
+	private static final ZanaviOsmMapValue z_Iceland = new ZanaviOsmMapValue("Iceland", "iceland.bin", 20290432L, false, 3);
+	private static final ZanaviOsmMapValue z_Ireland = new ZanaviOsmMapValue("Ireland", "ireland.bin", 75768095L, false, 3);
+	private static final ZanaviOsmMapValue z_Isle_of_man = new ZanaviOsmMapValue("Isle of man", "isle_of_man.bin", 876966L, false, 3);
+	private static final ZanaviOsmMapValue z_Italy = new ZanaviOsmMapValue("Italy", "italy.bin", 798327717L, false, 3);
+	private static final ZanaviOsmMapValue z_Kosovo = new ZanaviOsmMapValue("Kosovo", "kosovo.bin", 2726077L, false, 3);
+	private static final ZanaviOsmMapValue z_Latvia = new ZanaviOsmMapValue("Latvia", "latvia.bin", 19153876L, false, 3);
+	private static final ZanaviOsmMapValue z_Liechtenstein = new ZanaviOsmMapValue("Liechtenstein", "liechtenstein.bin", 1215152L, false, 3);
+	private static final ZanaviOsmMapValue z_Lithuania = new ZanaviOsmMapValue("Lithuania", "lithuania.bin", 15062324L, false, 3);
+	//private static final ZanaviOsmMapValue z_Luxembourg = new ZanaviOsmMapValue("Luxembourg", "luxembourg.bin", 10258179L, false, 3);
+	private static final ZanaviOsmMapValue z_Luxembourg = new ZanaviOsmMapValue("Luxembourg", "luxembourg.bin", 12422600L, false, 3, "https://263-93310424-gh.circle-artifacts.com/0/root/project/out/", 512033L, "04/12/2019");
+	private static final ZanaviOsmMapValue z_Macedonia = new ZanaviOsmMapValue("Macedonia", "macedonia.bin", 3652744L, false, 3);
+	private static final ZanaviOsmMapValue z_Malta = new ZanaviOsmMapValue("Malta", "malta.bin", 665042L, false, 3);
+	private static final ZanaviOsmMapValue z_Moldova = new ZanaviOsmMapValue("Moldova", "moldova.bin", 7215780L, false, 3);
+	private static final ZanaviOsmMapValue z_Monaco = new ZanaviOsmMapValue("Monaco", "monaco.bin", 91311L, false, 3);
+	private static final ZanaviOsmMapValue z_Montenegro = new ZanaviOsmMapValue("Montenegro", "montenegro.bin", 2377175L, false, 3);
+	//private static final ZanaviOsmMapValue z_Netherlands = new ZanaviOsmMapValue("Netherlands", "netherlands.bin", 555738939L, false, 3);
+	private static final ZanaviOsmMapValue z_Netherlands = new ZanaviOsmMapValue("Netherlands", "netherlands.bin", 578229055L, false, 3, "https://262-93310424-gh.circle-artifacts.com/0/root/project/out/", 11106247L, "04/12/2019");
+	private static final ZanaviOsmMapValue z_Norway = new ZanaviOsmMapValue("Norway", "norway.bin", 252172059L, false, 3);
+	private static final ZanaviOsmMapValue z_Poland = new ZanaviOsmMapValue("Poland", "poland.bin", 547877032L, false, 3);
+	private static final ZanaviOsmMapValue z_Portugal = new ZanaviOsmMapValue("Portugal", "portugal.bin", 103467963L, false, 3);
+	private static final ZanaviOsmMapValue z_Romania = new ZanaviOsmMapValue("Romania", "romania.bin", 39689553L, false, 3);
+	private static final ZanaviOsmMapValue z_Russia_European_part = new ZanaviOsmMapValue("Russia European part", "russia-european-part.bin", 476175240L, false, 3);
+	private static final ZanaviOsmMapValue z_Serbia = new ZanaviOsmMapValue("Serbia", "serbia.bin", 11166698L, false, 3);
+	private static final ZanaviOsmMapValue z_Slovakia = new ZanaviOsmMapValue("Slovakia", "slovakia.bin", 100067631L, false, 3);
+	private static final ZanaviOsmMapValue z_Slovenia = new ZanaviOsmMapValue("Slovenia", "slovenia.bin", 85291657L, false, 3);
+	private static final ZanaviOsmMapValue z_Spain = new ZanaviOsmMapValue("Spain", "spain.bin", 416456620L, false, 3);
+	private static final ZanaviOsmMapValue z_Sweden = new ZanaviOsmMapValue("Sweden", "sweden.bin", 208091370L, false, 3);
+	private static final ZanaviOsmMapValue z_Switzerland = new ZanaviOsmMapValue("Switzerland", "switzerland.bin", 166727088L, false, 3);
+	private static final ZanaviOsmMapValue z_Turkey = new ZanaviOsmMapValue("Turkey", "turkey.bin", 33231427L, false, 3);
+	private static final ZanaviOsmMapValue z_Ukraine = new ZanaviOsmMapValue("Ukraine", "ukraine.bin", 58070734L, false, 3);
+	private static final ZanaviOsmMapValue z_Canari_Islands = new ZanaviOsmMapValue("Canari Islands", "canari_islands.bin", 7125254L, false, 4);
+	private static final ZanaviOsmMapValue z_India = new ZanaviOsmMapValue("India", "india.bin", 46569907L, false, 5);
+	private static final ZanaviOsmMapValue z_Israel_and_Palestine = new ZanaviOsmMapValue("Israel and Palestine", "israel_and_palestine.bin", 15630491L, false, 5);
+	private static final ZanaviOsmMapValue z_China = new ZanaviOsmMapValue("China", "china.bin", 49738512L, false, 5);
+	private static final ZanaviOsmMapValue z_Japan = new ZanaviOsmMapValue("Japan", "japan.bin", 413065433L, false, 5);
+	private static final ZanaviOsmMapValue z_Taiwan = new ZanaviOsmMapValue("Taiwan", "taiwan.bin", 5689334L, false, 5);
+	private static final ZanaviOsmMapValue z_Canada = new ZanaviOsmMapValue("Canada", "canada.bin", 830908722L, false, 6);
+	private static final ZanaviOsmMapValue z_Greenland = new ZanaviOsmMapValue("Greenland", "greenland.bin", 500803L, false, 6);
+	private static final ZanaviOsmMapValue z_Mexico = new ZanaviOsmMapValue("Mexico", "mexico.bin", 29858297L, false, 6);
+	private static final ZanaviOsmMapValue z_US_Midwest = new ZanaviOsmMapValue("US-Midwest", "us-midwest.bin", 495302706L, false, 27);
+	private static final ZanaviOsmMapValue z_US_Northeast = new ZanaviOsmMapValue("US-Northeast", "us-northeast.bin", 206503509L, false, 27);
+	private static final ZanaviOsmMapValue z_US_Pacific = new ZanaviOsmMapValue("US-Pacific", "us-pacific.bin", 11527206L, false, 27);
+	private static final ZanaviOsmMapValue z_US_South = new ZanaviOsmMapValue("US-South", "us-south.bin", 803391332L, false, 27);
+	private static final ZanaviOsmMapValue z_US_West = new ZanaviOsmMapValue("US-West", "us-west.bin", 506304481L, false, 27);
+	private static final ZanaviOsmMapValue z_Alabama = new ZanaviOsmMapValue("Alabama", "alabama.bin", 35081542L, false, 27);
+	private static final ZanaviOsmMapValue z_Alaska = new ZanaviOsmMapValue("Alaska", "alaska.bin", 7844950L, false, 27);
+	private static final ZanaviOsmMapValue z_Arizona = new ZanaviOsmMapValue("Arizona", "arizona.bin", 33938704L, false, 27);
+	private static final ZanaviOsmMapValue z_Arkansas = new ZanaviOsmMapValue("Arkansas", "arkansas.bin", 22029069L, false, 27);
+	private static final ZanaviOsmMapValue z_California = new ZanaviOsmMapValue("California", "california.bin", 203758150L, false, 27);
+	private static final ZanaviOsmMapValue z_North_Carolina = new ZanaviOsmMapValue("North Carolina", "north-carolina.bin", 128642801L, false, 27);
+	private static final ZanaviOsmMapValue z_South_Carolina = new ZanaviOsmMapValue("South Carolina", "south-carolina.bin", 41257655L, false, 27);
+	private static final ZanaviOsmMapValue z_Colorado = new ZanaviOsmMapValue("Colorado", "colorado.bin", 67174144L, false, 27);
+	private static final ZanaviOsmMapValue z_North_Dakota = new ZanaviOsmMapValue("North Dakota", "north-dakota.bin", 45925872L, false, 27);
+	private static final ZanaviOsmMapValue z_South_Dakota = new ZanaviOsmMapValue("South Dakota", "south-dakota.bin", 13888265L, false, 27);
+	private static final ZanaviOsmMapValue z_District_of_Columbia = new ZanaviOsmMapValue("District of Columbia", "district-of-columbia.bin", 5693682L, false, 27);
+	private static final ZanaviOsmMapValue z_Connecticut = new ZanaviOsmMapValue("Connecticut", "connecticut.bin", 7189491L, false, 27);
+	private static final ZanaviOsmMapValue z_Delaware = new ZanaviOsmMapValue("Delaware", "delaware.bin", 3089068L, false, 27);
+	private static final ZanaviOsmMapValue z_Florida = new ZanaviOsmMapValue("Florida", "florida.bin", 49772033L, false, 27);
+	private static final ZanaviOsmMapValue z_Georgia = new ZanaviOsmMapValue("Georgia", "georgia.bin", 83076475L, false, 27);
+	private static final ZanaviOsmMapValue z_New_Hampshire = new ZanaviOsmMapValue("New Hampshire", "new-hampshire.bin", 13900082L, false, 27);
+	private static final ZanaviOsmMapValue z_Hawaii = new ZanaviOsmMapValue("Hawaii", "hawaii.bin", 3670926L, false, 27);
+	private static final ZanaviOsmMapValue z_Idaho = new ZanaviOsmMapValue("Idaho", "idaho.bin", 27122570L, false, 27);
+	private static final ZanaviOsmMapValue z_Illinois = new ZanaviOsmMapValue("Illinois", "illinois.bin", 64992622L, false, 27);
+	private static final ZanaviOsmMapValue z_Indiana = new ZanaviOsmMapValue("Indiana", "indiana.bin", 23877847L, false, 27);
+	private static final ZanaviOsmMapValue z_Iowa = new ZanaviOsmMapValue("Iowa", "iowa.bin", 47021367L, false, 27);
+	private static final ZanaviOsmMapValue z_New_Jersey = new ZanaviOsmMapValue("New Jersey", "new-jersey.bin", 25412463L, false, 27);
+	private static final ZanaviOsmMapValue z_Kansas = new ZanaviOsmMapValue("Kansas", "kansas.bin", 22432235L, false, 27);
+	private static final ZanaviOsmMapValue z_Kentucky = new ZanaviOsmMapValue("Kentucky", "kentucky.bin", 34892443L, false, 27);
+	private static final ZanaviOsmMapValue z_Louisiana = new ZanaviOsmMapValue("Louisiana", "louisiana.bin", 40739401L, false, 27);
+	private static final ZanaviOsmMapValue z_Maine = new ZanaviOsmMapValue("Maine", "maine.bin", 14716304L, false, 27);
+	private static final ZanaviOsmMapValue z_Maryland = new ZanaviOsmMapValue("Maryland", "maryland.bin", 27470086L, false, 27);
+	private static final ZanaviOsmMapValue z_Massachusetts = new ZanaviOsmMapValue("Massachusetts", "massachusetts.bin", 42398142L, false, 27);
+	private static final ZanaviOsmMapValue z_New_Mexico = new ZanaviOsmMapValue("New Mexico", "new-mexico.bin", 26815652L, false, 27);
+	private static final ZanaviOsmMapValue z_Michigan = new ZanaviOsmMapValue("Michigan", "michigan.bin", 44192808L, false, 27);
+	private static final ZanaviOsmMapValue z_Minnesota = new ZanaviOsmMapValue("Minnesota", "minnesota.bin", 82203062L, false, 27);
+	private static final ZanaviOsmMapValue z_Mississippi = new ZanaviOsmMapValue("Mississippi", "mississippi.bin", 31680044L, false, 27);
+	private static final ZanaviOsmMapValue z_Missouri = new ZanaviOsmMapValue("Missouri", "missouri.bin", 39762823L, false, 27);
+	private static final ZanaviOsmMapValue z_Montana = new ZanaviOsmMapValue("Montana", "montana.bin", 22707427L, false, 27);
+	private static final ZanaviOsmMapValue z_Nebraska = new ZanaviOsmMapValue("Nebraska", "nebraska.bin", 25624308L, false, 27);
+	private static final ZanaviOsmMapValue z_Nevada = new ZanaviOsmMapValue("Nevada", "nevada.bin", 21979548L, false, 27);
+	private static final ZanaviOsmMapValue z_Ohio = new ZanaviOsmMapValue("Ohio", "ohio.bin", 40769081L, false, 27);
+	private static final ZanaviOsmMapValue z_Oklahoma = new ZanaviOsmMapValue("Oklahoma", "oklahoma.bin", 55866120L, false, 27);
+	private static final ZanaviOsmMapValue z_Oregon = new ZanaviOsmMapValue("Oregon", "oregon.bin", 36940277L, false, 27);
+	private static final ZanaviOsmMapValue z_Pennsylvania = new ZanaviOsmMapValue("Pennsylvania", "pennsylvania.bin", 51500049L, false, 27);
+	private static final ZanaviOsmMapValue z_Rhode_Island = new ZanaviOsmMapValue("Rhode Island", "rhode-island.bin", 3691209L, false, 27);
+	private static final ZanaviOsmMapValue z_Tennessee = new ZanaviOsmMapValue("Tennessee", "tennessee.bin", 30511825L, false, 27);
+	private static final ZanaviOsmMapValue z_Texas = new ZanaviOsmMapValue("Texas", "texas.bin", 108367999L, false, 27);
+	private static final ZanaviOsmMapValue z_Utah = new ZanaviOsmMapValue("Utah", "utah.bin", 19254246L, false, 27);
+	private static final ZanaviOsmMapValue z_Vermont = new ZanaviOsmMapValue("Vermont", "vermont.bin", 7917383L, false, 27);
+	private static final ZanaviOsmMapValue z_Virginia = new ZanaviOsmMapValue("Virginia", "virginia.bin", 98109314L, false, 27);
+	private static final ZanaviOsmMapValue z_West_Virginia = new ZanaviOsmMapValue("West Virginia", "west-virginia.bin", 12267128L, false, 27);
+	private static final ZanaviOsmMapValue z_Washington = new ZanaviOsmMapValue("Washington", "washington.bin", 34281164L, false, 27);
+	private static final ZanaviOsmMapValue z_Wisconsin = new ZanaviOsmMapValue("Wisconsin", "wisconsin.bin", 44033160L, false, 27);
+	private static final ZanaviOsmMapValue z_Wyoming = new ZanaviOsmMapValue("Wyoming", "wyoming.bin", 15865183L, false, 27);
+	private static final ZanaviOsmMapValue z_New_York = new ZanaviOsmMapValue("New York", "new-york.bin", 39570304L, false, 27);
+	private static final ZanaviOsmMapValue z_USA_minor_Islands = new ZanaviOsmMapValue("USA minor Islands", "usa_minor_islands.bin", 24705L, false, 27);
+	private static final ZanaviOsmMapValue z_Panama = new ZanaviOsmMapValue("Panama", "panama.bin", 4836548L, false, 7);
+	private static final ZanaviOsmMapValue z_Haiti_and_Dom_Rep_ = new ZanaviOsmMapValue("Haiti and Dom.Rep.", "haiti_and_domrep.bin", 35886979L, false, 136);
+	private static final ZanaviOsmMapValue z_Cuba = new ZanaviOsmMapValue("Cuba", "cuba.bin", 11981430L, false, 136);
+	private static final ZanaviOsmMapValue z_Rest_of_World = new ZanaviOsmMapValue("Rest of World", "restl_welt.bin", 657152543L, false, 1);
 	//
 	//
 	//
-	static final zanavi_osm_map_values[] z_OSM_MAPS = new zanavi_osm_map_values[] { z_Country_borders, z_Coastline, z_Rest_of_World, z_Planet, z_Europe, z_North_America, z_USA, z_Central_America, z_South_America, z_Africa, z_Asia, z_Australia_and_Oceania, z_Caribbean, z_Albania, z_Alps, z_Andorra, z_Austria, z_Azores, z_Belarus, z_Belgium, z_Bosnia_Herzegovina, z_British_Isles, z_Bulgaria, z_Croatia, z_Cyprus, z_Czech_Republic, z_Denmark, z_Estonia, z_Faroe_Islands, z_Finland, z_France,
+	static final ZanaviOsmMapValue[] z_OSM_MAPS = new ZanaviOsmMapValue[] { z_Country_borders, z_Coastline, z_Rest_of_World, z_Planet, z_Europe, z_North_America, z_USA, z_Central_America, z_South_America, z_Africa, z_Asia, z_Australia_and_Oceania, z_Caribbean, z_Albania, z_Alps, z_Andorra, z_Austria, z_Azores, z_Belarus, z_Belgium, z_Bosnia_Herzegovina, z_British_Isles, z_Bulgaria, z_Croatia, z_Cyprus, z_Czech_Republic, z_Denmark, z_Estonia, z_Faroe_Islands, z_Finland, z_France,
 			z_Germany, z_Great_Britain, z_Greece, z_Hungary, z_Iceland, z_Ireland, z_Isle_of_man, z_Italy, z_Kosovo, z_Latvia, z_Liechtenstein, z_Lithuania, z_Luxembourg, z_Macedonia, z_Malta, z_Moldova, z_Monaco, z_Montenegro, z_Netherlands, z_Norway, z_Poland, z_Portugal, z_Romania, z_Russia_European_part, z_Serbia, z_Slovakia, z_Slovenia, z_Spain, z_Sweden, z_Switzerland, z_Turkey, z_Ukraine, z_Canari_Islands, z_India, z_Israel_and_Palestine, z_China, z_Japan, z_Taiwan, z_Canada,
 			z_Greenland, z_Mexico, z_US_Midwest, z_US_Northeast, z_US_Pacific, z_US_South, z_US_West, z_Alabama, z_Alaska, z_Arizona, z_Arkansas, z_California, z_North_Carolina, z_South_Carolina, z_Colorado, z_North_Dakota, z_South_Dakota, z_District_of_Columbia, z_Connecticut, z_Delaware, z_Florida, z_Georgia, z_New_Hampshire, z_Hawaii, z_Idaho, z_Illinois, z_Indiana, z_Iowa, z_New_Jersey, z_Kansas, z_Kentucky, z_Louisiana, z_Maine, z_Maryland, z_Massachusetts, z_New_Mexico, z_Michigan,
 			z_Minnesota, z_Mississippi, z_Missouri, z_Montana, z_Nebraska, z_Nevada, z_Ohio, z_Oklahoma, z_Oregon, z_Pennsylvania, z_Rhode_Island, z_Tennessee, z_Texas, z_Utah, z_Vermont, z_Virginia, z_West_Virginia, z_Washington, z_Wisconsin, z_Wyoming, z_New_York, z_USA_minor_Islands, z_Panama, z_Haiti_and_Dom_Rep_, z_Cuba };
@@ -348,11 +314,11 @@ public class NavitMapDownloader
 	public class ProgressThread extends Thread
 	{
 		final Handler mHandler;
-		final zanavi_osm_map_values map_values;
+		final ZanaviOsmMapValue map_values;
 		final int map_num;
 		int my_dialog_num;
 
-		ProgressThread(Handler h, zanavi_osm_map_values map_values, int map_num2)
+		ProgressThread(Handler h, ZanaviOsmMapValue map_values, int map_num2)
 		{
 			this.mHandler = h;
 			this.map_values = map_values;
@@ -626,7 +592,7 @@ public class NavitMapDownloader
 	{
 		boolean running;
 		final Handler handler;
-		final zanavi_osm_map_values map_values;
+		final ZanaviOsmMapValue map_values;
 		final int map_num;
 		int my_dialog_num;
 		final int my_num;
@@ -641,7 +607,7 @@ public class NavitMapDownloader
 		long start_byte_count_now = 0L;
 		final long end_byte;
 
-		MultiStreamDownloaderThread(int num_threads, Handler h, zanavi_osm_map_values map_values, int map_num2, int c, String p, String p2, String fn, String ffn, String sn, String upmap, long start_byte, long end_byte)
+		MultiStreamDownloaderThread(int num_threads, Handler h, ZanaviOsmMapValue map_values, int map_num2, int c, String p, String p2, String fn, String ffn, String sn, String upmap, long start_byte, long end_byte)
 		{
 			running = false;
 
@@ -793,8 +759,25 @@ public class NavitMapDownloader
 					try_number++;
 					// Log.d("NavitMapDownloader", this.my_num + "download try number " + try_number);
 					// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + "download try number " + try_number);
-
-					HttpURLConnection c = d_url_connect(map_values, this_server_name, map_num, this.my_num);
+					URL url;
+					HttpURLConnection c = null;
+					if (this_server_name.startsWith("https")) {
+					//if (map_values.getMapUrl() != null) {
+						try {
+							url = new URL(this_server_name);
+							if (url != null) {
+								Log.e(TAG, "map url: " + url);
+								//trustAllHosts();
+								HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+								https.setHostnameVerifier(new AllowAllHostnameVerifier());
+								c = https;
+							}
+						}
+						catch (Exception e){
+						}
+					} else {
+						c = d_url_connect(map_values, this_server_name, map_num, this.my_num);
+					}
 					// set http header to resume download
 					//if (this.end_byte == map_values.est_size_bytes)
 					//{
@@ -1334,12 +1317,9 @@ public class NavitMapDownloader
 	public NavitMapDownloader(Navit main)
 	{
 		//this.navit_jmain = main;
-
 		if (Navit.FDBL)
 		{
 			// ------- RELEASE SETTINGS --------
-			// ------- RELEASE SETTINGS --------
-			String ZANAVI_MAPS_BASE_URL = "http://dlfd.zanavi.cc/data/";
 			ZANAVI_MAPS_SEVERTEXT_URL = "http://dlfd.zanavi.cc/server.txt";
 		}
 	}
@@ -1349,16 +1329,8 @@ public class NavitMapDownloader
 		if (Navit.Navit_Largemap_DonateVersion_Installed != true)
 		{
 			z_Planet.est_size_bytes = -2;
-			z_Planet.est_size_bytes_human_string = "";
-			z_Planet.text_for_select_list = z_Planet.map_name + " " + z_Planet.est_size_bytes_human_string;
-
 			z_USA.est_size_bytes = -2;
-			z_USA.est_size_bytes_human_string = "";
-			z_USA.text_for_select_list = z_USA.map_name + " " + z_USA.est_size_bytes_human_string;
-
 			z_Europe.est_size_bytes = -2;
-			z_Europe.est_size_bytes_human_string = "";
-			z_Europe.text_for_select_list = z_Europe.map_name + " " + z_Europe.est_size_bytes_human_string;
 		}
 	}
 
@@ -1485,7 +1457,6 @@ public class NavitMapDownloader
 				}
 			}
 		}
-
 		// use the corrected copy
 		map_catalogue.clear();
 		map_catalogue.addAll(temp_list);
@@ -1501,7 +1472,6 @@ public class NavitMapDownloader
 		while (k.hasNext())
 		{
 			String m = k.next();
-
 			if (!m.equals("borders.bin:borders.bin"))
 			{
 				// System.out.println("MMMM=" + m);
@@ -1521,8 +1491,6 @@ public class NavitMapDownloader
 		List<String> temp_list = new ArrayList<>();
 		temp_list.clear();
 		temp_list.addAll(map_catalogue);
-
-		int temp_list_prev_size = temp_list.size();
 
 		// compare it with directory contents
 		File map_dir = new File(Navit.sNavitMapDirectory);
@@ -1555,7 +1523,6 @@ public class NavitMapDownloader
 									if (!files_in_mapdir[i].equals("borders.bin"))
 									{
 										System.out.println("checking file in mapdir: " + files_in_mapdir[i]);
-										boolean found_in_maplist = false;
 										Iterator<String> j = temp_list.listIterator();
 										int t = 0;
 										while (j.hasNext())
@@ -1630,7 +1597,6 @@ public class NavitMapDownloader
 		catch (IOException e)
 		{
 		}
-
 		Navit.send_installed_maps_to_plugin();
 	}
 
@@ -1681,9 +1647,7 @@ public class NavitMapDownloader
 				catch (NoSuchMethodError e)
 				{
 				}
-
 				Navit.sNavitObject.show_case_001();
-
 				// show semi transparent box "no maps installed" ------------------
 				// show semi transparent box "no maps installed" ------------------
 			}
@@ -1863,9 +1827,9 @@ public class NavitMapDownloader
 		{
 			//Log.v("NavitMapDownloader", "i=" + i);
 			// look for continents only
-			if (z_OSM_MAPS[i].is_continent)
+			if (z_OSM_MAPS[i].isContinent())
 			{
-				if (!((last_was_continent) && (last_continent_id == z_OSM_MAPS[i].continent_id)))
+				if (!((last_was_continent) && (last_continent_id == z_OSM_MAPS[i].getContinentId())))
 				{
 					if (count > 0)
 					{
@@ -1877,18 +1841,18 @@ public class NavitMapDownloader
 					}
 				}
 				last_was_continent = true;
-				last_continent_id = z_OSM_MAPS[i].continent_id;
+				last_continent_id = z_OSM_MAPS[i].getContinentId();
 
-				cur_continent = z_OSM_MAPS[i].continent_id;
+				cur_continent = z_OSM_MAPS[i].getContinentId();
 				if (z_OSM_MAPS[i].est_size_bytes == -2)
 				{
 					// only dummy entry to have a nice structure
-					temp_ml[count] = z_OSM_MAPS[i].text_for_select_list;
+					temp_ml[count] = z_OSM_MAPS[i].getTextForSelectList();
 					temp_i[count] = -1;
 				}
 				else
 				{
-					temp_ml[count] = z_OSM_MAPS[i].text_for_select_list;
+					temp_ml[count] = z_OSM_MAPS[i].getTextForSelectList();
 					temp_i[count] = i;
 				}
 				count++;
@@ -1897,7 +1861,7 @@ public class NavitMapDownloader
 				try
 				{
 					// get next item
-					if ((z_OSM_MAPS[i + 1].is_continent) && (cur_continent == z_OSM_MAPS[i + 1].continent_id))
+					if ((z_OSM_MAPS[i + 1].isContinent()) && (cur_continent == z_OSM_MAPS[i + 1].getContinentId()))
 					{
 						skip = true;
 					}
@@ -1915,12 +1879,12 @@ public class NavitMapDownloader
 						if (!already_added[j])
 						{
 							// look for maps in that continent
-							if ((z_OSM_MAPS[j].continent_id == cur_continent) && (!z_OSM_MAPS[j].is_continent))
+							if ((z_OSM_MAPS[j].getContinentId() == cur_continent) && (!z_OSM_MAPS[j].isContinent()))
 							{
 								//Log.v("NavitMapDownloader", "found map=" + j + " c=" + cur_continent);
 								// add this map.
 								//temp_m[count] = z_OSM_MAPS[j].map_name;
-								temp_ml[count] = " * " + z_OSM_MAPS[j].text_for_select_list;
+								temp_ml[count] = " * " + z_OSM_MAPS[j].getTextForSelectList();
 								temp_i[count] = j;
 								count++;
 								already_added[j] = true;
@@ -1954,7 +1918,7 @@ public class NavitMapDownloader
 				//Log.v("NavitMapDownloader", "found map(loose)=" + i + " c=" + cur_continent);
 				// add this map.
 				//temp_m[count] = z_OSM_MAPS[i].map_name;
-				temp_ml[count] = " # " + z_OSM_MAPS[i].text_for_select_list;
+				temp_ml[count] = " # " + z_OSM_MAPS[i].getTextForSelectList();
 				temp_i[count] = i;
 				count++;
 				already_added[i] = true;
@@ -2028,7 +1992,7 @@ public class NavitMapDownloader
 		}
 	}
 
-	private String find_file_on_other_mapserver(List<String> map_servers_list, String md5_sum, zanavi_osm_map_values map_values, int map_num3)
+	private String find_file_on_other_mapserver(List<String> map_servers_list, String md5_sum, ZanaviOsmMapValue map_values, int map_num3)
 	{
 		System.out.println("find_file_on_other_mapserver:first server name=" + map_servers_list);
 
@@ -2061,7 +2025,7 @@ public class NavitMapDownloader
 			return null;
 		}
 
-		String md5_server = d_get_md5_from_server(map_values, other_server_name, map_num3);
+		String md5_server = d_get_md5_from_server(map_values, other_server_name);
 		if ((md5_server == null) || (!md5_server.equals(md5_sum)))
 		{
 			System.out.println("find_file_on_other_mapserver:wrong md5 on " + other_server_name);
@@ -2072,7 +2036,7 @@ public class NavitMapDownloader
 		return other_server_name;
 	}
 
-	private int download_osm_map(Handler handler, zanavi_osm_map_values map_values, int map_num3)
+	private int download_osm_map(Handler handler, ZanaviOsmMapValue map_values, int map_num3)
 	{
 		int exit_code = 1;
 
@@ -2152,43 +2116,45 @@ public class NavitMapDownloader
 		}
 
 		String this_server_name = null;
-		String md5_server = null;
+		String md5FromServer = null;
 
 		int server_err = 0;
 		int server_retries = 0;
 		int server_max_retries = 8;
 
-		while (server_retries < server_max_retries)
-		{
-			Log.d("NavitMapDownloader", "init:try #" + server_retries);
+		if (map_values.getMD5URL() == null) {
+			while (server_retries < server_max_retries) {
+				Log.d(TAG, "init:try #" + server_retries);
 
-			this_server_name = d_get_servername(true, map_values);
-			if (this_server_name == null)
-			{
-				Log.d("NavitMapDownloader", "init:try #" + server_retries + " srvname=null");
+				this_server_name = d_get_servername(true, map_values);
+				if (this_server_name == null) {
+					Log.d(TAG, "init:try #" + server_retries + " srvname=null");
 
+					server_err = 1;
+					server_retries++;
+					continue;
+				}
+
+				md5FromServer = d_get_md5_from_server(map_values, this_server_name);
+				if (md5FromServer == null) {
+					Log.d(TAG, "init:try #" + server_retries + " md5=null" + " srvname=" + this_server_name);
+
+					server_err = 1;
+					server_retries++;
+					continue;
+				} else {
+					Log.d(TAG, "init:try #" + server_retries + " md5=" + md5FromServer + " srvname=" + this_server_name);
+					Log.e(TAG,"md5 = " + md5FromServer);
+					server_err = 0;
+					break;
+				}
+
+			}
+		} else { //only one custom server URL
+			md5FromServer = d_get_md5_from_server(map_values, map_values.getMD5URL().toString());
+			if (md5FromServer == null) {
 				server_err = 1;
-				server_retries++;
-				continue;
 			}
-
-			md5_server = d_get_md5_from_server(map_values, this_server_name, map_num3);
-			if (md5_server == null)
-			{
-				Log.d("NavitMapDownloader", "init:try #" + server_retries + " md5=null" + " srvname=" + this_server_name);
-
-				server_err = 1;
-				server_retries++;
-				continue;
-			}
-			else
-			{
-				Log.d("NavitMapDownloader", "init:try #" + server_retries + " md5=" + md5_server + " srvname=" + this_server_name);
-
-				server_err = 0;
-				break;
-			}
-
 		}
 
 		if (server_err == 1)
@@ -2208,9 +2174,9 @@ public class NavitMapDownloader
 		}
 
 		// on disk md5 can be "null" , when downloading new map
-		String md5_disk = d_get_md5_from_disk(map_values, this_server_name, map_num3);
+		String md5_disk = d_get_md5_from_disk(map_values);
 
-		if (d_match_md5sums(md5_disk, md5_server))
+		if (d_match_md5sums(md5_disk, md5FromServer))
 		{
 			// ok we have a match, no need to update!
 			msg = handler.obtainMessage();
@@ -2225,7 +2191,7 @@ public class NavitMapDownloader
 			return 11;
 		}
 
-		long real_file_size = d_get_real_download_filesize(map_values, this_server_name, map_num3);
+		long real_file_size = d_get_real_download_filesize(map_values, this_server_name);
 		if (real_file_size <= 0)
 		{
 			msg = handler.obtainMessage();
@@ -2267,10 +2233,18 @@ public class NavitMapDownloader
 		int num_threads = 1;
 		long bytes_diff = 0L;
 		long bytes_leftover = 0;
-		if (map_values.est_size_bytes < 1000000)
+		// from custom mapserver URL or small map use only one thread
+		if (map_values.est_size_bytes < 1000000 || map_values.getMD5URL() != null)
 		{
 			map_servers_used.clear();
-			map_servers_used.add(this_server_name);
+			if (map_values.getMD5URL() != null)
+			{
+				map_servers_used.add(map_values.getMapUrl().toString());
+			}
+			else
+				{
+				map_servers_used.add(this_server_name);
+			}
 			bytes_diff = map_values.est_size_bytes;
 		}
 		else
@@ -2293,7 +2267,7 @@ public class NavitMapDownloader
 				}
 				else
 				{
-					new_map_server = find_file_on_other_mapserver(map_servers_used, md5_server, map_values, map_num3);
+					new_map_server = find_file_on_other_mapserver(map_servers_used, md5FromServer, map_values, map_num3);
 					if (new_map_server != null)
 					{
 						map_servers_used.add(new_map_server);
@@ -2520,8 +2494,10 @@ public class NavitMapDownloader
 		}
 
 		System.out.println("MD5 ok **start*");
+		Log.i(TAG, "md5 from server = " + md5FromServer);
+		Log.i(TAG, "md5 from server = " + md5FromServer.split(" ",0)[0]);
 		String md5sum_local_calculated = calc_md5sum_on_device(handler, my_dialog_num, map_values.est_size_bytes);
-		if (!d_match_md5sums(md5sum_local_calculated, md5_server))
+		if (!d_match_md5sums(md5sum_local_calculated, md5FromServer.split(" ", 0)[0]))
 		{
 			// some problem with download
 			msg = handler.obtainMessage();
@@ -2537,7 +2513,7 @@ public class NavitMapDownloader
 			File tmp_downloadfile_md5 = new File(Navit.getInstance().getMapMD5path(), MD5_DOWNLOAD_TEMPFILE);
 			tmp_downloadfile_md5.delete();
 
-			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "md5 mismatch server=" + md5_server + " local=" + md5sum_local_calculated);
+			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "md5 mismatch server=" + md5FromServer + " local=" + md5sum_local_calculated);
 
 			Log.d("NavitMapDownloader", "MD5 mismatch!!");
 			System.out.println("MD5 mismatch ######");
@@ -2545,7 +2521,7 @@ public class NavitMapDownloader
 		}
 		else
 		{
-			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "md5 OK server=" + md5_server + " local=" + md5sum_local_calculated);
+			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "md5 OK server=" + md5FromServer + " local=" + md5sum_local_calculated);
 
 			Log.d("NavitMapDownloader", "MD5 ok");
 			System.out.println("MD5 ok ******");
@@ -2643,108 +2619,102 @@ public class NavitMapDownloader
 		{
 			// ------------ download idx file ------------
 			// ------------ download idx file ------------
-			zanavi_osm_map_values z_dummy_for_idx = new zanavi_osm_map_values("index file", map_values.url + ".idx", 400000000L, false, 3);
+			ZanaviOsmMapValue z_dummy_for_idx = new ZanaviOsmMapValue("index file", map_values.url + ".idx", 400000000L, false, 3);
 			ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "idx download start");
 
 			boolean index_file_download = true;
 			Log.d("NavitMapDownloader", "index_file_download(a)=" + index_file_download);
 
-			final int index_download_max_retries = 10;
-			int index_download_retries = 1;
-			while (index_download_retries < index_download_max_retries) // while-loop until index is downloaded -------------------------
-			{
-				System.out.println("index download -> enter retry loop: " + index_download_retries + "/" + index_download_max_retries);
-
-				long real_file_size_idx = d_get_real_download_filesize(z_dummy_for_idx, this_server_name, map_num3);
-				ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "idx file size = " + real_file_size_idx);
-
-				if (real_file_size_idx <= 0)
+				final int index_download_max_retries = 10;
+				int index_download_retries = 1;
+				while (index_download_retries < index_download_max_retries) // while-loop until index is downloaded -------------------------
 				{
-					msg = handler.obtainMessage();
-					b = new Bundle();
-					msg.what = 2;
-					b.putInt("dialog_num", my_dialog_num);
-					b.putString("text", Navit.get_text("Error downloading index!")); //TRANS
-					msg.setData(b);
-					handler.sendMessage(msg);
-
-					index_file_download = false;
-				}
-				else
-				{
-					z_dummy_for_idx.est_size_bytes = real_file_size_idx;
-				}
-
-				num_threads = 1;
-				bytes_leftover = 0;
-				bytes_diff = z_dummy_for_idx.est_size_bytes;
-
-				Message msg_idx = handler.obtainMessage();
-				Bundle b_idx = new Bundle();
-				msg_idx.what = 1;
-				b_idx.putInt("max", (int) (z_dummy_for_idx.est_size_bytes / 1024)); // use a dummy number here
-				b_idx.putInt("cur", 0);
-				b_idx.putInt("dialog_num", my_dialog_num);
-				b_idx.putString("title", Navit.get_text("Index download")); //TRANS
-				b_idx.putString("text", Navit.get_text("downloading indexfile")); //TRANS
-				msg_idx.setData(b);
-				handler.sendMessage(msg_idx);
-
-				MultiStreamDownloaderThread[] m_idx = new MultiStreamDownloaderThread[num_threads];
-				int k_idx;
-
-				mapdownload_error_code_clear();
-				mapdownload_already_read = new long[num_threads];
-				mapdownload_byte_per_second_overall = new float[num_threads];
-				mapdownload_byte_per_second_now = new float[num_threads];
-				for (k_idx = 0; k_idx < num_threads; k_idx++)
-				{
-					mapdownload_already_read[k_idx] = 0;
-					mapdownload_byte_per_second_overall[k_idx] = 0;
-					mapdownload_byte_per_second_now[k_idx] = 0;
-				}
-
-				// start downloader threads here --------------------------
-				// start downloader threads here --------------------------
-				for (k_idx = 0; k_idx < num_threads; k_idx++)
-				{
-					if (k_idx == (num_threads - 1))
+					System.out.println("index download -> enter retry loop: " + index_download_retries + "/" + index_download_max_retries);
+					long real_file_size_idx;
+					if (map_values.getIdxUrl() !=null)
 					{
-						m_idx[k_idx] = new MultiStreamDownloaderThread(num_threads, handler, z_dummy_for_idx, map_num3, k_idx + 1, PATH, PATH2, fileName + ".idx", final_fileName + ".idx", this_server_name, "xyzdummydummy", bytes_diff * k_idx, z_dummy_for_idx.est_size_bytes);
+						this_server_name = map_values.getIdxUrl().toString();
 					}
-					else
-					{
-						m_idx[k_idx] = new MultiStreamDownloaderThread(num_threads, handler, z_dummy_for_idx, map_num3, k_idx + 1, PATH, PATH2, fileName + ".idx", final_fileName + ".idx", this_server_name, "xyzdummydummy", bytes_diff * k_idx, bytes_diff * (k_idx + 1));
+					if (map_values.getIdxSize() > 0) {
+						real_file_size_idx = map_values.getIdxSize();
+					} else {
+						real_file_size_idx = d_get_real_download_filesize(z_dummy_for_idx, this_server_name);
 					}
-					m_idx[k_idx].start();
-				}
 
-				// wait for downloader threads to finish --------------------------
-				for (k_idx = 0; k_idx < num_threads; k_idx++)
-				{
-					try
-					{
-						m_idx[k_idx].join();
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
+					ZANaviLogMessages.am(ZANaviLogMessages.STATUS_INFO, this.getClass().getSimpleName() + ":" + "idx file size = " + real_file_size_idx);
 
-				index_download_retries++;
+					if (real_file_size_idx <= 0) {
+						msg = handler.obtainMessage();
+						b = new Bundle();
+						msg.what = 2;
+						b.putInt("dialog_num", my_dialog_num);
+						b.putString("text", Navit.get_text("Error downloading index!")); //TRANS
+						msg.setData(b);
+						handler.sendMessage(msg);
 
-				if (mapdownload_error_code == 0)
-				{
-					System.out.println("index download ok -> break retry loop");
-					break;
-				}
+						index_file_download = false;
+					} else {
+						z_dummy_for_idx.est_size_bytes = real_file_size_idx;
+					}
 
-			} // while-loop until index is downloaded -------------------------
+					num_threads = 1;
+					bytes_leftover = 0;
+					bytes_diff = z_dummy_for_idx.est_size_bytes;
+
+					Message msg_idx = handler.obtainMessage();
+					Bundle b_idx = new Bundle();
+					msg_idx.what = 1;
+					b_idx.putInt("max", (int) (z_dummy_for_idx.est_size_bytes / 1024)); // use a dummy number here
+					b_idx.putInt("cur", 0);
+					b_idx.putInt("dialog_num", my_dialog_num);
+					b_idx.putString("title", Navit.get_text("Index download")); //TRANS
+					b_idx.putString("text", Navit.get_text("downloading indexfile")); //TRANS
+					msg_idx.setData(b);
+					handler.sendMessage(msg_idx);
+
+					MultiStreamDownloaderThread[] m_idx = new MultiStreamDownloaderThread[num_threads];
+					int k_idx;
+
+					mapdownload_error_code_clear();
+					mapdownload_already_read = new long[num_threads];
+					mapdownload_byte_per_second_overall = new float[num_threads];
+					mapdownload_byte_per_second_now = new float[num_threads];
+					for (k_idx = 0; k_idx < num_threads; k_idx++) {
+						mapdownload_already_read[k_idx] = 0;
+						mapdownload_byte_per_second_overall[k_idx] = 0;
+						mapdownload_byte_per_second_now[k_idx] = 0;
+					}
+
+					// start downloader threads here --------------------------
+					// start downloader threads here --------------------------
+					for (k_idx = 0; k_idx < num_threads; k_idx++) {
+						if (k_idx == (num_threads - 1)) {
+							m_idx[k_idx] = new MultiStreamDownloaderThread(num_threads, handler, z_dummy_for_idx, map_num3, k_idx + 1, PATH, PATH2, fileName + ".idx", final_fileName + ".idx", this_server_name, "xyzdummydummy", bytes_diff * k_idx, z_dummy_for_idx.est_size_bytes);
+						} else {
+							m_idx[k_idx] = new MultiStreamDownloaderThread(num_threads, handler, z_dummy_for_idx, map_num3, k_idx + 1, PATH, PATH2, fileName + ".idx", final_fileName + ".idx", this_server_name, "xyzdummydummy", bytes_diff * k_idx, bytes_diff * (k_idx + 1));
+						}
+						m_idx[k_idx].start();
+					}
+
+					// wait for downloader threads to finish --------------------------
+					for (k_idx = 0; k_idx < num_threads; k_idx++) {
+						try {
+							m_idx[k_idx].join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					index_download_retries++;
+
+					if (mapdownload_error_code == 0) {
+						System.out.println("index download ok -> break retry loop");
+						break;
+					}
+
+				} // while-loop until index is downloaded -------------------------
 
 			System.out.println("index download -> ended retry loop");
 
@@ -2881,7 +2851,7 @@ public class NavitMapDownloader
 		// NEVER enable this on a production release!!!!!!!!!!
 	}
 
-	private String d_get_servername(boolean first_run, zanavi_osm_map_values map_values)
+	private String d_get_servername(boolean first_run, ZanaviOsmMapValue map_values)
 	{
 		// this is only for debugging
 		// NEVER enable this on a production release!!!!!!!!!!
@@ -2954,26 +2924,43 @@ public class NavitMapDownloader
 		return servername;
 	}
 
-	private String d_get_md5_from_server(zanavi_osm_map_values map_values, String servername, int map_num3)
+	private String d_get_md5_from_server(ZanaviOsmMapValue map_values, String servername)
 	{
 		// try to get MD5 file
 		String md5_from_server = null;
 		try
 		{
-			URL url = new URL(ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url + ".md5");
-			System.out.println("md5 url:" + ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url + ".md5");
-			HttpURLConnection c = get_url_connection(url);
-			String ua_ = Navit.UserAgentString_bind.replace("@__THREAD__@", "0" + "T" + MULTI_NUM_THREADS_LOCAL);
-			c.addRequestProperty("User-Agent", ua_);
-			c.addRequestProperty("Pragma", "no-cache");
+			URL url;
+			HttpURLConnection c;
+			url = map_values.getMD5URL(); // does the map have a predefined serverURL ?
+			if (url != null) {
+				Log.e(TAG,"md5 url: " + url);
+				//trustAllHosts();
+				HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+				https.setHostnameVerifier(new AllowAllHostnameVerifier());
+				c = https;
+			} else {
+				url = new URL(ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url + ".md5");
+				Log.i(TAG, "md5 url:" + ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url + ".md5");
+				//c = get_url_connection(url);
+				String ua_ = Navit.UserAgentString_bind.replace("@__THREAD__@", "0" + "T" + MULTI_NUM_THREADS_LOCAL);
+				c = (HttpURLConnection) url.openConnection();
+				c.addRequestProperty("User-Agent", ua_);
+				c.addRequestProperty("Pragma", "no-cache");
+				c.setRequestMethod("GET");
+				c.setDoOutput(true);
+				c.setReadTimeout(SOCKET_READ_TIMEOUT);
+				c.setConnectTimeout(SOCKET_CONNECT_TIMEOUT);
+				c = (HttpURLConnection) url.openConnection();
+			}
 
-			c.setRequestMethod("GET");
-			c.setDoOutput(true);
-			c.setReadTimeout(SOCKET_READ_TIMEOUT);
-			c.setConnectTimeout(SOCKET_CONNECT_TIMEOUT);
+
 			try
 			{
-				c.connect();
+				Log.e(TAG,"c.url: " + c.getURL());
+				//c.connect();
+				Log.e(TAG,"--- responsemessage = " + c.getResponseMessage());
+				Log.e(TAG,"------------- responsecode = " + c.getResponseCode());
 				BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()), 4096);
 				String str;
 				str = in.readLine();
@@ -3014,11 +3001,35 @@ public class NavitMapDownloader
 		return md5_from_server;
 	}
 
-	private long d_get_real_download_filesize(zanavi_osm_map_values map_values, String servername, int map_num3)
+	private long d_get_real_download_filesize(ZanaviOsmMapValue map_values, String servername)
 	{
 		long real_size_bytes = 0;
 		try
 		{
+			if (map_values.getMapUrl() != null) {
+			URL url;
+			HttpURLConnection c;
+			url = map_values.getMapUrl(); // does the map have a predefined serverURL ?
+			if (url != null) {
+				Log.e(TAG,"map url: " + url);
+
+				HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+				https.setHostnameVerifier(new AllowAllHostnameVerifier());
+
+				Log.e(TAG,"c.url: " + https.getURL());
+				Log.e(TAG,"--- responsemessage = " + https.getResponseMessage());
+				Log.e(TAG,"------------- responsecode = " + https.getResponseCode());
+				Log.e(TAG, ("header content-length=" + https.getHeaderField("content-length")));
+				Log.e(TAG,"All headers" + https.getHeaderFields());
+				real_size_bytes = https.getContentLength();
+				if (real_size_bytes <= 0) { // circleci does not provide content length
+					real_size_bytes = map_values.getEstSize();
+				}
+				https.disconnect();
+				Log.e(TAG,"map size: " + real_size_bytes);
+			}
+
+		} else {
 			URL url = new URL(ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url);
 			System.out.println("url1:" + ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url);
 			HttpURLConnection c = get_url_connection(url);
@@ -3031,19 +3042,17 @@ public class NavitMapDownloader
 			c.setReadTimeout(SOCKET_READ_TIMEOUT);
 			c.setConnectTimeout(SOCKET_CONNECT_TIMEOUT);
 			// real_size_bytes = c.getContentLength(); -> only returns "int" value, its an android bug
-			try
-			{
+			try {
 				c.connect();
 				System.out.println("header content-length=" + c.getHeaderField("content-length"));
 				real_size_bytes = Long.parseLong(c.getHeaderField("content-length"));
 				Log.d("NavitMapDownloader", "real_size_bytes=" + real_size_bytes);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 				Log.d("NavitMapDownloader", "error parsing content-length header field");
 			}
 			c.disconnect();
+		}
 		}
 		catch (Exception e)
 		{
@@ -3052,7 +3061,7 @@ public class NavitMapDownloader
 		return real_size_bytes;
 	}
 
-	private String d_get_md5_from_disk(zanavi_osm_map_values map_values, String servername, int map_num3)
+	private String d_get_md5_from_disk(ZanaviOsmMapValue map_values)
 	{
 		String md5_on_disk = null;
 
@@ -3113,7 +3122,7 @@ public class NavitMapDownloader
 		return md5_match;
 	}
 
-	private HttpURLConnection d_url_connect(zanavi_osm_map_values map_values, String servername, int map_num3, int current_thread_num)
+	private HttpURLConnection d_url_connect(ZanaviOsmMapValue map_values, String servername, int map_num3, int current_thread_num)
 	{
 		URL url = null;
 		HttpURLConnection c = null;
@@ -3218,10 +3227,10 @@ public class NavitMapDownloader
 			final Handler handler;
 			final String file;
 			final int my_dialog_num;
-			final long file_size;
+			private final long file_size;
 			Boolean running = false;
 
-			FileProgress(Handler h, String f, int dn, long fsize)
+			private FileProgress(Handler h, String f, int dn, long fsize)
 			{
 				handler = h;
 				file = f;
@@ -3627,9 +3636,7 @@ public class NavitMapDownloader
 								{
 									e.printStackTrace();
 								}
-
 							}
-
 						}
 						while (numRead != -1);
 
@@ -3717,7 +3724,6 @@ public class NavitMapDownloader
 			}
 			catch (Exception e)
 			{
-
 				try
 				{
 					if (Navit.wl_cpu != null)
@@ -3730,10 +3736,8 @@ public class NavitMapDownloader
 				{
 					e3.printStackTrace();
 				}
-
 				return md5sum;
 			}
-
 			return md5sum;
 		}
 
@@ -3770,7 +3774,6 @@ public class NavitMapDownloader
 			{
 				e.printStackTrace();
 			}
-
 			old_percent_ = -1;
 			percent_ = -2;
 
@@ -3915,7 +3918,7 @@ public class NavitMapDownloader
 				hexString.append(t);
 			}
 			md5sum = hexString.toString();
-			System.out.println("md5sum local=" + md5sum);
+			Log.i(TAG, "md5sum local = " + md5sum);
 		}
 		catch (NoSuchAlgorithmException e)
 		{
@@ -3944,7 +3947,7 @@ public class NavitMapDownloader
 
 	private static int calc_percent(int cur, int max)
 	{
-		int percent = 0;
+		int percent;
 
 		try
 		{
