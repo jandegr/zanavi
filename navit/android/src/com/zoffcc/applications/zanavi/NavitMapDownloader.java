@@ -156,9 +156,11 @@ public class NavitMapDownloader
 	private static final ZanaviOsmMapValue z_Greece = new ZanaviOsmMapValue("Greece", "greece.bin", 100282275L, false, 3);
 	private static final ZanaviOsmMapValue z_Hungary = new ZanaviOsmMapValue("Hungary", "hungary.bin", 82373691L, false, 3);
 	private static final ZanaviOsmMapValue z_Iceland = new ZanaviOsmMapValue("Iceland", "iceland.bin", 20290432L, false, 3);
-	private static final ZanaviOsmMapValue z_Ireland = new ZanaviOsmMapValue("Ireland", "ireland.bin", 75768095L, false, 3);
+	//private static final ZanaviOsmMapValue z_Ireland = new ZanaviOsmMapValue("Ireland", "ireland.bin", 75768095L, false, 3);
+	private static final ZanaviOsmMapValue z_Ireland = new ZanaviOsmMapValue("Ireland", "ireland.bin", 93376704L, false, 3, "https://286-93310424-gh.circle-artifacts.com/0/root/project/out/", 3705591L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Isle_of_man = new ZanaviOsmMapValue("Isle of man", "isle_of_man.bin", 876966L, false, 3);
-	private static final ZanaviOsmMapValue z_Italy = new ZanaviOsmMapValue("Italy", "italy.bin", 798327717L, false, 3);
+	//private static final ZanaviOsmMapValue z_Italy = new ZanaviOsmMapValue("Italy", "italy.bin", 798327717L, false, 3);
+	private static final ZanaviOsmMapValue z_Italy = new ZanaviOsmMapValue("Italy", "italy.bin", 920675492L, false, 3, "https://252-93310424-gh.circle-artifacts.com/0/root/project/out/", 26175268L, "03/12/2019");
 	private static final ZanaviOsmMapValue z_Kosovo = new ZanaviOsmMapValue("Kosovo", "kosovo.bin", 2726077L, false, 3);
 	private static final ZanaviOsmMapValue z_Latvia = new ZanaviOsmMapValue("Latvia", "latvia.bin", 19153876L, false, 3);
 	private static final ZanaviOsmMapValue z_Liechtenstein = new ZanaviOsmMapValue("Liechtenstein", "liechtenstein.bin", 1215152L, false, 3);
