@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 - 2015 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -85,10 +85,9 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 {
 	static ZANaviAutoCompleteTextViewSearchLocation address_string;
 	private EditText hn_string;
-	private TextView addrhn_view;
 	private static CheckBox pm_checkbox;
 	private static CheckBox hdup_checkbox;
-	static TextView result_count_number;
+	private static TextView result_count_number;
 	static String result_count_text = "0";
 	private CheckBox ff_checkbox;
 	private String search_type;
@@ -96,11 +95,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 	private Button search_country_select;
 	private ScrollView sv;
 	private LinearLayout ll;
-	static ListView listview;
 	static SearchResultListNewArrayAdapter adapter;
-	private ImageView index_light;
-	private RelativeLayout index_container;
-	private TextView index_light_noindex_text;
 	static SearchResultsThreadNew searchresultsThreadNew_offline = null;
 	private static int res_counter_ = 0;
 	private int selected_id = -1;
@@ -501,7 +496,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 					}
 					res_counter_ = 0;
 
-					if (NavitAddressSearchActivity.pm_checkbox.isChecked())
+					if (pm_checkbox.isChecked())
 					{
 						Navit.Navit_last_address_partial_match = true;
 					}
@@ -624,7 +619,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 		addr_view.setText(Navit.get_text("Enter Destination")); //TRANS
 
 		// housenumber: label
-		addrhn_view = (TextView) findViewById(R.id.house_number);
+		TextView addrhn_view = (TextView) findViewById(R.id.house_number);
 		addrhn_view.setText(Navit.get_text("Housenumber")); //TRANS
 
 		// partial match checkbox
@@ -639,8 +634,8 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 
 		result_count_number = (TextView) findViewById(R.id.result_count_number);
 
-		index_light = (ImageView) findViewById(R.id.index_light_img);
-		index_light_noindex_text = (TextView) findViewById(R.id.index_light_noindex_text);
+		ImageView index_light = (ImageView) findViewById(R.id.index_light_img);
+		TextView index_light_noindex_text = (TextView) findViewById(R.id.index_light_noindex_text);
 		index_light_noindex_text.setText(Navit.get_text("click to activate Index Search"));
 		final Intent donate_intent = new Intent(this, ZANaviNormalDonateActivity.class);
 		index_light_noindex_text.setOnTouchListener(new View.OnTouchListener()
@@ -663,7 +658,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 			index_light.setImageResource(R.drawable.round_light_red);
 		}
 
-		index_container = (RelativeLayout) findViewById(R.id.index_light_container);
+		RelativeLayout index_container = (RelativeLayout) findViewById(R.id.index_light_container);
 
 		// full file checkbox
 		ff_checkbox = (CheckBox) findViewById(R.id.cb_full_file);
@@ -1014,7 +1009,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 
 				// index_container.setVisibility(View.GONE);
 
-				listview = (ListView) findViewById(R.id.search_realtime_result_container);
+				ListView listview = (ListView) findViewById(R.id.search_realtime_result_container);
 				ArrayList<search_result_entry> l2 = new ArrayList<search_result_entry>();
 				// search_result_entry a = new search_result_entry(1, "eoprk woroewk r3k0", 0);
 				// l2.add(a);
@@ -1155,7 +1150,7 @@ public class NavitAddressSearchActivity extends AppCompatActivity
 				resultIntent.putExtra("hn_string", NavitAddressSearchActivity.this.hn_string.getText().toString());
 			}
 
-			if (NavitAddressSearchActivity.pm_checkbox.isChecked())
+			if (pm_checkbox.isChecked())
 			{
 				resultIntent.putExtra("partial_match", "1");
 			}

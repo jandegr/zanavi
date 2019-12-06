@@ -37,7 +37,10 @@ import androidx.appcompat.widget.Toolbar;
 @SuppressLint("NewApi")
 public class ZANaviDonateActivity extends AppCompatActivity
 {
-	@Override
+    // ------------------ BitCoin Addr --------
+    private final static String BITCOIN_DONATE_ADDR = "1ZANav18WY8ytM7bhnAEBS3bdrTohsD9p";
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		Navit.applySharedTheme(this, Navit.preferences.PREF_current_theme);
@@ -67,7 +70,7 @@ public class ZANaviDonateActivity extends AppCompatActivity
 	{
 		try
 		{
-			de.schildbach.wallet.integration.android.BitcoinIntegration.request(this, Navit.BITCOIN_DONATE_ADDR);
+			de.schildbach.wallet.integration.android.BitcoinIntegration.request(this, BITCOIN_DONATE_ADDR);
 		}
 		catch (Exception e)
 		{
@@ -79,7 +82,7 @@ public class ZANaviDonateActivity extends AppCompatActivity
 		try
 		{
 			final String subject = Navit.get_text("ZANavi Donation with Bitcoin");
-			final String body = Navit.get_text("Bitcoin address") + ":\n" + Navit.BITCOIN_DONATE_ADDR + "\n\n" + Navit.get_text("generate QR code") + ":\n" + "https://chart.googleapis.com/chart?cht=qr&chl=bitcoin%3A" + Navit.BITCOIN_DONATE_ADDR + "&choe=UTF-8&chs=300x300";
+			final String body = Navit.get_text("Bitcoin address") + ":\n" + BITCOIN_DONATE_ADDR + "\n\n" + Navit.get_text("generate QR code") + ":\n" + "https://chart.googleapis.com/chart?cht=qr&chl=bitcoin%3A" + BITCOIN_DONATE_ADDR + "&choe=UTF-8&chs=300x300";
 
 			final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 			emailIntent.setType("plain/text");
@@ -97,7 +100,7 @@ public class ZANaviDonateActivity extends AppCompatActivity
 	{
 		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
-		clipboard.setText(Navit.BITCOIN_DONATE_ADDR);
+		clipboard.setText(BITCOIN_DONATE_ADDR);
 		Toast.makeText(this, Navit.get_text("Bitcoinaddress copied to Clipboard"), Toast.LENGTH_LONG).show();
 	}
 }

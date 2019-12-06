@@ -63,7 +63,11 @@ import android.util.Log;
 
 public class NavitVehicle
 {
-	private final LocationManager locationManager;
+    private static long mLastLocationMillis = -1;
+    // -------------- GPS fix and extrapolation vars -------------
+    // -------------- GPS fix and extrapolation vars -------------
+    private static Location mLastLocation = null;
+    private final LocationManager locationManager;
 	private static LocationManager locationManager_s = null;
 	private static LocationListener fastLocationListener_s = null;
 	private static LocationListener preciseLocationListener_s = null;
@@ -369,8 +373,8 @@ public class NavitVehicle
 			public void onLocationChanged(Location location)
 			{
 				last_p_fix = location.getTime();
-				Navit.mLastLocationMillis = SystemClock.elapsedRealtime();
-				Navit.mLastLocation = location;
+				mLastLocationMillis = SystemClock.elapsedRealtime();
+				mLastLocation = location;
 
 				if (Navit.preferences.PREF_follow_gps)
 				{
@@ -525,9 +529,9 @@ public class NavitVehicle
 					// ------------------------------
 					// thanks to: http://stackoverflow.com/questions/2021176/how-can-i-check-the-current-status-of-the-gps-receiver
 					// ------------------------------
-					if (Navit.mLastLocation != null)
+					if (mLastLocation != null)
 					{
-						Navit.isGPSFix = (SystemClock.elapsedRealtime() - Navit.mLastLocationMillis) < MILLIS_AFTER_GPS_FIX_IS_LOST;
+						Navit.isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < MILLIS_AFTER_GPS_FIX_IS_LOST;
 					}
 					//					if (Navit.isGPSFix)
 					//					{

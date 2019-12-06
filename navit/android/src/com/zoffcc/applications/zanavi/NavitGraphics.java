@@ -238,7 +238,7 @@ class NavitGraphics
 	private static final Boolean DEBUG_TOUCH = false;
 	private static Boolean ZOOM_MODE_ACTIVE = false;
 	private static float ZOOM_MODE_SCALE = 1.0f;
-	static Boolean DRAG_MODE_ACTIVE = false;
+	private static Boolean DRAG_MODE_ACTIVE = false;
 
 	// ----------------- DEBUG ----------------
 	// ----------------- DEBUG ----------------
@@ -295,7 +295,7 @@ class NavitGraphics
 	private int vehicle_direction_delta = 0;
 	private int vehicle_zoom_delta = 0;
 	// int overlay_disabled;
-	float trackball_x, trackball_y;
+	private float trackball_x, trackball_y;
 	final View view;
 	RelativeLayout relativelayout;
 

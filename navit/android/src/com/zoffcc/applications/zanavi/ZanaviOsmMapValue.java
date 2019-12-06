@@ -2,6 +2,9 @@ package com.zoffcc.applications.zanavi;
 
 import java.net.URL;
 
+/**
+ * Represents a single downloadable map (usually a binfile).
+ */
 class ZanaviOsmMapValue {
 
     private String serverURL = null; // specifies an URL that overrides the Zanavi mapserver(s)

@@ -102,7 +102,7 @@ public class NavitMapDownloader
 	// ------- DEBUG DEBUG SETTINGS --------
 	// ------- DEBUG DEBUG SETTINGS --------
 
-	static int MULTI_NUM_THREADS_MAX = 5; // 5
+	static int MULTI_NUM_THREADS_MAX = 5;
 	static int MULTI_NUM_THREADS = 3; // how many download streams for a file
 	private static int MULTI_NUM_THREADS_LOCAL = 1; // how many download streams for the current file from the current server
 
@@ -127,8 +127,10 @@ public class NavitMapDownloader
 	private static final ZanaviOsmMapValue z_Australia_and_Oceania = new ZanaviOsmMapValue("Australia and Oceania", "australia_oceania.bin", 290908706L, true, 9);
 	private static final ZanaviOsmMapValue z_Albania = new ZanaviOsmMapValue("Albania", "albania.bin", 11868865L, false, 3);
 	private static final ZanaviOsmMapValue z_Alps = new ZanaviOsmMapValue("Alps", "alps.bin", 1093343815L, false, 3);
-	private static final ZanaviOsmMapValue z_Andorra = new ZanaviOsmMapValue("Andorra", "andorra.bin", 895533L, false, 3);
-	private static final ZanaviOsmMapValue z_Austria = new ZanaviOsmMapValue("Austria", "austria.bin", 291266612L, false, 3);
+	//private static final ZanaviOsmMapValue z_Andorra = new ZanaviOsmMapValue("Andorra", "andorra.bin", 895533L, false, 3);
+	private static final ZanaviOsmMapValue z_Andorra = new ZanaviOsmMapValue("Andorra", "andorra.bin", 971811L, false, 3, "https://271-93310424-gh.circle-artifacts.com/0/root/project/out/", 64088L, "06/12/2019");
+	private static final ZanaviOsmMapValue z_Austria = new ZanaviOsmMapValue("Austria", "austria.bin", 324616326L, false, 3, "https://277-93310424-gh.circle-artifacts.com/0/root/project/out/", 8832795L, "06/12/2019");
+	//private static final ZanaviOsmMapValue z_Austria = new ZanaviOsmMapValue("Austria", "austria.bin", 291266612L, false, 3, "");
 	//private static final ZanaviOsmMapValue z_Azores = new ZanaviOsmMapValue("Azores", "azores.bin", 3896636L, false, 3);
 	private static final ZanaviOsmMapValue z_Azores = new ZanaviOsmMapValue("Azores", "azores.bin", 5964800L, false, 3,"https://257-93310424-gh.circle-artifacts.com/0/root/project/out/", 226624L, "03/12/2019" );
 	private static final ZanaviOsmMapValue z_Belarus = new ZanaviOsmMapValue("Belarus", "belarus.bin", 35370454L, false, 3);
@@ -137,16 +139,20 @@ public class NavitMapDownloader
 	private static final ZanaviOsmMapValue z_Bosnia_Herzegovina = new ZanaviOsmMapValue("Bosnia-Herzegovina", "bosnia-herzegovina.bin", 20965766L, false, 3);
 	private static final ZanaviOsmMapValue z_British_Isles = new ZanaviOsmMapValue("British Isles", "british_isles.bin", 287714717L, false, 3);
 	private static final ZanaviOsmMapValue z_Bulgaria = new ZanaviOsmMapValue("Bulgaria", "bulgaria.bin", 45515055L, false, 3);
-	private static final ZanaviOsmMapValue z_Croatia = new ZanaviOsmMapValue("Croatia", "croatia.bin", 19816810L, false, 3);
+	//private static final ZanaviOsmMapValue z_Croatia = new ZanaviOsmMapValue("Croatia", "croatia.bin", 19816810L, false, 3);
+	private static final ZanaviOsmMapValue z_Croatia = new ZanaviOsmMapValue("Croatia", "croatia.bin", 63448343L, false, 3, "https://273-93310424-gh.circle-artifacts.com/0/root/project/out/", 2024363L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Cyprus = new ZanaviOsmMapValue("Cyprus", "cyprus.bin", 3062844L, false, 3);
 	private static final ZanaviOsmMapValue z_Czech_Republic = new ZanaviOsmMapValue("Czech Republic", "czech_republic.bin", 277514973L, false, 3);
-	private static final ZanaviOsmMapValue z_Denmark = new ZanaviOsmMapValue("Denmark", "denmark.bin", 134521370L, false, 3);
+	//private static final ZanaviOsmMapValue z_Denmark = new ZanaviOsmMapValue("Denmark", "denmark.bin", 134521370L, false, 3);
+	private static final ZanaviOsmMapValue z_Denmark = new ZanaviOsmMapValue("Denmark", "denmark.bin", 197898803L, false, 3, "https://283-93310424-gh.circle-artifacts.com/0/root/project/out/", 4676559, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Estonia = new ZanaviOsmMapValue("Estonia", "estonia.bin", 16299316L, false, 3);
 	private static final ZanaviOsmMapValue z_Faroe_Islands = new ZanaviOsmMapValue("Faroe Islands", "faroe_islands.bin", 601782L, false, 3);
-	private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 175651343L, false, 3);
+	//private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 175651343L, false, 3);
+	private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 272857125L, false, 3, "https://280-93310424-gh.circle-artifacts.com/0/root/project/out/", 5463584L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_France = new ZanaviOsmMapValue("France", "france.bin", 2135649463L, false, 3);
 	private static final ZanaviOsmMapValue z_Germany = new ZanaviOsmMapValue("Germany", "germany.bin", 1691074126L, false, 3);
-	private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 545499632L, false, 3);
+	//private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 545499632L, false, 3);
+	private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 639853192L, false, 3, "https://279-93310424-gh.circle-artifacts.com/0/root/project/out/", 31889126L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Greece = new ZanaviOsmMapValue("Greece", "greece.bin", 100282275L, false, 3);
 	private static final ZanaviOsmMapValue z_Hungary = new ZanaviOsmMapValue("Hungary", "hungary.bin", 82373691L, false, 3);
 	private static final ZanaviOsmMapValue z_Iceland = new ZanaviOsmMapValue("Iceland", "iceland.bin", 20290432L, false, 3);
@@ -172,13 +178,19 @@ public class NavitMapDownloader
 	private static final ZanaviOsmMapValue z_Romania = new ZanaviOsmMapValue("Romania", "romania.bin", 39689553L, false, 3);
 	private static final ZanaviOsmMapValue z_Russia_European_part = new ZanaviOsmMapValue("Russia European part", "russia-european-part.bin", 476175240L, false, 3);
 	private static final ZanaviOsmMapValue z_Serbia = new ZanaviOsmMapValue("Serbia", "serbia.bin", 11166698L, false, 3);
-	private static final ZanaviOsmMapValue z_Slovakia = new ZanaviOsmMapValue("Slovakia", "slovakia.bin", 100067631L, false, 3);
+	//private static final ZanaviOsmMapValue z_Slovakia = new ZanaviOsmMapValue("Slovakia", "slovakia.bin", 100067631L, false, 3);
+	private static final ZanaviOsmMapValue z_Slovakia = new ZanaviOsmMapValue("Slovakia", "slovakia.bin", 112570535L, false, 3, "https://274-93310424-gh.circle-artifacts.com/0/root/project/out/", 3149718L, "04/12/2019");
+	//private static final ZanaviOsmMapValue z_Slovenia = new ZanaviOsmMapValue("Slovenia", "slovenia.bin", 85291657L, false, 3);
 	private static final ZanaviOsmMapValue z_Slovenia = new ZanaviOsmMapValue("Slovenia", "slovenia.bin", 85291657L, false, 3);
-	private static final ZanaviOsmMapValue z_Spain = new ZanaviOsmMapValue("Spain", "spain.bin", 416456620L, false, 3);
-	private static final ZanaviOsmMapValue z_Sweden = new ZanaviOsmMapValue("Sweden", "sweden.bin", 208091370L, false, 3);
-	private static final ZanaviOsmMapValue z_Switzerland = new ZanaviOsmMapValue("Switzerland", "switzerland.bin", 166727088L, false, 3);
+	//private static final ZanaviOsmMapValue z_Spain = new ZanaviOsmMapValue("Spain", "spain.bin", 416456620L, false, 3);
+	private static final ZanaviOsmMapValue z_Spain = new ZanaviOsmMapValue("Spain", "spain.bin", 499950316L, false, 3, "https://282-93310424-gh.circle-artifacts.com/0/root/project/out/", 28672139L, "06/12/2019");
+	//private static final ZanaviOsmMapValue z_Sweden = new ZanaviOsmMapValue("Sweden", "sweden.bin", 208091370L, false, 3);
+	private static final ZanaviOsmMapValue z_Sweden = new ZanaviOsmMapValue("Sweden", "sweden.bin", 257962382L, false, 3, "https://278-93310424-gh.circle-artifacts.com/0/root/project/out/", 6497177L, "06/12/2019");
+	//private static final ZanaviOsmMapValue z_Switzerland = new ZanaviOsmMapValue("Switzerland", "switzerland.bin", 166727088L, false, 3);
+	private static final ZanaviOsmMapValue z_Switzerland = new ZanaviOsmMapValue("Switzerland", "switzerland.bin", 184014164L, false, 3, "https://276-93310424-gh.circle-artifacts.com/0/root/project/out/", 6170317L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Turkey = new ZanaviOsmMapValue("Turkey", "turkey.bin", 33231427L, false, 3);
-	private static final ZanaviOsmMapValue z_Ukraine = new ZanaviOsmMapValue("Ukraine", "ukraine.bin", 58070734L, false, 3);
+	//private static final ZanaviOsmMapValue z_Ukraine = new ZanaviOsmMapValue("Ukraine", "ukraine.bin", 58070734L, false, 3);
+	private static final ZanaviOsmMapValue z_Ukraine = new ZanaviOsmMapValue("Ukraine", "ukraine.bin", 319156238L, false, 3, "https://281-93310424-gh.circle-artifacts.com/0/root/project/out/", 8633086L,"06/12/2019");
 	private static final ZanaviOsmMapValue z_Canari_Islands = new ZanaviOsmMapValue("Canari Islands", "canari_islands.bin", 7125254L, false, 4);
 	private static final ZanaviOsmMapValue z_India = new ZanaviOsmMapValue("India", "india.bin", 46569907L, false, 5);
 	private static final ZanaviOsmMapValue z_Israel_and_Palestine = new ZanaviOsmMapValue("Israel and Palestine", "israel_and_palestine.bin", 15630491L, false, 5);
@@ -265,8 +277,8 @@ public class NavitMapDownloader
 	static String[] OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE = null;
 	static String[] OSM_MAP_NAME_LIST_ondisk = null;
 
-	public static int[] OSM_MAP_NAME_ORIG_ID_LIST = null;
-	public static String[] OSM_MAP_NAME_ondisk_ORIG_LIST = null;
+	static int[] OSM_MAP_NAME_ORIG_ID_LIST = null;
+	static String[] OSM_MAP_NAME_ondisk_ORIG_LIST = null;
 
 	private static Boolean already_inited = false;
 
@@ -311,12 +323,12 @@ public class NavitMapDownloader
 	static boolean download_active = false;
 	static boolean download_active_start = false;
 
-	public class ProgressThread extends Thread
+	class ProgressThread extends Thread
 	{
-		final Handler mHandler;
-		final ZanaviOsmMapValue map_values;
-		final int map_num;
-		int my_dialog_num;
+		private final Handler mHandler;
+		private final ZanaviOsmMapValue map_values;
+		private final int map_num;
+		private int my_dialog_num;
 
 		ProgressThread(Handler h, ZanaviOsmMapValue map_values, int map_num2)
 		{
@@ -684,13 +696,13 @@ public class NavitMapDownloader
 					// split file, we need to compensate
 					int split_num = (int) (this.start_byte / MAX_SINGLE_BINFILE_SIZE);
 					long real_start_byte = this.start_byte - (MAX_SINGLE_BINFILE_SIZE * split_num);
-					f_rnd = (RandomAccessFile) d_open_file(PATH2 + "/" + fileName + "." + split_num, real_start_byte, this.my_num);
+					f_rnd = d_open_file(PATH2 + "/" + fileName + "." + split_num, real_start_byte, this.my_num);
 					// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + "split file calc(a2):split_num=" + split_num + " real_start_byte=" + real_start_byte + " this.start_byte=" + this.start_byte);
 					// Log.d("NavitMapDownloader", this.my_num + "split file calc(a2):split_num=" + split_num + " real_start_byte=" + real_start_byte + " this.start_byte=" + this.start_byte);
 				}
 				else
 				{
-					f_rnd = (RandomAccessFile) d_open_file(PATH2 + "/" + fileName, this.start_byte, this.my_num);
+					f_rnd = d_open_file(PATH2 + "/" + fileName, this.start_byte, this.my_num);
 					// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + "split file calc(a1): this.start_byte=" + this.start_byte);
 					// Log.d("NavitMapDownloader", this.my_num + "split file calc(a1): this.start_byte=" + this.start_byte);
 				}
@@ -812,13 +824,13 @@ public class NavitMapDownloader
 							// split file, we need to compensate
 							int split_num = (int) (already_read / MAX_SINGLE_BINFILE_SIZE);
 							long real_already_read = already_read - (MAX_SINGLE_BINFILE_SIZE * split_num);
-							f_rnd = (RandomAccessFile) d_open_file(PATH2 + "/" + fileName + "." + split_num, real_already_read, this.my_num);
+							f_rnd = d_open_file(PATH2 + "/" + fileName + "." + split_num, real_already_read, this.my_num);
 							// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + "split file calc(b2):split_num=" + split_num + " real_already_read=" + real_already_read + " already_read=" + already_read);
 							// Log.d("NavitMapDownloader", this.my_num + "split file calc(b2):split_num=" + split_num + " real_already_read=" + real_already_read + " already_read=" + already_read);
 						}
 						else
 						{
-							f_rnd = (RandomAccessFile) d_open_file(PATH2 + "/" + fileName, already_read, this.my_num);
+							f_rnd = d_open_file(PATH2 + "/" + fileName, already_read, this.my_num);
 							// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + "split file calc(b1): already_read=" + already_read);
 							// Log.d("NavitMapDownloader", this.my_num + "split file calc(b1): already_read=" + already_read);
 						}
@@ -837,7 +849,6 @@ public class NavitMapDownloader
 					// InputStream bif = (InputStream) d_url_get_bif(c);
 					if (bif != null)
 					{
-
 						// do the real downloading here
 						try
 						{
@@ -862,7 +873,6 @@ public class NavitMapDownloader
 							while ((len1 = bif.read(buffer)) != -1)
 							{
 								// System.out.println("DEBUG_MAP_DOWNLOAD::" + this.my_num + " buf avail2=" + bif.available() + " len1=" + len1);
-
 								if (stop_me)
 								{
 									// ok we need to be stopped! close all files and end
@@ -1000,7 +1010,7 @@ public class NavitMapDownloader
 										// bytes_remaining = this.end_byte - already_read;
 										bytes_remaining = map_values.est_size_bytes - l1;
 										// eta_seconds = (int) ((float) bytes_remaining / (float) per_second_overall);
-										eta_seconds = (int) ((float) bytes_remaining / (float) f1);
+										eta_seconds = (int) ((float) bytes_remaining / f1);
 										if (eta_seconds > 60)
 										{
 											eta_string = (int) (eta_seconds / 60f) + " m";
@@ -1056,7 +1066,7 @@ public class NavitMapDownloader
 									if (already_read > (MAX_SINGLE_BINFILE_SIZE - 1))
 									{
 										// split file, we need to compensate
-										current_split = (int) ((long) (already_read - len1) / MAX_SINGLE_BINFILE_SIZE);
+										current_split = (int) ((already_read - len1) / MAX_SINGLE_BINFILE_SIZE);
 										next_split = (int) (already_read / MAX_SINGLE_BINFILE_SIZE);
 
 										// System.out.println("DEBUG_MAP_DOWNLOAD::" + "split file, we need to compensate: current_split=" + current_split + " next_split=" + next_split + " already_read=" + already_read + " MAX_SINGLE_BINFILE_SIZE=" + MAX_SINGLE_BINFILE_SIZE + " len1=" + len1);
@@ -1071,7 +1081,7 @@ public class NavitMapDownloader
 										// close file
 										d_close_file(f_rnd, this.my_num);
 										// open next split file (and seek to pos ZERO)
-										f_rnd = (RandomAccessFile) d_open_file(PATH2 + "/" + fileName + "." + next_split, 0, this.my_num);
+										f_rnd = d_open_file(PATH2 + "/" + fileName + "." + next_split, 0, this.my_num);
 										// part2, only if more than ZERO bytes left to write
 										if (len1_part2 > 0)
 										{
@@ -1314,9 +1324,8 @@ public class NavitMapDownloader
 		}
 	}
 
-	public NavitMapDownloader(Navit main)
+	NavitMapDownloader()
 	{
-		//this.navit_jmain = main;
 		if (Navit.FDBL)
 		{
 			// ------- RELEASE SETTINGS --------
@@ -1324,7 +1333,7 @@ public class NavitMapDownloader
 		}
 	}
 
-	public static void init_maps_without_donate_largemaps()
+	static void init_maps_without_donate_largemaps()
 	{
 		if (Navit.Navit_Largemap_DonateVersion_Installed != true)
 		{
@@ -1334,7 +1343,7 @@ public class NavitMapDownloader
 		}
 	}
 
-	public static void init_cat_file()
+	static void init_cat_file()
 	{
 		Log.v("NavitMapDownloader", "init_cat_file");
 
@@ -1465,7 +1474,7 @@ public class NavitMapDownloader
 		write_cat_file();
 	}
 
-	public static int cat_file_maps_have_installed_any()
+	static int cat_file_maps_have_installed_any()
 	{
 		Iterator<String> k = map_catalogue.listIterator();
 		int ret = 0;
@@ -1482,7 +1491,7 @@ public class NavitMapDownloader
 		return ret;
 	}
 
-	public static void init_cat_file_maps_timestamps()
+	static void init_cat_file_maps_timestamps()
 	{
 		Log.v("NavitMapDownloader", "init_cat_file_maps_timestamps");
 
@@ -1678,7 +1687,7 @@ public class NavitMapDownloader
 		write_cat_file();
 	}
 
-	public static void remove_from_cat_file(String disk_name, String server_name)
+	private static void remove_from_cat_file(String disk_name, String server_name)
 	{
 		System.out.println("removing: " + disk_name + ":" + server_name);
 		map_catalogue.remove(disk_name + ":" + server_name);
@@ -1722,19 +1731,19 @@ public class NavitMapDownloader
 		write_cat_file();
 	}
 
-	public static void remove_from_cat_file(String full_line)
+	static void remove_from_cat_file(String full_line)
 	{
 		System.out.println("removing: " + full_line);
 		map_catalogue.remove(full_line);
 		write_cat_file();
 	}
 
-	public static Boolean is_in_cat_file(String disk_name, String server_name)
+	private static Boolean is_in_cat_file(String disk_name, String server_name)
 	{
 		return map_catalogue.contains(disk_name + ":" + server_name);
 	}
 
-	public static String is_in_cat_file_disk_name(String name)
+	static String is_in_cat_file_disk_name(String name)
 	{
 		Log.v("NavitMapDownloader", "is_in_cat_file_disk_name");
 
@@ -1802,7 +1811,7 @@ public class NavitMapDownloader
 		return ret;
 	}
 
-	public static void init()
+	static void init()
 	{
 		// need only init once
 		if (already_inited)
@@ -1997,7 +2006,7 @@ public class NavitMapDownloader
 		System.out.println("find_file_on_other_mapserver:first server name=" + map_servers_list);
 
 		String other_server_name = d_get_servername(false, map_values);
-		int i = 0;
+		int i;
 		for (i = 0; i < 15; i++)
 		{
 			System.out.println("find_file_on_other_mapserver:found other mapserver (" + i + "): " + other_server_name);
@@ -2253,9 +2262,8 @@ public class NavitMapDownloader
 			int num_threads2 = 0;
 			map_servers_used.clear();
 			String new_map_server = null;
-			int k2 = 0;
 			System.out.println("find mapservers:" + "================ START ===================");
-			for (k2 = 0; k2 < num_threads; k2++)
+			for (int k2 = 0; k2 < num_threads; k2++)
 			{
 				System.out.println("find mapservers:" + k2 + "/" + num_threads + " ==================");
 
@@ -2283,7 +2291,7 @@ public class NavitMapDownloader
 
 			System.out.println("find mapservers:" + "================  END  ===================");
 
-			bytes_diff = (long) (map_values.est_size_bytes / num_threads);
+			bytes_diff = map_values.est_size_bytes / num_threads;
 			if (bytes_diff * num_threads < map_values.est_size_bytes)
 			{
 				bytes_leftover = map_values.est_size_bytes - (bytes_diff * num_threads);
@@ -2798,7 +2806,7 @@ public class NavitMapDownloader
 		return exit_code;
 	}
 
-	static void default_ssl_cert()
+	private static void default_ssl_cert()
 	{
 		HttpsURLConnection.setDefaultHostnameVerifier(hnv_default);
 		HttpsURLConnection.setDefaultSSLSocketFactory(sslf_default);
@@ -2807,7 +2815,7 @@ public class NavitMapDownloader
 	private static HostnameVerifier hnv_default = null;
 	private static SSLSocketFactory sslf_default = null;
 
-	static void trust_Every_ssl_cert()
+	private static void trust_Every_ssl_cert()
 	{
 		// NEVER enable this on a production release!!!!!!!!!!
 		try
@@ -2959,8 +2967,8 @@ public class NavitMapDownloader
 			{
 				Log.e(TAG,"c.url: " + c.getURL());
 				//c.connect();
-				Log.e(TAG,"--- responsemessage = " + c.getResponseMessage());
-				Log.e(TAG,"------------- responsecode = " + c.getResponseCode());
+				Log.d(TAG,"--- responsemessage = " + c.getResponseMessage());
+				Log.d(TAG,"------------- responsecode = " + c.getResponseCode());
 				BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()), 4096);
 				String str;
 				str = in.readLine();
@@ -3124,8 +3132,8 @@ public class NavitMapDownloader
 
 	private HttpURLConnection d_url_connect(ZanaviOsmMapValue map_values, String servername, int map_num3, int current_thread_num)
 	{
-		URL url = null;
-		HttpURLConnection c = null;
+		URL url;
+		HttpURLConnection c;
 		try
 		{
 			url = new URL(ZANAVI_MAPS_BASE_URL_PROTO + servername + ZANAVI_MAPS_BASE_URL_WO_SERVERNAME + map_values.url);
@@ -3310,7 +3318,7 @@ public class NavitMapDownloader
 				int buf_size = 1000 * 32;
 				byte[] buffer_seek = new byte[buf_size];
 				int num_loops = (int) ((size_2 - 1900000000L - 1) / buf_size);
-				int j = 0;
+				int j;
 				for (j = 0; j < num_loops; j++)
 				{
 					f.write(buffer_seek);

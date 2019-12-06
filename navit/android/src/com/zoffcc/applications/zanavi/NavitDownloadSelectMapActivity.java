@@ -1,4 +1,4 @@
-/**
+/*
  * ZANavi, Zoff Android Navigation system.
  * Copyright (C) 2011 Zoff <zoff@zoff.cc>
  *
@@ -17,7 +17,7 @@
  * Boston, MA  02110-1301, USA.
  */
 
-/**
+/*
  * Navit, a modular navigation system.
  * Copyright (C) 2005-2008 Navit Team
  *
@@ -75,13 +75,13 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 		}
 		else
 		{
-			ViewGroup root_view = (ViewGroup) findViewById(android.R.id.content);
+			ViewGroup root_view = findViewById(android.R.id.content);
 
 			System.out.println("ZZXX22:r1=" + findViewById(android.R.id.content));
 			System.out.println("ZZXX22:r2=" + findViewById(android.R.id.content).getParent());
 			System.out.println("ZZXX22:r3=" + findViewById(android.R.id.content).getParent().getParent());
 
-			View content = (View) root_view.getChildAt(0);
+			View content = root_view.getChildAt(0);
 			System.out.println("ZZXX22:r4=" + root_view.getChildAt(0));
 			System.out.println("ZZXX22:r5=" + root_view.getChildCount());
 			System.out.println("ZZXX22:r6=" + root_view.getChildAt(1));
@@ -137,7 +137,7 @@ public class NavitDownloadSelectMapActivity extends ListActivity
 		//this.getListView().addHeaderView(text_v);
 
 		NavitMapDownloader.init();
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_1_custom, NavitMapDownloader.OSM_MAP_NAME_LIST_inkl_SIZE_ESTIMATE);
 		setListAdapter(adapter);
 		this.getListView().setFastScrollEnabled(true);
 		this.getListView().setVerticalFadingEdgeEnabled(true);

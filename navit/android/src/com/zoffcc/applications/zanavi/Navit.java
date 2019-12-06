@@ -252,9 +252,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 
 	static final float OVERSPILL_FACTOR = 1.4f; // 20% percent on each side
 
-	// ------------------ BitCoin Addr --------
-	final static String BITCOIN_DONATE_ADDR = "1ZANav18WY8ytM7bhnAEBS3bdrTohsD9p";
-
 	private static ZanaviCloudApi plugin_api = null;
 	private static final int PLUGIN_MSG_ID = 1;
 	private static final int PLUGIN_MSG_CAT_zanavi_version = 1;
@@ -480,10 +477,6 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 	static int sats = 0;
 	static int satsInFix = 0;
 
-	// -------------- GPS fix and extrapolation vars -------------
-	// -------------- GPS fix and extrapolation vars -------------
-	static Location mLastLocation = null;
-	static long mLastLocationMillis = -1;
 	static boolean isGPSFix = false;
 	static boolean pos_is_underground = false;
 	static boolean tunnel_extrapolation = false;
@@ -9244,7 +9237,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 			}
 
 			mapdownloader_dialog_pri.setOnDismissListener(mOnDismissListener1);
-			mapdownloader_pri = new NavitMapDownloader(this);
+			mapdownloader_pri = new NavitMapDownloader();
 			progressThread_pri = mapdownloader_pri.new ProgressThread(progress_handler, NavitMapDownloader.z_OSM_MAPS[Navit.download_map_id], MAP_NUM_PRIMARY);
 			progressThread_pri.start();
 			//
@@ -9272,7 +9265,7 @@ public class Navit extends AppCompatActivity implements Handler.Callback, Sensor
 				}
 			};
 			mapdownloader_dialog_sec.setOnDismissListener(mOnDismissListener2);
-			NavitMapDownloader mapdownloader_sec = new NavitMapDownloader(this);
+			NavitMapDownloader mapdownloader_sec = new NavitMapDownloader();
 			progressThread_sec = mapdownloader_sec.new ProgressThread(progress_handler, NavitMapDownloader.z_OSM_MAPS[Navit.download_map_id], MAP_NUM_SECONDARY);
 			progressThread_sec.start();
 			//
