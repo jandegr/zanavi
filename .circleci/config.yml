@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Build for Linux
           command: |
-            export CFLAGS=" -finline-limit=1 -fkeep-inline-functions -O0 -DNO_GTYPES_ -DPLUGSSS -g -DONLY_C_BORDER -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -ldl -lpthread "
+            export CFLAGS=" -finline-limit=1 -fkeep-inline-functions -O0 -DNO_GTYPES_ -DPLUGSSS -g -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -ldl -lpthread "
             export CFLAGS=" -DNAVIT_TRANS_LAT_LON_GEO_NOFUNCS -DMAPTOOL ""$CFLAGS" ;
             ./autogen.sh
             ls -la ../
