@@ -49,7 +49,7 @@ jobs:
           command: |
             cd bin/navit/maptool
             ls -la
-            bzcat map1.osm.bz2 | ./maptool -6 -n -U -S 550000000 map.bin
+            bzcat map1.osm.bz2 | ./maptool -6 -n -U -S 600000000 map.bin
           no_output_timeout: 120m
       - run:
           name: split binfile
