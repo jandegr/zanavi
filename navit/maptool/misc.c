@@ -371,8 +371,9 @@ static int process_slice(FILE **in, FILE **reference, int in_count, int with_ran
 	int zipfiles = 0;
 	struct tile_info info;
 	int i;
-
+	fprintf(stderr, "process_slice About to allocate "LONGLONG_FMT"\n", size);// debug jdg
 	slice_data = malloc(size);
+	fprintf(stderr, "process_slice allocated "LONGLONG_FMT"\n", size);// debug jdg
 	assert(slice_data != NULL);
 	zip_data = slice_data;
 	th = tile_head_root;
