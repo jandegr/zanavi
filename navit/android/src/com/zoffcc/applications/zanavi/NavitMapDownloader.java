@@ -150,7 +150,8 @@ public class NavitMapDownloader
 	//private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 175651343L, false, 3);
 	private static final ZanaviOsmMapValue z_Finland = new ZanaviOsmMapValue("Finland", "finland.bin", 272857125L, false, 3, "https://280-93310424-gh.circle-artifacts.com/0/root/project/out/", 5463584L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_France = new ZanaviOsmMapValue("France", "france.bin", 2135649463L, false, 3);
-	private static final ZanaviOsmMapValue z_Germany = new ZanaviOsmMapValue("Germany", "germany.bin", 1691074126L, false, 3);
+	//private static final ZanaviOsmMapValue z_Germany = new ZanaviOsmMapValue("Germany", "germany.bin", 1691074126L, false, 3);
+    private static final ZanaviOsmMapValue z_Germany = new ZanaviOsmMapValue("Germany", "germany.bin", 1843685413L, false, 3, "https://309-93310424-gh.circle-artifacts.com/0/root/project/out/", 58892544, "08/12/2019");
 	//private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 545499632L, false, 3);
 	private static final ZanaviOsmMapValue z_Great_Britain = new ZanaviOsmMapValue("Great Britain", "great_britain.bin", 639853192L, false, 3, "https://279-93310424-gh.circle-artifacts.com/0/root/project/out/", 31889126L, "06/12/2019");
 	private static final ZanaviOsmMapValue z_Greece = new ZanaviOsmMapValue("Greece", "greece.bin", 100282275L, false, 3);
